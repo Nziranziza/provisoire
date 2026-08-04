@@ -1,0 +1,6 @@
+dist
+node_modules
+.astro
+tools
+questions.json
+package-lock.json
