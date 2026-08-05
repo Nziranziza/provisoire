@@ -1,0 +1,41 @@
+---
+interface Props {
+  pageSize: number;
+  questionCount: number;
+}
+
+const { pageSize, questionCount } = Astro.props;
+const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
+---
+
+<div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <div class="text-sm text-slate-500" data-scoreboard>
+    <span class="font-bold text-slate-900" data-score-answered>0</span> of
+    <span class="font-bold text-slate-900" data-score-total>{Math.min(pageSize, questionCount)}</span> answered
+    &nbsp;·&nbsp;
+    <span class="font-bold text-slate-900" data-score-correct>0</span> correct
+  </div>
+
+  <div class="flex flex-wrap items-center gap-2">
+    <div class="rounded-full bg-stone-100 px-3 py-2 text-sm font-semibold text-slate-700">
+      Page <span data-page-current>1</span> of <span data-page-total>{totalPages}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="rounded-full border border-slate-900 bg-white px-4 py-2 text-sm font-bold text-slate-900 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+        data-page-prev
+        disabled
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="rounded-full border border-slate-900 bg-slate-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+        data-page-next
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+---
+import questionBank from "../../questions.json";
+import type { Category, Lang, Question } from "../lib/quiz";
+import QuestionCard from "./quiz/QuestionCard.astro";
+import QuizHeader from "./quiz/QuizHeader.astro";
+import QuizToolbar from "./quiz/QuizToolbar.astro";
+
+interface Props {
+  /** Default language shown on load: "en" | "fr" | "rw" */
+  lang?: Lang;
+  /** Restrict to a single category id (1 = Traffic Rules, 2 = Road Signs). Omit for all. */
+  categoryId?: number;
+  /** Base path prefixed to image_url (e.g. "/" + "images/foo.png" → "/images/foo.png"). */
+  imageBase?: string;
+}
+
+const { lang = "en", categoryId, imageBase = "/" } = Astro.props;
+
+const categories = questionBank.categories as Category[];
+const questions = (
+  categoryId
+    ? questionBank.questions.filter((q) => q.category_id === categoryId)
+    : questionBank.questions
+) as Question[];
+
+const pageSize = 20;
+---
+
+<section
+  class="quiz mx-auto max-w-3xl rounded-2xl border border-stone-200 bg-stone-50 p-4 text-slate-900 sm:p-7"
+  data-lang={lang}
+  data-image-base={imageBase}
+  data-page-size={pageSize}
+>
+  <QuizHeader categories={categories} categoryId={categoryId} />
+  <QuizToolbar pageSize={pageSize} questionCount={questions.length} />
+
+  <ol class="m-0 flex list-none flex-col gap-5 p-0">
+    {questions.map((q, i) => (
+      <QuestionCard question={q} index={i} lang={lang} imageBase={imageBase} />
+    ))}
+  </ol>
+
+  {questions.length === 0 && (
+    <p class="py-8 text-center text-slate-500">No questions match this category yet.</p>
+  )}
+</section>
+
+<script>
+  import { initAllQuizzes } from "../scripts/quiz-client";
+  initAllQuizzes();
+</script>

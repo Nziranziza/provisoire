@@ -27,24 +27,24 @@
       "correct_index": 3,
       "translations": {
         "en": {
-          "question": "Borders of the public highway or the roadway must be signaled by reﬂectors. These devices must be so set up to let users see them in the following manner:",
+          "question": "Borders of the public highway or the roadway must be signaled by reflectors. These devices must be so set up to let users see them in the following manner:",
           "options": [
-            "They see on their left the red reﬂectors only",
-            "On their right they see only the orange reﬂectors",
-            "On left they see the yellow reﬂectors",
+            "They see on their left the red reflectors only",
+            "On their right they see only the orange reflectors",
+            "On left they see the yellow reflectors",
             "None of the answers is correct"
           ],
           "correct_answer": "None of the answers is correct"
         },
         "fr": {
-          "question": "Les bords de la voie publique ou de la chaussée peuvent être signalés par des dispositifs réﬂéchissants. Ces dispositifs doivent être placés de manière que les usagers les voient de façon suivante:",
+          "question": "Les bords de la voie publique ou de la chaussée peuvent être signalés par des dispositifs réfléchissants. Ces dispositifs doivent être placés de manière que les usagers les voient de façon suivante:",
           "options": [
             "Ils ne voient à leur gauche que ceux de couleur rouge",
             "Ils ne voient à leur droite que ceux de couleur orange",
             "Ils ne voient à leur gauche que ceux de couleur jaune",
-            "Aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes de réponses n’est correcte"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Inkombe z’inzira nyabagendwa cyangwa z’umuhanda zishobora kugaragazwa n’ibikoresho ngarurarumuri. Ibyo bikoresho bigomba gushyirwaho ku buryo abagenzi babibona :",
@@ -72,7 +72,7 @@
             "10 years",
             "12 years",
             "7 years",
-            "None of them is correct"
+            "None of the answers is correct"
           ],
           "correct_answer": "12 years"
         },
@@ -82,12 +82,12 @@
             "10ans",
             "12ans",
             "7ans",
-            "Aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "12ans"
         },
         "rw": {
-          "question": "Iyo hatarimo indi myanya birabujijwe gutwara ku ntebe y’imbere y’imodoka abana badaﬁte imyaka:",
+          "question": "Iyo hatarimo indi myanya birabujijwe gutwara ku ntebe y’imbere y’imodoka abana badafite imyaka:",
           "options": [
             "Imyaka 10",
             "Imyaka 12",
@@ -127,7 +127,7 @@
           "correct_answer": "Les véhicules de la largeur est supérieure à 2.10mètres"
         },
         "rw": {
-          "question": "Ibinyabiziga biﬁte ubugari buﬁte ibipimo bikurikira bigomba kugira amatara ndangaburumbarare :",
+          "question": "Ibinyabiziga bifite ubugari bufite ibipimo bikurikira bigomba kugira amatara ndangaburumbarare :",
           "options": [
             "Metero 3",
             "Metero 2 na cm 50",
@@ -162,7 +162,7 @@
             "100m",
             "150m",
             "200m",
-            "Aucune de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "150m"
         },
@@ -189,9 +189,9 @@
         "en": {
           "question": "When lighting of the vehicle is required if the loading projects beyond the back edge of the vehicle by more than one meter, the most accented protrusion must be signaled by:",
           "options": [
-            "a red light and a red reﬂector at day time",
+            "a red light and a red reflector at day time",
             "a piece of red cloth of 50 cm at each side at night",
-            "a yellow light and a yellow reﬂector",
+            "a yellow light and a yellow reflector",
             "none of the answers is correct"
           ],
           "correct_answer": "none of the answers is correct"
@@ -202,15 +202,15 @@
             "le feu rouge ou catadioptre rouge le jour",
             "un morceau d’étolle de couleur rouge de 50cm minimum du côté la nuit",
             "le feu de couleur jaune ou catadioptre jaune",
-            "aucune de réponses n’est correctes des reponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "aucune de réponses n’est correctes des reponses n’est correcte"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Iyo amatara y’ikinyabiziga agomba gucanwa kandi igihe imizigo isumba impera y’ikinyabizigaho metero irenga igice gihera cy’imizigo kigaragazwa ku buryo bukurikira:",
           "options": [
             "itara ritukura cyangwa akagarurarumuri ku mutuku ku manywa",
-            "agatambaro gatukura gaﬁte nibura cm 50 z’uruhande mu ijoro",
+            "agatambaro gatukura gafite nibura cm 50 z’uruhande mu ijoro",
             "itara ry’umuhondo cyangwa akagarurarumuri k’umuhondo",
             "nta gisubizo cy’ukuri kirimo"
           ],
@@ -227,7 +227,7 @@
       "correct_index": 1,
       "translations": {
         "en": {
-          "question": "The reﬂector placed on the sides of vehicle has the following color:",
+          "question": "The reflector placed on the sides of vehicle has the following color:",
           "options": [
             "white",
             "yellow",
@@ -242,7 +242,7 @@
             "blanche",
             "jaune",
             "rouge",
-            "Aucune de réponses n’est correctes de réponses n’est correct"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "jaune"
         },
@@ -267,7 +267,7 @@
       "correct_index": 0,
       "translations": {
         "en": {
-          "question": "The near position light of vehicle are to be ﬁxed nearest:",
+          "question": "The near position light of vehicle are to be fixed nearest:",
           "options": [
             "to the left border of the vehicle",
             "to the right border of the vehicle",
@@ -282,7 +282,7 @@
             "A proximité du bord gauche du véhicule",
             "A proximité du bord droit du véhicule",
             "A l’arrière tout près de l’extermitégauche du véhicule",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A proximité du bord gauche du véhicule"
         },
@@ -309,7 +309,7 @@
         "en": {
           "question": "Headlights of vehicle must be switched of when:",
           "options": [
-            "A roadway lighting is continuous and suﬃcient to permit the driver to see distinctly up to a distance of 20m",
+            "A roadway lighting is continuous and sufficient to permit the driver to see distinctly up to a distance of 20m",
             "When a vehicle is going to cross another",
             "In agglomeration",
             "All responses are correct"
@@ -319,7 +319,7 @@
         "fr": {
           "question": "Les feux de route d’un véhicule doivent être éteints:",
           "options": [
-            "Lorsque l’éclairage de la chaussée est continue et suﬃsant pour perme re au conducteur de voir distinctement jusqu’à 20m",
+            "Lorsque l’éclairage de la chaussée est continue et suffisant pour perme re au conducteur de voir distinctement jusqu’à 20m",
             "Lorsque le véhicule va en croiser un autre",
             "Dans une agglomération",
             "Toutes les réponses sont justes"
@@ -347,7 +347,7 @@
       "correct_index": 0,
       "translations": {
         "en": {
-          "question": "Where traﬃc deviation is required, it is signaled at the beginning and all the way long by means of an indication signal with the following color:",
+          "question": "Where traffic deviation is required, it is signaled at the beginning and all the way long by means of an indication signal with the following color:",
           "options": [
             "Blue",
             "White",
@@ -362,12 +362,12 @@
             "Blue",
             "Blanche",
             "Rouge",
-            "Aucune de réponses n’est correctes de réponse n’est correct"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Blue"
         },
         "rw": {
-          "question": "Iyo kuyobya umuhanda ari ngombwa bigaragazwa kuva aho uhera no kuburebure bwawo n’icyapa giﬁte ubuso bw’amabara akurikira:",
+          "question": "Iyo kuyobya umuhanda ari ngombwa bigaragazwa kuva aho uhera no kuburebure bwawo n’icyapa gifite ubuso bw’amabara akurikira:",
           "options": [
             "Ubururu",
             "Umweru",
@@ -387,7 +387,7 @@
       "correct_index": 1,
       "translations": {
         "en": {
-          "question": "When the loading is constituted by cereals, raw coﬀee wooden charcoal, non-ginned cotton, straw, grass, boughs or forage in bulk, excluding compressed bales, its width can reach the following measures:",
+          "question": "When the loading is constituted by cereals, raw coffee wooden charcoal, non-ginned cotton, straw, grass, boughs or forage in bulk, excluding compressed bales, its width can reach the following measures:",
           "options": [
             "2.50m",
             "2.75m",
@@ -402,7 +402,7 @@
             "2.50m",
             "2.75m",
             "3m",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "2.75m"
         },
@@ -427,7 +427,7 @@
       "correct_index": 3,
       "translations": {
         "en": {
-          "question": "When the ﬂashing yellow light is used at cross-roads of equal sizes, where must the yellow light be placed?",
+          "question": "When the flashing yellow light is used at cross-roads of equal sizes, where must the yellow light be placed?",
           "options": [
             "On each roadway",
             "In the middle of the cross-road",
@@ -549,15 +549,15 @@
         "en": {
           "question": "The broken line which announces the approach of a continuous line may be completed by white fall back arrows, these marks announce :",
           "options": [
-            "The traﬃc lane that drivers must follow",
+            "The traffic lane that drivers must follow",
             "Approach of a continuous line",
-            "Reduction of the number of traﬃc lanes which may be used in the direction followed",
+            "Reduction of the number of traffic lanes which may be used in the direction followed",
             "A and C are both correct"
           ],
-          "correct_answer": "Reduction of the number of traﬃc lanes which may be used in the direction followed"
+          "correct_answer": "Reduction of the number of traffic lanes which may be used in the direction followed"
         },
         "fr": {
-          "question": "La ligne discontinue qui annonce l’approche d’une ligne continue peut être complétée par des ﬂèches de rebattement de couleur blanche. Ces ﬂèches annoncent:",
+          "question": "La ligne discontinue qui annonce l’approche d’une ligne continue peut être complétée par des flèches de rebattement de couleur blanche. Ces flèches annoncent:",
           "options": [
             "La bande de circulation que les conducteurs doivent suivre",
             "L’approche d’une ligne continue",
@@ -627,7 +627,7 @@
       "correct_index": 3,
       "translations": {
         "en": {
-          "question": "In places where there are traﬃc lights, vehicles cannot move:",
+          "question": "In places where there are traffic lights, vehicles cannot move:",
           "options": [
             "In parallel lines",
             "On one line",
@@ -639,8 +639,8 @@
         "fr": {
           "question": "Aux endroits oú la circulation est réglée par des signaux lumineux, les véhicules ne peuvent y circuler:",
           "options": [
-            "En ﬁles parallèles",
-            "En ﬁle unique",
+            "En files parallèles",
+            "En file unique",
             "A and B sont correctes",
             "Toutes les réponses sont fausses"
           ],
@@ -667,7 +667,7 @@
       "correct_index": 1,
       "translations": {
         "en": {
-          "question": "When can the vehicle move on the slope roadway while its engine is oﬀ or its gears are out:",
+          "question": "When can the vehicle move on the slope roadway while its engine is off or its gears are out:",
           "options": [
             "when it is on slow down",
             "when it is trailed by another vehicle",
@@ -691,7 +691,7 @@
           "options": [
             "igihe kigenda ahamanuka",
             "igihe gikuruwe n’ikindi kinyabiziga",
-            "igihe giﬁte feri y’urugendo",
+            "igihe gifite feri y’urugendo",
             "ibisubizo byose ni byo"
           ],
           "correct_answer": "igihe gikuruwe n’ikindi kinyabiziga"
@@ -729,8 +729,8 @@
         "rw": {
           "question": "Uburebure bw’ibinyabiziga bikurikira ntibugomba kurenga metero 11 :",
           "options": [
-            "Ibiﬁte umutambiko umwe uhuza imipira",
-            "Ibiﬁte imitambiko ibiri ikurikiranye mu bugari bwayo",
+            "Ibifite umutambiko umwe uhuza imipira",
+            "Ibifite imitambiko ibiri ikurikiranye mu bugari bwayo",
             "Makuzungu",
             "Nta gisubizo cy’ukuri"
           ],
@@ -747,7 +747,7 @@
       "correct_index": 2,
       "translations": {
         "en": {
-          "question": "The following vehicles must be provided with a light diﬀusing a ﬂashing blue light visible from all directions:",
+          "question": "The following vehicles must be provided with a light diffusing a flashing blue light visible from all directions:",
           "options": [
             "the vehicle with the width is superior to 2.10m",
             "the vehicle of the national police",
@@ -769,7 +769,7 @@
         "rw": {
           "question": "Ibinyabiziga bikurikira bigomba kugira itara ry’ubururu rimyatsa riboneka mu mpande zose:",
           "options": [
-            "ibinyabiziga biﬁte ubugari burenga m 2 na cm 10",
+            "ibinyabiziga bifite ubugari burenga m 2 na cm 10",
             "ibinyabiziga bya police y’igihugu",
             "ibinyabiziga ndakumirwa",
             "ibisubizo byose ni ukuri"
@@ -802,9 +802,9 @@
             "25 cm",
             "125 cm",
             "45 cm",
-            "Aucune de réponses n’est correctes réponse n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes réponse n’est juste"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Ubugari bwa remoriki ikuruwe n’igare cyangwa velomoteri ntiburenza ibipimo bikurikira:",
@@ -830,7 +830,7 @@
           "question": "Parking a vehicle is forbidden:",
           "options": [
             "In front of entrances and exits of public passages",
-            "On the roadway at places where it is ported into traﬃc bands materialized by continuous marks",
+            "On the roadway at places where it is ported into traffic bands materialized by continuous marks",
             "A and B are both correct",
             "None of the answer is correct"
           ],
@@ -842,7 +842,7 @@
             "Devant les entrées et les sor es des passages publics",
             "Sur la chaussée aux endroits oύ celle-ci est divisée en bandes de circulation matérialisées par des marques continues",
             "A et B sont justes",
-            "Aucune de réponses n’est correctes de ces réponses n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A et B sont justes"
         },
@@ -882,16 +882,16 @@
             "Dans les agglomérations seulement",
             "A l’approche des animaux de toit seulement",
             "A l’approche de bestiaux seulement",
-            "Aucune de réponses n’est correctes de ces réponses n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes de ces réponses n’est juste"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Imburira zimurika zemerewe gukoreshwa kugirango bamenyeshe umuyobozi ko bagiye kumunyuraho aha hakurikira:",
           "options": [
             "Mu nsisiro gusa",
             "Ahegereye inyamaswa zikurura",
-            "Haﬁ y’amatungo",
+            "Hafi y’amatungo",
             "Nta gisubizo cy’ukuri kirimo"
           ],
           "correct_answer": "Nta gisubizo cy’ukuri kirimo"
@@ -957,7 +957,7 @@
           "correct_answer": "A and B are both correct answers"
         },
         "fr": {
-          "question": "Les véhicules agricoles et matériels spéciaux employés par les entreprises de travaux, lorsqu’il n’est pas possible de voir distinctement jusqu’à une distance de 200m à cause de la nuit en raison de circonstances diﬀérentes, leur présence sur la voie publique peut être signalée par un feu rouge à l’arrière mais en condition que :",
+          "question": "Les véhicules agricoles et matériels spéciaux employés par les entreprises de travaux, lorsqu’il n’est pas possible de voir distinctement jusqu’à une distance de 200m à cause de la nuit en raison de circonstances différentes, leur présence sur la voie publique peut être signalée par un feu rouge à l’arrière mais en condition que :",
           "options": [
             "ces véhicules ou matériels ne dépassent pas une vitesse de 20km /h",
             "leur longueur, chargement y compris, n’excède pas 6m",
@@ -1037,12 +1037,12 @@
           "correct_answer": "parking brake"
         },
         "fr": {
-          "question": "L’un de ces types de frein permet de maintenir le véhicule immobile, quelles que soient les condi ons de son chargement, sur une déclavité ascendante de 16%, les surfaces ac ves du frein restant maintenue en position de serrage\nau moyen d’un dispositif à action purement mecanique même en l’absence du conducteur:",
+          "question": "L’un de ces types de frein permet de maintenir le véhicule immobile, quelles que soient les condi ons de son chargement, sur une déclavité ascendante de 16%, les surfaces ac ves du frein restant maintenue en position de serrage au moyen d’un dispositif à action purement mecanique même en l’absence du conducteur:",
           "options": [
             "frein de stationnement",
             "frein de service",
             "frein de secour",
-            "aucune de réponses n’est correctes de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "frein de stationnement"
         },
@@ -1082,9 +1082,9 @@
             "75 cm",
             "125 cm",
             "265 cm",
-            "Aucune de réponses n’est correctes réponse"
+            "Aucune des réponses n'est correcte réponse"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes réponse"
+          "correct_answer": "Aucune des réponses n'est correcte réponse"
         },
         "rw": {
           "question": "Ubugari bwa romoruki ikuruwe n’ikinyamitende itatu ntibugomba kurenza ibipimo bikurikira:",
@@ -1107,7 +1107,7 @@
       "correct_index": 3,
       "translations": {
         "en": {
-          "question": "Road lights, of white or yellow color, must at night, by ﬁne weather, permit the illumination of the roadway at a distance of at least 100m in front of the vehicle but for motor vehicles with engine capacity not exceeding 125cm3 this distance is reduced to:",
+          "question": "Road lights, of white or yellow color, must at night, by fine weather, permit the illumination of the roadway at a distance of at least 100m in front of the vehicle but for motor vehicles with engine capacity not exceeding 125cm3 this distance is reduced to:",
           "options": [
             "200 m",
             "100 m",
@@ -1122,12 +1122,12 @@
             "200 m",
             "100 m",
             "85 m",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "aucune de réponses n’est correctes"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
-          "question": "Amatara maremare y’ibara ryera cyangwa ry’umuhondo agomba, nijoro igihe ijuru rikeye, kumurika mu muhanda mu ntera ya m 100 nibura imbere y’ikinyabiziga, ariko ku binyabiziga biﬁte moteri itarengeje za sen metero kibe 125 iyo ntera igira ibipimo bikurikira:",
+          "question": "Amatara maremare y’ibara ryera cyangwa ry’umuhondo agomba, nijoro igihe ijuru rikeye, kumurika mu muhanda mu ntera ya m 100 nibura imbere y’ikinyabiziga, ariko ku binyabiziga bifite moteri itarengeje za sen metero kibe 125 iyo ntera igira ibipimo bikurikira:",
           "options": [
             "m200",
             "m100",
@@ -1162,7 +1162,7 @@
             "Obligations particuliers seulement",
             "Restrictions ou dérogations général ou des interdictions ou obligations particulières",
             "a et b sont de bonnes réponses",
-            "Aucune de réponse n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Restrictions ou dérogations général ou des interdictions ou obligations particulières"
         },
@@ -1202,7 +1202,7 @@
             "Les signaux d’indication et d’obligation",
             "Les signaux de danger et d’obligation",
             "Les signaux d’interdiction et d’obligation",
-            "Aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Les signaux d’interdiction et d’obligation"
         },
@@ -1242,7 +1242,7 @@
             "150 à 200m",
             "100 à 150m",
             "50 à 100m",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "150 à 200m"
         },
@@ -1267,7 +1267,7 @@
       "correct_index": 1,
       "translations": {
         "en": {
-          "question": "No light or reﬂector can be placed in such a manner that the lowest point of its lighting surface be below the following measures from the ground level, the vehicle being empts:",
+          "question": "No light or reflector can be placed in such a manner that the lowest point of its lighting surface be below the following measures from the ground level, the vehicle being empts:",
           "options": [
             "30cm",
             "40cm",
@@ -1322,7 +1322,7 @@
             "2",
             "3",
             "1",
-            "Aucune de réponses n’est correctes réponse n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "1"
         },
@@ -1347,27 +1347,27 @@
       "correct_index": 0,
       "translations": {
         "en": {
-          "question": "The section of the public highway delineated by two broken and parallel white lines, and not wide enough for automobile vehicles traﬃc constitutes:",
+          "question": "The section of the public highway delineated by two broken and parallel white lines, and not wide enough for automobile vehicles traffic constitutes:",
           "options": [
             "Cycles",
             "Bicycles and mopeds",
             "The wheel barrows",
-            "None of them is correct"
+            "None of the answers is correct"
           ],
           "correct_answer": "Cycles"
         },
         "fr": {
-          "question": "La partie de la voie publique délimitée par deux lignes blanches discontinues et parallèles, et d'une largeur insuﬃsante pour perme re la circulation des véhicules automobiles, constitue:",
+          "question": "La partie de la voie publique délimitée par deux lignes blanches discontinues et parallèles, et d'une largeur insuffisante pour perme re la circulation des véhicules automobiles, constitue:",
           "options": [
             "Le passage pour les cycles",
             "Le passage pour les bicycle es et cyclomoteur",
             "Le passage pour les brouettes",
-            "Aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Le passage pour les cycles"
         },
         "rw": {
-          "question": "Igice cy'inzira nyabagendwa kigarukira ku mirongo ibiri yera icagaguye ibangikanye kandi giﬁte ubugari budahagije kugira ngo imodoka zitambuke neza, kiba ari:",
+          "question": "Igice cy'inzira nyabagendwa kigarukira ku mirongo ibiri yera icagaguye ibangikanye kandi gifite ubugari budahagije kugira ngo imodoka zitambuke neza, kiba ari:",
           "options": [
             "Ahanyurwa n’ibinyamitende",
             "Ahanyurwa n’amagare na velomoteri",
@@ -1402,7 +1402,7 @@
             "Frein de service",
             "Frein de stationnement",
             "Frein de secours",
-            "Aucune de réponses n’est correctes réponse n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Frein de secours"
         },
@@ -1429,25 +1429,25 @@
         "en": {
           "question": "Between twilight and daybreak or because of circumstances, when it is not possible to see distinctly up to a distance of 200m the presence on the public way of the trailers coupled to bicycles, mopeds, and motorbikes without a side car but except non ridden bicycles and mopeds when the bulk of this or its load makes the trailing vehicle light invisible must be signaled by:",
           "options": [
-            "A white, yellow or orange light ﬁxed at the back of the trailer",
-            "A greener yellow or orange light ﬁxed at the back of the trailer",
+            "A white, yellow or orange light fixed at the back of the trailer",
+            "A greener yellow or orange light fixed at the back of the trailer",
             "A and B are both the correct answers",
             "none of the answer is correct"
           ],
-          "correct_answer": "A white, yellow or orange light ﬁxed at the back of the trailer"
+          "correct_answer": "A white, yellow or orange light fixed at the back of the trailer"
         },
         "fr": {
           "question": "Lorsque, entre la tombée et le lever du jour en raison de circonstances, il n’est pas possible de voir dis nctement jusqu’à une distance de 200m, les remorques a elés par les cycles, cyclomoteurs et motocyclettes démunis de side car mais à l’exclusion des cycles et cyclomoteurs non montés si l’encombrement de celle-ci ou de son chargement rend le feu du véhicule tracteur invisible, doivent être signalés par:",
           "options": [
-            "un feu blanc, jaune ou orange ﬁxé à l’arrière de la remorque",
-            "un feu vert ou jaune ou orange ﬁxé à l’arrière de la remorque",
+            "un feu blanc, jaune ou orange fixé à l’arrière de la remorque",
+            "un feu vert ou jaune ou orange fixé à l’arrière de la remorque",
             "A et B sont justes",
-            "aucune de réponses n’est correctes de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "un feu blanc, jaune ou orange ﬁxé à l’arrière de la remorque"
+          "correct_answer": "un feu blanc, jaune ou orange fixé à l’arrière de la remorque"
         },
         "rw": {
-          "question": "Iyo romoruki iziritse ku kinyamitende, velomoteri n’amapikipiki bidaﬁte akanyabiziga ko kuruhande uretse ikinyamitende na velomoteri bidaﬁte umuyobozi, iyo uburumbarare bwayo cyangwa bw’ibyo yikoreye bituma itara ry’ikinyabiziga gikurura ritagaragara igihe bitagishoboka kubona neza muri m 200 bigomba kugaragazwa ku buryo bukurikira:",
+          "question": "Iyo romoruki iziritse ku kinyamitende, velomoteri n’amapikipiki bidafite akanyabiziga ko kuruhande uretse ikinyamitende na velomoteri bidafite umuyobozi, iyo uburumbarare bwayo cyangwa bw’ibyo yikoreye bituma itara ry’ikinyabiziga gikurura ritagaragara igihe bitagishoboka kubona neza muri m 200 bigomba kugaragazwa ku buryo bukurikira:",
           "options": [
             "itara ryera cyangwa ry’umuhondo cyangwa risa n’icunga rihishije riri kuri rumoruki inyuma",
             "itara ry’icyatsi cyangwa ry’umuhondo cyangwa risa n’icunga rihishije riri kuri rumoruki inyuma",
@@ -1482,12 +1482,12 @@
             "1.25m",
             "30cm",
             "75cm",
-            "aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "1.25m"
         },
         "rw": {
-          "question": "Ubugari bw’imizigo yikorewe n’ipikipiki idaﬁte akanyabiziga ko kuruhande kimwe n’ubwa romoruki ikuruwe na bene icyo kinyabiziga ntibushobora kurenza ibipimo bikurikira:",
+          "question": "Ubugari bw’imizigo yikorewe n’ipikipiki idafite akanyabiziga ko kuruhande kimwe n’ubwa romoruki ikuruwe na bene icyo kinyabiziga ntibushobora kurenza ibipimo bikurikira:",
           "options": [
             "m 1.25",
             "cm 30",
@@ -1522,7 +1522,7 @@
             "lorsque la circulation est intense",
             "sur les portions de la voie publique oύ le depassement est interdit",
             "A et B sont justes",
-            "aucune de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A et B sont justes"
         },
@@ -1562,19 +1562,19 @@
             "Remorque munie d’un frein de service",
             "Remorque non munie d’un frein de service",
             "Remorque légère avec 750kg du poids",
-            "Aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Remorque non munie d’un frein de service"
         },
         "rw": {
           "question": "Uburemere ntarengwa bwemewe ntibushobora kurenga ½ cy’uburemere bw’ikinyabiziga gikurura nubw’umuyobozi kuri romoruki zikurikira :",
           "options": [
-            "Romoruki iﬁte feri y’urugendo",
-            "Romoruki idaﬁte feri y’urugendo",
+            "Romoruki ifite feri y’urugendo",
+            "Romoruki idafite feri y’urugendo",
             "Romoruki itarenza kg 750",
             "Nta gisubizo cy’ukuri kirimo"
           ],
-          "correct_answer": "Romoruki idaﬁte feri y’urugendo"
+          "correct_answer": "Romoruki idafite feri y’urugendo"
         }
       }
     },
@@ -1642,12 +1642,12 @@
             "épassant 1 Tone",
             "épassant 1 Tone",
             "épassant 24 Tone",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
-          "question": "Icyapa cyerekana umuvuduko ntarengwa ikinyabiziga kitagomba kurenza gishyirwa gusa ku binyabiziga biﬁte uburemere ntarengwa",
+          "question": "Icyapa cyerekana umuvuduko ntarengwa ikinyabiziga kitagomba kurenza gishyirwa gusa ku binyabiziga bifite uburemere ntarengwa",
           "options": [
             "Burenga toni 1",
             "Burenga toni 2",
@@ -1682,7 +1682,7 @@
             "50km/h",
             "40km/h",
             "30km/h",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "50km/h"
         },
@@ -1722,7 +1722,7 @@
             "Oui.",
             "Non",
             "Oui, mais par à gauche",
-            "Aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Oui."
         },
@@ -1792,26 +1792,26 @@
             "A red piece of cloth measuring a minimum 0.50m by side",
             "An orange colored light laterally visible",
             "A square white panel of at least 0.20m by side",
-            "None these is answer"
+            "None of the answers is correct"
           ],
-          "correct_answer": "None these is answer"
+          "correct_answer": "None of the answers is correct"
         },
         "fr": {
-          "question": "Les attaches constituées de chaines ou de câbles de fortune ne peuvent être utilisées qu’en cas de force majeure et exclusivement pour amener un véhicule jusqu’au lieu de réparation à une vitesse ne pouvant en aucun cas dépasser 20km à l’heure. Par quoi doivent être signalées\nces attaches?",
+          "question": "Les attaches constituées de chaines ou de câbles de fortune ne peuvent être utilisées qu’en cas de force majeure et exclusivement pour amener un véhicule jusqu’au lieu de réparation à une vitesse ne pouvant en aucun cas dépasser 20km à l’heure. Par quoi doivent être signalées ces attaches?",
           "options": [
             "Par un morceau d’étole de couleur rouge de 0.05m minimum de côté",
             "Par un feu de couleur orange",
             "Par un panneau blanc carré d’au moins 0.20m",
-            "Aucune de réponses n’est correctes de ces réponses"
+            "Aucune des réponses n'est correcte de ces réponses"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes de ces réponses"
+          "correct_answer": "Aucune des réponses n'est correcte de ces réponses"
         },
         "rw": {
           "question": "Ibizirikisho by’iminyururu cyangwa by’insinga kimwe n’ibindi by’ingoboka bikoreshwa gusa igihe nta kundi umuntu yabigenza kandi nta kindi bigiriwe uretse gusa kugirango ikinyabiziga kigere aho kigomba gukorerwa kandi nturenze na rimwe km 20 mu isaha, ibyo bizirikisho bigaragazwa ku buryo bukurikira:",
           "options": [
             "Agatambaro gatukura kuri cm 50 z’umuhanda",
             "Ikimenyetso cy’itara risa n’icunga rihishije",
-            "Icyapa cyera cya mpande enye zingana giﬁte cm 20 kuri buri ruhande",
+            "Icyapa cyera cya mpande enye zingana gifite cm 20 kuri buri ruhande",
             "Nta gisubizo cy’ukuri kirimo"
           ],
           "correct_answer": "Nta gisubizo cy’ukuri kirimo"
@@ -1827,7 +1827,7 @@
       "correct_index": 1,
       "translations": {
         "en": {
-          "question": "For sign posting and lighting vehicles as well as the indication of their direction. It is forbidden changing them, using other lights or reﬂectors other than those prescribed by the decree. But this provision does not concern the following lights:",
+          "question": "For sign posting and lighting vehicles as well as the indication of their direction. It is forbidden changing them, using other lights or reflectors other than those prescribed by the decree. But this provision does not concern the following lights:",
           "options": [
             "Side lights",
             "Internal lighting",
@@ -1882,9 +1882,9 @@
             "rétrécissement de la chaussée",
             "rétrécissement de la chaussée (par empiétement de l’accotement situé à gauche de la chaussée)",
             "profil irrégulier",
-            "aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "aucune de réponse n’est correcte"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Iki cyapa cyerekana :",
@@ -1922,7 +1922,7 @@
             "Un conducteur",
             "Un convoyeur",
             "A et B sont de bonnes réponses",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Un conducteur"
         },
@@ -1962,12 +1962,12 @@
             "11 m",
             "10 m",
             "7 m",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "7 m"
         },
         "rw": {
-          "question": "Ikinyabiziga cyangwa ibinyabiziga bikururana biﬁte imitambiko ibiri ikurikiranye mu bugari bwayo ni ukuvuga imitambiko yihindukiza kucyo ifungiyeho, uburebure bwabyo ntibugomba kurenza ibipimo bikurikira:",
+          "question": "Ikinyabiziga cyangwa ibinyabiziga bikururana bifite imitambiko ibiri ikurikiranye mu bugari bwayo ni ukuvuga imitambiko yihindukiza kucyo ifungiyeho, uburebure bwabyo ntibugomba kurenza ibipimo bikurikira:",
           "options": [
             "m11",
             "m10",
@@ -1987,7 +1987,7 @@
       "correct_index": 0,
       "translations": {
         "en": {
-          "question": "The trailers, the overall width of which does not exceed 0.80m may be provided only with one reﬂector if they are coupled up to the following vehicles:",
+          "question": "The trailers, the overall width of which does not exceed 0.80m may be provided only with one reflector if they are coupled up to the following vehicles:",
           "options": [
             "motorbike without a side car",
             "moped",
@@ -2002,19 +2002,19 @@
             "une motocyclette sans side car",
             "vélomoteur",
             "les voitures de place",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "une motocyclette sans side car"
         },
         "rw": {
-          "question": "Romoruki ziﬁte ubugari ntarengwa bwa cm 80 zishobora gushyirwaho akagarurarumuri kamwe gusa iyo zikuruwe n’ibinyabiziga bikurikira:",
+          "question": "Romoruki zifite ubugari ntarengwa bwa cm 80 zishobora gushyirwaho akagarurarumuri kamwe gusa iyo zikuruwe n’ibinyabiziga bikurikira:",
           "options": [
-            "ipikipiki idaﬁte akanyabiziga ku ruhande",
+            "ipikipiki idafite akanyabiziga ku ruhande",
             "velomoteri",
             "amavatiri y’ifasi",
             "nta gisubizo cy’ukuri kirimo"
           ],
-          "correct_answer": "ipikipiki idaﬁte akanyabiziga ku ruhande"
+          "correct_answer": "ipikipiki idafite akanyabiziga ku ruhande"
         }
       }
     },
@@ -2067,7 +2067,7 @@
       "correct_index": 1,
       "translations": {
         "en": {
-          "question": "Overtaking when approaching a bend is",
+          "question": "Overtaking when approaching a bend is:",
           "options": [
             "Permissible",
             "Not permissible",
@@ -2075,6 +2075,26 @@
             "All answers are correct"
           ],
           "correct_answer": "Not permissible"
+        },
+        "fr": {
+          "question": "Le dépassement à l'approche d'un virage est :",
+          "options": [
+            "Autorisé",
+            "Interdit",
+            "Autorisé avec prudence",
+            "Toutes les réponses sont correctes"
+          ],
+          "correct_answer": "Interdit"
+        },
+        "rw": {
+          "question": "Kunyuranaho ugegereye ikoni:",
+          "options": [
+            "Byemewe",
+            "Bibujijwe",
+            "Byemewe niba witonze",
+            "Ibisubizo byose ni byo"
+          ],
+          "correct_answer": "Bibujijwe"
         }
       }
     },
@@ -2092,9 +2112,9 @@
             "At less than 1meter either before or behind another vehicle at stop or in parking",
             "Where appropriate prohibition signals are placed",
             "At places where pedestrians must walk on the roadway to pass round an obstacle",
-            "All answer are correct"
+            "All answers are correct"
           ],
-          "correct_answer": "All answer are correct"
+          "correct_answer": "All answers are correct"
         },
         "fr": {
           "question": "Le stationnement d’un véhicule est interdit:",
@@ -2142,12 +2162,12 @@
             "La surface en couleur blanche",
             "Le symbole en rouge et noir",
             "Le symbole en branche et noir",
-            "Aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes de réponses n’est correcte"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
-          "question": "Icyapa kivuga gutambuka mbere y’ibinyabiziga biturutse imbere giﬁte amabara akurikira:",
+          "question": "Icyapa kivuga gutambuka mbere y’ibinyabiziga biturutse imbere gifite amabara akurikira:",
           "options": [
             "Ubuso ni umweru",
             "Ikirango ni umutuku n’umukara",
@@ -2167,7 +2187,7 @@
       "correct_index": 1,
       "translations": {
         "en": {
-          "question": "The following vehicles must be ﬁtted with a speed indicator to be found at clear sight of a driver and to be constantly in good working condition:",
+          "question": "The following vehicles must be fitted with a speed indicator to be found at clear sight of a driver and to be constantly in good working condition:",
           "options": [
             "motor vehicle likely to move above 60km per hour",
             "motor vehicle likely to move above 40km per hour",
@@ -2189,7 +2209,7 @@
         "rw": {
           "question": "Ibinyabiziga bikurikira bigomba kugira icyerekana umuvuduko kiri aho umuyobozi areba neza kandi kigahora kitabwaho kugirango kigume gukora neza:",
           "options": [
-            "ibinyabiziga biﬁte umuvuduko nibura wa km 60 mu isaha",
+            "ibinyabiziga bifite umuvuduko nibura wa km 60 mu isaha",
             "ibinyabiziga bishobora kurenza km 40 mu isaha",
             "ibinyabiziga bishobora kurenza km 30 mu isaha",
             "ibinyabiziga bishobora kurenza km 25 mu isaha"
@@ -2210,7 +2230,7 @@
           "question": "When is the right hand priority rule applied in junction?",
           "options": [
             "When there is no road signal for priority",
-            "When the traﬃc lights intended for vehicle do not work properly",
+            "When the traffic lights intended for vehicle do not work properly",
             "A and B are correct",
             "None of the answers is correct"
           ],
@@ -2222,7 +2242,7 @@
             "lorsqu’il n’y a pas de signaux de priorité",
             "lorsque la signalisation lumineuse ne fonctionne pas",
             "A et B sont correctes",
-            "Aucune de réponses n’est correctes de reponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A et B sont correctes"
         },
@@ -2262,15 +2282,15 @@
             "A l’avant par un feu jaune porté du côté gauche",
             "A l’arrière par un feu blanche porté du côté gauche par l’individu qui se trouve le plus près de l’axe de la chaussée",
             "A et B sont correctes",
-            "Aucune de réponses n’est correctes des réponses n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes des réponses n’est juste"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Iyo bwije kugeza bukeye cyangwa bitewe n’uko ibihe bimeze nk’igihe cy’ibihu cyangwa cy’imvura bitagishoboka kubona neza muri m 200, udutsiko twose tw’abanyamaguru nk’imperekerane cyangwa udutsiko tw’abanyeshuri bari ku murongo bayobowe n’umwarimu, iyo bagenda mu muhanda ku isonga hakaba hari abantu barenze umwe bagomba kugaragazwa kuburyo bukurikira :",
           "options": [
             "Imbere ni itara ry’umuhondo ritwariwe ibumoso",
-            "inyuma ni itara ryera ritwariwe ibumoso n’umuntu uri ku murongo w’inyuma haﬁ y’umurongo ugabanya umuhanda mo kabiri",
+            "inyuma ni itara ryera ritwariwe ibumoso n’umuntu uri ku murongo w’inyuma hafi y’umurongo ugabanya umuhanda mo kabiri",
             "A na B ni ibisubizo by’ukuri",
             "Nta gisubizo cy’ukuri kirimo"
           ],
@@ -2307,7 +2327,7 @@
           "correct_answer": "feux d’éclairage du signe d’immatriculation arrière"
         },
         "rw": {
-          "question": "Iyo ikinyabiziga giﬁte amatara abiri cyangwa menshi y’ubwoko bumwe ayo matara agomba kugira ibara rimwe n’ingufu zingana kandi akagomba gushyirwaho ku buryo buteganye uhereye ku murongo ugabanya ikinyabizigamo kabiri mu burebure bwacyo. Ariko ibi ntibikurikizwa ku matara akurikira:",
+          "question": "Iyo ikinyabiziga gifite amatara abiri cyangwa menshi y’ubwoko bumwe ayo matara agomba kugira ibara rimwe n’ingufu zingana kandi akagomba gushyirwaho ku buryo buteganye uhereye ku murongo ugabanya ikinyabizigamo kabiri mu burebure bwacyo. Ariko ibi ntibikurikizwa ku matara akurikira:",
           "options": [
             "itara ndangamubyimba",
             "itara ndangaburumbarare",
@@ -2326,25 +2346,35 @@
       "correct_option": 1,
       "correct_index": 0,
       "translations": {
-        "fr": {
-          "question": "Tout conducteur qui se rend compte qu'un conducteur qui le suit souhaite le dépasser doit:",
+        "en": {
+          "question": "Any driver who realizes that a following driver wishes to overtake them must:",
           "options": [
-            "se rapprocher du bord droit du chemin",
-            "pour accélérer le véhicule",
-            "arrêter",
+            "move closer to the right edge of the road",
+            "accelerate the vehicle",
+            "stop",
+            "a and c are correct answers"
+          ],
+          "correct_answer": "move closer to the right edge of the road"
+        },
+        "fr": {
+          "question": "Tout conducteur qui se rend compte qu'un conducteur qui le suit souhaite le dépasser doit :",
+          "options": [
+            "se rapprocher du bord droit de la chaussée",
+            "accélérer le véhicule",
+            "s'arrêter",
             "a et c sont des réponses correctes"
           ],
-          "correct_answer": "se rapprocher du bord droit du chemin"
+          "correct_answer": "se rapprocher du bord droit de la chaussée"
         },
         "rw": {
-          "question": "Umuyobozi ubonye ko hari undi umukurikiye ashaka kumunyuraho agomba kubahiriza ibi bikurikira :",
+          "question": "Umuyobozi ubonye ko hari undi umukurikiye ashaka kumunyuraho agomba:",
           "options": [
-            "kwegera i ruhande rw’iburyo bw’umuhanda",
+            "kwegera i ruhande rw'iburyo bw'umuhanda",
             "kongera umuvuduko",
             "guhagarara",
-            "a na c ni byo bisubizo by’ukuri"
+            "a na c ni byo bisubizo by'ukuri"
           ],
-          "correct_answer": "kwegera i ruhande rw’iburyo bw’umuhanda"
+          "correct_answer": "kwegera i ruhande rw'iburyo bw'umuhanda"
         }
       }
     },
@@ -2357,7 +2387,7 @@
       "correct_index": 2,
       "translations": {
         "en": {
-          "question": "Where there are no speciﬁc restrictive regulations, the maximum speed for Motor vehicles used as hackney carriage or taxis of which the authorized weight does not exceed 3,500 kilograms is:",
+          "question": "Where there are no specific restrictive regulations, the maximum speed for Motor vehicles used as hackney carriage or taxis of which the authorized weight does not exceed 3,500 kilograms is:",
           "options": [
             "60 km/h",
             "40 km/h",
@@ -2367,7 +2397,7 @@
           "correct_answer": "75 km/h"
         },
         "fr": {
-          "question": "A défaut de réglementations restrictives speciﬁques, la vitesse maximale des véhicules automobiles à usage de voiture de place ou taxi dont le poids maximum autorisé n’excède pas 3500 kg est:",
+          "question": "A défaut de réglementations restrictives specifiques, la vitesse maximale des véhicules automobiles à usage de voiture de place ou taxi dont le poids maximum autorisé n’excède pas 3500 kg est:",
           "options": [
             "60 km/h",
             "40 km/h",
@@ -2377,7 +2407,7 @@
           "correct_answer": "75 km/h"
         },
         "rw": {
-          "question": "Iyo nta mategeko awugabanya by’umwihariko, umuvuduko ntarengwa ku modoka zikoreshwa nk’amavatiri y’ifasi cyangwa amatagisi ziﬁte uburemere bwemewe butarenga kilogarama 3500 ni:",
+          "question": "Iyo nta mategeko awugabanya by’umwihariko, umuvuduko ntarengwa ku modoka zikoreshwa nk’amavatiri y’ifasi cyangwa amatagisi zifite uburemere bwemewe butarenga kilogarama 3500 ni:",
           "options": [
             "Km 60 mu isaha",
             "Km 40 mu isaha",
@@ -2412,7 +2442,7 @@
             "sa forme de cercle, sa surface bleue et son symbole noir",
             "forme de cercle, surface bleue et symbole blanche",
             "forme de cercle, surface blanche et symbole noire",
-            "aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "forme de cercle, surface blanche et symbole noire"
         },
@@ -2447,7 +2477,7 @@
           "correct_answer": "1.90m"
         },
         "fr": {
-          "question": "Au-dessus du sol et le véhicule étant vide, le point le plus élevé de la plage éclairante de feux de position avant et\narrière ne peut se trouver à plus de mesures suivantes:",
+          "question": "Au-dessus du sol et le véhicule étant vide, le point le plus élevé de la plage éclairante de feux de position avant et arrière ne peut se trouver à plus de mesures suivantes:",
           "options": [
             "1.50m",
             "1.75m",
@@ -2477,7 +2507,7 @@
       "correct_index": 2,
       "translations": {
         "en": {
-          "question": "Buses assigned to transport of school children shall be provided with two ﬂashing orange lights in order to signal stop and to recommend caution. These lights are placed:",
+          "question": "Buses assigned to transport of school children shall be provided with two flashing orange lights in order to signal stop and to recommend caution. These lights are placed:",
           "options": [
             "behind of the vehicle",
             "in front of the vehicle",
@@ -2541,7 +2571,7 @@
           "options": [
             "Igare",
             "Velomoteri",
-            "Ipikipiki iﬁte akanyabiziga kuruhande",
+            "Ipikipiki ifite akanyabiziga kuruhande",
             "byose ni ibisubizo by’ukuri"
           ],
           "correct_answer": "byose ni ibisubizo by’ukuri"
@@ -2567,19 +2597,19 @@
           "correct_answer": "parking lights"
         },
         "fr": {
-          "question": "Les feux de position avant et arrière des véhicules automobiles dont la longueur et la largeur, chargement compris, n’excèdent pas respectivement 6m et 2m et aux quells aucune de réponses n’est correctes autre véhicule n’est attelé peuvent être remplacés par des feux suivants lorsque ces véhicules, à l’arrêt ou en stationnement dans une agglomeration, sont rangés parallèlement au bord de la chaussée.",
+          "question": "Les feux de position avant et arrière des véhicules automobiles dont la longueur et la largeur, chargement compris, n’excèdent pas respectivement 6m et 2m et aux quells Aucune des réponses n'est correcte autre véhicule n’est attelé peuvent être remplacés par des feux suivants lorsque ces véhicules, à l’arrêt ou en stationnement dans une agglomeration, sont rangés parallèlement au bord de la chaussée.",
           "options": [
             "Les feux de croissement",
             "les feux de gabarit",
             "les feux de stationnement",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "les feux de stationnement"
         },
         "rw": {
           "question": "Amatara ndangambere n’aya ndanganyuma y’imodoka zitarengeje m 6 z’uburebure na m 2 z’ubugari habariwemo imitwaro kdi nta kinyabiziga kindi kiziritseho ashobora gusimburwa n’amatara akurikira, iyo ibyo binyabiziga bihagaze umwanya muto cyangwa munini mu nsisiro bibangikanye ku ruhande rw’umuhanda:",
           "options": [
-            "amatara maguﬁ",
+            "amatara magufi",
             "amatara ndangaburumbarare",
             "amatara yo guhagarara umwanya munini",
             "nta gisubizo cy’ukuri kirimo"
@@ -2597,7 +2627,7 @@
       "correct_index": 0,
       "translations": {
         "en": {
-          "question": "Where there are no speciﬁc restrictive regulations, the maximum speeds for passenger service vehicles is:",
+          "question": "Where there are no specific restrictive regulations, the maximum speeds for passenger service vehicles is:",
           "options": [
             "60 km/h",
             "40 km/h",
@@ -2607,7 +2637,7 @@
           "correct_answer": "60 km/h"
         },
         "fr": {
-          "question": "A défaut de réglementation restrictive speciﬁques, la vitesse maximale des véhicules pour le transport en commun est:",
+          "question": "A défaut de réglementation restrictive specifiques, la vitesse maximale des véhicules pour le transport en commun est:",
           "options": [
             "60 km/h",
             "40 km/h",
@@ -2677,7 +2707,7 @@
       "correct_index": 0,
       "translations": {
         "en": {
-          "question": "Which kind of brake allowing to slow down the vehicle and to stop it in a quick and eﬃcient manner, in whatever condition of loading and sharpness of the up or down slope of the way on which it is moving?",
+          "question": "Which kind of brake allowing to slow down the vehicle and to stop it in a quick and efficient manner, in whatever condition of loading and sharpness of the up or down slope of the way on which it is moving?",
           "options": [
             "Service brake",
             "Emergency brake",
@@ -2687,12 +2717,12 @@
           "correct_answer": "Service brake"
         },
         "fr": {
-          "question": "Quel type de freinage peut permettre de ralentir le véhicule et de l’arrêter d’une façon sure, rapide et eﬃcace, quelles que soient les conditions de son chargement,de la déclivité ascendante ou descendante de la voie sur laquelle il circule:",
+          "question": "Quel type de freinage peut permettre de ralentir le véhicule et de l’arrêter d’une façon sure, rapide et efficace, quelles que soient les conditions de son chargement,de la déclivité ascendante ou descendante de la voie sur laquelle il circule:",
           "options": [
             "Un frein de service",
             "Un frein de secours",
             "Un frein de sta onnement",
-            "Aucune de réponses n’est correctes de réponses n’est correte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Un frein de service"
         },
@@ -2719,22 +2749,22 @@
         "en": {
           "question": "A wide and continuous white line may be drawn on the roadway to indicate:",
           "options": [
-            "its ﬁctitious border",
+            "its fictitious border",
             "Area reserved for stop and parking vehicles",
             "cycle lanes",
             "none of the answers is correct"
           ],
-          "correct_answer": "its ﬁctitious border"
+          "correct_answer": "its fictitious border"
         },
         "fr": {
           "question": "Une large ligne blanche con nue peut être tracée sur la chaussée pour marquer:",
           "options": [
-            "le bord ﬁctif de la chaussée",
+            "le bord fictif de la chaussée",
             "l’espace réservé pour l’arrêt et stationnement",
             "le passage que les conducteurs de bicyclettes doivent uttiliser",
-            "aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "le bord ﬁctif de la chaussée"
+          "correct_answer": "le bord fictif de la chaussée"
         },
         "rw": {
           "question": "Umurongo mugari wera udacagaguye ushobora gucibwa ku muhanda kugirango ugaragaze ibi bikurikira:",
@@ -2852,7 +2882,7 @@
             "feux de brouillard",
             "feux de marche arrière",
             "A et B sont justes",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A et B sont justes"
         },
@@ -2892,12 +2922,12 @@
             "plus de 0.30m à la largeur de ces véhicules non chargés",
             "Un maximum absolu est 2.50m",
             "A et B sont correctes",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A et B sont correctes"
         },
         "rw": {
-          "question": "Ubugari bw’imizigo yikorewe n’ibinyamitende itatu n’ubwiyikorewe n’ibinyamitende 4 biﬁte cyangwa bidaﬁte moteri kimwe n’ubw’iyikorewe na romuruki zikuruwe n’ibyo binyabiziga ntibushobora kurenga ibipimo bikurikira:",
+          "question": "Ubugari bw’imizigo yikorewe n’ibinyamitende itatu n’ubwiyikorewe n’ibinyamitende 4 bifite cyangwa bidafite moteri kimwe n’ubw’iyikorewe na romuruki zikuruwe n’ibyo binyabiziga ntibushobora kurenga ibipimo bikurikira:",
           "options": [
             "cm 30 ku bugari bw’icyo kinyabiziga kidapakiye",
             "Ubugari ntarengwa budakuka ni metero 2 na sentimetero 50",
@@ -2932,7 +2962,7 @@
             "Conseillé de circuler à plus de 30km/h.",
             "Conseillé de ne pas dépasser les 30km/h.",
             "Interdit de circuler à plus de 30km/h.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Interdit de circuler à plus de 30km/h."
         },
@@ -2957,7 +2987,7 @@
       "correct_index": 2,
       "translations": {
         "en": {
-          "question": "Traﬃc lights are placed on the right side of the public highway. However they may be duplicated on the left side of the public high way or above it:",
+          "question": "Traffic lights are placed on the right side of the public highway. However they may be duplicated on the left side of the public high way or above it:",
           "options": [
             "Following the direction of the vehicle concerned.",
             "Following the nature of things they do indicate",
@@ -2997,7 +3027,7 @@
       "correct_index": 2,
       "translations": {
         "en": {
-          "question": "Borders of the public highway or of the roadway must be signaled by reflectors, these devices must be so set\nup as the following manner:",
+          "question": "Borders of the public highway or of the roadway must be signaled by reflectors, these devices must be so set up as the following manner:",
           "options": [
             "the users see on their right the red or orange reflectors only",
             "they see on their left the white ones only",
@@ -3007,12 +3037,12 @@
           "correct_answer": "A and B are both correct"
         },
         "fr": {
-          "question": "Les bords de la voie publique au de la chaussée peuvent être signalés par des dispositifs réfléchissantes, ces dipositifs\ndoivent être placés de maniere suivante:",
+          "question": "Les bords de la voie publique au de la chaussée peuvent être signalés par des dispositifs réfléchissantes, ces dipositifs doivent être placés de maniere suivante:",
           "options": [
             "les usagers ne voient à leur droite que ceux de couleur rouge ou orange",
             "les usagers ne voient à leur gauche que ceux de couleur blanche",
             "A et B sont justes",
-            "aucune de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A et B sont justes"
         },
@@ -3059,9 +3089,9 @@
         "rw": {
           "question": "Kunyura ku binyabiziga bindi, uretse icy’ibiziga bibiri, bibujijwe aha hakurikira:",
           "options": [
-            "Haﬁ y’iteme iyo hari umuhanda ufunganye",
-            "Haﬁ y’aho abanyamaguru banyura",
-            "Haﬁ y’ibice by’umuhanda bimeze nabi",
+            "Hafi y’iteme iyo hari umuhanda ufunganye",
+            "Hafi y’aho abanyamaguru banyura",
+            "Hafi y’ibice by’umuhanda bimeze nabi",
             "Ibi bisubizo byose ni ukuri"
           ],
           "correct_answer": "Ibi bisubizo byose ni ukuri"
@@ -3097,7 +3127,7 @@
           "correct_answer": "12 tonnes"
         },
         "rw": {
-          "question": "Uretse mu mijyi kuyindi mihanda yagenywe na minisiteri ushinzwe gutwara ibintu n’abantu, uburemere ntarengwa bwemewe ku binyabiziga bifatanye biﬁte imitambiko itatu ni:",
+          "question": "Uretse mu mijyi kuyindi mihanda yagenywe na minisiteri ushinzwe gutwara ibintu n’abantu, uburemere ntarengwa bwemewe ku binyabiziga bifatanye bifite imitambiko itatu ni:",
           "options": [
             "toni 20",
             "toni 16",
@@ -3132,7 +3162,7 @@
             "A l’arrière 3.50m",
             "A l’avant 1.70m",
             "A et B sont justes",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A l’arrière 3.50m"
         },
@@ -3167,14 +3197,14 @@
           "correct_answer": "No correct answer"
         },
         "fr": {
-          "question": "Le conducteur qui circule sur la chaussée peut, lorsque la largeur de celle-ci ne permet pas d’eﬀectuer aisément un dépassement peut emprunter l’accotement de plain-pied mais il doit tenir compte sur:",
+          "question": "Le conducteur qui circule sur la chaussée peut, lorsque la largeur de celle-ci ne permet pas d’effectuer aisément un dépassement peut emprunter l’accotement de plain-pied mais il doit tenir compte sur:",
           "options": [
             "La vitesse de piétons",
             "La largeur de la route",
             "Le nombre de piétons",
-            "Aucune de réponses n’est correctes réponse n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes réponse n’est juste"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Umuyobozi ugenda mu muhanda igihe ubugari bwawo budatuma anyuranaho nta nkomyi ashobora kunyura mu kayira k’abanyamaguru ariko amaze kureba ibi bikurikira:",
@@ -3199,9 +3229,9 @@
         "en": {
           "question": "Every motor vehicle or trailer pulled by such a vehicle shall be provided with a green light permitting the driver to signal that he has noticed the warning of the person who is ready to overtake him, this light must be placed as following manner:",
           "options": [
-            "it must be ﬁxed nearest to the left border of vehicle",
+            "it must be fixed nearest to the left border of vehicle",
             "it must be at the back right edge of vehicle",
-            "it must be ﬁxed at the back nearest the right",
+            "it must be fixed at the back nearest the right",
             "none of the answer is correct"
           ],
           "correct_answer": "none of the answer is correct"
@@ -3212,15 +3242,15 @@
             "A proximité du bord gauche du véhicule",
             "A l’arrière et à proximité droite du véhicule",
             "A l’arrière et à proximité droite du véhicule",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "aucune de réponses n’est correctes"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Buri modoka cyangwa buri romoruki ikuruwe n’iyo modoka bishobora kugira itara risa n’icyatsi kibisi bituma umuyobozi yerekana ko yabonye ikimenyetso cy’uwitegura kumunyuraho. Iryo tara rigomba gushyirwa aha hakurikira:",
           "options": [
-            "haﬁ y’inguni y’ibumoso bw’ikinyabiziga",
-            "inyuma haﬁ y’impera y’iburyo bw’ikinyabiziga",
+            "hafi y’inguni y’ibumoso bw’ikinyabiziga",
+            "inyuma hafi y’impera y’iburyo bw’ikinyabiziga",
             "inyuma ahegereye inguni y’iburyo",
             "nta gisubizo cy’ukuri kirimo"
           ],
@@ -3252,7 +3282,7 @@
             "triangulaire",
             "circulaire",
             "rectangulaire",
-            "aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "circulaire"
         },
@@ -3287,7 +3317,7 @@
           "correct_answer": "16 tones"
         },
         "fr": {
-          "question": "Sauf dans les circonscriptions urbaines, sur les autres routes déterminées par le ministre ayant le transport dans ses attributions les poids maximum autorisés par véhicules à trios\nessieux et plus à l’excep on de semi-remorques est:",
+          "question": "Sauf dans les circonscriptions urbaines, sur les autres routes déterminées par le ministre ayant le transport dans ses attributions les poids maximum autorisés par véhicules à trios essieux et plus à l’excep on de semi-remorques est:",
           "options": [
             "10 tonnes",
             "12 tonnes",
@@ -3297,7 +3327,7 @@
           "correct_answer": "16 tonnes"
         },
         "rw": {
-          "question": "Uretse mu mujyi, ku yindi mihanda yajyenwe na minisitiri ushinzwe gutwara abantu n’ibintu, uburemere ntarengwa ku binyabiziga biﬁte imitambiko itatu cyangwa irenga hatarimo makuzungu ni :",
+          "question": "Uretse mu mujyi, ku yindi mihanda yajyenwe na minisitiri ushinzwe gutwara abantu n’ibintu, uburemere ntarengwa ku binyabiziga bifite imitambiko itatu cyangwa irenga hatarimo makuzungu ni :",
           "options": [
             "Toni 10",
             "Toni 12",
@@ -3332,7 +3362,7 @@
             "Je peux, à mon tour, le dépasser à droite.",
             "Je ne peux pas le dépasser.",
             "Je peux, à mon tour, le dépasser à gauche, dès que je disposerai d'un espace suffisant.",
-            "Aucune de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Je peux, à mon tour, le dépasser à gauche, dès que je disposerai d'un espace suffisant."
         },
@@ -3377,7 +3407,7 @@
           "correct_answer": "50cm"
         },
         "rw": {
-          "question": "Imizigo yikorewe n’amagare, velomoteri, amapikipiki, ibinyamitende by’ibiziga bitatu nibyo ibiziga bine biﬁte cyangwa bidaﬁte moteri inyuma ntishobora kurenza ibipimo bikurikira:",
+          "question": "Imizigo yikorewe n’amagare, velomoteri, amapikipiki, ibinyamitende by’ibiziga bitatu nibyo ibiziga bine bifite cyangwa bidafite moteri inyuma ntishobora kurenza ibipimo bikurikira:",
           "options": [
             "cm 20",
             "cm 30",
@@ -3407,14 +3437,14 @@
           "correct_answer": "The green light placed at the front"
         },
         "fr": {
-          "question": "Les véhicules aﬀectés au service de taxi, avec sta onnement sur la voie publique peuvent être munis d’un disposi f lumineux indiquant que le véhicule est libre.Ce feu doit être :",
+          "question": "Les véhicules affectés au service de taxi, avec sta onnement sur la voie publique peuvent être munis d’un disposi f lumineux indiquant que le véhicule est libre.Ce feu doit être :",
           "options": [
-            "Le feu vert ﬁxé à l’avant",
-            "Le feu vert ﬁxé à gauche",
-            "Le feu jaune ﬁxé derrière le véhicule",
+            "Le feu vert fixé à l’avant",
+            "Le feu vert fixé à gauche",
+            "Le feu jaune fixé derrière le véhicule",
             "A et C sont les bonnes réponses"
           ],
-          "correct_answer": "Le feu vert ﬁxé à l’avant"
+          "correct_answer": "Le feu vert fixé à l’avant"
         },
         "rw": {
           "question": "Ibinyabiziga bikoreshwa nka tagisi, bitegerereza abantu mu nzira nyabagendwa, bishobora gushyirwaho itara ryerekana ko ikinyabiziga kitakodeshejwe. Iryo tara rishyirwaho ku buryo bukurikira:",
@@ -3492,9 +3522,9 @@
             "25km/h",
             "70km/h",
             "40km/h",
-            "Aucune de réponses n’est correctes réponse n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes réponse n’est juste"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Iyo nta mategeko awugabanya by’umwihariko umuvuduko ntarengwa w’amapikipiki mu isaha ni:",
@@ -3532,12 +3562,12 @@
             "10km/h",
             "20km/h",
             "30km/h",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "aucune de réponses n’est correctes"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
-          "question": "Iyo banyuze iruhande rw’inkomyi abanyamaguru bagomba gukikira banyuze mu muhanda, abayobozi bagomba gusiga umwanya uﬁte ubugari bwa m 1 nibura hagati yabo nayo. Iyo ibyo bidashobora kubahirizwa kandi umunyamaguru akaba anyura haﬁ yiyo nkomyi,umuyobozi agomba kuyikikira aﬁte umuvuduko utarengeje ibipimo bikurikira:",
+          "question": "Iyo banyuze iruhande rw’inkomyi abanyamaguru bagomba gukikira banyuze mu muhanda, abayobozi bagomba gusiga umwanya ufite ubugari bwa m 1 nibura hagati yabo nayo. Iyo ibyo bidashobora kubahirizwa kandi umunyamaguru akaba anyura hafi yiyo nkomyi,umuyobozi agomba kuyikikira afite umuvuduko utarengeje ibipimo bikurikira:",
           "options": [
             "km 10 mu isaha",
             "km 20 mu isaha",
@@ -3577,7 +3607,7 @@
           "correct_answer": "verte"
         },
         "rw": {
-          "question": "Buri modoka cyangwa buri romoruki ikuruwe n’iyo modoka bishobora kugira itara rituma umuyobozi yerekana ko yabonye ikimenyetso cy’uwitegura kumunyuraho. Iryo tara riﬁte amabara akurikira:",
+          "question": "Buri modoka cyangwa buri romoruki ikuruwe n’iyo modoka bishobora kugira itara rituma umuyobozi yerekana ko yabonye ikimenyetso cy’uwitegura kumunyuraho. Iryo tara rifite amabara akurikira:",
           "options": [
             "umuhondo",
             "icyatsi kibisi",
@@ -3612,7 +3642,7 @@
             "Pour tous les usagers arrivant face à l'agent",
             "Pour tous les usagers, d'où qu'ils viennent.",
             "Pour tous les usagers apparaissant derrière l'agent.",
-            "aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Pour tous les usagers, d'où qu'ils viennent."
         },
@@ -3641,13 +3671,13 @@
           "options": [
             "on the road of one way",
             "on the side opposite to where another vehicle is already at stop or in parking",
-            "on the road ways where the traﬃc is performed in two direction when the width of the passage having to permit the crossing of two other vehicles  would be reduced to less than 12m",
+            "on the road ways where the traffic is performed in two direction when the width of the passage having to permit the crossing of two other vehicles would be reduced to less than 12m",
             "all answers are correct"
           ],
           "correct_answer": "on the side opposite to where another vehicle is already at stop or in parking"
         },
         "fr": {
-          "question": "L’arrêt et le stationnement sont  interdits en particulier:",
+          "question": "L’arrêt et le stationnement sont interdits en particulier:",
           "options": [
             "sur toutes les chaussées à sens unique",
             "du côté oppose à celui oύ un véhicule est déjà à l’arrêt ou en stationnement",
@@ -3661,7 +3691,7 @@
           "options": [
             "ku mihanda y’icyerekezo kimwe hose",
             "mu ruhande ruteganye n’urwo ikindi kinyabiziga gihagazemo akanya gato cyangwa kanini",
-            "ku mihanda ibisikanirwamo, iyo ubugari bw’umwanya w’ibinyabiziga ugomba gutuma bibisikana butagiﬁte m12",
+            "ku mihanda ibisikanirwamo, iyo ubugari bw’umwanya w’ibinyabiziga ugomba gutuma bibisikana butagifite m12",
             "ibisubizo byose nibyo"
           ],
           "correct_answer": "mu ruhande ruteganye n’urwo ikindi kinyabiziga gihagazemo akanya gato cyangwa kanini"
@@ -3727,14 +3757,14 @@
           "correct_answer": "No correct answer"
         },
         "fr": {
-          "question": "Les dépassements s’eﬀectuent",
+          "question": "Les dépassements s’effectuent",
           "options": [
             "Sur la côte droite seulement",
             "Toutes fois à gauche",
             "A droite si on dépasse un animal",
-            "Aucune de réponses n’est correctes réponse n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes réponse n’est juste"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Kunyuranaho bikorerwa:",
@@ -3757,14 +3787,14 @@
       "correct_index": 3,
       "translations": {
         "en": {
-          "question": "The circulation of self-propelling vehicles and trailers pulled by these vehicles is forbidden when their wheels\nare provided with either rigid bandages or elastic bandages of less than 0.04 meter thick. But this provision does not apply on :",
+          "question": "The circulation of self-propelling vehicles and trailers pulled by these vehicles is forbidden when their wheels are provided with either rigid bandages or elastic bandages of less than 0.04 meter thick. But this provision does not apply on :",
           "options": [
-            "Military vehicles when they are in traﬃc within a maximum radius of 25km",
+            "Military vehicles when they are in traffic within a maximum radius of 25km",
             "Agricultural vehicles",
             "Vehicles of national police",
-            "None of them is correct"
+            "None of the answers is correct"
           ],
-          "correct_answer": "None of them is correct"
+          "correct_answer": "None of the answers is correct"
         },
         "fr": {
           "question": "Est interdite la circulation de véhicules automoteurs et des remorques rées par ces véhicules, lorsque les roués sont munis soit de bandages rigides, soit debandages élastiques de moins de 0.04 metre d’épaisseur. Mais ceci n’est pas appliqué aux véhicules suivants:",
@@ -3772,12 +3802,12 @@
             "Les véhicules militaires en circulation dans un rayon maximum de 25km",
             "Les véhicules agricoles",
             "les véhicules de la police national",
-            "Aucune de réponses n’est correctes de réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes de réponses n’est correcte"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
-          "question": "Birabujijwe kugenza ibinyabiziga bigendeshwana moteri naza romoruki zikururwa nabyo, iyo ibiziga byambaye inziga zidahagwa cyangwa inziga zikururuka ziﬁte umubyimba uri hasi ya cm 4. Ariko ibyo n bikurikizwa kubinyabiziga bikurikira:",
+          "question": "Birabujijwe kugenza ibinyabiziga bigendeshwana moteri naza romoruki zikururwa nabyo, iyo ibiziga byambaye inziga zidahagwa cyangwa inziga zikururuka zifite umubyimba uri hasi ya cm 4. Ariko ibyo n bikurikizwa kubinyabiziga bikurikira:",
           "options": [
             "Ku binyabiziga by’ingabo bijya ahatarenga km25",
             "Ibinyabiziga bihinga",
@@ -3812,9 +3842,9 @@
             "100 m le jour et 20 m la nuit",
             "150 m le jour et 50 m la nuit",
             "200 m le jour et 100 m la nuit",
-            "Aucune de réponses n’est correctes des réponses n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes des réponses n’est correcte"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Itara ryo guhagarara ry’ibara ritukura rigomba kugaragara igihe ijuru rikeye nibura mu ntera ikurikira:",
@@ -3932,9 +3962,9 @@
             "au Carrefour",
             "les signaux lumineux",
             "a et b sont justes",
-            "aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "aucune de réponse n’est correctes"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Ibyapa bibuza n’ibitegeka bikurikizwa gusa :",
@@ -3959,12 +3989,12 @@
         "en": {
           "question": "Between twilight and daybreak or because of circumstances such as fog or heavy rain, it is not possible to see distinctly up to distance of 200m, formation of armed forces on march and of all other groups of pedestrians such as procession or school children groups in lines under the supervision of a school master, when they move on the roadway with more than one front, must be signaled in the following way:",
           "options": [
-            "in front, by a white light held on the left side, by the individual in the ﬁrst rank, and in the nearest position to the axis of the roadway",
+            "in front, by a white light held on the left side, by the individual in the first rank, and in the nearest position to the axis of the roadway",
             "at the back, by a yellow light held on the left side, by the individual in the nearest position to the axis of the roadway",
             "A and B both are correct",
             "none of the answers is correct"
           ],
-          "correct_answer": "in front, by a white light held on the left side, by the individual in the ﬁrst rank, and in the nearest position to the axis of the roadway"
+          "correct_answer": "in front, by a white light held on the left side, by the individual in the first rank, and in the nearest position to the axis of the roadway"
         },
         "fr": {
           "question": "Lorsque, entre la tombée et le lever du jour ou en raison de circonstances, il n’est pas possible de voir distinctement jusqu’à distance de 200m tous les groupements de piètons tells que cortèges ou groupe d’ecoliers en range sous la conduit d’un moniteur lorsqu’ils circulent sur la chaussée à plus d’une personne à l’avant, ils doivent être signalés par:",
@@ -3972,19 +4002,19 @@
             "A l’avant, par un feu blanc porté du côté gauche par l’individu qui se trouve au premier rang, le plus près de l’axe de la chaussée",
             "A l’arrière, par un feu jaune porté du côté gauche par l’individu qui se trouve au dernier rang, le plus près de l’axe de la chaussée",
             "A et B sont justes",
-            "aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "A l’avant, par un feu blanc porté du côté gauche par l’individu qui se trouve au premier rang, le plus près de l’axe de la chaussée"
         },
         "rw": {
-          "question": "Iyo kuva bwije kugeza bukeye cyangwa bitewe nuko ibihe bimeze nk’igihe cy’igihu cyangwa cy’imvura bitagishoboka kubona neza muri m 200, imirongo y’ingabo z’igihugu zigendera kuri gahunda n’utundi dutsiko twose tw’abanyamaguru nk’imperekerane cyangwa udutsiko  tw’abanyeshuri bari ku murongo bayobowe na mwarimu, iyo bagenda mu muhanda ku isonga hakaba hari abantu barenze umwe, bagaragazwa ku buryo bukurikira:",
+          "question": "Iyo kuva bwije kugeza bukeye cyangwa bitewe nuko ibihe bimeze nk’igihe cy’igihu cyangwa cy’imvura bitagishoboka kubona neza muri m 200, imirongo y’ingabo z’igihugu zigendera kuri gahunda n’utundi dutsiko twose tw’abanyamaguru nk’imperekerane cyangwa udutsiko tw’abanyeshuri bari ku murongo bayobowe na mwarimu, iyo bagenda mu muhanda ku isonga hakaba hari abantu barenze umwe, bagaragazwa ku buryo bukurikira:",
           "options": [
-            "imbere ni itara ryera ritwariwe ku ruhande rw’ibumoso n’umuntu uri ku murongo w’imbere haﬁ y’umurongo ugabanya umuhanda mo kabiri",
-            "inyuma ni itara umuhondo ritwariwe ku ruhande rw’ibumoso n’umuntu uri ku murongo w’inyuma haﬁ y’umurongo ugabanya umuhanda mo kabiri",
+            "imbere ni itara ryera ritwariwe ku ruhande rw’ibumoso n’umuntu uri ku murongo w’imbere hafi y’umurongo ugabanya umuhanda mo kabiri",
+            "inyuma ni itara umuhondo ritwariwe ku ruhande rw’ibumoso n’umuntu uri ku murongo w’inyuma hafi y’umurongo ugabanya umuhanda mo kabiri",
             "A na B ni ibisubizo by’ukuri",
             "nta gisubizo cy’ukuri kirimo"
           ],
-          "correct_answer": "imbere ni itara ryera ritwariwe ku ruhande rw’ibumoso n’umuntu uri ku murongo w’imbere haﬁ y’umurongo ugabanya umuhanda mo kabiri"
+          "correct_answer": "imbere ni itara ryera ritwariwe ku ruhande rw’ibumoso n’umuntu uri ku murongo w’imbere hafi y’umurongo ugabanya umuhanda mo kabiri"
         }
       }
     },
@@ -4132,7 +4162,7 @@
             "Le signal A19",
             "Le signal B5",
             "Le signal B6",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Le signal B5"
         },
@@ -4212,7 +4242,7 @@
             "De dépasser les véhicules attelés et les véhicules à plus de 2 roues par la gauche et de rouler à plus de 70 km/h.",
             "De dépasser un véhicule attelé ou un véhicule à plus de 2 roues par à gauche.",
             "De rouler à plus de 70 km/h.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "De dépasser les véhicules attelés et les véhicules à plus de 2 roues par la gauche et de rouler à plus de 70 km/h."
         },
@@ -4252,7 +4282,7 @@
             "C'est autorisé, en deçà du signal.",
             "C'est autorisé en partie, au-delà du signal.",
             "C'est interdit, aussi bien en deçà qu'au-delà du signal.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "C'est autorisé, en deçà du signal."
         },
@@ -4292,7 +4322,7 @@
             "Circulation dans les deux sens",
             "Circulation dans les deux sens interdit",
             "Annonce d’un passage où les cyclistes peuvent déboucher sur la chaussée",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Circulation dans les deux sens"
         },
@@ -4732,9 +4762,9 @@
             "Rétrécissement de la chaussée",
             "Chaussée glissante",
             "Profil irrégulier",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "Aucune de réponses n’est correctes"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Icyi cyapa cyerekana :",
@@ -4772,7 +4802,7 @@
             "J'ai la priorité.",
             "La voiture verte a la priorité.",
             "Ni l'un ni l'autre: nous devons faire preuve de prudence.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "La voiture verte a la priorité."
         },
@@ -4892,7 +4922,7 @@
             "Un danger",
             "Une interdiction",
             "Une obligation",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Un danger"
         },
@@ -5292,7 +5322,7 @@
             "Interdiction de dépasser",
             "Priorité aux véhicules venant en sens inverse",
             "a et b sont correctes",
-            "Aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Priorité aux véhicules venant en sens inverse"
         },
@@ -5332,9 +5362,9 @@
             "Un conducteur peut franchir la ligne blanche continue uniquement lorsqu'il effectue un demi-tour.",
             "Un conducteur ne peut pas dépasser, seuls les motocyclistes peuvent franchir la ligne blanche continue.",
             "Un conducteur ne peut pas dépasser en franchissant la ligne blanche continue.",
-            "Un conducteur peut  dépasser s'il est sécuritaire de le faire."
+            "Un conducteur peut dépasser s'il est sécuritaire de le faire."
           ],
-          "correct_answer": "Un conducteur peut  dépasser s'il est sécuritaire de le faire."
+          "correct_answer": "Un conducteur peut dépasser s'il est sécuritaire de le faire."
         },
         "rw": {
           "question": "Mu gihe utwaye ikinyabiziga uva kuri A ugana kuri B, Iki kimenyetso kiri mu muhanda kivuze iki ?",
@@ -5412,7 +5442,7 @@
             "fin de priorité",
             "priorité aux véhicules venant en sens inverse",
             "priorité par rapport aux véhicules venant en sens inverse",
-            "aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "priorité par rapport aux véhicules venant en sens inverse"
         },
@@ -5572,7 +5602,7 @@
             "rétrécissement de la chaussée à droite",
             "rétrécissement de l’accotement situé à gauche de la chaussée",
             "un petit sentier",
-            "aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "rétrécissement de l’accotement situé à gauche de la chaussée"
         },
@@ -5612,7 +5642,7 @@
             "M'interdit de rouler à une vitesse supérieure à 5 km/h.",
             "M'interdit l'accès, car il s'applique au véhicule de plus de 5 tonnes.",
             "Ne me concerne pas, car il ne s'applique qu'aux véhicules de 5 tonnes et plus.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Ne me concerne pas, car il ne s'applique qu'aux véhicules de 5 tonnes et plus."
         },
@@ -5812,7 +5842,7 @@
             "sortir les blesses des véhicules",
             "leur donner à boire",
             "signaler l’accident et avertir les secours",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "signaler l’accident et avertir les secours"
         },
@@ -5972,7 +6002,7 @@
             "Marquer un temps d'arrêt à hauteur de ce signal routier.",
             "M'immobiliser et céder le passage à 100 mètres au-delà de ce signal routier.",
             "Céder le passage et m'immobiliser, si nécessaire, à 100 mètres au-delà de ce signal routier.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "M'immobiliser et céder le passage à 100 mètres au-delà de ce signal routier."
         },
@@ -6132,7 +6162,7 @@
             "Oui.",
             "Oui, mais après m’être immobilisé.",
             "Non.",
-            "aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Non."
         },
@@ -6492,7 +6522,7 @@
             "Oui",
             "Oui, si ma vitesse est supérieure à 90 km/h",
             "Non.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Oui"
         },
@@ -6732,7 +6762,7 @@
             "Par la droite",
             "Par la gauche",
             "Par la droite et la gauche",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Par la gauche"
         },
@@ -6772,7 +6802,7 @@
             "Oui, à condition de virer à droite.",
             "Non, l'autre voiture qui poursuit sa route en ligne droite a priorité.",
             "Oui, quelle que soit ma direction suivie.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Oui, quelle que soit ma direction suivie."
         },
@@ -6852,7 +6882,7 @@
             "Je peux encore traverser ce passage à niveau, car les barrières ne sont pas totalement baissées.",
             "Je dois m’immobiliser en deçà des feux rouges clignotants.",
             "Je ne peux plus poursuivre ma route. Je dois m’arrêter maintenant.",
-            "aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Je dois m’immobiliser en deçà des feux rouges clignotants."
         },
@@ -6892,7 +6922,7 @@
             "Ensuite, je pourrai virer à droite.",
             "Ensuite, je pourrai virer à gauche.",
             "Ensuite, je pourrai virer à gauche ou à droite.",
-            "Aucune de réponse n’est correcte"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Ensuite, je pourrai virer à gauche."
         },
@@ -6972,7 +7002,7 @@
             "Préparez-vous à y aller",
             "Interdiction de franchir la ligne d'arrêt ou, à défaut de ligne d'arrêt, le signal même",
             "A et B sont de bonne réponse",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Interdiction de franchir la ligne d'arrêt ou, à défaut de ligne d'arrêt, le signal même"
         },
@@ -7197,7 +7227,7 @@
       "correct_index": 2,
       "translations": {
         "en": {
-          "question": "What should you do when you’re approaching traﬃc lights that have been on yellow color?",
+          "question": "What should you do when you’re approaching traffic lights that have been on yellow color?",
           "options": [
             "Accelerate hard",
             "Maintain speed",
@@ -7252,7 +7282,7 @@
             "Avant chaque virage",
             "Dans chaque virage",
             "Après chaque virage",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "Avant chaque virage"
         },
@@ -7292,7 +7322,7 @@
             "La circulation interdite dans les deux sens",
             "La circulation interdite sauf circulation locale",
             "La circulation interdite dans un sens unique",
-            "Aucune de réponses n’est juste"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "La circulation interdite dans les deux sens"
         },
@@ -7372,9 +7402,9 @@
             "carrefour",
             "intersection avec une route débouchant sur la droite",
             "a et b sont justes",
-            "aucune de réponse n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
-          "correct_answer": "aucune de réponse n’est correctes"
+          "correct_answer": "Aucune des réponses n'est correcte"
         },
         "rw": {
           "question": "Iki cyapa kivuga:",
@@ -7571,7 +7601,7 @@
           "options": [
             "Un conducteur peut dépasser en franchissant la ligne blanche continue.",
             "Un conducteur ne peut pas franchir les lignes blanche pour dépasser.",
-            "Un conducteur peut  dépasser.",
+            "Un conducteur peut dépasser.",
             "Seuls les motocyclistes sont autorisés à dépasser la ligne blanche continue."
           ],
           "correct_answer": "Un conducteur ne peut pas franchir les lignes blanche pour dépasser."
@@ -7692,7 +7722,7 @@
             "De tout véhicule",
             "De tout véhicule à moteur",
             "De tous les véhicules à moteur autres que ceux à deux roues sans side-car",
-            "Aucune de réponses n’est correctes"
+            "Aucune des réponses n'est correcte"
           ],
           "correct_answer": "De tous les véhicules à moteur autres que ceux à deux roues sans side-car"
         },
@@ -7890,7 +7920,7 @@
           "question": "Que signifie ce marquage routier?",
           "options": [
             "Un conducteur ne doit pas franchir la ligne blanche brisée à moins que cela ne soit sans danger.",
-            "Vous ne pouvez pas  dépasser.",
+            "Vous ne pouvez pas dépasser.",
             "Vous pouvez dépasser à condition de ne pas franchir la ligne blanche brisée.",
             "Vous ne pouvez pas effectuer de manœuvre inverse."
           ],
