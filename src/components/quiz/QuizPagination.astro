@@ -1,0 +1,36 @@
+---
+interface Props {
+  pageSize: number;
+  questionCount: number;
+}
+
+const { pageSize, questionCount } = Astro.props;
+const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
+---
+
+<nav
+  class="mt-6 flex flex-wrap items-center justify-between gap-3 border-t-2 border-slate-900 pt-5"
+  aria-label="Question pages"
+  data-quiz-pagination
+>
+  <button
+    type="button"
+    class="rounded-full border border-slate-900 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+    data-page-prev
+    disabled
+  >
+    Back
+  </button>
+
+  <div class="rounded-full bg-stone-100 px-3 py-2 text-sm font-semibold text-slate-700">
+    Page <span data-page-current-bottom>1</span> of <span data-page-total-bottom>{totalPages}</span>
+  </div>
+
+  <button
+    type="button"
+    class="rounded-full border border-slate-900 bg-slate-900 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+    data-page-next
+  >
+    Next
+  </button>
+</nav>

@@ -3,6 +3,7 @@ import questionBank from "../../questions.json";
 import type { Category, Lang, Question } from "../lib/quiz";
 import QuestionCard from "./quiz/QuestionCard.astro";
 import QuizHeader from "./quiz/QuizHeader.astro";
+import QuizPagination from "./quiz/QuizPagination.astro";
 import QuizToolbar from "./quiz/QuizToolbar.astro";
 
 interface Props {
@@ -44,6 +45,8 @@ const pageSize = 20;
   {questions.length === 0 && (
     <p class="py-8 text-center text-slate-500">No questions match this category yet.</p>
   )}
+
+  <QuizPagination pageSize={pageSize} questionCount={questions.length} />
 </section>
 
 <script>
