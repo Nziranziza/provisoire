@@ -110,9 +110,11 @@ function initQuiz(root: HTMLElement) {
     const copy = uiCopy(currentLang);
     const style = isCorrect ? RESULT_CARD.correct : RESULT_CARD.incorrect;
     const letter = String.fromCharCode(65 + data.correctIndex);
+    const translation = data.t[currentLang] || data.t.en;
     const answer = correctAnswerText(data, currentLang);
 
     const statusEl = card.querySelector("[data-result-status]");
+    const questionEl = card.querySelector("[data-result-question]");
     const answerLabelEl = card.querySelector("[data-result-answer-label]");
     const answerEl = card.querySelector("[data-result-answer]");
     const iconEl = card.querySelector<HTMLElement>("[data-result-icon]");
@@ -122,6 +124,7 @@ function initQuiz(root: HTMLElement) {
       statusEl.classList.add(...style.status);
       statusEl.textContent = isCorrect ? copy.correct : copy.incorrect;
     }
+    if (questionEl) questionEl.textContent = translation?.question || "";
     if (answerLabelEl) answerLabelEl.textContent = `${copy.correctAnswer} `;
     if (answerEl) answerEl.textContent = `${letter}. ${answer}`;
     if (iconEl) {
