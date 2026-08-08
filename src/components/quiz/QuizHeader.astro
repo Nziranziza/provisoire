@@ -1,5 +1,5 @@
 ---
-import type { Category } from "../../lib/quiz";
+import type { Category } from '../../lib/quiz';
 
 interface Props {
   categories: Category[];
@@ -9,12 +9,18 @@ interface Props {
 const { categories, categoryId } = Astro.props;
 ---
 
-<header class="mb-4 flex flex-wrap items-end justify-between gap-4 border-b-4 border-slate-900 pb-4">
+<header
+  class="mb-4 flex flex-wrap items-end justify-between gap-4 border-b-4 border-slate-900 pb-4"
+>
   <div>
-    <span class="mb-1 block text-[11px] font-bold uppercase tracking-widest text-blue-700">
+    <span
+      class="mb-1 block text-[11px] font-bold tracking-widest text-blue-700 uppercase"
+    >
       Rwanda Provisional Test
     </span>
-    <h2 class="text-xl font-extrabold uppercase tracking-wide text-slate-900 sm:text-2xl">
+    <h2
+      class="text-xl font-extrabold tracking-wide text-slate-900 uppercase sm:text-2xl"
+    >
       Question Bank Practice
     </h2>
   </div>
@@ -54,11 +60,13 @@ const { categories, categoryId } = Astro.props;
       aria-label="Category"
     >
       <option value="all">All categories</option>
-      {categories.map((c) => (
-        <option value={c.id} selected={categoryId === c.id}>
-          {c.name}
-        </option>
-      ))}
+      {
+        categories.map((c) => (
+          <option value={c.id} selected={categoryId === c.id}>
+            {c.name}
+          </option>
+        ))
+      }
     </select>
   </div>
 </header>

@@ -17,27 +17,35 @@ const { imageUrl, imageSrc: src } = Astro.props;
     <span
       class="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full text-sm font-bold text-white"
       data-result-icon
-      aria-hidden="true"
-    ></span>
+      aria-hidden="true"></span>
     <div class="min-w-0 flex-1">
       <p class="text-base font-extrabold" data-result-status></p>
-      <p class="mt-2 text-sm font-semibold leading-relaxed text-slate-900" data-result-question></p>
+      <p
+        class="mt-2 text-sm leading-relaxed font-semibold text-slate-900"
+        data-result-question
+      >
+      </p>
       <p class="mt-2 text-sm leading-relaxed text-slate-700">
         <span class="font-semibold" data-result-answer-label></span>
         <span data-result-answer></span>
       </p>
     </div>
   </div>
-  {imageUrl && (
-    <div class="border-t border-stone-200 bg-white px-4 py-3" data-result-image-wrap>
-      <img
-        class="mx-auto block max-h-48 max-w-full rounded-lg border border-stone-200"
-        src={src}
-        alt=""
-        loading="lazy"
-        data-result-image
-        onerror="this.closest('[data-result-image-wrap]')?.classList.add('hidden')"
-      />
-    </div>
-  )}
+  {
+    imageUrl && (
+      <div
+        class="border-t border-stone-200 bg-white px-4 py-3"
+        data-result-image-wrap
+      >
+        <img
+          class="mx-auto block max-h-48 max-w-full rounded-lg border border-stone-200"
+          src={src}
+          alt=""
+          loading="lazy"
+          data-result-image
+          onerror="this.closest('[data-result-image-wrap]')?.classList.add('hidden')"
+        />
+      </div>
+    )
+  }
 </div>

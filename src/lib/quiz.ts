@@ -1,4 +1,4 @@
-export type Lang = "en" | "fr" | "rw";
+export type Lang = 'en' | 'fr' | 'rw';
 
 export type QuestionTranslation = {
   question: string;
@@ -37,12 +37,16 @@ export function questionPayload(q: Question): string {
 }
 
 export function imageSrc(imageBase: string, imageUrl: string | null): string {
-  if (!imageUrl) return "";
-  return `${imageBase}${imageUrl.replace(/^\//, "")}`;
+  if (!imageUrl) return '';
+  return `${imageBase}${imageUrl.replace(/^\//, '')}`;
 }
 
 export function questionText(q: Question, lang: Lang): string {
-  return q.translations[lang]?.question ?? q.translations.en?.question ?? "Question unavailable";
+  return (
+    q.translations[lang]?.question ??
+    q.translations.en?.question ??
+    'Question unavailable'
+  );
 }
 
 export function questionOptions(q: Question, lang: Lang): string[] {

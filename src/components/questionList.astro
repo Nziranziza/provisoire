@@ -1,10 +1,10 @@
 ---
-import questionBank from "../../questions.json";
-import type { Category, Lang, Question } from "../lib/quiz";
-import QuestionCard from "./quiz/QuestionCard.astro";
-import QuizHeader from "./quiz/QuizHeader.astro";
-import QuizPagination from "./quiz/QuizPagination.astro";
-import QuizToolbar from "./quiz/QuizToolbar.astro";
+import questionBank from '../../questions.json';
+import type { Category, Lang, Question } from '../lib/quiz';
+import QuestionCard from './quiz/QuestionCard.astro';
+import QuizHeader from './quiz/QuizHeader.astro';
+import QuizPagination from './quiz/QuizPagination.astro';
+import QuizToolbar from './quiz/QuizToolbar.astro';
 
 interface Props {
   /** Default language shown on load: "en" | "fr" | "rw" */
@@ -15,7 +15,7 @@ interface Props {
   imageBase?: string;
 }
 
-const { lang = "en", categoryId, imageBase = "/" } = Astro.props;
+const { lang = 'en', categoryId, imageBase = '/' } = Astro.props;
 
 const categories = questionBank.categories as Category[];
 const questions = (
@@ -37,19 +37,30 @@ const pageSize = 20;
   <QuizToolbar pageSize={pageSize} questionCount={questions.length} />
 
   <ol class="m-0 flex list-none flex-col gap-5 p-0">
-    {questions.map((q, i) => (
-      <QuestionCard question={q} index={i} lang={lang} imageBase={imageBase} />
-    ))}
+    {
+      questions.map((q, i) => (
+        <QuestionCard
+          question={q}
+          index={i}
+          lang={lang}
+          imageBase={imageBase}
+        />
+      ))
+    }
   </ol>
 
-  {questions.length === 0 && (
-    <p class="py-8 text-center text-slate-500">No questions match this category yet.</p>
-  )}
+  {
+    questions.length === 0 && (
+      <p class="py-8 text-center text-slate-500">
+        No questions match this category yet.
+      </p>
+    )
+  }
 
   <QuizPagination pageSize={pageSize} questionCount={questions.length} />
 </section>
 
 <script>
-  import { initAllQuizzes } from "../scripts/quiz-client";
+  import { initAllQuizzes } from '../scripts/quiz-client';
   initAllQuizzes();
 </script>
