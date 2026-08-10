@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QuestionList from '../components/questionList.astro';
+import type { Lang } from '../lib/quiz';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const meta: Record<Lang, { title: string; description: string }> = {
+  en: {
+    title: 'Questions & Answers (English) — Provisoire',
+    description:
+      'English list of Rwanda provisional driving-test questions and answers.',
+  },
+  fr: {
+    title: 'Questions et réponses (Français) — Provisoire',
+    description:
+      'Liste en français des questions et réponses du permis provisoire rwandais.',
+  },
+  rw: {
+    title: 'Ibibazo n’ibisubizo (Ikinyarwanda) — Provisoire',
+    description:
+      'Urutonde rw’ibibazo n’ibisubizo by’ikizamini cy’uruhushya rwo gutwara mu Kinyarwanda.',
+  },
+};
+
+const { title, description } = meta[lang];
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <main class="m-0 bg-stone-100 px-4 py-10">
+    <QuestionList lang={lang} imageBase="/" />
+  </main>
+</BaseLayout>

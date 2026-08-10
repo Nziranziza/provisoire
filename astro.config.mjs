@@ -16,13 +16,11 @@ export default defineConfig({
   // which is the directory Cloudflare Pages serves.
   output: 'static',
 
-  // English is served from the bare path (`/`), French and Kinyarwanda from
-  // `/fr/` and `/rw/`. Matches the three locales in questions.json.
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'fr', 'rw'],
     routing: {
-      prefixDefaultLocale: false,
+      prefixDefaultLocale: true,
     },
   },
 

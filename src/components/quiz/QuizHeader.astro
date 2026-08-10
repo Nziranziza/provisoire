@@ -1,12 +1,19 @@
 ---
-import type { Category } from '../../lib/quiz';
+import type { Category, Lang } from '../../lib/quiz';
 
 interface Props {
   categories: Category[];
   categoryId?: number;
+  lang: Lang;
 }
 
-const { categories, categoryId } = Astro.props;
+const { categories, categoryId, lang } = Astro.props;
+
+const locales: { code: Lang; label: string }[] = [
+  { code: 'en', label: 'EN' },
+  { code: 'fr', label: 'FR' },
+  { code: 'rw', label: 'RW' },
+];
 ---
 
 <header
@@ -31,27 +38,26 @@ const { categories, categoryId } = Astro.props;
       role="group"
       aria-label="Language"
     >
-      <button
-        type="button"
-        class="lang-btn bg-stone-50 px-3 py-1.5 text-xs font-bold tracking-wide text-slate-900 hover:bg-stone-200"
-        data-lang-btn="en"
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        class="lang-btn bg-stone-50 px-3 py-1.5 text-xs font-bold tracking-wide text-slate-900 hover:bg-stone-200"
-        data-lang-btn="fr"
-      >
-        FR
-      </button>
-      <button
-        type="button"
-        class="lang-btn bg-stone-50 px-3 py-1.5 text-xs font-bold tracking-wide text-slate-900 hover:bg-stone-200"
-        data-lang-btn="rw"
-      >
-        RW
-      </button>
+      {
+        locales.map(({ code, label }) => {
+          const active = lang === code;
+          return (
+            <a
+              href={`/${code}/questions`}
+              hreflang={code}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'px-3 py-1.5 text-xs font-bold tracking-wide transition',
+                active
+                  ? 'bg-blue-700 text-white'
+                  : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
+              ]}
+            >
+              {label}
+            </a>
+          );
+        })
+      }
     </div>
 
     <select

@@ -55,12 +55,12 @@ export function questionOptions(q: Question, lang: Lang): string[] {
 
 export function correctAnswerText(q: Question, lang: Lang): string {
   const t = q.translations[lang] ?? q.translations.en;
-  if (!t) return "";
-  return t.correct_answer || t.options[q.correct_index] || "";
+  if (!t) return '';
+  return t.correct_answer || t.options[q.correct_index] || '';
 }
 
 export const ANSWER_LABEL: Record<Lang, string> = {
-  en: "Correct answer:",
-  fr: "Bonne réponse :",
-  rw: "Igisubizo cy’ukuri:",
+  en: 'Correct answer:',
+  fr: 'Bonne réponse :',
+  rw: 'Igisubizo cy’ukuri:',
 };

@@ -1,6 +1,6 @@
 ---
-import type { Lang } from "../../lib/quiz";
-import { ANSWER_LABEL } from "../../lib/quiz";
+import type { Lang } from '../../lib/quiz';
+import { ANSWER_LABEL } from '../../lib/quiz';
 
 interface Props {
   title: string;
@@ -11,7 +11,14 @@ interface Props {
   lang: Lang;
 }
 
-const { title, answer, answerLetter, imageUrl, imageSrc: src, lang } = Astro.props;
+const {
+  title,
+  answer,
+  answerLetter,
+  imageUrl,
+  imageSrc: src,
+  lang,
+} = Astro.props;
 ---
 
 <div
@@ -19,35 +26,40 @@ const { title, answer, answerLetter, imageUrl, imageSrc: src, lang } = Astro.pro
   data-answer-card
 >
   <div class="px-4 py-3">
-    <p class="text-xs font-bold uppercase tracking-widest text-emerald-700">
+    <p class="text-xs font-bold tracking-widest text-emerald-700 uppercase">
       Answer card
     </p>
     <h3
-      class="mt-1 text-base font-extrabold leading-relaxed text-slate-900"
+      class="mt-1 text-base leading-relaxed font-extrabold text-slate-900"
       data-answer-card-title
     >
       {title}
     </h3>
   </div>
 
-  {imageUrl && (
-    <div class="border-t border-emerald-200 bg-white px-4 py-3" data-answer-card-image-wrap>
-      <img
-        class="mx-auto block max-h-48 max-w-full rounded-lg border border-stone-200"
-        src={src}
-        alt=""
-        loading="lazy"
-        data-answer-card-image
-        onerror="this.closest('[data-answer-card-image-wrap]')?.classList.add('hidden')"
-      />
-    </div>
-  )}
+  {
+    imageUrl && (
+      <div
+        class="border-t border-emerald-200 bg-white px-4 py-3"
+        data-answer-card-image-wrap
+      >
+        <img
+          class="mx-auto block max-h-48 max-w-full rounded-lg border border-stone-200"
+          src={src}
+          alt=""
+          loading="lazy"
+          data-answer-card-image
+          onerror="this.closest('[data-answer-card-image-wrap]')?.classList.add('hidden')"
+        />
+      </div>
+    )
+  }
 
   <div class="border-t border-emerald-200 px-4 py-3">
     <p class="text-sm leading-relaxed text-slate-900">
       <span class="font-bold text-emerald-700" data-answer-label>
         {ANSWER_LABEL[lang]}
-      </span>{" "}
+      </span>{' '}
       <span data-answer-text>{answerLetter}. {answer}</span>
     </p>
   </div>
