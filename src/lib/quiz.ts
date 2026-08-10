@@ -52,3 +52,15 @@ export function questionText(q: Question, lang: Lang): string {
 export function questionOptions(q: Question, lang: Lang): string[] {
   return q.translations[lang]?.options ?? q.translations.en?.options ?? [];
 }
+
+export function correctAnswerText(q: Question, lang: Lang): string {
+  const t = q.translations[lang] ?? q.translations.en;
+  if (!t) return "";
+  return t.correct_answer || t.options[q.correct_index] || "";
+}
+
+export const ANSWER_LABEL: Record<Lang, string> = {
+  en: "Correct answer:",
+  fr: "Bonne réponse :",
+  rw: "Igisubizo cy’ukuri:",
+};

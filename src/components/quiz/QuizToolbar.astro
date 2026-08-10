@@ -8,20 +8,10 @@ const { pageSize, questionCount } = Astro.props;
 const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
 ---
 
-<div
-  class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
->
-  <form
-    class="flex min-w-0 flex-1 flex-col gap-1"
-    data-question-search
-    role="search"
-  >
-    <label class="sr-only" for="question-number-search"
-      >Search by question number</label
-    >
-    <div
-      class="flex max-w-md items-stretch overflow-hidden rounded-full border-2 border-slate-900 bg-white"
-    >
+<div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <form class="flex min-w-0 flex-1 flex-col gap-1" data-question-search role="search">
+    <label class="sr-only" for="question-number-search">Search by question number</label>
+    <div class="flex max-w-md items-stretch overflow-hidden rounded-full border-2 border-slate-900 bg-white">
       <input
         id="question-number-search"
         type="text"
@@ -53,28 +43,12 @@ const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
         </svg>
       </button>
     </div>
-    <p
-      class="hidden text-sm font-semibold text-red-600"
-      data-question-search-error
-      aria-live="polite"
-    >
-    </p>
+    <p class="hidden text-sm font-semibold text-red-600" data-question-search-error aria-live="polite"></p>
   </form>
 
-  <div class="flex flex-wrap items-center gap-3">
-    <div class="text-sm text-slate-500" data-scoreboard>
-      <span class="font-bold text-slate-900" data-score-answered>0</span> of
-      <span class="font-bold text-slate-900" data-score-total
-        >{Math.min(pageSize, questionCount)}</span
-      > answered &nbsp;·&nbsp;
-      <span class="font-bold text-slate-900" data-score-correct>0</span> correct
-    </div>
-    <div
-      class="rounded-full bg-stone-100 px-3 py-2 text-sm font-semibold text-slate-700"
-    >
-      Page <span data-page-current>1</span> of <span data-page-total
-        >{totalPages}</span
-      >
-    </div>
+  <div class="rounded-full bg-stone-100 px-3 py-2 text-sm font-semibold text-slate-700">
+    Page <span data-page-current>1</span> of <span data-page-total>{totalPages}</span>
+    <span class="text-slate-400"> · </span>
+    <span data-question-count>{questionCount}</span> questions
   </div>
 </div>

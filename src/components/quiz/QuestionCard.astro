@@ -1,12 +1,13 @@
 ---
-import type { Lang, Question } from '../../lib/quiz';
+import type { Lang, Question } from "../../lib/quiz";
 import {
+  correctAnswerText,
   imageSrc,
   questionOptions,
   questionPayload,
   questionText,
-} from '../../lib/quiz';
-import QuestionResult from './QuestionResult.astro';
+} from "../../lib/quiz";
+import QuestionAnswerCard from "./QuestionAnswerCard.astro";
 
 interface Props {
   question: Question;
@@ -18,65 +19,84 @@ interface Props {
 const { question: q, index, lang, imageBase } = Astro.props;
 const src = imageSrc(imageBase, q.image_url);
 const options = questionOptions(q, lang);
+const title = questionText(q, lang);
+const answer = correctAnswerText(q, lang);
+const answerLetter = String.fromCharCode(65 + q.correct_index);
 ---
 
 <li
-  class="quiz-item rounded-xl border border-l-4 border-stone-200 border-l-amber-400 bg-white px-4 pt-4 pb-5 transition-colors sm:px-5"
+  class="quiz-item rounded-xl border border-l-4 border-l-amber-400 border-stone-200 bg-white px-4 pb-5 pt-4 sm:px-5"
   data-question
   data-question-index={index}
   data-category-id={q.category_id}
   data-payload={questionPayload(q)}
 >
   <div class="mb-2 flex items-center justify-between">
-    <span
-      class="text-xs font-semibold tracking-widest text-slate-400 uppercase"
-    >
-      {String(index + 1).padStart(2, '0')}
+    <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">
+      {String(index + 1).padStart(2, "0")}
     </span>
     <span
-      class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase"
+      class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
       data-category-badge
     >
       {q.category_name}
     </span>
   </div>
 
-  {
-    q.image_url && (
-      <div class="quiz-image-wrap mt-2 mb-3">
-        <img
-          class="block max-h-56 max-w-full rounded-lg border border-stone-200"
-          src={src}
-          alt=""
-          loading="lazy"
-          onerror="this.closest('.quiz-image-wrap').classList.add('hidden')"
-        />
-      </div>
-    )
-  }
+  {q.image_url && (
+    <div class="quiz-image-wrap mb-3 mt-2">
+      <img
+        class="block max-h-56 max-w-full rounded-lg border border-stone-200"
+        src={src}
+        alt=""
+        loading="lazy"
+        onerror="this.closest('.quiz-image-wrap').classList.add('hidden')"
+      />
+    </div>
+  )}
 
-  <p class="mb-3 text-base leading-relaxed font-semibold" data-question-text>
-    {questionText(q, lang)}
+  <p class="mb-3 text-base font-semibold leading-relaxed" data-question-text>
+    {title}
   </p>
 
   <ul class="m-0 flex list-none flex-col gap-2 p-0" data-options role="list">
-    {
-      options.map((opt, idx) => (
+    {options.map((opt, idx) => {
+      const isCorrect = idx === q.correct_index;
+      return (
         <li>
-          <button
-            type="button"
-            class="quiz-option flex w-full items-center gap-3 rounded-lg border-[1.5px] border-stone-200 bg-stone-50 px-3 py-2.5 text-left text-sm text-slate-900 hover:border-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 disabled:cursor-default"
+          <div
+            class:list={[
+              "flex w-full items-center gap-3 rounded-lg border-[1.5px] px-3 py-2.5 text-left text-sm",
+              isCorrect
+                ? "border-emerald-600 bg-emerald-50 text-slate-900"
+                : "border-stone-200 bg-stone-50 text-slate-700",
+            ]}
             data-option-index={idx}
+            data-correct={isCorrect ? "true" : "false"}
           >
-            <span class="quiz-option-marker flex h-6 w-6 flex-none items-center justify-center rounded-full border-[1.5px] border-slate-900 text-xs font-bold">
+            <span
+              class:list={[
+                "flex h-6 w-6 flex-none items-center justify-center rounded-full border-[1.5px] text-xs font-bold",
+                isCorrect
+                  ? "border-emerald-600 bg-emerald-600 text-white"
+                  : "border-slate-400 text-slate-600",
+              ]}
+            >
               {String.fromCharCode(65 + idx)}
             </span>
             <span data-option-text>{opt}</span>
-          </button>
+          </div>
         </li>
-      ))
-    }
+      );
+    })}
   </ul>
 
-  <QuestionResult imageUrl={q.image_url} imageSrc={src} />
+  <QuestionAnswerCard
+    title={title}
+    answer={answer}
+    answerLetter={answerLetter}
+    imageUrl={q.image_url}
+    imageSrc={src}
+    lang={lang}
+  />
 </li>
