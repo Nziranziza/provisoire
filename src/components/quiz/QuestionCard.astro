@@ -3,6 +3,8 @@ import type { Lang, Question } from '../../lib/quiz';
 import {
   correctAnswerText,
   imageSrc,
+  questionHref,
+  questionNumber,
   questionOptions,
   questionPayload,
   questionText,
@@ -14,54 +16,108 @@ interface Props {
   index: number;
   lang: Lang;
   imageBase: string;
+  /** When true, the card links to the single-question page. */
+  linked?: boolean;
+  /** Hide this card (e.g. off the current list page). */
+  hidden?: boolean;
 }
 
-const { question: q, index, lang, imageBase } = Astro.props;
+const {
+  question: q,
+  index,
+  lang,
+  imageBase,
+  linked = false,
+  hidden = false,
+} = Astro.props;
 const src = imageSrc(imageBase, q.image_url);
 const options = questionOptions(q, lang);
 const title = questionText(q, lang);
 const answer = correctAnswerText(q, lang);
 const answerLetter = String.fromCharCode(65 + q.correct_index);
+const number = questionNumber(index);
+const href = questionHref(lang, number);
 ---
 
 <li
-  class="quiz-item rounded-xl border border-l-4 border-stone-200 border-l-amber-400 bg-white px-4 pt-4 pb-5 sm:px-5"
+  class:list={[
+    'quiz-item rounded-xl border border-l-4 border-stone-200 border-l-amber-400 bg-white px-4 pt-4 pb-5 transition sm:px-5',
+    hidden && 'hidden',
+  ]}
   data-question
   data-question-index={index}
   data-category-id={q.category_id}
   data-payload={questionPayload(q)}
 >
-  <div class="mb-2 flex items-center justify-between">
-    <span
-      class="text-xs font-semibold tracking-widest text-slate-400 uppercase"
-    >
-      {String(index + 1).padStart(2, '0')}
-    </span>
-    <span
-      class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase"
-      data-category-badge
-    >
-      {q.category_name}
-    </span>
-  </div>
-
   {
-    q.image_url && (
-      <div class="quiz-image-wrap mt-2 mb-3">
-        <img
-          class="block max-h-56 max-w-full rounded-lg border border-stone-200"
-          src={src}
-          alt=""
-          loading="lazy"
-          onerror="this.closest('.quiz-image-wrap').classList.add('hidden')"
-        />
+    linked ? (
+      <a
+        href={href}
+        class="mb-2 flex items-center justify-between text-inherit no-underline"
+      >
+        <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
+          {String(number).padStart(2, '0')}
+        </span>
+        <span class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase">
+          {q.category_name}
+        </span>
+      </a>
+    ) : (
+      <div class="mb-2 flex items-center justify-between">
+        <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
+          {String(number).padStart(2, '0')}
+        </span>
+        <span class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase">
+          {q.category_name}
+        </span>
       </div>
     )
   }
 
-  <p class="mb-3 text-base leading-relaxed font-semibold" data-question-text>
-    {title}
-  </p>
+  {
+    q.image_url && (
+      <div class="quiz-image-wrap mt-2 mb-3">
+        {linked ? (
+          <a href={href} class="block">
+            <img
+              class="block max-h-56 max-w-full rounded-lg border border-stone-200"
+              src={src}
+              alt=""
+              loading="lazy"
+              onerror="this.closest('.quiz-image-wrap').classList.add('hidden')"
+            />
+          </a>
+        ) : (
+          <img
+            class="block max-h-56 max-w-full rounded-lg border border-stone-200"
+            src={src}
+            alt=""
+            loading="lazy"
+            onerror="this.closest('.quiz-image-wrap').classList.add('hidden')"
+          />
+        )}
+      </div>
+    )
+  }
+
+  {
+    linked ? (
+      <a
+        href={href}
+        class="mb-3 block text-base leading-relaxed font-semibold text-slate-900 no-underline hover:text-blue-700"
+        data-question-text
+      >
+        {title}
+      </a>
+    ) : (
+      <p
+        class="mb-3 text-base leading-relaxed font-semibold"
+        data-question-text
+      >
+        {title}
+      </p>
+    )
+  }
 
   <ul class="m-0 flex list-none flex-col gap-2 p-0" data-options role="list">
     {
@@ -105,4 +161,14 @@ const answerLetter = String.fromCharCode(65 + q.correct_index);
     imageSrc={src}
     lang={lang}
   />
+
+  {
+    linked && (
+      <p class="mt-3 text-sm font-bold text-blue-700">
+        <a href={href} class="hover:underline">
+          Open question {number} →
+        </a>
+      </p>
+    )
+  }
 </li>

@@ -1,30 +1,38 @@
 ---
 import questionBank from '../../questions.json';
 import type { Category, Lang, Question } from '../lib/quiz';
+import { PAGE_SIZE, parsePageParam, totalQuestionPages } from '../lib/quiz';
 import QuestionCard from './quiz/QuestionCard.astro';
 import QuizHeader from './quiz/QuizHeader.astro';
 import QuizPagination from './quiz/QuizPagination.astro';
 import QuizToolbar from './quiz/QuizToolbar.astro';
 
 interface Props {
-  /** Default language shown on load: "en" | "fr" | "rw" */
   lang?: Lang;
-  /** Restrict to a single category id (1 = Traffic Rules, 2 = Road Signs). Omit for all. */
   categoryId?: number;
-  /** Base path prefixed to image_url (e.g. "/" + "images/foo.png" → "/images/foo.png"). */
   imageBase?: string;
+  page?: number;
 }
 
-const { lang = 'en', categoryId, imageBase = '/' } = Astro.props;
+const {
+  lang = 'en',
+  categoryId,
+  imageBase = '/',
+  page: pageProp,
+} = Astro.props;
 
 const categories = questionBank.categories as Category[];
-const questions = (
+const allQuestions = (
   categoryId
     ? questionBank.questions.filter((q) => q.category_id === categoryId)
     : questionBank.questions
 ) as Question[];
 
-const pageSize = 20;
+const pageSize = PAGE_SIZE;
+const totalPages = totalQuestionPages(allQuestions.length, pageSize);
+const currentPage = parsePageParam(String(pageProp ?? 1), totalPages);
+const start = (currentPage - 1) * pageSize;
+const pageQuestions = allQuestions.slice(start, start + pageSize);
 ---
 
 <section
@@ -32,32 +40,50 @@ const pageSize = 20;
   data-lang={lang}
   data-image-base={imageBase}
   data-page-size={pageSize}
+  data-current-page={currentPage}
+  data-total-pages={totalPages}
+  data-site={Astro.site?.href ?? ''}
 >
-  <QuizHeader categories={categories} categoryId={categoryId} lang={lang} />
-  <QuizToolbar pageSize={pageSize} questionCount={questions.length} />
+  <QuizHeader
+    categories={categories}
+    categoryId={categoryId}
+    lang={lang}
+    page={currentPage}
+  />
+  <QuizToolbar
+    pageSize={pageSize}
+    questionCount={allQuestions.length}
+    currentPage={currentPage}
+  />
 
   <ol class="m-0 flex list-none flex-col gap-5 p-0">
     {
-      questions.map((q, i) => (
+      pageQuestions.map((q, i) => (
         <QuestionCard
           question={q}
-          index={i}
+          index={start + i}
           lang={lang}
           imageBase={imageBase}
+          linked
         />
       ))
     }
   </ol>
 
   {
-    questions.length === 0 && (
+    pageQuestions.length === 0 && (
       <p class="py-8 text-center text-slate-500">
         No questions match this category yet.
       </p>
     )
   }
 
-  <QuizPagination pageSize={pageSize} questionCount={questions.length} />
+  <QuizPagination
+    lang={lang}
+    pageSize={pageSize}
+    questionCount={allQuestions.length}
+    currentPage={currentPage}
+  />
 </section>
 
 <script>

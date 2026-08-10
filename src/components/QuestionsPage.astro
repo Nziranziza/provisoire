@@ -2,36 +2,110 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import QuestionList from '../components/questionList.astro';
 import type { Lang } from '../lib/quiz';
+import {
+  PAGE_SIZE,
+  parsePageParam,
+  questionsListHref,
+  totalQuestionPages,
+} from '../lib/quiz';
+import questionBank from '../../questions.json';
+import {
+  breadcrumbJsonLd,
+  listJsonLd,
+  listPageAlternates,
+  truncateMeta,
+} from '../lib/seo';
+import type { Question } from '../lib/quiz';
 
 interface Props {
   lang: Lang;
+  page?: number;
 }
 
-const { lang } = Astro.props;
+const { lang, page: pageProp } = Astro.props;
 
-const meta: Record<Lang, { title: string; description: string }> = {
+const meta: Record<
+  Lang,
+  { title: string; description: string; listLabel: string }
+> = {
   en: {
     title: 'Questions & Answers (English) — Provisoire',
     description:
-      'English list of Rwanda provisional driving-test questions and answers.',
+      'Practice Rwanda provisional driving-test questions and answers in English. Traffic rules and road signs with correct answers.',
+    listLabel: 'Questions',
   },
   fr: {
     title: 'Questions et réponses (Français) — Provisoire',
     description:
-      'Liste en français des questions et réponses du permis provisoire rwandais.',
+      'Questions et réponses du permis provisoire rwandais en français. Règles de circulation et panneaux avec bonnes réponses.',
+    listLabel: 'Questions',
   },
   rw: {
     title: 'Ibibazo n’ibisubizo (Ikinyarwanda) — Provisoire',
     description:
-      'Urutonde rw’ibibazo n’ibisubizo by’ikizamini cy’uruhushya rwo gutwara mu Kinyarwanda.',
+      'Ibibazo n’ibisubizo by’ikizamini cy’uruhushya rwo gutwara mu Kinyarwanda. Amategeko n’ibyapa n’ibisubizo by’ukuri.',
+    listLabel: 'Ibibazo',
   },
 };
 
-const { title, description } = meta[lang];
+const allQuestions = questionBank.questions as Question[];
+const totalPages = totalQuestionPages(allQuestions.length, PAGE_SIZE);
+const page = parsePageParam(String(pageProp ?? 1), totalPages);
+const start = (page - 1) * PAGE_SIZE;
+const pageQuestions = allQuestions.slice(start, start + PAGE_SIZE);
+
+const {
+  title: baseTitle,
+  description: baseDescription,
+  listLabel,
+} = meta[lang];
+const title =
+  page > 1
+    ? `${baseTitle.replace(' — Provisoire', '')} · Page ${page} — Provisoire`
+    : baseTitle;
+const description =
+  page > 1
+    ? truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
+    : truncateMeta(baseDescription);
+
+const canonical = questionsListHref(lang, page);
+const prev = page > 1 ? questionsListHref(lang, page - 1) : null;
+const next = page < totalPages ? questionsListHref(lang, page + 1) : null;
+const alternates = listPageAlternates(page, Astro.site);
+
+const jsonLd = [
+  listJsonLd({
+    lang,
+    page,
+    totalPages,
+    questions: pageQuestions,
+    startIndex: start,
+    site: Astro.site,
+  }),
+  breadcrumbJsonLd(
+    [
+      { name: 'Provisoire', path: '/' },
+      { name: listLabel, path: questionsListHref(lang, 1) },
+      ...(page > 1
+        ? [{ name: `Page ${page}`, path: questionsListHref(lang, page) }]
+        : []),
+    ],
+    Astro.site,
+  ),
+];
 ---
 
-<BaseLayout title={title} description={description} lang={lang}>
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  canonical={canonical}
+  prev={prev}
+  next={next}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
   <main class="m-0 bg-stone-100 px-4 py-10">
-    <QuestionList lang={lang} imageBase="/" />
+    <QuestionList lang={lang} imageBase="/" page={page} />
   </main>
 </BaseLayout>

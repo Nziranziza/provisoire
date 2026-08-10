@@ -1,0 +1,16 @@
+---
+import QuestionsPage from '../../../../components/QuestionsPage.astro';
+import questionBank from '../../../../../questions.json';
+import { PAGE_SIZE, totalQuestionPages } from '../../../../lib/quiz';
+
+export function getStaticPaths() {
+  const total = totalQuestionPages(questionBank.questions.length, PAGE_SIZE);
+  return Array.from({ length: Math.max(0, total - 1) }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }));
+}
+
+const page = Number(Astro.params.page);
+---
+
+<QuestionsPage lang="rw" page={page} />

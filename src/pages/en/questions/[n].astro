@@ -1,0 +1,28 @@
+---
+import questionBank from '../../../../questions.json';
+import QuestionDetailPage from '../../../components/QuestionDetailPage.astro';
+import type { Question } from '../../../lib/quiz';
+
+export function getStaticPaths() {
+  const questions = questionBank.questions as Question[];
+  return questions.map((_, index) => ({
+    params: { n: String(index + 1) },
+  }));
+}
+
+const n = Number(Astro.params.n);
+const index = n - 1;
+const questions = questionBank.questions as Question[];
+const question = questions[index];
+
+if (!question || !Number.isInteger(n) || n < 1) {
+  return Astro.redirect('/en/questions');
+}
+---
+
+<QuestionDetailPage
+  lang="en"
+  question={question}
+  index={index}
+  total={questions.length}
+/>

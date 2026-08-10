@@ -1,13 +1,15 @@
 ---
 import type { Category, Lang } from '../../lib/quiz';
+import { questionsListHref } from '../../lib/quiz';
 
 interface Props {
   categories: Category[];
   categoryId?: number;
   lang: Lang;
+  page?: number;
 }
 
-const { categories, categoryId, lang } = Astro.props;
+const { categories, categoryId, lang, page = 1 } = Astro.props;
 
 const locales: { code: Lang; label: string }[] = [
   { code: 'en', label: 'EN' },
@@ -43,7 +45,7 @@ const locales: { code: Lang; label: string }[] = [
           const active = lang === code;
           return (
             <a
-              href={`/${code}/questions`}
+              href={questionsListHref(code, page)}
               hreflang={code}
               aria-current={active ? 'page' : undefined}
               class:list={[

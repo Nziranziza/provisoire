@@ -64,3 +64,41 @@ export const ANSWER_LABEL: Record<Lang, string> = {
   fr: 'Bonne réponse :',
   rw: 'Igisubizo cy’ukuri:',
 };
+
+export const LOCALES: Lang[] = ['en', 'fr', 'rw'];
+
+export function isLang(value: string | undefined): value is Lang {
+  return value === 'en' || value === 'fr' || value === 'rw';
+}
+
+export function questionNumber(index: number): number {
+  return index + 1;
+}
+
+export function questionHref(lang: Lang, number: number): string {
+  return `/${lang}/questions/${number}`;
+}
+
+export const PAGE_SIZE = 20;
+
+/** List URL: page 1 at /[lang]/questions, later pages at /[lang]/questions/page/[n]. */
+export function questionsListHref(lang: Lang, page = 1): string {
+  if (page <= 1) return `/${lang}/questions`;
+  return `/${lang}/questions/page/${page}`;
+}
+
+export function totalQuestionPages(
+  questionCount: number,
+  pageSize = PAGE_SIZE,
+): number {
+  return Math.max(1, Math.ceil(questionCount / pageSize));
+}
+
+export function parsePageParam(
+  raw: string | null | undefined,
+  totalPages: number,
+): number {
+  const n = Number.parseInt(String(raw ?? '1'), 10);
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.min(n, Math.max(1, totalPages));
+}
