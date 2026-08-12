@@ -1,16 +1,53 @@
 ---
 import '../styles/global.css';
+import type { HreflangLink } from '../lib/seo';
+import { absoluteUrl, ogLocale } from '../lib/seo';
+import type { Lang } from '../lib/quiz';
 
 interface Props {
   title: string;
   description: string;
   /** BCP 47 tag for <html lang>. Defaults to the current URL's locale. */
   lang?: string;
+  /** Absolute or site-relative self-canonical URL. Defaults to the current pathname. */
+  canonical?: string;
+  /** Absolute or site-relative URL for <link rel="prev">. */
+  prev?: string | null;
+  /** Absolute or site-relative URL for <link rel="next">. */
+  next?: string | null;
+  /** hreflang alternate URLs for this page. */
+  alternates?: HreflangLink[];
+  /** Optional Open Graph image (absolute or site-relative). */
+  image?: string | null;
+  /** JSON-LD objects to embed. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** robots directive, e.g. "index,follow" or "noindex,nofollow". */
+  robots?: string;
 }
 
-const { title, description, lang = Astro.currentLocale ?? 'en' } = Astro.props;
+const {
+  title,
+  description,
+  lang = Astro.currentLocale ?? 'en',
+  canonical: canonicalProp,
+  prev,
+  next,
+  alternates = [],
+  image,
+  jsonLd,
+  robots = 'index,follow',
+} = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site);
+function toAbsolute(url: string): string {
+  return absoluteUrl(url, Astro.site);
+}
+
+const canonical = toAbsolute(canonicalProp ?? Astro.url.pathname);
+const prevHref = prev ? toAbsolute(prev) : null;
+const nextHref = next ? toAbsolute(next) : null;
+const imageHref = image ? toAbsolute(image) : null;
+const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const locale = (lang as Lang) || 'en';
 ---
 
 <!doctype html>
@@ -20,12 +57,53 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
     <link rel="canonical" href={canonical} />
+    {prevHref && <link rel="prev" href={prevHref} />}
+    {nextHref && <link rel="next" href={nextHref} />}
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.lang} href={alt.href} />
+      ))
+    }
     <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content="Provisoire" />
+    <meta property="og:locale" content={ogLocale(locale)} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    {imageHref && <meta property="og:image" content={imageHref} />}
+    {
+      alternates
+        .filter((alt) => alt.lang !== 'x-default' && alt.lang !== lang)
+        .map((alt) => (
+          <meta
+            property="og:locale:alternate"
+            content={ogLocale(alt.lang as Lang)}
+          />
+        ))
+    }
+
+    <meta
+      name="twitter:card"
+      content={imageHref ? 'summary_large_image' : 'summary'}
+    />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {imageHref && <meta name="twitter:image" content={imageHref} />}
+
+    {
+      jsonLdItems.map((item) => (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(item)}
+        />
+      ))
+    }
   </head>
   <body class="bg-white text-slate-900">
     <slot />

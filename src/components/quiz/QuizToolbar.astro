@@ -1,0 +1,98 @@
+---
+interface Props {
+  pageSize: number;
+  questionCount: number;
+  /** How many questions are visible on this page after category filter. */
+  visibleCount?: number;
+  /** Full bank size for search (not the filtered category count). */
+  bankTotal?: number;
+  currentPage?: number;
+}
+
+const {
+  pageSize,
+  questionCount,
+  visibleCount,
+  bankTotal = questionCount,
+  currentPage = 1,
+} = Astro.props;
+const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
+const page = Math.min(Math.max(1, currentPage), totalPages);
+const showVisible =
+  typeof visibleCount === 'number' && visibleCount !== pageSize;
+---
+
+<div
+  class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+>
+  <form
+    class="flex min-w-0 flex-1 flex-col gap-1"
+    data-question-search
+    role="search"
+  >
+    <label class="sr-only" for="question-number-search"
+      >Search by question number</label
+    >
+    <div
+      class="flex max-w-md items-stretch overflow-hidden rounded-full border-2 border-slate-900 bg-white"
+    >
+      <input
+        id="question-number-search"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        autocomplete="off"
+        placeholder={`Type a question number (1–${bankTotal}) to jump there`}
+        class="min-w-0 flex-1 border-0 bg-transparent px-4 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+        data-question-search-input
+      />
+      <button
+        type="submit"
+        class="flex items-center justify-center border-l-2 border-slate-900 bg-slate-900 px-3.5 text-white transition hover:bg-slate-700"
+        aria-label="Search question number"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.25"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+      </button>
+    </div>
+    <p
+      class="hidden text-sm font-semibold text-red-600"
+      data-question-search-error
+      aria-live="polite"
+    >
+    </p>
+  </form>
+
+  <div
+    class="rounded-full bg-stone-100 px-3 py-2 text-sm font-semibold text-slate-700"
+  >
+    Page <span data-page-current>{page}</span> of <span data-page-total
+      >{totalPages}</span
+    >
+    <span class="text-slate-400"> · </span>
+    {
+      showVisible ? (
+        <>
+          <span data-visible-count>{visibleCount}</span> shown ·{' '}
+          <span data-question-count>{questionCount}</span> total
+        </>
+      ) : (
+        <>
+          <span data-question-count>{questionCount}</span> questions
+        </>
+      )
+    }
+  </div>
+</div>

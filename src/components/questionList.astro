@@ -1,0 +1,119 @@
+---
+import questionBank from '../../questions.json';
+import type { Category, Lang, Question } from '../lib/quiz';
+import {
+  PAGE_SIZE,
+  globalQuestionIndex,
+  parsePageParam,
+  totalQuestionPages,
+} from '../lib/quiz';
+import QuestionCard from './quiz/QuestionCard.astro';
+import QuizHeader from './quiz/QuizHeader.astro';
+import QuizPagination from './quiz/QuizPagination.astro';
+import QuizToolbar from './quiz/QuizToolbar.astro';
+
+interface Props {
+  lang?: Lang;
+  categoryId?: number;
+  imageBase?: string;
+  page?: number;
+}
+
+const {
+  lang = 'en',
+  categoryId,
+  imageBase = '/',
+  page: pageProp,
+} = Astro.props;
+
+const categories = questionBank.categories as Category[];
+const bankQuestions = questionBank.questions as Question[];
+const filteredQuestions = categoryId
+  ? bankQuestions.filter((q) => q.category_id === categoryId)
+  : bankQuestions;
+const categoryCounts = Object.fromEntries(
+  categories.map((c) => [
+    c.id,
+    bankQuestions.filter((q) => q.category_id === c.id).length,
+  ]),
+) as Record<number, number>;
+const category = categoryId
+  ? categories.find((c) => c.id === categoryId)
+  : undefined;
+
+const pageSize = PAGE_SIZE;
+const totalPages = totalQuestionPages(filteredQuestions.length, pageSize);
+const currentPage = parsePageParam(String(pageProp ?? 1), totalPages);
+const start = (currentPage - 1) * pageSize;
+const pageQuestions = filteredQuestions.slice(start, start + pageSize);
+
+const emptyCopy: Record<Lang, (name: string) => string> = {
+  en: (name) => `No ${name} questions found.`,
+  fr: (name) => `Aucune question « ${name} » trouvée.`,
+  rw: (name) => `Nta bibazo bya « ${name} » byabonetse.`,
+};
+---
+
+<section
+  class="quiz mx-auto max-w-3xl rounded-2xl border border-stone-200 bg-stone-50 p-4 text-slate-900 sm:p-7"
+  data-lang={lang}
+  data-image-base={imageBase}
+  data-page-size={pageSize}
+  data-current-page={currentPage}
+  data-total-pages={totalPages}
+  data-category-id={categoryId ?? 'all'}
+  data-bank-total={bankQuestions.length}
+  data-site={Astro.site?.href ?? ''}
+>
+  <QuizHeader
+    categories={categories}
+    categoryId={categoryId}
+    lang={lang}
+    page={currentPage}
+    categoryCounts={categoryCounts}
+  />
+  <QuizToolbar
+    pageSize={pageSize}
+    questionCount={filteredQuestions.length}
+    bankTotal={bankQuestions.length}
+    currentPage={currentPage}
+  />
+
+  <ol class="m-0 flex list-none flex-col gap-5 p-0">
+    {
+      pageQuestions.map((q) => {
+        const globalIndex = globalQuestionIndex(bankQuestions, q);
+        return (
+          <QuestionCard
+            question={q}
+            index={globalIndex}
+            lang={lang}
+            imageBase={imageBase}
+            linked
+          />
+        );
+      })
+    }
+  </ol>
+
+  {
+    pageQuestions.length === 0 && (
+      <p class="py-8 text-center text-base font-semibold text-slate-600">
+        {emptyCopy[lang](category?.name ?? 'category')}
+      </p>
+    )
+  }
+
+  <QuizPagination
+    lang={lang}
+    pageSize={pageSize}
+    questionCount={filteredQuestions.length}
+    currentPage={currentPage}
+    categoryId={categoryId}
+  />
+</section>
+
+<script>
+  import { initAllQuizzes } from '../scripts/quiz-client';
+  initAllQuizzes();
+</script>

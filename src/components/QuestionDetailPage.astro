@@ -1,0 +1,200 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QuestionCard from './quiz/QuestionCard.astro';
+import type { Lang, Question } from '../lib/quiz';
+import {
+  LOCALES,
+  correctAnswerText,
+  imageSrc,
+  questionHref,
+  questionNumber,
+  questionText,
+  questionsListHref,
+} from '../lib/quiz';
+import {
+  breadcrumbJsonLd,
+  questionJsonLd,
+  questionPageAlternates,
+  truncateMeta,
+} from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+  question: Question;
+  index: number;
+  total: number;
+  imageBase?: string;
+}
+
+const { lang, question, index, total, imageBase = '/' } = Astro.props;
+const number = questionNumber(index);
+const titleText = questionText(question, lang);
+const answerText = correctAnswerText(question, lang);
+const imagePath = question.image_url
+  ? imageSrc(imageBase, question.image_url)
+  : null;
+
+const copy: Record<
+  Lang,
+  {
+    back: string;
+    prev: string;
+    next: string;
+    pageTitle: string;
+    home: string;
+    list: string;
+  }
+> = {
+  en: {
+    back: 'Back to all questions',
+    prev: 'Previous',
+    next: 'Next',
+    pageTitle: `Question ${number}: ${truncateMeta(titleText, 60)} — Provisoire`,
+    home: 'Provisoire',
+    list: 'Questions',
+  },
+  fr: {
+    back: 'Retour à toutes les questions',
+    prev: 'Précédente',
+    next: 'Suivante',
+    pageTitle: `Question ${number} : ${truncateMeta(titleText, 60)} — Provisoire`,
+    home: 'Provisoire',
+    list: 'Questions',
+  },
+  rw: {
+    back: 'Subira ku bibazo byose',
+    prev: 'Ibanza',
+    next: 'Ikurikira',
+    pageTitle: `Ikibazo ${number}: ${truncateMeta(titleText, 60)} — Provisoire`,
+    home: 'Provisoire',
+    list: 'Ibibazo',
+  },
+};
+
+const labels = copy[lang];
+const hasPrev = number > 1;
+const hasNext = number < total;
+const canonical = questionHref(lang, number);
+const prevUrl = hasPrev ? questionHref(lang, number - 1) : null;
+const nextUrl = hasNext ? questionHref(lang, number + 1) : null;
+const description = truncateMeta(`${titleText} Correct answer: ${answerText}`);
+const alternates = questionPageAlternates(number, Astro.site);
+const jsonLd = [
+  questionJsonLd({
+    lang,
+    question,
+    number,
+    site: Astro.site,
+    imageBase,
+  }),
+  breadcrumbJsonLd(
+    [
+      { name: labels.home, path: '/' },
+      { name: labels.list, path: questionsListHref(lang) },
+      { name: `${labels.list} ${number}`, path: canonical },
+    ],
+    Astro.site,
+  ),
+];
+---
+
+<BaseLayout
+  title={labels.pageTitle}
+  description={description}
+  lang={lang}
+  canonical={canonical}
+  prev={prevUrl}
+  next={nextUrl}
+  alternates={alternates}
+  image={imagePath}
+  jsonLd={jsonLd}
+>
+  <main class="m-0 bg-stone-100 px-4 py-10">
+    <div class="mx-auto max-w-3xl">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <a
+          href={questionsListHref(lang)}
+          class="text-sm font-bold text-blue-700 underline-offset-2 hover:underline"
+        >
+          ← {labels.back}
+        </a>
+        <div class="flex items-center gap-2" role="group" aria-label="Language">
+          {
+            LOCALES.map((code) => {
+              const active = lang === code;
+              return (
+                <a
+                  href={questionHref(code, number)}
+                  hreflang={code}
+                  aria-current={active ? 'page' : undefined}
+                  class:list={[
+                    'rounded-full border-2 border-slate-900 px-3 py-1 text-xs font-bold tracking-wide',
+                    active
+                      ? 'bg-blue-700 text-white'
+                      : 'bg-white text-slate-900 hover:bg-stone-200',
+                  ]}
+                >
+                  {code.toUpperCase()}
+                </a>
+              );
+            })
+          }
+        </div>
+      </div>
+
+      <article
+        class="rounded-2xl border border-stone-200 bg-stone-50 p-4 sm:p-7"
+      >
+        <ul class="m-0 list-none p-0">
+          <QuestionCard
+            question={question}
+            index={index}
+            lang={lang}
+            imageBase={imageBase}
+          />
+        </ul>
+      </article>
+
+      <nav
+        class="mt-6 flex flex-wrap items-center justify-between gap-3"
+        aria-label="Question navigation"
+      >
+        {
+          hasPrev ? (
+            <a
+              href={questionHref(lang, number - 1)}
+              rel="prev"
+              class="rounded-full border border-slate-900 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-slate-100"
+            >
+              ← {labels.prev}
+            </a>
+          ) : (
+            <span class="rounded-full border border-stone-200 px-5 py-2.5 text-sm font-bold text-stone-300">
+              ← {labels.prev}
+            </span>
+          )
+        }
+
+        <span class="text-sm font-semibold text-slate-600">
+          {number} / {total}
+        </span>
+
+        {
+          hasNext ? (
+            <a
+              href={questionHref(lang, number + 1)}
+              rel="next"
+              class="rounded-full border border-slate-900 bg-slate-900 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-slate-700"
+            >
+              {labels.next} →
+            </a>
+          ) : (
+            <span class="rounded-full border border-stone-200 px-5 py-2.5 text-sm font-bold text-stone-300">
+              {labels.next} →
+            </span>
+          )
+        }
+      </nav>
+    </div>
+  </main>
+</BaseLayout>

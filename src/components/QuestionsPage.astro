@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QuestionList from '../components/questionList.astro';
+import type { Lang, Question } from '../lib/quiz';
+import {
+  PAGE_SIZE,
+  globalQuestionIndex,
+  parsePageParam,
+  questionsListHref,
+  totalQuestionPages,
+} from '../lib/quiz';
+import questionBank from '../../questions.json';
+import {
+  breadcrumbJsonLd,
+  listJsonLd,
+  listPageAlternates,
+  truncateMeta,
+} from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+  page?: number;
+  categoryId?: number;
+}
+
+const { lang, page: pageProp, categoryId } = Astro.props;
+
+const category = categoryId
+  ? questionBank.categories.find((c) => c.id === categoryId)
+  : undefined;
+
+const meta: Record<
+  Lang,
+  { title: string; description: string; listLabel: string }
+> = {
+  en: {
+    title: category
+      ? `${category.name} on this page (English) — Provisoire`
+      : 'Questions & Answers (English) — Provisoire',
+    description: category
+      ? `Rwanda provisional ${category.name.toLowerCase()} questions on this page, in English.`
+      : 'Practice Rwanda provisional driving-test questions and answers in English. Traffic rules and road signs with correct answers.',
+    listLabel: category?.name ?? 'Questions',
+  },
+  fr: {
+    title: category
+      ? `${category.name} sur cette page (Français) — Provisoire`
+      : 'Questions et réponses (Français) — Provisoire',
+    description: category
+      ? `Questions ${category.name.toLowerCase()} du permis provisoire sur cette page, en français.`
+      : 'Questions et réponses du permis provisoire rwandais en français. Règles de circulation et panneaux avec bonnes réponses.',
+    listLabel: category?.name ?? 'Questions',
+  },
+  rw: {
+    title: category
+      ? `${category.name} kuri iyi paji (Ikinyarwanda) — Provisoire`
+      : 'Ibibazo n’ibisubizo (Ikinyarwanda) — Provisoire',
+    description: category
+      ? `Ibibazo bya ${category.name} kuri iyi paji mu Kinyarwanda.`
+      : 'Ibibazo n’ibisubizo by’ikizamini cy’uruhushya rwo gutwara mu Kinyarwanda. Amategeko n’ibyapa n’ibisubizo by’ukuri.',
+    listLabel: category?.name ?? 'Ibibazo',
+  },
+};
+
+const bankQuestions = questionBank.questions as Question[];
+const filteredQuestions = categoryId
+  ? bankQuestions.filter((q) => q.category_id === categoryId)
+  : bankQuestions;
+const totalPages = totalQuestionPages(filteredQuestions.length, PAGE_SIZE);
+const page = parsePageParam(String(pageProp ?? 1), totalPages);
+const start = (page - 1) * PAGE_SIZE;
+const pageQuestions = filteredQuestions.slice(start, start + PAGE_SIZE);
+
+const {
+  title: baseTitle,
+  description: baseDescription,
+  listLabel,
+} = meta[lang];
+const title =
+  page > 1
+    ? `${baseTitle.replace(' — Provisoire', '')} · Page ${page} — Provisoire`
+    : baseTitle;
+const description =
+  page > 1
+    ? truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
+    : truncateMeta(baseDescription);
+
+const canonical = questionsListHref(lang, page, categoryId);
+const prev = page > 1 ? questionsListHref(lang, page - 1, categoryId) : null;
+const next =
+  page < totalPages ? questionsListHref(lang, page + 1, categoryId) : null;
+const alternates = listPageAlternates(page, Astro.site, categoryId);
+
+const questionNumbers = pageQuestions.map(
+  (q) => globalQuestionIndex(bankQuestions, q) + 1,
+);
+
+const jsonLd = [
+  listJsonLd({
+    lang,
+    page,
+    totalPages,
+    questions: pageQuestions,
+    startIndex: start,
+    site: Astro.site,
+    categoryId,
+    questionNumbers,
+  }),
+  breadcrumbJsonLd(
+    [
+      { name: 'Provisoire', path: '/' },
+      { name: 'Questions', path: questionsListHref(lang, 1) },
+      ...(page > 1
+        ? [{ name: `Page ${page}`, path: questionsListHref(lang, page) }]
+        : []),
+      ...(category
+        ? [
+            {
+              name: listLabel,
+              path: questionsListHref(lang, page, categoryId),
+            },
+          ]
+        : []),
+    ],
+    Astro.site,
+  ),
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  canonical={canonical}
+  prev={prev}
+  next={next}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
+  <main class="m-0 bg-stone-100 px-4 py-10">
+    <QuestionList
+      lang={lang}
+      imageBase="/"
+      page={page}
+      categoryId={categoryId}
+    />
+  </main>
+</BaseLayout>
