@@ -37,11 +37,15 @@ const answer = correctAnswerText(q, lang);
 const answerLetter = String.fromCharCode(65 + q.correct_index);
 const number = questionNumber(index);
 const href = questionHref(lang, number);
+const isRoadSigns = q.category_id === 2;
 ---
 
 <li
   class:list={[
-    'quiz-item rounded-xl border border-l-4 border-stone-200 border-l-amber-400 bg-white px-4 pt-4 pb-5 transition sm:px-5',
+    'quiz-item rounded-xl border border-l-4 bg-white px-4 pt-4 pb-5 transition sm:px-5',
+    isRoadSigns
+      ? 'border-stone-200 border-l-sky-600'
+      : 'border-stone-200 border-l-amber-500',
     hidden && 'hidden',
   ]}
   data-question
@@ -58,7 +62,12 @@ const href = questionHref(lang, number);
         <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
           {String(number).padStart(2, '0')}
         </span>
-        <span class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase">
+        <span
+          class:list={[
+            'rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase',
+            isRoadSigns ? 'bg-sky-700' : 'bg-amber-700',
+          ]}
+        >
           {q.category_name}
         </span>
       </a>
@@ -67,7 +76,12 @@ const href = questionHref(lang, number);
         <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
           {String(number).padStart(2, '0')}
         </span>
-        <span class="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase">
+        <span
+          class:list={[
+            'rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase',
+            isRoadSigns ? 'bg-sky-700' : 'bg-amber-700',
+          ]}
+        >
           {q.category_name}
         </span>
       </div>

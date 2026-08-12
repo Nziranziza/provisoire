@@ -2,12 +2,24 @@
 interface Props {
   pageSize: number;
   questionCount: number;
+  /** How many questions are visible on this page after category filter. */
+  visibleCount?: number;
+  /** Full bank size for search (not the filtered category count). */
+  bankTotal?: number;
   currentPage?: number;
 }
 
-const { pageSize, questionCount, currentPage = 1 } = Astro.props;
+const {
+  pageSize,
+  questionCount,
+  visibleCount,
+  bankTotal = questionCount,
+  currentPage = 1,
+} = Astro.props;
 const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
 const page = Math.min(Math.max(1, currentPage), totalPages);
+const showVisible =
+  typeof visibleCount === "number" && visibleCount !== pageSize;
 ---
 
 <div
@@ -30,7 +42,7 @@ const page = Math.min(Math.max(1, currentPage), totalPages);
         inputmode="numeric"
         pattern="[0-9]*"
         autocomplete="off"
-        placeholder={`Type a question number (1–${questionCount}) to jump there`}
+        placeholder={`Type a question number (1–${bankTotal}) to jump there`}
         class="min-w-0 flex-1 border-0 bg-transparent px-4 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400"
         data-question-search-input
       />
@@ -70,6 +82,17 @@ const page = Math.min(Math.max(1, currentPage), totalPages);
       >{totalPages}</span
     >
     <span class="text-slate-400"> · </span>
-    <span data-question-count>{questionCount}</span> questions
+    {
+      showVisible ? (
+        <>
+          <span data-visible-count>{visibleCount}</span> shown ·{" "}
+          <span data-question-count>{questionCount}</span> total
+        </>
+      ) : (
+        <>
+          <span data-question-count>{questionCount}</span> questions
+        </>
+      )
+    }
   </div>
 </div>

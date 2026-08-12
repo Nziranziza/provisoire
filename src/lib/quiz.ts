@@ -81,10 +81,52 @@ export function questionHref(lang: Lang, number: number): string {
 
 export const PAGE_SIZE = 20;
 
-/** List URL: page 1 at /[lang]/questions, later pages at /[lang]/questions/page/[n]. */
-export function questionsListHref(lang: Lang, page = 1): string {
+/** URL slugs for question categories. */
+export const CATEGORY_SLUGS: Record<number, string> = {
+  1: "traffic-rules",
+  2: "road-signs",
+};
+
+export function categorySlug(categoryId: number): string | undefined {
+  return CATEGORY_SLUGS[categoryId];
+}
+
+export function categoryIdFromSlug(slug: string): number | undefined {
+  const match = Object.entries(CATEGORY_SLUGS).find(([, s]) => s === slug);
+  return match ? Number(match[0]) : undefined;
+}
+
+/**
+ * List URL:
+ * - all: /[lang]/questions[/page/N]
+ * - category on that same bank page: /[lang]/questions/page/N/category/[slug]
+ */
+export function questionsListHref(
+  lang: Lang,
+  page = 1,
+  categoryId?: number | null,
+): string {
+  const slug = categoryId ? CATEGORY_SLUGS[categoryId] : undefined;
+  if (slug) {
+    const p = Math.max(1, page);
+    return `/${lang}/questions/page/${p}/category/${slug}`;
+  }
   if (page <= 1) return `/${lang}/questions`;
   return `/${lang}/questions/page/${page}`;
+}
+
+/** Slice the full bank for a page, then optionally keep one category. */
+export function pageQuestionsFor(
+  questions: Question[],
+  page: number,
+  categoryId?: number | null,
+  pageSize = PAGE_SIZE,
+): Question[] {
+  const safePage = Math.max(1, page);
+  const start = (safePage - 1) * pageSize;
+  const slice = questions.slice(start, start + pageSize);
+  if (!categoryId) return slice;
+  return slice.filter((q) => q.category_id === categoryId);
 }
 
 export function totalQuestionPages(
@@ -98,7 +140,14 @@ export function parsePageParam(
   raw: string | null | undefined,
   totalPages: number,
 ): number {
-  const n = Number.parseInt(String(raw ?? '1'), 10);
+  const n = Number.parseInt(String(raw ?? "1"), 10);
   if (!Number.isFinite(n) || n < 1) return 1;
   return Math.min(n, Math.max(1, totalPages));
+}
+
+export function globalQuestionIndex(
+  allQuestions: Question[],
+  question: Question,
+): number {
+  return allQuestions.findIndex((q) => q.id === question.id);
 }

@@ -13,7 +13,9 @@ function initQuiz(root: HTMLElement) {
   );
   const lang = root.dataset.lang || 'en';
   const totalQuestions = Number(
-    root.querySelector('[data-question-count]')?.textContent || '0',
+    root.dataset.bankTotal ||
+      root.querySelector('[data-question-count]')?.textContent ||
+      '0',
   );
 
   function setSearchError(message: string) {
@@ -37,27 +39,38 @@ function initQuiz(root: HTMLElement) {
     window.location.href = `/${lang}/questions/${number}`;
   }
 
-  // Redirect legacy ?page=N URLs to crawlable /page/N paths.
+  const path = window.location.pathname;
+
+  // Old: /questions/category/slug[/page/N] → /questions/page/N/category/slug
+  const legacyCategory = path.match(
+    /^\/(en|fr|rw)\/questions\/category\/([^/]+)(?:\/page\/(\d+))?\/?$/,
+  );
+  if (legacyCategory) {
+    const slug = legacyCategory[2];
+    const page = legacyCategory[3] || '1';
+    window.location.replace(
+      `/${lang}/questions/page/${page}/category/${slug}`,
+    );
+    return;
+  }
+
+  // Legacy ?page=N on the all-questions list.
   const params = new URL(window.location.href).searchParams;
   const legacyPage = Number.parseInt(params.get('page') || '', 10);
-  if (Number.isFinite(legacyPage) && legacyPage > 1) {
-    const target =
-      legacyPage <= 1
-        ? `/${lang}/questions`
-        : `/${lang}/questions/page/${legacyPage}`;
-    window.location.replace(target);
+  if (
+    Number.isFinite(legacyPage) &&
+    legacyPage > 1 &&
+    /^\/(en|fr|rw)\/questions\/?$/.test(path)
+  ) {
+    window.location.replace(`/${lang}/questions/page/${legacyPage}`);
     return;
   }
 
   categorySelect?.addEventListener('change', () => {
-    const value = categorySelect.value;
-    const items = Array.from(
-      root.querySelectorAll<HTMLElement>('[data-question]'),
-    );
-    items.forEach((item) => {
-      const match = value === 'all' || item.dataset.categoryId === value;
-      item.classList.toggle('hidden', !match);
-    });
+    const href = categorySelect.selectedOptions[0]?.dataset.href;
+    if (href) {
+      window.location.assign(href);
+    }
   });
 
   searchForm?.addEventListener('submit', (event) => {

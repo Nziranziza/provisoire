@@ -10,18 +10,72 @@ import questionBank from './questions.json' with { type: 'json' };
 // and hreflang entries.
 const SITE = 'https://provisoire.pages.dev';
 const PAGE_SIZE = 20;
-const totalListPages = Math.max(
+const locales = ['en', 'fr', 'rw'];
+const CATEGORY_SLUGS = {
+  1: 'traffic-rules',
+  2: 'road-signs',
+};
+
+const bankPages = Math.max(
   1,
   Math.ceil(questionBank.questions.length / PAGE_SIZE),
 );
-const locales = ['en', 'fr', 'rw'];
-
-/** Extra list pagination URLs (page 2+) so crawlers discover them. */
-const listPageUrls = locales.flatMap((lang) =>
-  Array.from({ length: Math.max(0, totalListPages - 1) }, (_, i) => {
-    const page = i + 2;
-    return `${SITE}/${lang}/questions/page/${page}`;
+const categoryPageCounts = Object.fromEntries(
+  Object.entries(CATEGORY_SLUGS).map(([id, slug]) => {
+    const count = questionBank.questions.filter(
+      (q) => q.category_id === Number(id),
+    ).length;
+    return [slug, Math.max(1, Math.ceil(count / PAGE_SIZE))];
   }),
+);
+
+/**
+ * @param {string} basePath
+ * @param {number} questionCount
+ * @param {number} [fromPage=2]
+ */
+function pageUrlsForCount(basePath, questionCount, fromPage = 2) {
+  const total = Math.max(1, Math.ceil(questionCount / PAGE_SIZE));
+  return Array.from({ length: Math.max(0, total - fromPage + 1) }, (_, i) => {
+    const page = fromPage + i;
+    return `${SITE}${basePath}/page/${page}`;
+  });
+}
+
+/** Extra list pagination URLs so crawlers discover them. */
+const listPageUrls = locales.flatMap((lang) => {
+  const all = pageUrlsForCount(
+    `/${lang}/questions`,
+    questionBank.questions.length,
+  );
+  const byCategory = Object.values(CATEGORY_SLUGS).flatMap((slug) =>
+    Array.from({ length: categoryPageCounts[slug] }, (_, i) => {
+      const page = i + 1;
+      return `${SITE}/${lang}/questions/page/${page}/category/${slug}`;
+    }),
+  );
+  return [...all, ...byCategory];
+});
+
+/** Old /category/... paths → /page/N/category/... */
+const categoryRedirects = Object.fromEntries(
+  locales.flatMap((lang) =>
+    Object.values(CATEGORY_SLUGS).flatMap((slug) => {
+      const entries = [
+        [
+          `/${lang}/questions/category/${slug}`,
+          `/${lang}/questions/page/1/category/${slug}`,
+        ],
+      ];
+      for (let page = 2; page <= categoryPageCounts[slug]; page++) {
+        entries.push([
+          `/${lang}/questions/category/${slug}/page/${page}`,
+          `/${lang}/questions/page/${page}/category/${slug}`,
+        ]);
+      }
+      return entries;
+    }),
+  ),
 );
 
 export default defineConfig({
@@ -30,6 +84,8 @@ export default defineConfig({
   // Static output is the default: no adapter, `astro build` emits `dist/`,
   // which is the directory Cloudflare Pages serves.
   output: 'static',
+
+  redirects: categoryRedirects,
 
   i18n: {
     defaultLocale: 'en',

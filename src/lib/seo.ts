@@ -47,8 +47,12 @@ export function hreflangAlternates(
 export function listPageAlternates(
   page: number,
   site: string | URL | undefined,
+  categoryId?: number | null,
 ) {
-  return hreflangAlternates((lang) => questionsListHref(lang, page), site);
+  return hreflangAlternates(
+    (lang) => questionsListHref(lang, page, categoryId),
+    site,
+  );
 }
 
 export function questionPageAlternates(
@@ -71,9 +75,24 @@ export function listJsonLd(options: {
   questions: Question[];
   startIndex: number;
   site: string | URL | undefined;
+  categoryId?: number | null;
+  /** Global 1-based question numbers (bank order). Defaults to startIndex + i + 1. */
+  questionNumbers?: number[];
 }) {
-  const { lang, page, totalPages, questions, startIndex, site } = options;
-  const pageUrl = absoluteUrl(questionsListHref(lang, page), site);
+  const {
+    lang,
+    page,
+    totalPages,
+    questions,
+    startIndex,
+    site,
+    categoryId,
+    questionNumbers,
+  } = options;
+  const pageUrl = absoluteUrl(
+    questionsListHref(lang, page, categoryId),
+    site,
+  );
 
   return {
     '@context': 'https://schema.org',
@@ -93,16 +112,16 @@ export function listJsonLd(options: {
       '@type': 'ItemList',
       numberOfItems: questions.length,
       itemListElement: questions.map((q, i) => {
-        const number = startIndex + i + 1;
+        const number = questionNumbers?.[i] ?? startIndex + i + 1;
         return {
           '@type': 'ListItem',
-          position: number,
+          position: i + 1,
           url: absoluteUrl(questionHref(lang, number), site),
           name: truncateMeta(questionText(q, lang), 110),
         };
       }),
     },
-    ...(page > 1 ? { url: pageUrl, pagination: `${page}/${totalPages}` } : {}),
+    ...(page > 1 ? { pagination: `${page}/${totalPages}` } : {}),
   };
 }
 
