@@ -41,6 +41,12 @@ function initQuiz(root: HTMLElement) {
 
   const path = window.location.pathname;
 
+  // /questions/page/1 is not a real route; page 1 is /questions.
+  if (/^\/(en|fr|rw)\/questions\/page\/1\/?$/.test(path)) {
+    window.location.replace(`/${lang}/questions`);
+    return;
+  }
+
   // Old: /questions/category/slug[/page/N] → /questions/page/N/category/slug
   const legacyCategory = path.match(
     /^\/(en|fr|rw)\/questions\/category\/([^/]+)(?:\/page\/(\d+))?\/?$/,
@@ -48,9 +54,7 @@ function initQuiz(root: HTMLElement) {
   if (legacyCategory) {
     const slug = legacyCategory[2];
     const page = legacyCategory[3] || '1';
-    window.location.replace(
-      `/${lang}/questions/page/${page}/category/${slug}`,
-    );
+    window.location.replace(`/${lang}/questions/page/${page}/category/${slug}`);
     return;
   }
 

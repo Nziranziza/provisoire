@@ -89,10 +89,7 @@ export function listJsonLd(options: {
     categoryId,
     questionNumbers,
   } = options;
-  const pageUrl = absoluteUrl(
-    questionsListHref(lang, page, categoryId),
-    site,
-  );
+  const pageUrl = absoluteUrl(questionsListHref(lang, page, categoryId), site);
 
   return {
     '@context': 'https://schema.org',

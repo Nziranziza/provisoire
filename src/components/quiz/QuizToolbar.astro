@@ -19,7 +19,7 @@ const {
 const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
 const page = Math.min(Math.max(1, currentPage), totalPages);
 const showVisible =
-  typeof visibleCount === "number" && visibleCount !== pageSize;
+  typeof visibleCount === 'number' && visibleCount !== pageSize;
 ---
 
 <div
@@ -85,7 +85,7 @@ const showVisible =
     {
       showVisible ? (
         <>
-          <span data-visible-count>{visibleCount}</span> shown ·{" "}
+          <span data-visible-count>{visibleCount}</span> shown ·{' '}
           <span data-question-count>{questionCount}</span> total
         </>
       ) : (

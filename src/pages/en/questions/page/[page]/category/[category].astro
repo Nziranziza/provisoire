@@ -1,12 +1,12 @@
 ---
-import QuestionsPage from "../../../../../../components/QuestionsPage.astro";
-import questionBank from "../../../../../../../questions.json";
+import QuestionsPage from '../../../../../../components/QuestionsPage.astro';
+import questionBank from '../../../../../../../questions.json';
 import {
   CATEGORY_SLUGS,
   PAGE_SIZE,
   categoryIdFromSlug,
   totalQuestionPages,
-} from "../../../../../../lib/quiz";
+} from '../../../../../../lib/quiz';
 
 export function getStaticPaths() {
   return Object.entries(CATEGORY_SLUGS).flatMap(([id, category]) => {
@@ -20,7 +20,7 @@ export function getStaticPaths() {
   });
 }
 
-const categoryId = categoryIdFromSlug(Astro.params.category ?? "")!;
+const categoryId = categoryIdFromSlug(Astro.params.category ?? '')!;
 const page = Number(Astro.params.page);
 ---
 

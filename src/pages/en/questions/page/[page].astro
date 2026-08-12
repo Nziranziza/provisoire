@@ -5,12 +5,15 @@ import { PAGE_SIZE, totalQuestionPages } from '../../../../lib/quiz';
 
 export function getStaticPaths() {
   const total = totalQuestionPages(questionBank.questions.length, PAGE_SIZE);
-  return Array.from({ length: Math.max(0, total - 1) }, (_, i) => ({
-    params: { page: String(i + 2) },
+  return Array.from({ length: total }, (_, i) => ({
+    params: { page: String(i + 1) },
   }));
 }
 
 const page = Number(Astro.params.page);
+if (page <= 1) {
+  return Astro.redirect('/en/questions', 301);
+}
 ---
 
 <QuestionsPage lang="en" page={page} />

@@ -16,10 +16,7 @@ const CATEGORY_SLUGS = {
   2: 'road-signs',
 };
 
-const bankPages = Math.max(
-  1,
-  Math.ceil(questionBank.questions.length / PAGE_SIZE),
-);
+/** @type {Record<string, number>} */
 const categoryPageCounts = Object.fromEntries(
   Object.entries(CATEGORY_SLUGS).map(([id, slug]) => {
     const count = questionBank.questions.filter(
@@ -48,26 +45,32 @@ const listPageUrls = locales.flatMap((lang) => {
     `/${lang}/questions`,
     questionBank.questions.length,
   );
-  const byCategory = Object.values(CATEGORY_SLUGS).flatMap((slug) =>
-    Array.from({ length: categoryPageCounts[slug] }, (_, i) => {
-      const page = i + 1;
-      return `${SITE}/${lang}/questions/page/${page}/category/${slug}`;
-    }),
+  const byCategory = Object.entries(categoryPageCounts).flatMap(
+    ([slug, totalPages]) =>
+      Array.from({ length: totalPages }, (_, i) => {
+        const page = i + 1;
+        return `${SITE}/${lang}/questions/page/${page}/category/${slug}`;
+      }),
   );
   return [...all, ...byCategory];
 });
 
+/** /questions/page/1 → canonical /questions (page 1 has no /page/1 route). */
+const pageOneRedirects = Object.fromEntries(
+  locales.map((lang) => [`/${lang}/questions/page/1`, `/${lang}/questions`]),
+);
+
 /** Old /category/... paths → /page/N/category/... */
 const categoryRedirects = Object.fromEntries(
   locales.flatMap((lang) =>
-    Object.values(CATEGORY_SLUGS).flatMap((slug) => {
+    Object.entries(categoryPageCounts).flatMap(([slug, totalPages]) => {
       const entries = [
         [
           `/${lang}/questions/category/${slug}`,
           `/${lang}/questions/page/1/category/${slug}`,
         ],
       ];
-      for (let page = 2; page <= categoryPageCounts[slug]; page++) {
+      for (let page = 2; page <= totalPages; page++) {
         entries.push([
           `/${lang}/questions/category/${slug}/page/${page}`,
           `/${lang}/questions/page/${page}/category/${slug}`,
@@ -85,7 +88,7 @@ export default defineConfig({
   // which is the directory Cloudflare Pages serves.
   output: 'static',
 
-  redirects: categoryRedirects,
+  redirects: { ...pageOneRedirects, ...categoryRedirects },
 
   i18n: {
     defaultLocale: 'en',

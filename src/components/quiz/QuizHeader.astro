@@ -1,6 +1,6 @@
 ---
-import type { Category, Lang } from "../../lib/quiz";
-import { categorySlug, questionsListHref } from "../../lib/quiz";
+import type { Category, Lang } from '../../lib/quiz';
+import { categorySlug, questionsListHref } from '../../lib/quiz';
 
 interface Props {
   categories: Category[];
@@ -14,24 +14,30 @@ interface Props {
 const { categories, categoryId, lang, page = 1, categoryCounts } = Astro.props;
 
 const locales: { code: Lang; label: string }[] = [
-  { code: "en", label: "EN" },
-  { code: "fr", label: "FR" },
-  { code: "rw", label: "RW" },
+  { code: 'en', label: 'EN' },
+  { code: 'fr', label: 'FR' },
+  { code: 'rw', label: 'RW' },
 ];
 
 const allLabel: Record<Lang, string> = {
-  en: "All categories",
-  fr: "Toutes les catégories",
-  rw: "Ibyiciro byose",
+  en: 'All categories',
+  fr: 'Toutes les catégories',
+  rw: 'Ibyiciro byose',
 };
 ---
 
-<header class="mb-4 flex flex-wrap items-end justify-between gap-4 border-b-4 border-slate-900 pb-4">
+<header
+  class="mb-4 flex flex-wrap items-end justify-between gap-4 border-b-4 border-slate-900 pb-4"
+>
   <div>
-    <span class="mb-1 block text-[11px] font-bold uppercase tracking-widest text-blue-700">
+    <span
+      class="mb-1 block text-[11px] font-bold tracking-widest text-blue-700 uppercase"
+    >
       Rwanda Provisional Test
     </span>
-    <h2 class="text-xl font-extrabold uppercase tracking-wide text-slate-900 sm:text-2xl">
+    <h2
+      class="text-xl font-extrabold tracking-wide text-slate-900 uppercase sm:text-2xl"
+    >
       Questions & Answers
     </h2>
   </div>
@@ -42,24 +48,26 @@ const allLabel: Record<Lang, string> = {
       role="group"
       aria-label="Language"
     >
-      {locales.map(({ code, label }) => {
-        const active = lang === code;
-        return (
-          <a
-            href={questionsListHref(code, page, categoryId)}
-            hreflang={code}
-            aria-current={active ? "page" : undefined}
-            class:list={[
-              "px-3 py-1.5 text-xs font-bold tracking-wide transition",
-              active
-                ? "bg-blue-700 text-white"
-                : "bg-stone-50 text-slate-900 hover:bg-stone-200",
-            ]}
-          >
-            {label}
-          </a>
-        );
-      })}
+      {
+        locales.map(({ code, label }) => {
+          const active = lang === code;
+          return (
+            <a
+              href={questionsListHref(code, page, categoryId)}
+              hreflang={code}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'px-3 py-1.5 text-xs font-bold tracking-wide transition',
+                active
+                  ? 'bg-blue-700 text-white'
+                  : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
+              ]}
+            >
+              {label}
+            </a>
+          );
+        })
+      }
     </div>
 
     <select
@@ -75,21 +83,23 @@ const allLabel: Record<Lang, string> = {
       >
         {allLabel[lang]}
       </option>
-      {categories.map((c) => {
-        const count = categoryCounts?.[c.id];
-        const label =
-          typeof count === "number" ? `${c.name} (${count})` : c.name;
-        return (
-          <option
-            value={String(c.id)}
-            data-category-slug={categorySlug(c.id)}
-            data-href={questionsListHref(lang, 1, c.id)}
-            selected={categoryId === c.id}
-          >
-            {label}
-          </option>
-        );
-      })}
+      {
+        categories.map((c) => {
+          const count = categoryCounts?.[c.id];
+          const label =
+            typeof count === 'number' ? `${c.name} (${count})` : c.name;
+          return (
+            <option
+              value={String(c.id)}
+              data-category-slug={categorySlug(c.id)}
+              data-href={questionsListHref(lang, 1, c.id)}
+              selected={categoryId === c.id}
+            >
+              {label}
+            </option>
+          );
+        })
+      }
     </select>
   </div>
 </header>

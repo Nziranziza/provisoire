@@ -11,7 +11,11 @@ function classify(q) {
   if (/what does this sign mean/i.test(en)) return 2;
   if (/what does this road marking mean/i.test(en)) return 2;
   if (/what do these road markings mean/i.test(en)) return 2;
-  if (/^this signal (means|indicates|explains|designates|showing|prohibits|prevents)/i.test(en))
+  if (
+    /^this signal (means|indicates|explains|designates|showing|prohibits|prevents)/i.test(
+      en,
+    )
+  )
     return 2;
   if (/^this sign (indicates|showing|means)/i.test(en)) return 2;
   if (/^this signaling/i.test(en)) return 2;
@@ -32,16 +36,23 @@ function classify(q) {
   if (/what signal (obliges|gives you priority)/i.test(en)) return 2;
   if (/beyond the first road sign/i.test(en)) return 2;
   if (/from these road signs/i.test(en)) return 2;
-  if (/outside an agglomeration, you first encounter the two left-hand signals/i.test(en))
+  if (
+    /outside an agglomeration, you first encounter the two left-hand signals/i.test(
+      en,
+    )
+  )
     return 2;
   if (/this road sign means/i.test(en)) return 2;
-  if (/what does a (green|red|yellow) (traffic )?light mean/i.test(en)) return 2;
+  if (/what does a (green|red|yellow) (traffic )?light mean/i.test(en))
+    return 2;
   if (/what does a continuous white line/i.test(en)) return 2;
   if (/what does this broken white line mean/i.test(en)) return 2;
   if (/the two parallel discontinuous lines/i.test(en)) return 2;
   if (/railroad crossing/i.test(en) && hasImg) return 2;
   if (/at this junction.*stop.?sign/i.test(en)) return 2;
-  if (/which sign shows the driver who is about to enter a narrow road/i.test(en))
+  if (
+    /which sign shows the driver who is about to enter a narrow road/i.test(en)
+  )
     return 2;
   if (/which sign shows no through road/i.test(en)) return 2;
   if (/a tanker is involved.*which sign/i.test(en)) return 2;
@@ -99,7 +110,9 @@ for (let p = 1; p <= Math.ceil(bank.questions.length / PAGE); p++) {
 console.log('\nRoad Signs sample (should be sign/marking meaning):');
 bank.questions.forEach((q, i) => {
   if (q.category_id !== 2) return;
-  const t = (q.translations.en.question || '').replace(/\s+/g, ' ').slice(0, 90);
+  const t = (q.translations.en.question || '')
+    .replace(/\s+/g, ' ')
+    .slice(0, 90);
   console.log(String(i + 1).padStart(3), t);
 });
 

@@ -83,8 +83,8 @@ export const PAGE_SIZE = 20;
 
 /** URL slugs for question categories. */
 export const CATEGORY_SLUGS: Record<number, string> = {
-  1: "traffic-rules",
-  2: "road-signs",
+  1: 'traffic-rules',
+  2: 'road-signs',
 };
 
 export function categorySlug(categoryId: number): string | undefined {
@@ -140,7 +140,7 @@ export function parsePageParam(
   raw: string | null | undefined,
   totalPages: number,
 ): number {
-  const n = Number.parseInt(String(raw ?? "1"), 10);
+  const n = Number.parseInt(String(raw ?? '1'), 10);
   if (!Number.isFinite(n) || n < 1) return 1;
   return Math.min(n, Math.max(1, totalPages));
 }
