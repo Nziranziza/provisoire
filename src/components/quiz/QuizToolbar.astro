@@ -1,4 +1,6 @@
 ---
+import type { Lang } from '../../lib/quiz';
+
 interface Props {
   pageSize: number;
   questionCount: number;
@@ -7,6 +9,7 @@ interface Props {
   /** Full bank size for search (not the filtered category count). */
   bankTotal?: number;
   currentPage?: number;
+  lang?: Lang;
 }
 
 const {
@@ -15,42 +18,54 @@ const {
   visibleCount,
   bankTotal = questionCount,
   currentPage = 1,
+  lang = 'en',
 } = Astro.props;
+
 const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
 const page = Math.min(Math.max(1, currentPage), totalPages);
 const showVisible =
   typeof visibleCount === 'number' && visibleCount !== pageSize;
+
+const placeholders: Record<Lang, string> = {
+  en: `Search questions, options, explanations or # (1–${bankTotal})...`,
+  fr: `Rechercher questions, choix, explications ou n° (1–${bankTotal})...`,
+  rw: `Shakisha ibibazo, amahitamo, ibisobanuro cyangwa nimero (1–${bankTotal})...`,
+};
+
+const searchLabels: Record<Lang, string> = {
+  en: 'Search questions, options, explanations or enter question number',
+  fr: 'Rechercher questions, options, explications ou entrer le numéro',
+  rw: 'Shakisha ibibazo, amahitamo, ibisobanuro cyangwa nimero y’ikibazo',
+};
+
+const buttonLabels: Record<Lang, string> = {
+  en: 'Search',
+  fr: 'Rechercher',
+  rw: 'Shakisha',
+};
+
+const clearLabels: Record<Lang, string> = {
+  en: 'Clear search',
+  fr: 'Effacer la recherche',
+  rw: 'Hanagura ibishakishwa',
+};
 ---
 
 <div
   class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
 >
   <form
-    class="flex min-w-0 flex-1 flex-col gap-1"
+    class="relative flex min-w-0 flex-1 flex-col gap-1"
     data-question-search
     role="search"
   >
-    <label class="sr-only" for="question-number-search"
-      >Search by question number</label
-    >
+    <label class="sr-only" for="question-search-input">
+      {searchLabels[lang]}
+    </label>
     <div
-      class="flex max-w-md items-stretch overflow-hidden rounded-full border-2 border-slate-900 bg-white"
+      class="relative flex max-w-lg items-stretch overflow-hidden rounded-full border-2 border-slate-900 bg-white transition-shadow focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-1"
     >
-      <input
-        id="question-number-search"
-        type="text"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        autocomplete="off"
-        placeholder={`Type a question number (1–${bankTotal}) to jump there`}
-        class="min-w-0 flex-1 border-0 bg-transparent px-4 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400"
-        data-question-search-input
-      />
-      <button
-        type="submit"
-        class="flex items-center justify-center border-l-2 border-slate-900 bg-slate-900 px-3.5 text-white transition hover:bg-slate-700"
-        aria-label="Search question number"
-      >
+      <span class="pointer-events-none flex items-center pl-3.5 text-slate-400">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -65,8 +80,111 @@ const showVisible =
           <circle cx="11" cy="11" r="7"></circle>
           <path d="m20 20-3.5-3.5"></path>
         </svg>
+      </span>
+
+      <input
+        id="question-search-input"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder={placeholders[lang]}
+        class="min-w-0 flex-1 border-0 bg-transparent py-2 pr-2 pl-2.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+        data-question-search-input
+        role="combobox"
+        aria-expanded="false"
+        aria-autocomplete="list"
+        aria-controls="question-search-results-list"
+        aria-haspopup="listbox"
+      />
+
+      <div class="flex items-center gap-1 pr-1">
+        <!-- Clear button (hidden by default until input has text) -->
+        <button
+          type="button"
+          class="hidden rounded-full p-1 text-slate-400 transition hover:bg-stone-100 hover:text-slate-700"
+          data-question-search-clear
+          aria-label={clearLabels[lang]}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-3.5 w-3.5"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+
+        <!-- Loading spinner -->
+        <span
+          class="hidden px-1.5 text-blue-600"
+          data-question-search-loading
+          aria-hidden="true"
+        >
+          <svg
+            class="h-4 w-4 animate-spin"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        </span>
+      </div>
+
+      <!-- Search Submit Button -->
+      <button
+        type="submit"
+        class="flex items-center justify-center gap-1.5 border-l-2 border-slate-900 bg-slate-900 px-4 text-xs font-bold text-white transition hover:bg-slate-700 active:bg-slate-800"
+        aria-label={buttonLabels[lang]}
+        data-question-search-submit
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.25"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-3.5 w-3.5"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+        <span>{buttonLabels[lang]}</span>
       </button>
     </div>
+
+    <!-- Dropdown Results Container -->
+    <div
+      id="question-search-results-list"
+      class="absolute top-full left-0 z-50 mt-2 hidden max-h-[28rem] w-full max-w-lg overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-2xl"
+      data-question-search-results
+      role="listbox"
+      tabindex="-1"
+    >
+      <!-- Injected dynamically by quiz-client.ts -->
+    </div>
+
     <p
       class="hidden text-sm font-semibold text-red-600"
       data-question-search-error

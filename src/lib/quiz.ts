@@ -4,6 +4,7 @@ export type QuestionTranslation = {
   question: string;
   options: string[];
   correct_answer?: string;
+  explanation?: string;
 };
 
 export type Question = {
@@ -57,6 +58,11 @@ export function correctAnswerText(q: Question, lang: Lang): string {
   const t = q.translations[lang] ?? q.translations.en;
   if (!t) return '';
   return t.correct_answer || t.options[q.correct_index] || '';
+}
+
+export function questionExplanation(q: Question, lang: Lang): string {
+  const t = q.translations[lang] ?? q.translations.en;
+  return t?.explanation ?? '';
 }
 
 export const ANSWER_LABEL: Record<Lang, string> = {

@@ -1,3 +1,164 @@
+import type { Lang, Question } from '../lib/quiz';
+import { questionHref } from '../lib/quiz';
+import type {
+  ClientTokenIndex,
+  SearchPayload,
+  SearchResult,
+} from '../lib/search';
+
+const tokenIndexCache: Record<string, ClientTokenIndex> = {};
+const pendingFetches: Record<string, Promise<ClientTokenIndex | null>> = {};
+
+let searchModulePromise: Promise<typeof import('../lib/search')> | null = null;
+
+/**
+ * Dynamically loads the search engine module only when the user opens search.
+ * This keeps the initial page bundle minimal for Core Web Vitals.
+ */
+function getSearchModule(): Promise<typeof import('../lib/search')> {
+  if (!searchModulePromise) {
+    searchModulePromise = import('../lib/search');
+  }
+  return searchModulePromise;
+}
+
+const copy = {
+  en: {
+    resultsCount: (count: number) =>
+      `${count} ${count === 1 ? 'question' : 'questions'} found`,
+    jumpToQuestion: (n: number) => `Jump to Question #${n}`,
+    noResults: (q: string) => `No questions found matching "${q}"`,
+    noResultsHint:
+      'Try searching by traffic rules, road signs, option text, or a question number.',
+    optionLabel: 'Option',
+    explanationLabel: 'Explanation',
+    correctAnswerLabel: 'Correct',
+    questionNotFound: (n: number) => `Question ${n} was not found.`,
+    enterValidNumber: 'Enter a valid question number.',
+  },
+  fr: {
+    resultsCount: (count: number) =>
+      `${count} ${count === 1 ? 'question trouvée' : 'questions trouvées'}`,
+    jumpToQuestion: (n: number) => `Aller à la question n° ${n}`,
+    noResults: (q: string) => `Aucune question trouvée pour « ${q} »`,
+    noResultsHint:
+      'Essayez de chercher par règles de circulation, panneaux, choix ou numéro de question.',
+    optionLabel: 'Option',
+    explanationLabel: 'Explication',
+    correctAnswerLabel: 'Bonne réponse',
+    questionNotFound: (n: number) => `La question ${n} n’a pas été trouvée.`,
+    enterValidNumber: 'Entrez un numéro de question valide.',
+  },
+  rw: {
+    resultsCount: (count: number) => `Ibibazo ${count} byabonetse`,
+    jumpToQuestion: (n: number) => `Jya ku kibazo cya #${n}`,
+    noResults: (q: string) => `Nta bibazo bibonetse bihuye na « ${q} »`,
+    noResultsHint:
+      'Gerageza gushakisha amategeko, ibyapa, amahitamo cyangwa nimero y’ikibazo.',
+    optionLabel: 'Ihitamo',
+    explanationLabel: 'Ibisobanuro',
+    correctAnswerLabel: 'Igisubizo cy’ukuri',
+    questionNotFound: (n: number) => `Ikibazo ${n} nticyabonetse.`,
+    enterValidNumber: 'Andika nimero nyayo y’ikibazo.',
+  },
+};
+
+/**
+ * Lazily loads the search engine and index on demand.
+ * 1. Fetches pre-rendered static index: /${lang}/search-index.json
+ * 2. If network/endpoint is unavailable, dynamically loads questions.json and builds index on the fly.
+ */
+async function fetchTokenIndex(lang: Lang): Promise<ClientTokenIndex | null> {
+  if (tokenIndexCache[lang]) {
+    return tokenIndexCache[lang]!;
+  }
+
+  if (pendingFetches[lang]) {
+    return pendingFetches[lang]!;
+  }
+
+  const fetchPromise = (async () => {
+    const searchLib = await getSearchModule();
+
+    // 1. Try fetching the pre-rendered static search index
+    try {
+      const response = await fetch(`/${lang}/search-index.json`);
+      if (response.ok) {
+        const payload: SearchPayload = await response.json();
+        const clientIndex = searchLib.createClientTokenIndex(payload);
+        tokenIndexCache[lang] = clientIndex;
+        return clientIndex;
+      }
+    } catch {
+      // Network/offline fallback
+    }
+
+    // 2. Resilient fallback: Dynamically load questions.json on the fly
+    try {
+      const questionsModule = await import('../../questions.json');
+      const questions = (questionsModule.default?.questions ||
+        questionsModule.questions ||
+        []) as Question[];
+      const payload = searchLib.buildSearchPayload(questions, lang);
+      const clientIndex = searchLib.createClientTokenIndex(payload);
+      tokenIndexCache[lang] = clientIndex;
+      return clientIndex;
+    } catch (err) {
+      console.error('Failed to load search index:', err);
+      return null;
+    } finally {
+      delete pendingFetches[lang];
+    }
+  })();
+
+  pendingFetches[lang] = fetchPromise;
+  return fetchPromise;
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function highlightSnippet(text: string, rawQuery: string): string {
+  if (!text || !rawQuery.trim()) return escapeHtml(text);
+
+  const rawTokens = rawQuery
+    .trim()
+    .split(/\s+/)
+    .map((t) => t.trim().replace(/[’‘`´]/g, "'"))
+    .filter((t) => t.length > 0);
+
+  if (rawTokens.length === 0) return escapeHtml(text);
+
+  const escapedText = escapeHtml(text);
+
+  const allTokens: string[] = [];
+  for (const t of rawTokens) {
+    allTokens.push(escapeHtml(t));
+    const noApos = escapeHtml(t.replace(/'/g, ''));
+    if (noApos && noApos !== t) allTokens.push(noApos);
+  }
+
+  const escapedRegexTokens = Array.from(new Set(allTokens))
+    .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .filter(Boolean);
+
+  try {
+    const regex = new RegExp(`(${escapedRegexTokens.join('|')})`, 'gi');
+    return escapedText.replace(
+      regex,
+      '<mark class="bg-amber-200 text-slate-950 font-semibold px-0.5 rounded">$1</mark>',
+    );
+  } catch {
+    return escapedText;
+  }
+}
+
 function initQuiz(root: HTMLElement) {
   const categorySelect = root.querySelector<HTMLSelectElement>(
     '[data-category-select]',
@@ -8,15 +169,31 @@ function initQuiz(root: HTMLElement) {
   const searchInput = root.querySelector<HTMLInputElement>(
     '[data-question-search-input]',
   );
+  const searchClear = root.querySelector<HTMLButtonElement>(
+    '[data-question-search-clear]',
+  );
+  const searchLoading = root.querySelector<HTMLElement>(
+    '[data-question-search-loading]',
+  );
+  const searchResults = root.querySelector<HTMLElement>(
+    '[data-question-search-results]',
+  );
   const searchError = root.querySelector<HTMLElement>(
     '[data-question-search-error]',
   );
-  const lang = root.dataset.lang || 'en';
+
+  const lang = (root.dataset.lang as Lang) || 'en';
+  const i18n = copy[lang] || copy.en;
+
   const totalQuestions = Number(
     root.dataset.bankTotal ||
       root.querySelector('[data-question-count]')?.textContent ||
       '0',
   );
+
+  let currentResults: SearchResult[] = [];
+  let selectedIndex = -1;
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   function setSearchError(message: string) {
     if (!searchError) return;
@@ -24,20 +201,309 @@ function initQuiz(root: HTMLElement) {
     searchError.classList.toggle('hidden', !message);
   }
 
+  function setLoading(loading: boolean) {
+    if (!searchLoading) return;
+    searchLoading.classList.toggle('hidden', !loading);
+  }
+
+  function toggleClearButton(show: boolean) {
+    if (!searchClear) return;
+    searchClear.classList.toggle('hidden', !show);
+  }
+
+  function openResults() {
+    if (!searchResults) return;
+    searchResults.classList.remove('hidden');
+    searchInput?.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeResults() {
+    if (!searchResults) return;
+    searchResults.classList.add('hidden');
+    searchInput?.setAttribute('aria-expanded', 'false');
+    searchInput?.removeAttribute('aria-activedescendant');
+    selectedIndex = -1;
+  }
+
   function goToQuestionNumber(rawValue: string) {
     const number = Number.parseInt(rawValue.trim(), 10);
     if (!Number.isFinite(number) || number < 1) {
-      setSearchError('Enter a valid question number.');
+      setSearchError(i18n.enterValidNumber);
       return;
     }
     if (totalQuestions > 0 && number > totalQuestions) {
-      setSearchError(`Question ${number} was not found.`);
+      setSearchError(i18n.questionNotFound(number));
       return;
     }
 
     setSearchError('');
-    window.location.href = `/${lang}/questions/${number}`;
+    closeResults();
+    window.location.href = questionHref(lang, number);
   }
+
+  function updateSelectedOption() {
+    if (!searchResults) return;
+    const items = searchResults.querySelectorAll<HTMLElement>(
+      '[data-search-result-item]',
+    );
+    items.forEach((item, idx) => {
+      const isSelected = idx === selectedIndex;
+      item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      item.classList.toggle('bg-blue-50', isSelected);
+      item.classList.toggle('border-blue-500', isSelected);
+      if (isSelected) {
+        searchInput?.setAttribute('aria-activedescendant', item.id);
+        item.scrollIntoView({ block: 'nearest' });
+      }
+    });
+    if (selectedIndex === -1) {
+      searchInput?.removeAttribute('aria-activedescendant');
+    }
+  }
+
+  function renderResults(query: string, results: SearchResult[]) {
+    if (!searchResults) return;
+
+    if (!query.trim()) {
+      closeResults();
+      return;
+    }
+
+    if (results.length === 0) {
+      searchResults.innerHTML = `
+        <div class="p-5 text-center">
+          <p class="text-sm font-semibold text-slate-800">${escapeHtml(
+            i18n.noResults(query),
+          )}</p>
+          <p class="mt-1 text-xs text-slate-500">${escapeHtml(
+            i18n.noResultsHint,
+          )}</p>
+        </div>
+      `;
+      openResults();
+      return;
+    }
+
+    const itemsHtml = results
+      .map((res, idx) => {
+        const href = questionHref(lang, res.n);
+        const isRoadSigns = res.categoryId === 2;
+
+        // Context match badges
+        const optionMatches = res.matches.filter((m) => m.field === 'option');
+        const explanationMatch = res.matches.find(
+          (m) => m.field === 'explanation',
+        );
+
+        let contextHtml = '';
+        if (optionMatches.length > 0) {
+          const opt = optionMatches[0]!;
+          const letter = String.fromCharCode(65 + (opt.optionIndex ?? 0));
+          contextHtml += `
+            <div class="mt-1.5 flex items-start gap-1.5 rounded-md border border-amber-200 bg-amber-50/60 px-2 py-1 text-xs text-slate-700">
+              <span class="font-bold text-amber-900">${i18n.optionLabel} ${letter}:</span>
+              <span class="line-clamp-2">${highlightSnippet(
+                opt.snippet,
+                query,
+              )}</span>
+            </div>
+          `;
+        }
+
+        if (explanationMatch && explanationMatch.snippet) {
+          contextHtml += `
+            <div class="mt-1.5 flex items-start gap-1.5 rounded-md border border-emerald-200 bg-emerald-50/60 px-2 py-1 text-xs text-slate-700">
+              <span class="font-bold text-emerald-900">${i18n.explanationLabel}:</span>
+              <span class="line-clamp-2">${highlightSnippet(
+                explanationMatch.snippet,
+                query,
+              )}</span>
+            </div>
+          `;
+        }
+
+        return `
+          <a
+            href="${href}"
+            id="search-result-${idx}"
+            class="group block border-b border-stone-200 p-3.5 text-left transition hover:bg-stone-50"
+            data-search-result-item
+            data-index="${idx}"
+            role="option"
+            aria-selected="false"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <span class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500">
+                <span class="font-mono text-slate-900">#${String(
+                  res.n,
+                ).padStart(2, '0')}</span>
+              </span>
+              <span
+                class="rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase ${
+                  isRoadSigns ? 'bg-sky-700' : 'bg-amber-700'
+                }"
+              >
+                ${escapeHtml(res.categoryName)}
+              </span>
+            </div>
+            <p class="mt-1.5 text-sm font-semibold text-slate-900 group-hover:text-blue-700">
+              ${highlightSnippet(res.question, query)}
+            </p>
+            ${contextHtml}
+          </a>
+        `;
+      })
+      .join('');
+
+    searchResults.innerHTML = `
+      <div class="border-b border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-bold tracking-wide text-slate-500 uppercase flex items-center justify-between">
+        <span>${i18n.resultsCount(results.length)}</span>
+        <span class="text-[10px] text-slate-400">↑↓ to navigate · Enter to view</span>
+      </div>
+      <div class="max-h-80 overflow-y-auto">
+        ${itemsHtml}
+      </div>
+    `;
+
+    openResults();
+  }
+
+  async function handleSearch(query: string) {
+    const trimmed = query.trim();
+    toggleClearButton(trimmed.length > 0);
+
+    if (!trimmed) {
+      closeResults();
+      setSearchError('');
+      return;
+    }
+
+    setLoading(true);
+    const [tokenIndex, searchLib] = await Promise.all([
+      fetchTokenIndex(lang),
+      getSearchModule(),
+    ]);
+    setLoading(false);
+
+    if (!tokenIndex) {
+      if (/^\d+$/.test(trimmed)) {
+        goToQuestionNumber(trimmed);
+      }
+      return;
+    }
+
+    currentResults = searchLib.searchTokenIndex(tokenIndex, trimmed, 8);
+    selectedIndex = -1;
+    renderResults(trimmed, currentResults);
+  }
+
+  // Lazy-load search index & module when user opens or interacts with search
+  function triggerLazyLoad() {
+    fetchTokenIndex(lang);
+  }
+
+  searchInput?.addEventListener('focus', () => {
+    triggerLazyLoad();
+    if (searchInput.value.trim() && currentResults.length > 0) {
+      openResults();
+    }
+  });
+
+  searchInput?.addEventListener('pointerdown', triggerLazyLoad, { once: true });
+
+  searchInput?.addEventListener('input', () => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    const query = searchInput.value;
+    debounceTimer = setTimeout(() => {
+      handleSearch(query);
+    }, 40);
+  });
+
+  searchClear?.addEventListener('click', () => {
+    if (!searchInput) return;
+    searchInput.value = '';
+    toggleClearButton(false);
+    closeResults();
+    setSearchError('');
+    searchInput.focus();
+  });
+
+  // Direct click handling on search results dropdown
+  searchResults?.addEventListener('click', (event) => {
+    const item = (event.target as HTMLElement).closest<HTMLAnchorElement>(
+      '[data-search-result-item]',
+    );
+    if (item && item.href) {
+      closeResults();
+      window.location.href = item.href;
+    }
+  });
+
+  searchInput?.addEventListener('keydown', (event) => {
+    if (searchResults && !searchResults.classList.contains('hidden')) {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, currentResults.length - 1);
+        updateSelectedOption();
+        return;
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, 0);
+        updateSelectedOption();
+        return;
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeResults();
+        return;
+      }
+      if (event.key === 'Enter') {
+        if (selectedIndex >= 0 && currentResults[selectedIndex]) {
+          event.preventDefault();
+          const target = currentResults[selectedIndex]!;
+          window.location.href = questionHref(lang, target.n);
+          return;
+        }
+      }
+    }
+
+    if (event.key === 'Enter') {
+      const rawValue = searchInput.value.trim();
+      const numMatch = rawValue.match(/^(?:#|q|question\s*)?(\d+)$/i);
+      if (numMatch) {
+        event.preventDefault();
+        goToQuestionNumber(numMatch[1]!);
+      } else if (currentResults.length > 0) {
+        event.preventDefault();
+        const topResult = currentResults[0]!;
+        window.location.href = questionHref(lang, topResult.n);
+      }
+    }
+  });
+
+  // Close search results when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!searchForm?.contains(event.target as Node)) {
+      closeResults();
+    }
+  });
+
+  // Quick keyboard shortcut: Press '/' to focus search input and lazy load index
+  document.addEventListener('keydown', (event) => {
+    if (
+      event.key === '/' &&
+      document.activeElement !== searchInput &&
+      !['INPUT', 'TEXTAREA', 'SELECT'].includes(
+        document.activeElement?.tagName || '',
+      )
+    ) {
+      event.preventDefault();
+      triggerLazyLoad();
+      searchInput?.focus();
+      searchInput?.select();
+    }
+  });
 
   const path = window.location.pathname;
 
@@ -79,10 +545,28 @@ function initQuiz(root: HTMLElement) {
 
   searchForm?.addEventListener('submit', (event) => {
     event.preventDefault();
-    goToQuestionNumber(searchInput?.value || '');
+    triggerLazyLoad();
+    const rawValue = searchInput?.value || '';
+    const numMatch = rawValue.trim().match(/^(?:#|q|question\s*)?(\d+)$/i);
+    if (numMatch) {
+      goToQuestionNumber(numMatch[1]!);
+    } else if (currentResults.length > 0) {
+      const topResult = currentResults[0]!;
+      window.location.href = questionHref(lang, topResult.n);
+    } else {
+      handleSearch(rawValue);
+    }
   });
 }
 
 export function initAllQuizzes() {
   document.querySelectorAll<HTMLElement>('.quiz').forEach(initQuiz);
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllQuizzes);
+  } else {
+    initAllQuizzes();
+  }
 }
