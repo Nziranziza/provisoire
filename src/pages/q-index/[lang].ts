@@ -7,7 +7,11 @@ import { buildSearchPayload } from '../../lib/search-build';
 export const prerender = true;
 
 export function getStaticPaths() {
-  return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'rw' } }];
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'rw' } },
+  ];
 }
 
 export const GET: APIRoute = async ({ params }) => {

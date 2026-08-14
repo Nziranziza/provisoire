@@ -71,10 +71,7 @@ const copy = {
 
 const SEARCH_INDEX_VERSION = '3';
 
-function isSearchPayload(
-  value: unknown,
-  lang: Lang,
-): value is SearchPayload {
+function isSearchPayload(value: unknown, lang: Lang): value is SearchPayload {
   if (!value || typeof value !== 'object') return false;
   const payload = value as SearchPayload;
   return (
@@ -142,39 +139,73 @@ function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
-function getWordStems(token: string): string[] {
+function getWordStems(token: string, lang: Lang = 'en'): string[] {
   if (!token) return [];
   const clean = token.toLowerCase().trim();
   if (clean.length < 3) return [clean];
 
   const stems = new Set<string>([clean]);
-  if (clean.endsWith('ies') && clean.length > 4) stems.add(clean.slice(0, -3) + 'y');
-  if (clean.endsWith('es') && clean.length > 4) {
-    stems.add(clean.slice(0, -2));
-    stems.add(clean.slice(0, -1));
+
+  if (lang === 'en') {
+    if (clean.endsWith('ies') && clean.length > 4) {
+      stems.add(clean.slice(0, -3) + 'y');
+    }
+    if (clean.endsWith('es') && clean.length > 4) {
+      stems.add(clean.slice(0, -2));
+      stems.add(clean.slice(0, -1));
+    }
+    if (clean.endsWith('s') && !clean.endsWith('ss') && clean.length > 3) {
+      stems.add(clean.slice(0, -1));
+    }
+    if (clean.endsWith('ing') && clean.length > 5) {
+      stems.add(clean.slice(0, -3));
+      stems.add(clean.slice(0, -3) + 'e');
+    }
+    if (clean.endsWith('ed') && clean.length > 4) {
+      stems.add(clean.slice(0, -2));
+      stems.add(clean.slice(0, -1));
+    }
+    if (clean.length >= 3 && !clean.endsWith('s')) {
+      stems.add(clean + 's');
+      stems.add(clean + 'es');
+    }
+  } else if (lang === 'fr') {
+    if (clean.endsWith('aux') && clean.length > 4) {
+      stems.add(clean.slice(0, -3) + 'al');
+    }
+    if (clean.endsWith('eaux') && clean.length > 5) {
+      stems.add(clean.slice(0, -1));
+    }
+    if (clean.endsWith('es') && clean.length > 4) {
+      stems.add(clean.slice(0, -1));
+      stems.add(clean.slice(0, -2));
+    }
+    if (clean.endsWith('s') && !clean.endsWith('ss') && clean.length > 3) {
+      stems.add(clean.slice(0, -1));
+    }
+    if (clean.endsWith('x') && clean.length > 3) {
+      stems.add(clean.slice(0, -1));
+    }
+    if (clean.length >= 3 && !clean.endsWith('s') && !clean.endsWith('x')) {
+      stems.add(clean + 's');
+      stems.add(clean + 'x');
+      stems.add(clean + 'es');
+    }
+  } else if (lang === 'rw') {
+    const strippedApos = clean.replace(/^[a-z]+'/, '');
+    if (strippedApos && strippedApos !== clean && strippedApos.length >= 3) {
+      stems.add(strippedApos);
+    }
   }
-  if (clean.endsWith('s') && !clean.endsWith('ss') && clean.length > 3) stems.add(clean.slice(0, -1));
-  if (clean.endsWith('ing') && clean.length > 5) {
-    stems.add(clean.slice(0, -3));
-    stems.add(clean.slice(0, -3) + 'e');
-  }
-  if (clean.endsWith('ed') && clean.length > 4) {
-    stems.add(clean.slice(0, -2));
-    stems.add(clean.slice(0, -1));
-  }
-  if (clean.endsWith('aux') && clean.length > 4) {
-    stems.add(clean.slice(0, -3) + 'al');
-    stems.add(clean.slice(0, -1));
-  }
-  if (clean.endsWith('x') && clean.length > 3) stems.add(clean.slice(0, -1));
-  if (clean.length >= 3 && !clean.endsWith('s')) {
-    stems.add(clean + 's');
-    stems.add(clean + 'es');
-  }
+
   return Array.from(stems);
 }
 
-function highlightSnippet(text: string, rawQuery: string): string {
+function highlightSnippet(
+  text: string,
+  rawQuery: string,
+  lang: Lang = 'en',
+): string {
   if (!text || !rawQuery.trim()) return escapeHtml(text || '');
 
   const rawTokens = rawQuery
@@ -193,7 +224,7 @@ function highlightSnippet(text: string, rawQuery: string): string {
     allTokens.push(escapeHtml(t));
     const noApos = escapeHtml(t.replace(/'/g, ''));
     if (noApos && noApos !== t) allTokens.push(noApos);
-    const stems = getWordStems(t.toLowerCase());
+    const stems = getWordStems(t.toLowerCase(), lang);
     for (const s of stems) {
       if (s.length >= 3) allTokens.push(escapeHtml(s));
     }
@@ -369,6 +400,7 @@ function initQuiz(root: HTMLElement) {
               <span class="line-clamp-2">${highlightSnippet(
                 opt.snippet,
                 query,
+                lang,
               )}</span>
             </div>
           `;
@@ -381,6 +413,7 @@ function initQuiz(root: HTMLElement) {
               <span class="line-clamp-2">${highlightSnippet(
                 explanationMatch.snippet,
                 query,
+                lang,
               )}</span>
             </div>
           `;
@@ -397,6 +430,7 @@ function initQuiz(root: HTMLElement) {
               <span class="line-clamp-2">${highlightSnippet(
                 answerMatch.snippet,
                 query,
+                lang,
               )}</span>
             </div>
           `;
@@ -427,7 +461,7 @@ function initQuiz(root: HTMLElement) {
               </span>
             </div>
             <p class="mt-1.5 text-sm font-semibold text-slate-900 group-hover:text-blue-700">
-              ${highlightSnippet(res.question, query)}
+              ${highlightSnippet(res.question, query, lang)}
             </p>
             ${contextHtml}
           </a>

@@ -76,10 +76,7 @@ const {
   description: baseDescription,
   listLabel,
 } = meta[lang];
-const title =
-  page > 1
-    ? `${baseTitle} · Page ${page}`
-    : baseTitle;
+const title = page > 1 ? `${baseTitle} · Page ${page}` : baseTitle;
 const description =
   page > 1
     ? truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
