@@ -157,6 +157,7 @@ for (const lang of locales) {
         `${lang} Q${qNum}: "${phrase}" → #${results[0]?.n ?? 'none'} (expected #${qNum}, rank ${rank + 1})`,
       );
       failed++;
+    }
   }
 
   // Explicit verification for morphological search queries (e.g. Borders / border in en)
@@ -202,6 +203,87 @@ for (const lang of locales) {
       failed++;
     } else {
       console.log('  ✓ en: Kinyarwanda query correctly returned 0 results (strict locale)');
+    }
+  }
+
+  if (lang === 'fr') {
+    const bordsResults = search.searchTokenIndex(tokenIndex, 'bords', 8);
+    const hasQ1 = bordsResults.some((r) => r.n === 1);
+    if (!hasQ1) {
+      console.error('fr query "bords" did NOT return Question 1');
+      failed++;
+    } else {
+      console.log(`  ✓ fr: "bords" returned ${bordsResults.length} questions (including Q1)`);
+    }
+
+    const bordResults = search.searchTokenIndex(tokenIndex, 'bord', 8);
+    const hasQ1Singular = bordResults.some((r) => r.n === 1);
+    if (!hasQ1Singular) {
+      console.error('fr query "bord" did NOT return Question 1');
+      failed++;
+    } else {
+      console.log(`  ✓ fr: "bord" returned ${bordResults.length} questions (including Q1)`);
+    }
+
+    // Strict locale isolation: English / Kinyarwanda queries on FR index must return NO results
+    const foreignEnResults = search.searchTokenIndex(
+      tokenIndex,
+      'Borders of the public highway or the roadway must be signaled',
+      8,
+    );
+    if (foreignEnResults.length > 0) {
+      console.error(`fr index incorrectly returned ${foreignEnResults.length} result(s) for English query`);
+      failed++;
+    } else {
+      console.log('  ✓ fr: English query correctly returned 0 results (strict locale)');
+    }
+
+    const foreignRwResults = search.searchTokenIndex(
+      tokenIndex,
+      'Inkombe z’inzira nyabagendwa cyangwa z’umuhanda',
+      8,
+    );
+    if (foreignRwResults.length > 0) {
+      console.error(`fr index incorrectly returned ${foreignRwResults.length} result(s) for Kinyarwanda query`);
+      failed++;
+    } else {
+      console.log('  ✓ fr: Kinyarwanda query correctly returned 0 results (strict locale)');
+    }
+  }
+
+  if (lang === 'rw') {
+    const inkombeResults = search.searchTokenIndex(tokenIndex, 'inkombe', 8);
+    const hasQ1 = inkombeResults.some((r) => r.n === 1);
+    if (!hasQ1) {
+      console.error('rw query "inkombe" did NOT return Question 1');
+      failed++;
+    } else {
+      console.log(`  ✓ rw: "inkombe" returned ${inkombeResults.length} questions (including Q1)`);
+    }
+
+    // Strict locale isolation: English / French queries on RW index must return NO results
+    const foreignEnResults = search.searchTokenIndex(
+      tokenIndex,
+      'Borders of the public highway or the roadway must be signaled',
+      8,
+    );
+    if (foreignEnResults.length > 0) {
+      console.error(`rw index incorrectly returned ${foreignEnResults.length} result(s) for English query`);
+      failed++;
+    } else {
+      console.log('  ✓ rw: English query correctly returned 0 results (strict locale)');
+    }
+
+    const foreignFrResults = search.searchTokenIndex(
+      tokenIndex,
+      'Les bords de la voie publique ou de la chaussée peuvent être signalés',
+      8,
+    );
+    if (foreignFrResults.length > 0) {
+      console.error(`rw index incorrectly returned ${foreignFrResults.length} result(s) for French query`);
+      failed++;
+    } else {
+      console.log('  ✓ rw: French query correctly returned 0 results (strict locale)');
     }
   }
 }
