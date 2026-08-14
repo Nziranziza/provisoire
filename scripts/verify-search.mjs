@@ -168,7 +168,9 @@ for (const lang of locales) {
       console.error('en query "Borders" did NOT return Question 1');
       failed++;
     } else {
-      console.log(`  ✓ en: "Borders" returned ${bordersResults.length} questions (including Q1)`);
+      console.log(
+        `  ✓ en: "Borders" returned ${bordersResults.length} questions (including Q1)`,
+      );
     }
 
     const borderResults = search.searchTokenIndex(tokenIndex, 'border', 8);
@@ -177,7 +179,9 @@ for (const lang of locales) {
       console.error('en query "border" did NOT return Question 1');
       failed++;
     } else {
-      console.log(`  ✓ en: "border" returned ${borderResults.length} questions (including Q1)`);
+      console.log(
+        `  ✓ en: "border" returned ${borderResults.length} questions (including Q1)`,
+      );
     }
 
     // Strict locale isolation verification: French / Kinyarwanda queries on EN index must return NO results
@@ -187,10 +191,14 @@ for (const lang of locales) {
       8,
     );
     if (foreignFrResults.length > 0) {
-      console.error(`en index incorrectly returned ${foreignFrResults.length} result(s) for French query`);
+      console.error(
+        `en index incorrectly returned ${foreignFrResults.length} result(s) for French query`,
+      );
       failed++;
     } else {
-      console.log('  ✓ en: French query correctly returned 0 results (strict locale)');
+      console.log(
+        '  ✓ en: French query correctly returned 0 results (strict locale)',
+      );
     }
 
     const foreignRwResults = search.searchTokenIndex(
@@ -199,10 +207,14 @@ for (const lang of locales) {
       8,
     );
     if (foreignRwResults.length > 0) {
-      console.error(`en index incorrectly returned ${foreignRwResults.length} result(s) for Kinyarwanda query`);
+      console.error(
+        `en index incorrectly returned ${foreignRwResults.length} result(s) for Kinyarwanda query`,
+      );
       failed++;
     } else {
-      console.log('  ✓ en: Kinyarwanda query correctly returned 0 results (strict locale)');
+      console.log(
+        '  ✓ en: Kinyarwanda query correctly returned 0 results (strict locale)',
+      );
     }
   }
 
@@ -213,7 +225,9 @@ for (const lang of locales) {
       console.error('fr query "bords" did NOT return Question 1');
       failed++;
     } else {
-      console.log(`  ✓ fr: "bords" returned ${bordsResults.length} questions (including Q1)`);
+      console.log(
+        `  ✓ fr: "bords" returned ${bordsResults.length} questions (including Q1)`,
+      );
     }
 
     const bordResults = search.searchTokenIndex(tokenIndex, 'bord', 8);
@@ -222,7 +236,9 @@ for (const lang of locales) {
       console.error('fr query "bord" did NOT return Question 1');
       failed++;
     } else {
-      console.log(`  ✓ fr: "bord" returned ${bordResults.length} questions (including Q1)`);
+      console.log(
+        `  ✓ fr: "bord" returned ${bordResults.length} questions (including Q1)`,
+      );
     }
 
     // Strict locale isolation: English / Kinyarwanda queries on FR index must return NO results
@@ -232,10 +248,14 @@ for (const lang of locales) {
       8,
     );
     if (foreignEnResults.length > 0) {
-      console.error(`fr index incorrectly returned ${foreignEnResults.length} result(s) for English query`);
+      console.error(
+        `fr index incorrectly returned ${foreignEnResults.length} result(s) for English query`,
+      );
       failed++;
     } else {
-      console.log('  ✓ fr: English query correctly returned 0 results (strict locale)');
+      console.log(
+        '  ✓ fr: English query correctly returned 0 results (strict locale)',
+      );
     }
 
     const foreignRwResults = search.searchTokenIndex(
@@ -244,10 +264,14 @@ for (const lang of locales) {
       8,
     );
     if (foreignRwResults.length > 0) {
-      console.error(`fr index incorrectly returned ${foreignRwResults.length} result(s) for Kinyarwanda query`);
+      console.error(
+        `fr index incorrectly returned ${foreignRwResults.length} result(s) for Kinyarwanda query`,
+      );
       failed++;
     } else {
-      console.log('  ✓ fr: Kinyarwanda query correctly returned 0 results (strict locale)');
+      console.log(
+        '  ✓ fr: Kinyarwanda query correctly returned 0 results (strict locale)',
+      );
     }
   }
 
@@ -258,7 +282,9 @@ for (const lang of locales) {
       console.error('rw query "inkombe" did NOT return Question 1');
       failed++;
     } else {
-      console.log(`  ✓ rw: "inkombe" returned ${inkombeResults.length} questions (including Q1)`);
+      console.log(
+        `  ✓ rw: "inkombe" returned ${inkombeResults.length} questions (including Q1)`,
+      );
     }
 
     // Strict locale isolation: English / French queries on RW index must return NO results
@@ -268,10 +294,14 @@ for (const lang of locales) {
       8,
     );
     if (foreignEnResults.length > 0) {
-      console.error(`rw index incorrectly returned ${foreignEnResults.length} result(s) for English query`);
+      console.error(
+        `rw index incorrectly returned ${foreignEnResults.length} result(s) for English query`,
+      );
       failed++;
     } else {
-      console.log('  ✓ rw: English query correctly returned 0 results (strict locale)');
+      console.log(
+        '  ✓ rw: English query correctly returned 0 results (strict locale)',
+      );
     }
 
     const foreignFrResults = search.searchTokenIndex(
@@ -280,10 +310,14 @@ for (const lang of locales) {
       8,
     );
     if (foreignFrResults.length > 0) {
-      console.error(`rw index incorrectly returned ${foreignFrResults.length} result(s) for French query`);
+      console.error(
+        `rw index incorrectly returned ${foreignFrResults.length} result(s) for French query`,
+      );
       failed++;
     } else {
-      console.log('  ✓ rw: French query correctly returned 0 results (strict locale)');
+      console.log(
+        '  ✓ rw: French query correctly returned 0 results (strict locale)',
+      );
     }
   }
 }
@@ -305,9 +339,9 @@ const listChunk = fs
   .readdirSync(astroDir)
   .find((f) => f.startsWith('questionList.') && f.endsWith('.js'));
 if (listChunk) {
-  const kb = (
-    fs.statSync(path.join(astroDir, listChunk)).size / 1024
-  ).toFixed(1);
+  const kb = (fs.statSync(path.join(astroDir, listChunk)).size / 1024).toFixed(
+    1,
+  );
   console.log(`✓ Initial list script: ${kb} KB`);
 }
 
