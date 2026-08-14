@@ -1,4 +1,4 @@
-import type { Lang, Question } from '../lib/quiz';
+import type { Lang } from '../lib/quiz';
 import { questionHref } from '../lib/quiz';
 import type {
   ClientTokenIndex,
@@ -35,6 +35,8 @@ const copy = {
     correctAnswerLabel: 'Correct',
     questionNotFound: (n: number) => `Question ${n} was not found.`,
     enterValidNumber: 'Enter a valid question number.',
+    indexUnavailable:
+      'Search is temporarily unavailable. Try again or jump to a question number.',
   },
   fr: {
     resultsCount: (count: number) =>
@@ -48,6 +50,8 @@ const copy = {
     correctAnswerLabel: 'Bonne réponse',
     questionNotFound: (n: number) => `La question ${n} n’a pas été trouvée.`,
     enterValidNumber: 'Entrez un numéro de question valide.',
+    indexUnavailable:
+      'La recherche est indisponible. Réessayez ou entrez un numéro de question.',
   },
   rw: {
     resultsCount: (count: number) => `Ibibazo ${count} byabonetse`,
@@ -60,16 +64,34 @@ const copy = {
     correctAnswerLabel: 'Igisubizo cy’ukuri',
     questionNotFound: (n: number) => `Ikibazo ${n} nticyabonetse.`,
     enterValidNumber: 'Andika nimero nyayo y’ikibazo.',
+    indexUnavailable:
+      'Gushakisha ntibiboneka. Ongera ugerageze cyangwa andika nimero y’ikibazo.',
   },
 };
 
+const SEARCH_INDEX_VERSION = '3';
+
+function isSearchPayload(
+  value: unknown,
+  lang: Lang,
+): value is SearchPayload {
+  if (!value || typeof value !== 'object') return false;
+  const payload = value as SearchPayload;
+  return (
+    payload.lang === lang &&
+    Array.isArray(payload.items) &&
+    payload.items.length > 0 &&
+    typeof payload.items[0]?.q === 'string'
+  );
+}
+
 /**
- * Lazily loads the search engine and index on demand.
- * 1. Fetches pre-rendered static index: /${lang}/search-index.json
- * 2. If network/endpoint is unavailable, dynamically loads questions.json and builds index on the fly.
+ * Lazily loads the pre-rendered search index for the active locale.
+ * Prefers /q-index/{lang} (outside locale folders) so the default EN
+ * prefix cannot intercept or cache an empty payload.
  */
 async function fetchTokenIndex(lang: Lang): Promise<ClientTokenIndex | null> {
-  if (tokenIndexCache[lang]) {
+  if (tokenIndexCache[lang]?.items.length) {
     return tokenIndexCache[lang]!;
   }
 
@@ -79,37 +101,33 @@ async function fetchTokenIndex(lang: Lang): Promise<ClientTokenIndex | null> {
 
   const fetchPromise = (async () => {
     const searchLib = await getSearchModule();
+    const urls = [
+      `/q-index/${lang}?v=${SEARCH_INDEX_VERSION}`,
+      `/${lang}/search-index.json?v=${SEARCH_INDEX_VERSION}`,
+    ];
 
-    // 1. Try fetching the pre-rendered static search index
-    try {
-      const response = await fetch(`/${lang}/search-index.json`);
-      if (response.ok) {
-        const payload: SearchPayload = await response.json();
+    for (const url of urls) {
+      try {
+        const response = await fetch(url, {
+          cache: 'no-store',
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) continue;
+        const payload: unknown = await response.json();
+        if (!isSearchPayload(payload, lang)) continue;
         const clientIndex = searchLib.createClientTokenIndex(payload);
+        if (!clientIndex.items.length) continue;
         tokenIndexCache[lang] = clientIndex;
         return clientIndex;
+      } catch {
+        // Try the next URL
       }
-    } catch {
-      // Network/offline fallback
     }
 
-    // 2. Resilient fallback: Dynamically load questions.json on the fly
-    try {
-      const questionsModule = await import('../../questions.json');
-      const questions = (questionsModule.default?.questions ||
-        questionsModule.questions ||
-        []) as Question[];
-      const payload = searchLib.buildSearchPayload(questions, lang);
-      const clientIndex = searchLib.createClientTokenIndex(payload);
-      tokenIndexCache[lang] = clientIndex;
-      return clientIndex;
-    } catch (err) {
-      console.error('Failed to load search index:', err);
-      return null;
-    } finally {
-      delete pendingFetches[lang];
-    }
-  })();
+    return null;
+  })().finally(() => {
+    delete pendingFetches[lang];
+  });
 
   pendingFetches[lang] = fetchPromise;
   return fetchPromise;
@@ -124,8 +142,40 @@ function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
+function getWordStems(token: string): string[] {
+  if (!token) return [];
+  const clean = token.toLowerCase().trim();
+  if (clean.length < 3) return [clean];
+
+  const stems = new Set<string>([clean]);
+  if (clean.endsWith('ies') && clean.length > 4) stems.add(clean.slice(0, -3) + 'y');
+  if (clean.endsWith('es') && clean.length > 4) {
+    stems.add(clean.slice(0, -2));
+    stems.add(clean.slice(0, -1));
+  }
+  if (clean.endsWith('s') && !clean.endsWith('ss') && clean.length > 3) stems.add(clean.slice(0, -1));
+  if (clean.endsWith('ing') && clean.length > 5) {
+    stems.add(clean.slice(0, -3));
+    stems.add(clean.slice(0, -3) + 'e');
+  }
+  if (clean.endsWith('ed') && clean.length > 4) {
+    stems.add(clean.slice(0, -2));
+    stems.add(clean.slice(0, -1));
+  }
+  if (clean.endsWith('aux') && clean.length > 4) {
+    stems.add(clean.slice(0, -3) + 'al');
+    stems.add(clean.slice(0, -1));
+  }
+  if (clean.endsWith('x') && clean.length > 3) stems.add(clean.slice(0, -1));
+  if (clean.length >= 3 && !clean.endsWith('s')) {
+    stems.add(clean + 's');
+    stems.add(clean + 'es');
+  }
+  return Array.from(stems);
+}
+
 function highlightSnippet(text: string, rawQuery: string): string {
-  if (!text || !rawQuery.trim()) return escapeHtml(text);
+  if (!text || !rawQuery.trim()) return escapeHtml(text || '');
 
   const rawTokens = rawQuery
     .trim()
@@ -137,14 +187,20 @@ function highlightSnippet(text: string, rawQuery: string): string {
 
   const escapedText = escapeHtml(text);
 
+  // Generate tokens including stripped apostrophe forms and stems
   const allTokens: string[] = [];
   for (const t of rawTokens) {
     allTokens.push(escapeHtml(t));
     const noApos = escapeHtml(t.replace(/'/g, ''));
     if (noApos && noApos !== t) allTokens.push(noApos);
+    const stems = getWordStems(t.toLowerCase());
+    for (const s of stems) {
+      if (s.length >= 3) allTokens.push(escapeHtml(s));
+    }
   }
 
   const escapedRegexTokens = Array.from(new Set(allTokens))
+    .sort((a, b) => b.length - a.length)
     .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     .filter(Boolean);
 
@@ -160,6 +216,9 @@ function highlightSnippet(text: string, rawQuery: string): string {
 }
 
 function initQuiz(root: HTMLElement) {
+  if (root.dataset.quizInitialized === 'true') return;
+  root.dataset.quizInitialized = 'true';
+
   const categorySelect = root.querySelector<HTMLSelectElement>(
     '[data-category-select]',
   );
@@ -194,6 +253,7 @@ function initQuiz(root: HTMLElement) {
   let currentResults: SearchResult[] = [];
   let selectedIndex = -1;
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  let searchRequestId = 0;
 
   function setSearchError(message: string) {
     if (!searchError) return;
@@ -294,6 +354,10 @@ function initQuiz(root: HTMLElement) {
         const explanationMatch = res.matches.find(
           (m) => m.field === 'explanation',
         );
+        const answerMatch = res.matches.find((m) => m.field === 'answer');
+        const optionTexts = new Set(
+          optionMatches.map((m) => m.matchedText.trim().toLowerCase()),
+        );
 
         let contextHtml = '';
         if (optionMatches.length > 0) {
@@ -316,6 +380,22 @@ function initQuiz(root: HTMLElement) {
               <span class="font-bold text-emerald-900">${i18n.explanationLabel}:</span>
               <span class="line-clamp-2">${highlightSnippet(
                 explanationMatch.snippet,
+                query,
+              )}</span>
+            </div>
+          `;
+        }
+
+        if (
+          answerMatch &&
+          answerMatch.snippet &&
+          !optionTexts.has(answerMatch.matchedText.trim().toLowerCase())
+        ) {
+          contextHtml += `
+            <div class="mt-1.5 flex items-start gap-1.5 rounded-md border border-blue-200 bg-blue-50/60 px-2 py-1 text-xs text-slate-700">
+              <span class="font-bold text-blue-900">${i18n.correctAnswerLabel}:</span>
+              <span class="line-clamp-2">${highlightSnippet(
+                answerMatch.snippet,
                 query,
               )}</span>
             </div>
@@ -358,7 +438,7 @@ function initQuiz(root: HTMLElement) {
     searchResults.innerHTML = `
       <div class="border-b border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-bold tracking-wide text-slate-500 uppercase flex items-center justify-between">
         <span>${i18n.resultsCount(results.length)}</span>
-        <span class="text-[10px] text-slate-400">↑↓ to navigate · Enter to view</span>
+        <span class="text-[10px] text-slate-400 hidden sm:inline">↑↓ to navigate · Enter to view</span>
       </div>
       <div class="max-h-80 overflow-y-auto">
         ${itemsHtml}
@@ -378,23 +458,37 @@ function initQuiz(root: HTMLElement) {
       return;
     }
 
+    const requestId = ++searchRequestId;
     setLoading(true);
-    const [tokenIndex, searchLib] = await Promise.all([
-      fetchTokenIndex(lang),
-      getSearchModule(),
-    ]);
-    setLoading(false);
+    try {
+      const [tokenIndex, searchLib] = await Promise.all([
+        fetchTokenIndex(lang),
+        getSearchModule(),
+      ]);
+      if (requestId !== searchRequestId) return;
 
-    if (!tokenIndex) {
-      if (/^\d+$/.test(trimmed)) {
-        goToQuestionNumber(trimmed);
+      setLoading(false);
+
+      if (!tokenIndex) {
+        if (/^\d+$/.test(trimmed)) {
+          goToQuestionNumber(trimmed);
+          return;
+        }
+        setSearchError(i18n.indexUnavailable);
+        renderResults(trimmed, []);
+        return;
       }
-      return;
-    }
 
-    currentResults = searchLib.searchTokenIndex(tokenIndex, trimmed, 8);
-    selectedIndex = -1;
-    renderResults(trimmed, currentResults);
+      setSearchError('');
+      currentResults = searchLib.searchTokenIndex(tokenIndex, trimmed, 8);
+      selectedIndex = -1;
+      renderResults(trimmed, currentResults);
+    } catch {
+      if (requestId !== searchRequestId) return;
+      setLoading(false);
+      setSearchError(i18n.indexUnavailable);
+      renderResults(trimmed, []);
+    }
   }
 
   // Lazy-load search index & module when user opens or interacts with search

@@ -96,8 +96,8 @@ export function listJsonLd(options: {
     '@type': 'CollectionPage',
     name:
       page > 1
-        ? `Rwanda driving test questions (${lang.toUpperCase()}) — page ${page}`
-        : `Rwanda driving test questions (${lang.toUpperCase()})`,
+        ? `Rwanda provisional driving-test question bank — page ${page}`
+        : 'Rwanda provisional driving-test question bank',
     inLanguage: lang,
     url: pageUrl,
     isPartOf: {

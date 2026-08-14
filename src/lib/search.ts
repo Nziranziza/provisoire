@@ -1,13 +1,12 @@
-import type { Lang, Question } from './quiz';
-import {
-  questionExplanation,
-  questionNumber,
-  questionOptions,
-  questionText,
-} from './quiz';
+import type { Lang } from './quiz';
 
 export type MatchField =
-  'number' | 'question' | 'option' | 'explanation' | 'category';
+  | 'number'
+  | 'question'
+  | 'option'
+  | 'explanation'
+  | 'answer'
+  | 'category';
 
 /**
  * Compact payload entry strictly scoped to the active locale.
@@ -23,6 +22,8 @@ export type SearchEntryPayload = {
   o: string[];
   /** Optional explanation for active locale (omitted if empty) */
   e?: string;
+  /** Correct answer text for active locale (omitted if empty) */
+  a?: string;
 };
 
 /**
@@ -48,6 +49,7 @@ export type SearchResult = {
   question: string;
   options: string[];
   explanation: string;
+  answer: string;
   score: number;
   matches: SearchMatch[];
 };
@@ -64,6 +66,53 @@ export const CATEGORY_NAMES: Record<number, Record<Lang, string>> = {
     rw: 'Ibyapa byo ku muhanda',
   },
 };
+
+/**
+ * Generates stem and morphological variants for a normalized token (English, French, Kinyarwanda).
+ * Enables queries like "borders" to match "border" and vice-versa.
+ */
+export function getWordStems(token: string): string[] {
+  if (!token) return [];
+  const clean = token.toLowerCase().trim();
+  if (clean.length < 3) return [clean];
+
+  const stems = new Set<string>([clean]);
+
+  // English & French plural/ending rules
+  if (clean.endsWith('ies') && clean.length > 4) {
+    stems.add(clean.slice(0, -3) + 'y');
+  }
+  if (clean.endsWith('es') && clean.length > 4) {
+    stems.add(clean.slice(0, -2));
+    stems.add(clean.slice(0, -1)); // e.g. devices -> device
+  }
+  if (clean.endsWith('s') && !clean.endsWith('ss') && clean.length > 3) {
+    stems.add(clean.slice(0, -1)); // e.g. borders -> border, reflectors -> reflector
+  }
+  if (clean.endsWith('ing') && clean.length > 5) {
+    stems.add(clean.slice(0, -3)); // crossing -> cross, parking -> park
+    stems.add(clean.slice(0, -3) + 'e'); // overtaking -> overtake
+  }
+  if (clean.endsWith('ed') && clean.length > 4) {
+    stems.add(clean.slice(0, -2)); // parked -> park
+    stems.add(clean.slice(0, -1)); // signaled -> signal, placed -> place
+  }
+  if (clean.endsWith('aux') && clean.length > 4) {
+    stems.add(clean.slice(0, -3) + 'al'); // signaux -> signal
+    stems.add(clean.slice(0, -1)); // panneaux -> panneau
+  }
+  if (clean.endsWith('x') && clean.length > 3) {
+    stems.add(clean.slice(0, -1)); // feux -> feu
+  }
+
+  // Allow singular forms to match plural forms as well
+  if (clean.length >= 3 && !clean.endsWith('s')) {
+    stems.add(clean + 's');
+    stems.add(clean + 'es');
+  }
+
+  return Array.from(stems);
+}
 
 /**
  * Normalizes text for case-insensitive, accent-tolerant, apostrophe-flexible,
@@ -83,49 +132,23 @@ export function normalizeForSearch(text: string): string {
 
 /**
  * Produces search variations combining original tokens, apostrophe-stripped tokens,
- * and space-separated tokens for complete query coverage.
+ * space-separated tokens, and word stems for complete query coverage.
  */
 export function generateSearchVariants(text: string): string {
   if (!text) return '';
   const norm = normalizeForSearch(text);
   const noApos = norm.replace(/'/g, '');
   const spaceApos = norm.replace(/'/g, ' ');
-  return `${norm} ${noApos} ${spaceApos}`.trim();
-}
 
-/**
- * Builds the compact, minimal payload JSON for a specific locale at build time.
- * Strictly includes content for the requested locale ONLY.
- */
-export function buildSearchPayload(
-  questions: Question[],
-  lang: Lang,
-): SearchPayload {
-  const items: SearchEntryPayload[] = questions.map((q, index) => {
-    const n = questionNumber(index);
-    const qText = questionText(q, lang);
-    const options = questionOptions(q, lang);
-    const explanation = questionExplanation(q, lang);
-
-    const entry: SearchEntryPayload = {
-      n,
-      c: q.category_id,
-      q: qText,
-      o: options,
-    };
-
-    if (explanation && explanation.trim().length > 0) {
-      entry.e = explanation.trim();
+  const tokens = norm.split(/\s+/).filter(Boolean);
+  const allStems = new Set<string>();
+  for (const t of tokens) {
+    for (const s of getWordStems(t)) {
+      allStems.add(s);
     }
+  }
 
-    return entry;
-  });
-
-  return {
-    lang,
-    total: items.length,
-    items,
-  };
+  return `${norm} ${noApos} ${spaceApos} ${Array.from(allStems).join(' ')}`.trim();
 }
 
 /**
@@ -140,6 +163,8 @@ export type IndexedItem = {
   optionsVariants: string[];
   normalizedExplanation: string;
   explanationVariants: string;
+  normalizedAnswer: string;
+  answerVariants: string;
   normalizedCategory: string;
   questionTokens: Set<string>;
 };
@@ -172,6 +197,9 @@ export function createClientTokenIndex(
     const normExpl = item.e ? normalizeForSearch(item.e) : '';
     const explVariants = item.e ? generateSearchVariants(item.e) : '';
 
+    const normAns = item.a ? normalizeForSearch(item.a) : '';
+    const ansVariants = item.a ? generateSearchVariants(item.a) : '';
+
     const normCat = generateSearchVariants(catName);
 
     const questionTokens = new Set(
@@ -187,6 +215,8 @@ export function createClientTokenIndex(
       optionsVariants: optsVariants,
       normalizedExplanation: normExpl,
       explanationVariants: explVariants,
+      normalizedAnswer: normAns,
+      answerVariants: ansVariants,
       normalizedCategory: normCat,
       questionTokens,
     };
@@ -236,9 +266,16 @@ export function extractSnippet(
 }
 
 /**
+ * Whole-token test against a normalized haystack (space-padded).
+ */
+function containsToken(haystack: string, token: string): boolean {
+  if (!haystack || !token) return false;
+  return ` ${haystack} `.includes(` ${token} `);
+}
+
+/**
  * Hand-rolled client-side token search matcher.
- * STRICTLY searches active locale content (question text, options, explanations, category).
- * Queries containing words from a different locale will return NO results.
+ * STRICTLY searches active locale content (question text, options, explanations, correct answer, category).
  */
 export function searchTokenIndex(
   tokenIndex: ClientTokenIndex,
@@ -255,6 +292,14 @@ export function searchTokenIndex(
   const queryTokens = Array.from(
     new Set(queryVariants.split(/\s+/).filter((t) => t.length > 0)),
   );
+  const allQueryStems = Array.from(
+    new Set(queryTokens.flatMap((t) => getWordStems(t))),
+  );
+  const meaningfulTokens = allQueryStems.filter(
+    (t) => t.replace(/'/g, '').length >= 3,
+  );
+  const scoreTokens =
+    meaningfulTokens.length >= 1 ? meaningfulTokens : queryTokens;
 
   // Check if query is directly pointing to a question number (e.g. "42", "#42", "q42", "question 42")
   const directNumberMatch = query.match(
@@ -287,106 +332,170 @@ export function searchTokenIndex(
     }
 
     // 2. Question Text Matching (Active Locale Only)
-    if (indexed.questionVariants.includes(normalizedQuery)) {
-      score += 400;
+    if (indexed.normalizedQuestion === normalizedQuery) {
+      score += 50000;
+      matches.push({
+        field: 'question',
+        snippet: extractSnippet(item.q, allQueryStems),
+        matchedText: item.q,
+      });
+    } else if (
+      indexed.normalizedQuestion.includes(normalizedQuery) ||
+      indexed.questionVariants.includes(normalizedQuery)
+    ) {
+      score += 5000;
       if (indexed.normalizedQuestion.startsWith(normalizedQuery)) {
-        score += 150;
+        score += 600;
       }
       matches.push({
         field: 'question',
-        snippet: extractSnippet(item.q, queryTokens),
+        snippet: extractSnippet(item.q, allQueryStems),
         matchedText: item.q,
       });
     } else {
       let qTokenMatches = 0;
-      for (const token of queryTokens) {
-        if (indexed.questionVariants.includes(token)) {
+      for (const token of scoreTokens) {
+        if (
+          indexed.questionTokens.has(token) ||
+          containsToken(indexed.normalizedQuestion, token) ||
+          indexed.questionVariants.includes(token)
+        ) {
           qTokenMatches++;
           if (indexed.questionTokens.has(token)) {
-            score += 25; // Exact word boost
+            score += 40; // Exact word boost
           }
         }
       }
       if (qTokenMatches > 0) {
-        score += qTokenMatches * 40;
-        if (qTokenMatches >= queryTokens.length) {
-          score += 120; // Full query token coverage
+        score += qTokenMatches * 50;
+        if (qTokenMatches >= scoreTokens.length) {
+          score += 200; // Full query token coverage
         }
         matches.push({
           field: 'question',
-          snippet: extractSnippet(item.q, queryTokens),
+          snippet: extractSnippet(item.q, allQueryStems),
           matchedText: item.q,
         });
       }
     }
 
-    // 3. Options Matching (Active Locale Only)
-    item.o.forEach((option, idx) => {
+    // 3. Options Matching — best single option only (prevents score stacking)
+    let bestOptionMatch: SearchMatch | null = null;
+    let bestOptionScore = 0;
+
+    (item.o || []).forEach((option, idx) => {
       const optVariants =
         indexed.optionsVariants[idx] ?? generateSearchVariants(option);
-      if (optVariants.includes(normalizedQuery)) {
-        score += 220;
-        matches.push({
-          field: 'option',
-          optionIndex: idx,
-          snippet: extractSnippet(option, queryTokens),
-          matchedText: option,
-        });
+      const normOpt = indexed.normalizedOptions[idx] ?? normalizeForSearch(option);
+      let optScore = 0;
+
+      if (normOpt === normalizedQuery) {
+        optScore = 8000;
+      } else if (
+        normOpt.includes(normalizedQuery) ||
+        optVariants.includes(normalizedQuery)
+      ) {
+        optScore = 4000;
       } else {
         let optTokenMatches = 0;
-        for (const token of queryTokens) {
+        for (const token of scoreTokens) {
           if (optVariants.includes(token)) {
             optTokenMatches++;
           }
         }
         if (optTokenMatches > 0) {
-          score += optTokenMatches * 25;
-          if (optTokenMatches >= queryTokens.length) {
-            score += 60;
+          optScore = optTokenMatches * 40;
+          if (optTokenMatches >= scoreTokens.length) {
+            optScore += 100;
           }
-          matches.push({
-            field: 'option',
-            optionIndex: idx,
-            snippet: extractSnippet(option, queryTokens),
-            matchedText: option,
-          });
         }
+      }
+
+      if (optScore > bestOptionScore) {
+        bestOptionScore = optScore;
+        bestOptionMatch = {
+          field: 'option',
+          optionIndex: idx,
+          snippet: extractSnippet(option, allQueryStems),
+          matchedText: option,
+        };
       }
     });
 
+    if (bestOptionMatch && bestOptionScore > 0) {
+      score += bestOptionScore;
+      matches.push(bestOptionMatch);
+    }
+
     // 4. Explanation Matching (Active Locale Only)
     if (item.e && indexed.explanationVariants) {
-      if (indexed.explanationVariants.includes(normalizedQuery)) {
-        score += 250;
+      if (
+        indexed.normalizedExplanation.includes(normalizedQuery) ||
+        indexed.explanationVariants.includes(normalizedQuery)
+      ) {
+        score += 350;
         matches.push({
           field: 'explanation',
-          snippet: extractSnippet(item.e, queryTokens),
+          snippet: extractSnippet(item.e, allQueryStems),
           matchedText: item.e,
         });
       } else {
         let expTokenMatches = 0;
-        for (const token of queryTokens) {
+        for (const token of scoreTokens) {
           if (indexed.explanationVariants.includes(token)) {
             expTokenMatches++;
           }
         }
         if (expTokenMatches > 0) {
-          score += expTokenMatches * 25;
-          if (expTokenMatches >= queryTokens.length) {
-            score += 70;
+          score += expTokenMatches * 30;
+          if (expTokenMatches >= scoreTokens.length) {
+            score += 80;
           }
           matches.push({
             field: 'explanation',
-            snippet: extractSnippet(item.e, queryTokens),
+            snippet: extractSnippet(item.e, allQueryStems),
             matchedText: item.e,
           });
         }
       }
     }
 
-    // 5. Category Name Matching (Active Locale Only)
+    // 5. Correct Answer Matching (Active Locale Only)
+    if (item.a && indexed.answerVariants) {
+      if (
+        indexed.normalizedAnswer.includes(normalizedQuery) ||
+        indexed.answerVariants.includes(normalizedQuery)
+      ) {
+        score += 300;
+        matches.push({
+          field: 'answer',
+          snippet: extractSnippet(item.a, allQueryStems),
+          matchedText: item.a,
+        });
+      } else {
+        let ansTokenMatches = 0;
+        for (const token of scoreTokens) {
+          if (indexed.answerVariants.includes(token)) {
+            ansTokenMatches++;
+          }
+        }
+        if (ansTokenMatches > 0) {
+          score += ansTokenMatches * 25;
+          if (ansTokenMatches >= scoreTokens.length) {
+            score += 60;
+          }
+          matches.push({
+            field: 'answer',
+            snippet: extractSnippet(item.a, allQueryStems),
+            matchedText: item.a,
+          });
+        }
+      }
+    }
+
+    // 6. Category Name Matching (Active Locale Only)
     if (indexed.normalizedCategory.includes(normalizedQuery)) {
-      score += 35;
+      score += 40;
       matches.push({
         field: 'category',
         snippet: indexed.categoryName,
@@ -402,8 +511,47 @@ export function searchTokenIndex(
         question: item.q,
         options: item.o,
         explanation: item.e ?? '',
+        answer: item.a ?? '',
         score,
         matches,
+      });
+    }
+  }
+
+  if (results.length === 0 && directNumber === null) {
+    for (const indexed of tokenIndex.items) {
+      const item = indexed.raw;
+      const haystack = [
+        indexed.normalizedQuestion,
+        ...(indexed.normalizedOptions || []),
+        indexed.normalizedExplanation,
+        indexed.normalizedAnswer,
+        indexed.normalizedCategory,
+      ]
+        .filter(Boolean)
+        .join(' ');
+
+      if (!haystack.includes(normalizedQuery)) {
+        const anyToken = scoreTokens.some((token) => containsToken(haystack, token));
+        if (!anyToken) continue;
+      }
+
+      results.push({
+        n: item.n,
+        categoryId: item.c,
+        categoryName: indexed.categoryName,
+        question: item.q,
+        options: item.o || [],
+        explanation: item.e ?? '',
+        answer: item.a ?? '',
+        score: haystack.includes(normalizedQuery) ? 800 : 120,
+        matches: [
+          {
+            field: 'question',
+            snippet: extractSnippet(item.q, allQueryStems),
+            matchedText: item.q,
+          },
+        ],
       });
     }
   }
@@ -439,15 +587,20 @@ export function highlightSnippet(text: string, rawQuery: string): string {
 
   const escapedText = escapeHtml(text);
 
-  // Generate tokens including stripped apostrophe forms
+  // Generate tokens including stripped apostrophe forms and word stems
   const allTokens: string[] = [];
   for (const t of rawTokens) {
     allTokens.push(escapeHtml(t));
     const noApos = escapeHtml(t.replace(/'/g, ''));
     if (noApos && noApos !== t) allTokens.push(noApos);
+    const stems = getWordStems(normalizeForSearch(t));
+    for (const s of stems) {
+      if (s.length >= 3) allTokens.push(escapeHtml(s));
+    }
   }
 
   const escapedRegexTokens = Array.from(new Set(allTokens))
+    .sort((a, b) => b.length - a.length)
     .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     .filter(Boolean);
 
