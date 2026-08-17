@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "verify:search": "node scripts/verify-search.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.2",

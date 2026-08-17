@@ -35,8 +35,8 @@ const meta: Record<
 > = {
   en: {
     title: category
-      ? `${category.name} on this page (English) — Provisoire`
-      : 'Questions & Answers (English) — Provisoire',
+      ? `${category.name} — Rwanda provisional driving-test question bank`
+      : 'Rwanda provisional driving-test question bank',
     description: category
       ? `Rwanda provisional ${category.name.toLowerCase()} questions on this page, in English.`
       : 'Practice Rwanda provisional driving-test questions and answers in English. Traffic rules and road signs with correct answers.',
@@ -44,8 +44,8 @@ const meta: Record<
   },
   fr: {
     title: category
-      ? `${category.name} sur cette page (Français) — Provisoire`
-      : 'Questions et réponses (Français) — Provisoire',
+      ? `${category.name} — Rwanda provisional driving-test question bank`
+      : 'Rwanda provisional driving-test question bank',
     description: category
       ? `Questions ${category.name.toLowerCase()} du permis provisoire sur cette page, en français.`
       : 'Questions et réponses du permis provisoire rwandais en français. Règles de circulation et panneaux avec bonnes réponses.',
@@ -53,8 +53,8 @@ const meta: Record<
   },
   rw: {
     title: category
-      ? `${category.name} kuri iyi paji (Ikinyarwanda) — Provisoire`
-      : 'Ibibazo n’ibisubizo (Ikinyarwanda) — Provisoire',
+      ? `${category.name} — Rwanda provisional driving-test question bank`
+      : 'Rwanda provisional driving-test question bank',
     description: category
       ? `Ibibazo bya ${category.name} kuri iyi paji mu Kinyarwanda.`
       : 'Ibibazo n’ibisubizo by’ikizamini cy’uruhushya rwo gutwara mu Kinyarwanda. Amategeko n’ibyapa n’ibisubizo by’ukuri.',
@@ -76,10 +76,7 @@ const {
   description: baseDescription,
   listLabel,
 } = meta[lang];
-const title =
-  page > 1
-    ? `${baseTitle.replace(' — Provisoire', '')} · Page ${page} — Provisoire`
-    : baseTitle;
+const title = page > 1 ? `${baseTitle} · Page ${page}` : baseTitle;
 const description =
   page > 1
     ? truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
