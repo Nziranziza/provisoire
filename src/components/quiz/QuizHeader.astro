@@ -43,6 +43,22 @@ const allLabel: Record<Lang, string> = {
   </div>
 
   <div class="flex flex-wrap items-center gap-3">
+    <a
+      href={`/${lang}/practice`}
+      class="inline-flex items-center gap-1.5 rounded-full border-2 border-slate-900 bg-amber-400 px-3.5 py-1.5 text-xs font-bold tracking-wide text-slate-900 transition hover:bg-amber-300 active:scale-[0.98]"
+    >
+      <span>⏱</span>
+      <span
+        >{
+          lang === 'fr'
+            ? 'Examen blanc'
+            : lang === 'rw'
+              ? 'Ikizamini cy’imyitozo'
+              : 'Practice Exam'
+        }</span
+      >
+    </a>
+
     <div
       class="inline-flex divide-x-2 divide-slate-900 overflow-hidden rounded-full border-2 border-slate-900"
       role="group"

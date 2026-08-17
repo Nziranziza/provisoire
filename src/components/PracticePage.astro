@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PracticeSession from './PracticeSession';
+import type { Lang } from '../lib/quiz';
+import { breadcrumbJsonLd, hreflangAlternates } from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+  initialCategory?: number | null;
+}
+
+const { lang, initialCategory = null } = Astro.props;
+
+const meta: Record<
+  Lang,
+  {
+    title: string;
+    description: string;
+    homeLabel: string;
+    practiceLabel: string;
+  }
+> = {
+  en: {
+    title: 'Practice Exam (20 Questions) — Rwanda Provisional Driving Test',
+    description:
+      'Official 20-question practice test simulation for the Rwanda provisional driving license. Timed test with scoring and detailed answer review.',
+    homeLabel: 'Provisoire',
+    practiceLabel: 'Practice Exam',
+  },
+  fr: {
+    title: 'Examen blanc (20 Questions) — Permis provisoire rwandais',
+    description:
+      'Simulation officielle d’examen blanc de 20 questions pour le permis de conduire provisoire au Rwanda. Test chronométré avec correction détaillée.',
+    homeLabel: 'Provisoire',
+    practiceLabel: 'Examen blanc',
+  },
+  rw: {
+    title: 'Ikizamini cy’imyitozo (Ibibazo 20) — Uruhushya rw’agateganyo',
+    description:
+      'Imyitozo y’ibibazo 20 nk’ibyo mu kizamini cy’uruhushya rw’agateganyo rwo gutwara ibinyabiziga mu Rwanda. Isaha, amanota no gusubiramo ibisubizo.',
+    homeLabel: 'Provisoire',
+    practiceLabel: 'Ikizamini cy’imyitozo',
+  },
+};
+
+const { title, description, homeLabel, practiceLabel } = meta[lang];
+const canonical = `/${lang}/practice`;
+const alternates = hreflangAlternates((l) => `/${l}/practice`, Astro.site);
+
+const jsonLd = [
+  breadcrumbJsonLd(
+    [
+      { name: homeLabel, path: '/' },
+      { name: practiceLabel, path: canonical },
+    ],
+    Astro.site,
+  ),
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  canonical={canonical}
+  alternates={alternates}
+  robots="noindex,nofollow"
+  jsonLd={jsonLd}
+>
+  <main class="min-h-screen bg-stone-100 px-4 py-8 sm:px-6 sm:py-12">
+    <div class="mx-auto max-w-3xl">
+      <PracticeSession
+        client:load
+        lang={lang}
+        imageBase="/"
+        initialCategory={initialCategory}
+      />
+    </div>
+  </main>
+</BaseLayout>
