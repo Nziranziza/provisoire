@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import type { Lang, Question } from '../lib/quiz';
 import questionBank from '../../questions.json';
 

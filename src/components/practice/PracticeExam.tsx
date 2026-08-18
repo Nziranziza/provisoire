@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef, type Dispatch, type TouchEvent } from 'react';
 import type { I18nDictionary } from './constants';
 import { EXAM_CONFIG } from './constants';
 import { formatTime } from './reducer';
@@ -6,7 +6,7 @@ import type { PracticeAction, PracticeState } from './types';
 
 interface PracticeExamProps {
   state: PracticeState;
-  dispatch: React.Dispatch<PracticeAction>;
+  dispatch: Dispatch<PracticeAction>;
   t: I18nDictionary;
   imageBase: string;
 }
@@ -50,7 +50,7 @@ export default function PracticeExam({
   const isLastQuestion = state.currentIndex === totalQuestions - 1;
 
   // Touch Swipe Handlers for mobile swipe navigation
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent) => {
     const touch = e.touches[0];
     if (e.touches.length === 1 && touch) {
       touchStartRef.current = {
@@ -61,7 +61,7 @@ export default function PracticeExam({
     }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: TouchEvent) => {
     const touchEnd = e.changedTouches[0];
     if (!touchStartRef.current || !touchEnd) return;
 

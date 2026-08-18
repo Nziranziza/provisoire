@@ -1,4 +1,4 @@
-import React from 'react';
+import type { Dispatch } from 'react';
 import type { I18nDictionary } from './constants';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
@@ -6,7 +6,7 @@ import { PASSING_SCORE } from './constants';
 
 interface PracticeReviewProps {
   state: PracticeState;
-  dispatch: React.Dispatch<PracticeAction>;
+  dispatch: Dispatch<PracticeAction>;
   t: I18nDictionary;
   imageBase: string;
   onRetake: () => void;

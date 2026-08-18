@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import { useId, type Dispatch } from 'react';
 import type { Question } from '../../lib/quiz';
 import type { I18nDictionary } from './constants';
 import { formatTime, sampleQuestions } from './reducer';
@@ -7,7 +7,7 @@ import { DEFAULT_TOTAL_QUESTIONS, PASSING_SCORE } from './constants';
 
 interface PracticeIntroProps {
   state: PracticeState;
-  dispatch: React.Dispatch<PracticeAction>;
+  dispatch: Dispatch<PracticeAction>;
   allQuestions: Question[];
   t: I18nDictionary;
 }

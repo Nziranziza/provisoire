@@ -1,11 +1,11 @@
-import React from 'react';
+import type { Dispatch } from 'react';
 import type { I18nDictionary } from './constants';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState } from './types';
 
 interface PracticeSubmitModalProps {
   state: PracticeState;
-  dispatch: React.Dispatch<PracticeAction>;
+  dispatch: Dispatch<PracticeAction>;
   t: I18nDictionary;
 }
 
