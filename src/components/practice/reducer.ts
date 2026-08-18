@@ -12,7 +12,12 @@ import {
   EXAM_DURATION_SECONDS,
   PASSING_SCORE,
 } from './constants';
-import { clearSessionFromStorage, saveHistoryToStorage } from './storage';
+import {
+  clearHistoryFromStorage,
+  clearSessionFromStorage,
+  saveHistoryToStorage,
+  saveSessionToStorage,
+} from './storage';
 
 /** Randomly samples 20 questions, optionally restricted to a specific category */
 export function sampleQuestions(
@@ -133,13 +138,28 @@ export function calculateFinishState(
 
   const updatedHistory = [newResult, ...state.history].slice(0, 10);
   saveHistoryToStorage(updatedHistory);
-  clearSessionFromStorage();
+
+  // Persist review_all stage so refreshing the results page stays on results
+  saveSessionToStorage({
+    sessionQuestions: state.sessionQuestions,
+    currentIndex: state.currentIndex,
+    answers: state.answers,
+    flagged: state.flagged,
+    timeRemaining: state.timeRemaining,
+    timeSpent: Math.max(1, finalTime),
+    mode: state.mode,
+    stage: 'review_all',
+    selectedCategory: state.selectedCategory,
+    locale: state.currentLocale,
+    savedAt: Date.now(),
+  });
 
   return {
     ...state,
     stage: 'review_all',
+    timeSpent: Math.max(1, finalTime),
     showSubmitModal: false,
-    hasSavedSession: false,
+    hasSavedSession: true,
     history: updatedHistory,
     reviewFilter: 'all',
   };
@@ -148,10 +168,11 @@ export function calculateFinishState(
 export function createInitialState(
   initialLang: Lang = 'en',
   initialCategory: number | null = null,
+  initialMode: ExamMode = 'practice',
 ): PracticeState {
   return {
     stage: 'intro',
-    mode: 'practice',
+    mode: initialMode,
     selectedCategory: initialCategory,
     sessionQuestions: [],
     currentIndex: 0,
@@ -175,11 +196,14 @@ export function practiceReducer(
 ): PracticeState {
   switch (action.type) {
     case 'INIT_STORAGE': {
-      const { history, savedSession, urlCategory, detectedLocale } =
+      const { history, savedSession, urlCategory, urlMode, detectedLocale } =
         action.payload;
       const initialCat = savedSession
         ? (savedSession.selectedCategory ?? null)
         : (urlCategory ?? state.selectedCategory);
+      const initialMode = savedSession
+        ? savedSession.mode
+        : (urlMode ?? state.mode);
       const activeLocale =
         detectedLocale || savedSession?.locale || state.currentLocale;
 
@@ -187,6 +211,7 @@ export function practiceReducer(
         return {
           ...state,
           history,
+          mode: initialMode,
           currentLocale: activeLocale,
           selectedCategory: initialCat,
           hasSavedSession: false,
@@ -250,6 +275,37 @@ export function practiceReducer(
           hasSavedSession: true,
           history,
           isHydrated: true,
+        };
+      }
+
+      // If session was in review_all (results screen), restore review screen
+      if (savedSession.stage === 'review_all') {
+        const isMock =
+          savedSession.mode === 'mock_exam' ||
+          (savedSession.mode as string) === 'timed';
+        const normalizedMode: ExamMode = isMock ? 'mock_exam' : 'practice';
+
+        return {
+          ...state,
+          stage: 'review_all',
+          sessionQuestions: savedSession.sessionQuestions,
+          currentIndex: Math.min(
+            savedSession.sessionQuestions.length - 1,
+            Math.max(0, savedSession.currentIndex),
+          ),
+          answers: savedSession.answers || {},
+          flagged: savedSession.flagged || {},
+          timeRemaining: savedSession.timeRemaining,
+          timeSpent: savedSession.timeSpent,
+          mode: normalizedMode,
+          selectedCategory: savedSession.selectedCategory ?? null,
+          currentLocale: activeLocale,
+          isPaused: false,
+          showSubmitModal: false,
+          hasSavedSession: true,
+          history,
+          isHydrated: true,
+          reviewFilter: 'all',
         };
       }
 
@@ -528,7 +584,7 @@ export function practiceReducer(
     }
 
     case 'CLEAR_HISTORY': {
-      clearSessionFromStorage();
+      clearHistoryFromStorage();
       return {
         ...state,
         history: [],

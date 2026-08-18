@@ -4,6 +4,7 @@ export interface PracticeSessionProps {
   lang?: Lang;
   imageBase?: string;
   initialCategory?: number | null;
+  initialMode?: ExamMode;
 }
 
 export interface SessionQuestion {
@@ -72,6 +73,7 @@ export type PracticeAction =
         history: PastResult[];
         savedSession: SavedSession | null;
         urlCategory?: number | null;
+        urlMode?: ExamMode | null;
         detectedLocale?: Lang;
       };
     }

@@ -339,10 +339,18 @@ export default function PracticeReview({
         </div>
       </div>
 
-      <div className="text-center">
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
+          className="inline-flex min-h-[42px] touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-5 text-xs font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:text-sm"
+        >
+          ↺ {t.discardBtn}
+        </button>
+
         <a
           href={`/${state.currentLocale}/questions`}
-          className="inline-flex items-center gap-1.5 rounded-full border border-slate-900 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-stone-100"
+          className="inline-flex min-h-[42px] touch-manipulation items-center gap-1.5 rounded-full border border-slate-900 bg-white px-5 text-xs font-bold text-slate-900 transition hover:bg-stone-100 sm:text-sm"
         >
           ← {t.bankBtn}
         </a>

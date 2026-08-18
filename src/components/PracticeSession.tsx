@@ -39,9 +39,10 @@ export default function PracticeSession({
   lang = 'en',
   imageBase = '/',
   initialCategory = null,
+  initialMode = 'practice',
 }: PracticeSessionProps) {
   const [state, dispatch] = useReducer(practiceReducer, lang, (l) =>
-    createInitialState(l, initialCategory),
+    createInitialState(l, initialCategory, initialMode),
   );
 
   const t = getTranslation(state.currentLocale);
@@ -54,12 +55,13 @@ export default function PracticeSession({
     }
   }, [lang]);
 
-  // Hydrate from localStorage once mounted & detect route path locale
+  // Hydrate from localStorage once mounted & detect route path locale/mode
   useEffect(() => {
     const history = loadHistoryFromStorage();
     const savedSession = loadSessionFromStorage();
 
     let urlCat: number | null = null;
+    let urlMode: ExamMode | null = null;
     let pathLocale: Lang = lang;
 
     try {
@@ -69,9 +71,26 @@ export default function PracticeSession({
         if (cat === 'traffic-rules' || cat === '1') urlCat = 1;
         else if (cat === 'road-signs' || cat === '2') urlCat = 2;
 
+        const modeParam = p.get('mode');
+        if (
+          modeParam === 'mock_exam' ||
+          modeParam === 'exam' ||
+          modeParam === 'timed'
+        ) {
+          urlMode = 'mock_exam';
+        } else if (modeParam === 'practice' || modeParam === 'untimed') {
+          urlMode = 'practice';
+        }
+
         const match = window.location.pathname.match(/^\/(en|fr|rw)(\/|$)/);
         if (match && match[1]) {
           pathLocale = match[1] as Lang;
+        }
+
+        if (window.location.pathname.includes('/exam')) {
+          urlMode = 'mock_exam';
+        } else if (window.location.pathname.includes('/practice')) {
+          urlMode = urlMode ?? initialMode;
         }
       }
     } catch {
@@ -84,16 +103,20 @@ export default function PracticeSession({
         history,
         savedSession,
         urlCategory: urlCat ?? initialCategory,
+        urlMode: urlMode ?? initialMode,
         detectedLocale: pathLocale,
       },
     });
-  }, [lang, initialCategory]);
+  }, [lang, initialCategory, initialMode]);
 
-  // Save active session to localStorage on state changes
+  // Save active session / review state to localStorage on state changes
   useEffect(() => {
     if (!state.isHydrated) return;
 
-    if (state.stage === 'in_progress' && state.sessionQuestions.length > 0) {
+    if (
+      (state.stage === 'in_progress' || state.stage === 'review_all') &&
+      state.sessionQuestions.length > 0
+    ) {
       saveSessionToStorage({
         sessionQuestions: state.sessionQuestions,
         currentIndex: state.currentIndex,
@@ -102,12 +125,12 @@ export default function PracticeSession({
         timeRemaining: state.timeRemaining,
         timeSpent: state.timeSpent,
         mode: state.mode,
-        stage: 'in_progress',
+        stage: state.stage,
         selectedCategory: state.selectedCategory,
         locale: state.currentLocale,
         savedAt: Date.now(),
       });
-    } else if (state.stage === 'review_all' || state.stage === 'intro') {
+    } else if (state.stage === 'intro') {
       clearSessionFromStorage();
     }
   }, [
@@ -185,6 +208,43 @@ export default function PracticeSession({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [state.stage, state.currentIndex]);
 
+  // Listen to browser back/forward history navigation (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      if (typeof window === 'undefined') return;
+      const isExamPath = window.location.pathname.includes('/exam');
+      const isPracticePath = window.location.pathname.includes('/practice');
+      const targetMode: ExamMode | null = isExamPath
+        ? 'mock_exam'
+        : isPracticePath
+          ? 'practice'
+          : null;
+      if (targetMode && targetMode !== state.mode) {
+        dispatch({ type: 'SET_MODE', payload: { mode: targetMode } });
+      }
+
+      const match = window.location.pathname.match(/^\/(en|fr|rw)(\/|$)/);
+      if (match && match[1] && (match[1] as Lang) !== state.currentLocale) {
+        dispatch({
+          type: 'SET_LOCALE',
+          payload: { locale: match[1] as Lang },
+        });
+      }
+
+      const p = new URLSearchParams(window.location.search);
+      const cat = p.get('category') || p.get('cat');
+      let catId: number | null = null;
+      if (cat === 'traffic-rules' || cat === '1') catId = 1;
+      else if (cat === 'road-signs' || cat === '2') catId = 2;
+      if (catId !== state.selectedCategory) {
+        dispatch({ type: 'SET_CATEGORY', payload: { categoryId: catId } });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [state.mode, state.currentLocale, state.selectedCategory]);
+
   const handleStartExam = (
     chosenMode: ExamMode,
     chosenCat: number | null = state.selectedCategory,
@@ -211,15 +271,14 @@ export default function PracticeSession({
       if (typeof window !== 'undefined') {
         localStorage.setItem('provisoire_user_locale', newLocale);
 
-        // Update the browser URL so a page refresh (F5) stays in this exact locale!
+        // Update the browser URL so a page refresh (F5) stays in this exact locale & mode!
         const currentPath = window.location.pathname;
-        let newPath = currentPath;
-        if (/^\/(en|fr|rw)(\/|$)/.test(currentPath)) {
+        const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
+        let newPath = `/${newLocale}/${targetSlug}`;
+        if (/^\/(en|fr|rw)\/(exam|practice)(\/|$)/.test(currentPath)) {
           newPath = currentPath.replace(/^\/(en|fr|rw)/, `/${newLocale}`);
-        } else {
-          newPath = `/${newLocale}${currentPath}`;
         }
-        window.history.replaceState(null, '', newPath + window.location.search);
+        window.history.pushState(null, '', newPath + window.location.search);
       }
     } catch {
       // ignore
@@ -247,20 +306,30 @@ export default function PracticeSession({
         >
           {(['en', 'fr', 'rw'] as Lang[]).map((code) => {
             const active = state.currentLocale === code;
+            const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
+            const catSearch =
+              state.selectedCategory === 1
+                ? '?category=traffic-rules'
+                : state.selectedCategory === 2
+                  ? '?category=road-signs'
+                  : '';
             return (
-              <button
+              <a
                 key={code}
-                type="button"
-                onClick={() => handleLocaleChange(code)}
+                href={`/${code}/${targetSlug}${catSearch}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLocaleChange(code);
+                }}
                 aria-pressed={active}
-                className={`flex min-h-[36px] min-w-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-full px-3.5 text-xs font-bold transition active:scale-95 ${
+                className={`flex min-h-[36px] min-w-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-full px-3.5 text-xs font-bold no-underline transition active:scale-95 ${
                   active
                     ? 'bg-blue-700 text-white shadow-sm'
                     : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-200'
                 }`}
               >
                 {code.toUpperCase()}
-              </button>
+              </a>
             );
           })}
         </div>

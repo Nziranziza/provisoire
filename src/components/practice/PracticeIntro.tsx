@@ -47,6 +47,48 @@ export default function PracticeIntro({
     });
   };
 
+  const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
+  const categoryQuery =
+    state.selectedCategory === 1
+      ? '?category=traffic-rules'
+      : state.selectedCategory === 2
+        ? '?category=road-signs'
+        : '';
+
+  const handleModeChange = (chosenMode: ExamMode) => {
+    dispatch({ type: 'SET_MODE', payload: { mode: chosenMode } });
+
+    try {
+      if (typeof window !== 'undefined') {
+        const slug = chosenMode === 'mock_exam' ? 'exam' : 'practice';
+        const newUrl = `/${state.currentLocale}/${slug}${categoryQuery}`;
+        window.history.pushState(null, '', newUrl);
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleCategoryChange = (catId: number | null) => {
+    dispatch({ type: 'SET_CATEGORY', payload: { categoryId: catId } });
+
+    try {
+      if (typeof window !== 'undefined') {
+        const slug = state.mode === 'mock_exam' ? 'exam' : 'practice';
+        const search =
+          catId === 1
+            ? '?category=traffic-rules'
+            : catId === 2
+              ? '?category=road-signs'
+              : '';
+        const newUrl = `/${state.currentLocale}/${slug}${search}`;
+        window.history.pushState(null, '', newUrl);
+      }
+    } catch {
+      // ignore
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
@@ -116,16 +158,14 @@ export default function PracticeIntro({
           </label>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {/* Mode 1: Practice Mode (Immediate feedback) */}
-            <button
-              type="button"
+            <a
+              href={`/${state.currentLocale}/practice${categoryQuery}`}
               id={selectId}
-              onClick={() =>
-                dispatch({
-                  type: 'SET_MODE',
-                  payload: { mode: 'practice' },
-                })
-              }
-              className={`cursor-pointer touch-manipulation rounded-2xl border-2 p-4.5 text-left transition active:scale-[0.985] ${
+              onClick={(e) => {
+                e.preventDefault();
+                handleModeChange('practice');
+              }}
+              className={`block cursor-pointer touch-manipulation rounded-2xl border-2 p-4.5 text-left no-underline transition active:scale-[0.985] ${
                 state.mode === 'practice'
                   ? 'border-blue-700 bg-blue-50/60 shadow-xs ring-1 ring-blue-700'
                   : 'border-stone-200 bg-white hover:border-slate-400'
@@ -142,15 +182,16 @@ export default function PracticeIntro({
               <p className="mt-2 text-xs leading-relaxed text-slate-600">
                 {t.modePracticeDesc}
               </p>
-            </button>
+            </a>
 
             {/* Mode 2: Mock Exam (No feedback until session ends) */}
-            <button
-              type="button"
-              onClick={() =>
-                dispatch({ type: 'SET_MODE', payload: { mode: 'mock_exam' } })
-              }
-              className={`cursor-pointer touch-manipulation rounded-2xl border-2 p-4.5 text-left transition active:scale-[0.985] ${
+            <a
+              href={`/${state.currentLocale}/exam${categoryQuery}`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleModeChange('mock_exam');
+              }}
+              className={`block cursor-pointer touch-manipulation rounded-2xl border-2 p-4.5 text-left no-underline transition active:scale-[0.985] ${
                 state.mode === 'mock_exam'
                   ? 'border-blue-700 bg-blue-50/60 shadow-xs ring-1 ring-blue-700'
                   : 'border-stone-200 bg-white hover:border-slate-400'
@@ -167,7 +208,7 @@ export default function PracticeIntro({
               <p className="mt-2 text-xs leading-relaxed text-slate-600">
                 {t.modeMockExamDesc}
               </p>
-            </button>
+            </a>
           </div>
         </div>
 
@@ -180,16 +221,14 @@ export default function PracticeIntro({
             {t.categoryLabel}
           </label>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <button
-              type="button"
+            <a
+              href={`/${state.currentLocale}/${targetSlug}`}
               id={categorySelectId}
-              onClick={() =>
-                dispatch({
-                  type: 'SET_CATEGORY',
-                  payload: { categoryId: null },
-                })
-              }
-              className={`cursor-pointer touch-manipulation rounded-2xl border-2 p-4 text-left transition active:scale-[0.985] ${
+              onClick={(e) => {
+                e.preventDefault();
+                handleCategoryChange(null);
+              }}
+              className={`block cursor-pointer touch-manipulation rounded-2xl border-2 p-4 text-left no-underline transition active:scale-[0.985] ${
                 state.selectedCategory === null
                   ? 'border-blue-700 bg-blue-50/60 shadow-xs ring-1 ring-blue-700'
                   : 'border-stone-200 bg-white hover:border-slate-400'
@@ -204,14 +243,15 @@ export default function PracticeIntro({
               <p className="mt-1 text-xs leading-relaxed text-slate-600">
                 {t.categoryAllDesc}
               </p>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() =>
-                dispatch({ type: 'SET_CATEGORY', payload: { categoryId: 1 } })
-              }
-              className={`cursor-pointer touch-manipulation rounded-2xl border-2 p-4 text-left transition active:scale-[0.985] ${
+            <a
+              href={`/${state.currentLocale}/${targetSlug}?category=traffic-rules`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleCategoryChange(1);
+              }}
+              className={`block cursor-pointer touch-manipulation rounded-2xl border-2 p-4 text-left no-underline transition active:scale-[0.985] ${
                 state.selectedCategory === 1
                   ? 'border-blue-700 bg-blue-50/60 shadow-xs ring-1 ring-blue-700'
                   : 'border-stone-200 bg-white hover:border-slate-400'
@@ -226,14 +266,15 @@ export default function PracticeIntro({
               <p className="mt-1 text-xs leading-relaxed text-slate-600">
                 {t.categoryRulesDesc}
               </p>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() =>
-                dispatch({ type: 'SET_CATEGORY', payload: { categoryId: 2 } })
-              }
-              className={`cursor-pointer touch-manipulation rounded-2xl border-2 p-4 text-left transition active:scale-[0.985] ${
+            <a
+              href={`/${state.currentLocale}/${targetSlug}?category=road-signs`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleCategoryChange(2);
+              }}
+              className={`block cursor-pointer touch-manipulation rounded-2xl border-2 p-4 text-left no-underline transition active:scale-[0.985] ${
                 state.selectedCategory === 2
                   ? 'border-blue-700 bg-blue-50/60 shadow-xs ring-1 ring-blue-700'
                   : 'border-stone-200 bg-white hover:border-slate-400'
@@ -248,7 +289,7 @@ export default function PracticeIntro({
               <p className="mt-1 text-xs leading-relaxed text-slate-600">
                 {t.categorySignsDesc}
               </p>
-            </button>
+            </a>
           </div>
         </div>
 
