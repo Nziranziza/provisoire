@@ -32,7 +32,7 @@ export function sampleQuestions(
     return copy;
   };
 
-  let combined: Question[] = [];
+  let combined: Question[];
 
   if (categoryId !== null && categoryId !== undefined) {
     const categoryQuestions = allQuestions.filter(
