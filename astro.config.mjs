@@ -105,9 +105,7 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { en: 'en', fr: 'fr', rw: 'rw' },
       },
-      filter: (page) =>
-        !page.includes('/practice') &&
-        !page.includes('/exam'),
+      filter: (page) => !page.includes('/practice') && !page.includes('/exam'),
       customPages: listPageUrls,
     }),
   ],

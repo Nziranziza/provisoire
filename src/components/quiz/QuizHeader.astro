@@ -51,14 +51,30 @@ const allLabel: Record<Lang, string> = {
         class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold tracking-wide text-slate-800 transition hover:bg-stone-100 active:scale-95"
       >
         <span>💡</span>
-        <span>{lang === 'fr' ? 'Entraînement' : lang === 'rw' ? 'Imyitozo' : 'Practice'}</span>
+        <span
+          >{
+            lang === 'fr'
+              ? 'Entraînement'
+              : lang === 'rw'
+                ? 'Imyitozo'
+                : 'Practice'
+          }</span
+        >
       </a>
       <a
         href={`/${lang}/exam`}
         class="inline-flex items-center gap-1 rounded-full bg-amber-400 px-3 py-1 text-xs font-bold tracking-wide text-slate-900 transition hover:bg-amber-300 active:scale-95"
       >
         <span>⏱</span>
-        <span>{lang === 'fr' ? 'Examen Blanc' : lang === 'rw' ? 'Ikizamini (20m)' : 'Mock Exam (20m)'}</span>
+        <span
+          >{
+            lang === 'fr'
+              ? 'Examen Blanc'
+              : lang === 'rw'
+                ? 'Ikizamini (20m)'
+                : 'Mock Exam (20m)'
+          }</span
+        >
       </a>
     </div>
 
