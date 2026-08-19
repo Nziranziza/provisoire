@@ -621,9 +621,13 @@ export default function PracticeExam({
           )}
         </div>
 
-        {/* Bottom Navigation: ONLY TWO BUTTONS (Previous & Next/Finish) */}
+        {/* Bottom Navigation: Previous & Next/Finish */}
         <nav
-          className="flex flex-none items-center justify-between gap-3 border-t border-stone-100 pt-2.5 sm:pt-3"
+          className={`flex flex-none gap-2 border-t border-stone-100 pt-2.5 sm:gap-3 sm:pt-3 ${
+            state.currentIndex === totalQuestions - 1
+              ? 'flex-wrap'
+              : 'items-stretch'
+          }`}
           aria-label="Question navigation"
         >
           {/* 1. Previous Button */}
@@ -631,9 +635,22 @@ export default function PracticeExam({
             type="button"
             disabled={state.currentIndex === 0}
             onClick={() => dispatch({ type: 'PREV_QUESTION' })}
-            className="flex h-11 min-w-[120px] cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 text-xs font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 disabled:border-stone-200 disabled:text-stone-300 disabled:hover:bg-transparent sm:h-12 sm:min-w-[140px] sm:px-7 sm:text-sm"
+            className="flex min-h-[44px] min-w-0 flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-3 text-[11px] leading-tight font-bold whitespace-nowrap text-slate-900 transition hover:bg-stone-100 active:scale-95 disabled:border-stone-200 disabled:text-stone-300 disabled:hover:bg-transparent sm:min-h-[48px] sm:min-w-[140px] sm:flex-none sm:px-7 sm:text-sm"
           >
-            ← {t.prevBtn}
+            ←{' '}
+            {state.currentLocale === 'fr' ? (
+              <>
+                <span className="sm:hidden">Préc.</span>
+                <span className="hidden sm:inline">{t.prevBtn}</span>
+              </>
+            ) : state.currentLocale === 'rw' ? (
+              <>
+                <span className="sm:hidden">Inyuma</span>
+                <span className="hidden sm:inline">{t.prevBtn}</span>
+              </>
+            ) : (
+              t.prevBtn
+            )}
           </button>
 
           {/* 2. Next or Finish Button */}
@@ -641,17 +658,46 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'NEXT_QUESTION' })}
-              className="flex h-11 min-w-[120px] cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-xs font-bold text-white shadow-xs transition hover:bg-slate-700 active:scale-95 sm:h-12 sm:min-w-[140px] sm:px-8 sm:text-sm"
+              className="flex min-h-[44px] min-w-0 flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-[11px] leading-tight font-bold whitespace-nowrap text-white shadow-xs transition hover:bg-slate-700 active:scale-95 sm:min-h-[48px] sm:min-w-[140px] sm:flex-none sm:px-8 sm:text-sm"
             >
-              {t.nextBtn} →
+              {state.currentLocale === 'fr' ? (
+                <>
+                  <span className="sm:hidden">Suiv.</span>
+                  <span className="hidden sm:inline">{t.nextBtn}</span>
+                </>
+              ) : state.currentLocale === 'rw' ? (
+                <>
+                  <span className="sm:hidden">Imbere</span>
+                  <span className="hidden sm:inline">{t.nextBtn}</span>
+                </>
+              ) : (
+                t.nextBtn
+              )}{' '}
+              →
             </button>
           ) : (
             <button
               type="button"
               onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="flex h-11 min-w-[120px] cursor-pointer touch-manipulation items-center justify-center rounded-full bg-emerald-600 px-6 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-95 sm:h-12 sm:min-w-[140px] sm:px-8 sm:text-sm"
+              className="order-last flex min-h-[44px] w-full basis-full cursor-pointer touch-manipulation items-center justify-center rounded-full bg-emerald-600 px-3 text-[11px] leading-tight font-bold whitespace-nowrap text-white shadow-xs transition hover:bg-emerald-700 active:scale-95 sm:order-none sm:min-h-[48px] sm:w-auto sm:min-w-[140px] sm:flex-none sm:basis-auto sm:px-8 sm:text-sm"
             >
-              {t.finishBtn} ✓
+              {state.currentLocale === 'fr' ? (
+                <>
+                  <span className="sm:hidden">Terminer</span>
+                  <span className="hidden sm:inline">{t.finishBtn}</span>
+                </>
+              ) : state.currentLocale === 'rw' ? (
+                <>
+                  <span className="sm:hidden">Soza</span>
+                  <span className="hidden sm:inline">{t.finishBtn}</span>
+                </>
+              ) : (
+                <>
+                  <span className="sm:hidden">Finish</span>
+                  <span className="hidden sm:inline">{t.finishBtn}</span>
+                </>
+              )}{' '}
+              ✓
             </button>
           )}
         </nav>

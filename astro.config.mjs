@@ -112,5 +112,13 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      dedupe: ['react', 'react-dom'],
+    },
+    esbuild: {
+      jsx: 'automatic',
+      // Avoid _jsxDEV runtime mismatch when NODE_ENV is inconsistent (e.g. Tailwind/PostCSS).
+      jsxDev: false,
+    },
   },
 });
