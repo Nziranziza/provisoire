@@ -93,19 +93,19 @@ export default function PracticeExam({
 
   return (
     <div
-      className="h-full flex flex-col justify-between select-none sm:select-auto overflow-hidden"
+      className="flex h-full flex-col justify-between overflow-hidden select-none sm:select-auto"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       style={{ touchAction: 'pan-y' }}
     >
       {/* 1. Compact Header Bar (Progress, Timer, Flag, Language & Navigation) */}
-      <header className="flex-none rounded-2xl border border-stone-200 bg-white/95 p-2.5 sm:p-3 shadow-xs backdrop-blur-md">
+      <header className="flex-none rounded-2xl border border-stone-200 bg-white/95 p-2.5 shadow-xs backdrop-blur-md sm:p-3">
         <div className="flex items-center justify-between gap-2">
           {/* Left: Back to Question Bank link & Progress Badge & Category */}
           <div className="flex flex-wrap items-center justify-end gap-1.5 sm:flex-nowrap sm:gap-2">
             <a
               href={`/${state.currentLocale}/questions`}
-              className="flex min-h-[40px] sm:h-8 items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-slate-700 hover:bg-stone-100 hover:text-blue-700 transition active:scale-95 no-underline shadow-2xs whitespace-nowrap"
+              className="flex min-h-[40px] items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] font-bold whitespace-nowrap text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:h-8 sm:px-3 sm:text-xs"
               title={t.bankBtn}
               onClick={() => {
                 // The user left Practice/Exam to browse questions.
@@ -114,24 +114,29 @@ export default function PracticeExam({
               }}
             >
               <span>←</span>
-              <span className="hidden sm:inline text-[11px] font-bold">{t.bankBtn}</span>
-              <span className="sm:hidden text-[11px] font-bold">Bank</span>
+              <span className="hidden text-[11px] font-bold sm:inline">
+                {t.bankBtn}
+              </span>
+              <span className="text-[11px] font-bold sm:hidden">Bank</span>
             </a>
 
-            <span className="flex min-h-[40px] sm:h-8 min-w-[72px] items-center justify-center rounded-lg bg-blue-700 px-2 sm:px-2.5 font-mono text-[11px] sm:text-sm font-black text-white whitespace-nowrap shadow-2xs">
-              {String(state.currentIndex + 1).padStart(2, '0')} / {totalQuestions}
+            <span className="flex min-h-[40px] min-w-[72px] items-center justify-center rounded-lg bg-blue-700 px-2 font-mono text-[11px] font-black whitespace-nowrap text-white shadow-2xs sm:h-8 sm:px-2.5 sm:text-sm">
+              {String(state.currentIndex + 1).padStart(2, '0')} /{' '}
+              {totalQuestions}
             </span>
 
             <span
-              className={`hidden xs:inline-flex rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
+              className={`xs:inline-flex hidden rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
                 currentQ.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
               }`}
             >
               {currentQ.category_name}
             </span>
 
-            <span className="hidden md:inline-flex items-center gap-1 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-bold text-slate-600">
-              <span>{answeredCount}/{totalQuestions}</span>
+            <span className="hidden items-center gap-1 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-bold text-slate-600 md:inline-flex">
+              <span>
+                {answeredCount}/{totalQuestions}
+              </span>
               <span className="text-slate-400">·</span>
               <span className="text-blue-700">{percentCompleted}%</span>
             </span>
@@ -142,7 +147,7 @@ export default function PracticeExam({
             {/* Timer */}
             {isMockMode ? (
               <div
-                className={`flex min-h-[40px] sm:h-8 items-center gap-1 rounded-full px-2.5 font-mono text-[11px] sm:text-xs font-bold transition ${
+                className={`flex min-h-[40px] items-center gap-1 rounded-full px-2.5 font-mono text-[11px] font-bold transition sm:h-8 sm:text-xs ${
                   isTimeCritical
                     ? 'animate-pulse bg-rose-600 text-white shadow-xs'
                     : isTimeLow
@@ -157,7 +162,7 @@ export default function PracticeExam({
               </div>
             ) : (
               <div
-                className="flex min-h-[40px] sm:h-8 items-center gap-1 rounded-full bg-stone-100 px-2.5 font-mono text-[11px] sm:text-xs font-bold text-slate-700"
+                className="flex min-h-[40px] items-center gap-1 rounded-full bg-stone-100 px-2.5 font-mono text-[11px] font-bold text-slate-700 sm:h-8 sm:text-xs"
                 title={t.timeSpent}
               >
                 <span>⏱</span>
@@ -167,7 +172,7 @@ export default function PracticeExam({
 
             {/* Locked Language Badge */}
             <span
-              className="hidden sm:inline-flex items-center rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 uppercase"
+              className="hidden items-center rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 uppercase sm:inline-flex"
               title="Test language is locked"
             >
               {state.currentLocale.toUpperCase()}
@@ -187,14 +192,14 @@ export default function PracticeExam({
               }
               title={t.flaggedCardTooltip}
               aria-pressed={isCurrentFlagged}
-              className={`flex min-h-[40px] sm:h-8 touch-manipulation items-center gap-1 rounded-full px-2.5 text-[11px] sm:text-xs font-bold transition active:scale-95 cursor-pointer ${
+              className={`flex min-h-[40px] cursor-pointer touch-manipulation items-center gap-1 rounded-full px-2.5 text-[11px] font-bold transition active:scale-95 sm:h-8 sm:text-xs ${
                 isCurrentFlagged
                   ? 'bg-amber-500 text-white shadow-xs'
                   : 'border border-stone-200 bg-white text-slate-700 hover:bg-stone-100'
               }`}
             >
               <span className="text-xs">⚑</span>
-              <span className="hidden sm:inline text-[11px]">
+              <span className="hidden text-[11px] sm:inline">
                 {isCurrentFlagged ? t.unflagQuestion : t.flagQuestion}
               </span>
             </button>
@@ -203,11 +208,11 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => setShowGridModal(true)}
-              className="flex min-h-[40px] sm:h-8 touch-manipulation items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] sm:text-xs font-bold text-slate-800 hover:bg-stone-100 active:scale-95 cursor-pointer"
+              className="flex min-h-[40px] cursor-pointer touch-manipulation items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] font-bold text-slate-800 hover:bg-stone-100 active:scale-95 sm:h-8 sm:text-xs"
               title={t.questionGrid}
             >
               <span>⊞</span>
-              <span className="hidden xs:inline text-[11px]">20 Qs</span>
+              <span className="xs:inline hidden text-[11px]">20 Qs</span>
               {flaggedCount > 0 && (
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-900">
                   {flaggedCount}
@@ -219,7 +224,7 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="order-last flex min-h-[40px] w-full sm:h-8 sm:w-auto sm:order-none touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-[11px] sm:text-xs font-bold text-white transition hover:bg-slate-700 active:scale-95 cursor-pointer"
+              className="order-last flex min-h-[40px] w-full cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-[11px] font-bold text-white transition hover:bg-slate-700 active:scale-95 sm:order-none sm:h-8 sm:w-auto sm:text-xs"
             >
               {t.finishBtn}
             </button>
@@ -228,7 +233,7 @@ export default function PracticeExam({
 
         {/* 20-Segment Interactive Multi-Track Bar */}
         <div className="mt-2">
-          <div className="flex gap-1 w-full">
+          <div className="flex w-full gap-1">
             {state.sessionQuestions.map((q, dotIdx) => {
               const isDotCurrent = dotIdx === state.currentIndex;
               const isDotAnswered = typeof state.answers[dotIdx] === 'number';
@@ -259,7 +264,7 @@ export default function PracticeExam({
                     })
                   }
                   title={`Q${dotIdx + 1}${isDotAnswered ? ' (Answered)' : ' (Unanswered)'}${isDotFlagged ? ' ⚑' : ''}`}
-                  className={`flex-1 h-2 sm:h-2.5 touch-manipulation rounded-xs transition-all duration-150 cursor-pointer ${segmentColor}`}
+                  className={`h-2 flex-1 cursor-pointer touch-manipulation rounded-xs transition-all duration-150 sm:h-2.5 ${segmentColor}`}
                   aria-label={`Jump to question ${dotIdx + 1}`}
                 />
               );
@@ -269,9 +274,9 @@ export default function PracticeExam({
       </header>
 
       {/* 2. Main Question Card Area (Engineered to fit viewport perfectly) */}
-      <main className="flex-1 flex flex-col justify-between my-1.5 sm:my-2 rounded-2xl sm:rounded-3xl border border-stone-200 bg-white p-3.5 sm:p-5 md:p-6 shadow-xs overflow-hidden">
+      <main className="my-1.5 flex flex-1 flex-col justify-between overflow-hidden rounded-2xl border border-stone-200 bg-white p-3.5 shadow-xs sm:my-2 sm:rounded-3xl sm:p-5 md:p-6">
         {/* Question Header Row */}
-        <div className="flex-none mb-2 flex items-center justify-between">
+        <div className="mb-2 flex flex-none items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-xs font-black tracking-widest text-slate-400 uppercase">
               {t.questionOf(state.currentIndex + 1, totalQuestions)}
@@ -294,10 +299,10 @@ export default function PracticeExam({
                 payload: { questionIndex: state.currentIndex },
               })
             }
-            className={`inline-flex items-center gap-1 rounded-lg px-2 py-0.5 text-[11px] font-bold transition active:scale-95 cursor-pointer ${
+            className={`inline-flex cursor-pointer items-center gap-1 rounded-lg px-2 py-0.5 text-[11px] font-bold transition active:scale-95 ${
               isCurrentFlagged
                 ? 'border border-amber-300 bg-amber-50 text-amber-900'
-                : 'text-slate-400 hover:text-slate-700 hover:bg-stone-100'
+                : 'text-slate-400 hover:bg-stone-100 hover:text-slate-700'
             }`}
           >
             <span>⚑</span>
@@ -306,21 +311,21 @@ export default function PracticeExam({
         </div>
 
         {/* Question Content & Options Container */}
-        <div className="flex-1 flex flex-col justify-center overflow-y-auto pr-1">
+        <div className="flex flex-1 flex-col justify-center overflow-y-auto pr-1">
           {currentQ.image_url ? (
             /* Road Sign Question: Responsive 2-Column on Tablet/Desktop, Compact Stacked on Mobile */
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-center">
+            <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-12 md:gap-6">
               {/* Left Column: Sign Image + Question Title + Practice Feedback */}
-              <div className="md:col-span-5 flex flex-col items-center justify-center text-center">
-                <div className="flex justify-center my-1">
+              <div className="flex flex-col items-center justify-center text-center md:col-span-5">
+                <div className="my-1 flex justify-center">
                   <img
                     src={`${imageBase}${currentQ.image_url.replace(/^\//, '')}`}
                     alt="Road sign"
-                    className="max-h-24 sm:max-h-32 md:max-h-44 max-w-full rounded-xl border border-stone-200 bg-stone-50 p-1.5 shadow-2xs object-contain"
+                    className="max-h-24 max-w-full rounded-xl border border-stone-200 bg-stone-50 object-contain p-1.5 shadow-2xs sm:max-h-32 md:max-h-44"
                   />
                 </div>
 
-                <h2 className="mt-1.5 text-xs sm:text-sm md:text-base font-bold text-slate-900 leading-snug">
+                <h2 className="mt-1.5 text-xs leading-snug font-bold text-slate-900 sm:text-sm md:text-base">
                   {questionTitle}
                 </h2>
 
@@ -343,7 +348,9 @@ export default function PracticeExam({
                     </div>
                     {qTrans?.explanation && (
                       <p className="mt-1 text-[11px] leading-tight text-slate-800">
-                        <strong className="font-semibold">{t.explanation}:</strong>{' '}
+                        <strong className="font-semibold">
+                          {t.explanation}:
+                        </strong>{' '}
                         {qTrans.explanation}
                       </p>
                     )}
@@ -353,7 +360,7 @@ export default function PracticeExam({
 
               {/* Right Column: Option Buttons */}
               <div
-                className="md:col-span-7 flex flex-col justify-center space-y-2 sm:space-y-2.5"
+                className="flex flex-col justify-center space-y-2 sm:space-y-2.5 md:col-span-7"
                 role="radiogroup"
                 aria-label={questionTitle}
               >
@@ -397,14 +404,18 @@ export default function PracticeExam({
                             },
                           })
                         }
-                        className={`flex min-h-[44px] sm:min-h-[48px] w-full touch-manipulation items-center gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-3.5 text-left transition active:scale-[0.985] cursor-pointer ${optionStyle}`}
+                        className={`flex min-h-[44px] w-full cursor-pointer touch-manipulation items-center gap-2.5 rounded-xl border-2 px-3 py-2 text-left transition active:scale-[0.985] sm:min-h-[48px] sm:gap-3 sm:rounded-2xl sm:px-3.5 sm:py-2.5 ${optionStyle}`}
                       >
                         <span
-                          className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-black transition ${badgeStyle}`}
+                          className={`flex h-7 w-7 flex-none items-center justify-center rounded-full text-xs font-black transition sm:h-8 sm:w-8 ${badgeStyle}`}
                         >
-                          {isCorrectOption ? '✓' : isUserWrongChoice ? '✗' : letter}
+                          {isCorrectOption
+                            ? '✓'
+                            : isUserWrongChoice
+                              ? '✗'
+                              : letter}
                         </span>
-                        <span className="flex-1 text-xs sm:text-sm leading-snug font-medium">
+                        <span className="flex-1 text-xs leading-snug font-medium sm:text-sm">
                           {opt}
                         </span>
                         {isCorrectOption && (
@@ -437,14 +448,14 @@ export default function PracticeExam({
                           },
                         })
                       }
-                      className={`flex min-h-[44px] sm:min-h-[48px] w-full cursor-pointer touch-manipulation items-center gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-3.5 text-left transition active:scale-[0.985] ${
+                      className={`flex min-h-[44px] w-full cursor-pointer touch-manipulation items-center gap-2.5 rounded-xl border-2 px-3 py-2 text-left transition active:scale-[0.985] sm:min-h-[48px] sm:gap-3 sm:rounded-2xl sm:px-3.5 sm:py-2.5 ${
                         isSelected
                           ? 'border-blue-700 bg-blue-50/80 text-slate-950 shadow-xs ring-1 ring-blue-700'
                           : 'border-stone-200 bg-stone-50/80 text-slate-700 hover:border-slate-400 hover:bg-white'
                       }`}
                     >
                       <span
-                        className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-extrabold transition ${
+                        className={`flex h-7 w-7 flex-none items-center justify-center rounded-full text-xs font-extrabold transition sm:h-8 sm:w-8 ${
                           isSelected
                             ? 'bg-blue-700 text-white shadow-2xs'
                             : 'border border-slate-300 bg-white text-slate-700'
@@ -452,7 +463,7 @@ export default function PracticeExam({
                       >
                         {letter}
                       </span>
-                      <span className="flex-1 text-xs sm:text-sm leading-snug font-medium">
+                      <span className="flex-1 text-xs leading-snug font-medium sm:text-sm">
                         {opt}
                       </span>
                     </button>
@@ -462,8 +473,8 @@ export default function PracticeExam({
             </div>
           ) : (
             /* Traffic Rules Question: Single Column Clean Layout */
-            <div className="max-w-3xl mx-auto w-full flex flex-col justify-center">
-              <h2 className="mb-3 sm:mb-4 text-sm sm:text-base md:text-lg font-bold text-slate-900 leading-snug">
+            <div className="mx-auto flex w-full max-w-3xl flex-col justify-center">
+              <h2 className="mb-3 text-sm leading-snug font-bold text-slate-900 sm:mb-4 sm:text-base md:text-lg">
                 {questionTitle}
               </h2>
 
@@ -512,14 +523,18 @@ export default function PracticeExam({
                             },
                           })
                         }
-                        className={`flex min-h-[44px] sm:min-h-[48px] w-full touch-manipulation items-center gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-4 text-left transition active:scale-[0.985] cursor-pointer ${optionStyle}`}
+                        className={`flex min-h-[44px] w-full cursor-pointer touch-manipulation items-center gap-3 rounded-xl border-2 px-3 py-2 text-left transition active:scale-[0.985] sm:min-h-[48px] sm:rounded-2xl sm:px-4 sm:py-2.5 ${optionStyle}`}
                       >
                         <span
-                          className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-black transition ${badgeStyle}`}
+                          className={`flex h-7 w-7 flex-none items-center justify-center rounded-full text-xs font-black transition sm:h-8 sm:w-8 ${badgeStyle}`}
                         >
-                          {isCorrectOption ? '✓' : isUserWrongChoice ? '✗' : letter}
+                          {isCorrectOption
+                            ? '✓'
+                            : isUserWrongChoice
+                              ? '✗'
+                              : letter}
                         </span>
-                        <span className="flex-1 text-xs sm:text-sm md:text-base leading-snug font-medium">
+                        <span className="flex-1 text-xs leading-snug font-medium sm:text-sm md:text-base">
                           {opt}
                         </span>
                         {isCorrectOption && (
@@ -552,14 +567,14 @@ export default function PracticeExam({
                           },
                         })
                       }
-                      className={`flex min-h-[44px] sm:min-h-[48px] w-full cursor-pointer touch-manipulation items-center gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-4 text-left transition active:scale-[0.985] ${
+                      className={`flex min-h-[44px] w-full cursor-pointer touch-manipulation items-center gap-3 rounded-xl border-2 px-3 py-2 text-left transition active:scale-[0.985] sm:min-h-[48px] sm:rounded-2xl sm:px-4 sm:py-2.5 ${
                         isSelected
                           ? 'border-blue-700 bg-blue-50/80 text-slate-950 shadow-xs ring-1 ring-blue-700'
                           : 'border-stone-200 bg-stone-50/80 text-slate-700 hover:border-slate-400 hover:bg-white'
                       }`}
                     >
                       <span
-                        className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-extrabold transition ${
+                        className={`flex h-7 w-7 flex-none items-center justify-center rounded-full text-xs font-extrabold transition sm:h-8 sm:w-8 ${
                           isSelected
                             ? 'bg-blue-700 text-white shadow-2xs'
                             : 'border border-slate-300 bg-white text-slate-700'
@@ -567,7 +582,7 @@ export default function PracticeExam({
                       >
                         {letter}
                       </span>
-                      <span className="flex-1 text-xs sm:text-sm md:text-base leading-snug font-medium">
+                      <span className="flex-1 text-xs leading-snug font-medium sm:text-sm md:text-base">
                         {opt}
                       </span>
                     </button>
@@ -584,7 +599,7 @@ export default function PracticeExam({
                       : 'border-rose-300 bg-rose-50 text-rose-950'
                   }`}
                 >
-                  <div className="flex items-center gap-2 text-xs sm:text-sm font-extrabold">
+                  <div className="flex items-center gap-2 text-xs font-extrabold sm:text-sm">
                     <span>{isCorrect ? '✓' : '✗'}</span>
                     <span>
                       {isCorrect
@@ -594,7 +609,9 @@ export default function PracticeExam({
                   </div>
                   {qTrans?.explanation && (
                     <p className="mt-1.5 text-xs leading-relaxed text-slate-800">
-                      <strong className="font-semibold">{t.explanation}:</strong>{' '}
+                      <strong className="font-semibold">
+                        {t.explanation}:
+                      </strong>{' '}
                       {qTrans.explanation}
                     </p>
                   )}
@@ -606,7 +623,7 @@ export default function PracticeExam({
 
         {/* Bottom Navigation: ONLY TWO BUTTONS (Previous & Next/Finish) */}
         <nav
-          className="flex-none border-t border-stone-100 pt-2.5 sm:pt-3 flex items-center justify-between gap-3"
+          className="flex flex-none items-center justify-between gap-3 border-t border-stone-100 pt-2.5 sm:pt-3"
           aria-label="Question navigation"
         >
           {/* 1. Previous Button */}
@@ -614,7 +631,7 @@ export default function PracticeExam({
             type="button"
             disabled={state.currentIndex === 0}
             onClick={() => dispatch({ type: 'PREV_QUESTION' })}
-            className="flex h-11 sm:h-12 min-w-[120px] sm:min-w-[140px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 sm:px-7 text-xs sm:text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 disabled:border-stone-200 disabled:text-stone-300 disabled:hover:bg-transparent cursor-pointer"
+            className="flex h-11 min-w-[120px] cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 text-xs font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 disabled:border-stone-200 disabled:text-stone-300 disabled:hover:bg-transparent sm:h-12 sm:min-w-[140px] sm:px-7 sm:text-sm"
           >
             ← {t.prevBtn}
           </button>
@@ -624,7 +641,7 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'NEXT_QUESTION' })}
-              className="flex h-11 sm:h-12 min-w-[120px] sm:min-w-[140px] touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 sm:px-8 text-xs sm:text-sm font-bold text-white shadow-xs transition hover:bg-slate-700 active:scale-95 cursor-pointer"
+              className="flex h-11 min-w-[120px] cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-xs font-bold text-white shadow-xs transition hover:bg-slate-700 active:scale-95 sm:h-12 sm:min-w-[140px] sm:px-8 sm:text-sm"
             >
               {t.nextBtn} →
             </button>
@@ -632,7 +649,7 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="flex h-11 sm:h-12 min-w-[120px] sm:min-w-[140px] touch-manipulation items-center justify-center rounded-full bg-emerald-600 px-6 sm:px-8 text-xs sm:text-sm font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-95 cursor-pointer"
+              className="flex h-11 min-w-[120px] cursor-pointer touch-manipulation items-center justify-center rounded-full bg-emerald-600 px-6 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-95 sm:h-12 sm:min-w-[140px] sm:px-8 sm:text-sm"
             >
               {t.finishBtn} ✓
             </button>
@@ -643,7 +660,7 @@ export default function PracticeExam({
       {/* 3. On-Demand 20-Questions Grid Modal */}
       {showGridModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-lg rounded-3xl border border-stone-200 bg-white p-5 sm:p-6 shadow-2xl">
+          <div className="w-full max-w-lg rounded-3xl border border-stone-200 bg-white p-5 shadow-2xl sm:p-6">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
               <div>
@@ -651,13 +668,14 @@ export default function PracticeExam({
                   {t.questionGrid}
                 </h3>
                 <span className="text-xs font-semibold text-slate-500">
-                  {answeredCount} / {totalQuestions} {t.legendAnswered} ({percentCompleted}%)
+                  {answeredCount} / {totalQuestions} {t.legendAnswered} (
+                  {percentCompleted}%)
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setShowGridModal(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-100 text-sm font-bold text-slate-600 hover:bg-stone-200 cursor-pointer"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-stone-100 text-sm font-bold text-slate-600 hover:bg-stone-200"
                 aria-label="Close"
               >
                 ✕
@@ -673,7 +691,7 @@ export default function PracticeExam({
                     dispatch({ type: 'JUMP_TO_NEXT_UNANSWERED' });
                     setShowGridModal(false);
                   }}
-                  className="flex min-h-[34px] touch-manipulation items-center rounded-full border border-stone-300 bg-stone-50 px-3 text-xs font-bold text-slate-700 hover:bg-stone-100 cursor-pointer"
+                  className="flex min-h-[34px] cursor-pointer touch-manipulation items-center rounded-full border border-stone-300 bg-stone-50 px-3 text-xs font-bold text-slate-700 hover:bg-stone-100"
                 >
                   ○ {t.nextUnanswered}
                 </button>
@@ -686,7 +704,7 @@ export default function PracticeExam({
                     dispatch({ type: 'JUMP_TO_NEXT_FLAGGED' });
                     setShowGridModal(false);
                   }}
-                  className="flex min-h-[34px] touch-manipulation items-center rounded-full border border-amber-300 bg-amber-50 px-3 text-xs font-bold text-amber-900 hover:bg-amber-100 cursor-pointer"
+                  className="flex min-h-[34px] cursor-pointer touch-manipulation items-center rounded-full border border-amber-300 bg-amber-50 px-3 text-xs font-bold text-amber-900 hover:bg-amber-100"
                 >
                   ⚑ {t.nextFlagged}
                 </button>
@@ -694,7 +712,7 @@ export default function PracticeExam({
             </div>
 
             {/* 20 Questions Matrix */}
-            <div className="grid grid-cols-5 gap-2 sm:grid-cols-10 my-3">
+            <div className="my-3 grid grid-cols-5 gap-2 sm:grid-cols-10">
               {state.sessionQuestions.map((q, idx) => {
                 const isCurrent = idx === state.currentIndex;
                 const userAns = state.answers[idx];
@@ -745,7 +763,7 @@ export default function PracticeExam({
             </div>
 
             {/* Legend */}
-            <div className="mt-3 border-t border-stone-100 pt-3 flex flex-wrap items-center gap-3 text-[11px] font-semibold text-slate-500">
+            <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-stone-100 pt-3 text-[11px] font-semibold text-slate-500">
               <span className="flex items-center gap-1.5">
                 <span className="inline-block h-3 w-3 rounded-md bg-blue-700" />
                 {t.legendCurrent}

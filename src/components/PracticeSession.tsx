@@ -285,14 +285,14 @@ export default function PracticeSession({
   };
 
   return (
-    <div className="practice-engine mx-auto w-full max-w-5xl h-full flex flex-col text-slate-900 overflow-hidden">
+    <div className="practice-engine mx-auto flex h-full w-full max-w-5xl flex-col overflow-hidden text-slate-900">
       {/* Top Locale & Navigation Bar (Only visible before test starts or during review) */}
       {state.stage !== 'in_progress' && (
         <div className="mb-3 flex flex-none flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-3">
           <div className="flex items-center gap-3">
             <a
               href={`/${state.currentLocale}/questions`}
-              className="inline-flex min-h-[40px] touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-[11px] sm:px-3.5 sm:text-xs font-bold text-slate-700 shadow-2xs no-underline transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 whitespace-nowrap"
+              className="inline-flex min-h-[40px] touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-[11px] font-bold whitespace-nowrap text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:px-3.5 sm:text-xs"
               title={t.bankBtn}
               onClick={() => {
                 // User left Practice/Exam to browse questions: clear in-progress session.
@@ -312,7 +312,8 @@ export default function PracticeSession({
           >
             {(['en', 'fr', 'rw'] as Lang[]).map((code) => {
               const active = state.currentLocale === code;
-              const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
+              const targetSlug =
+                state.mode === 'mock_exam' ? 'exam' : 'practice';
               const catSearch =
                 state.selectedCategory === 1
                   ? '?category=traffic-rules'
@@ -328,7 +329,7 @@ export default function PracticeSession({
                     handleLocaleChange(code);
                   }}
                   aria-current={active ? 'page' : undefined}
-                  className={`border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0 no-underline ${
+                  className={`border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide no-underline transition last:border-r-0 ${
                     active
                       ? 'bg-blue-700 text-white'
                       : 'bg-stone-50 text-slate-900 hover:bg-stone-200'
@@ -339,7 +340,6 @@ export default function PracticeSession({
               );
             })}
           </div>
-
         </div>
       )}
 
@@ -357,7 +357,7 @@ export default function PracticeSession({
 
       {/* 2. In-Progress Exam Stage */}
       {state.stage === 'in_progress' && (
-        <div className="flex-1 h-full flex flex-col overflow-hidden">
+        <div className="flex h-full flex-1 flex-col overflow-hidden">
           <PracticeExam
             state={state}
             dispatch={dispatch}

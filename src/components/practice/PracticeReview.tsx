@@ -137,7 +137,7 @@ export default function PracticeReview({
           <button
             type="button"
             onClick={onRetake}
-            className="flex min-h-[48px] flex-1 touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95 cursor-pointer"
+            className="flex min-h-[48px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95"
           >
             {t.retakeBtn}
           </button>
@@ -146,7 +146,7 @@ export default function PracticeReview({
             <button
               type="button"
               onClick={() => dispatch({ type: 'RETAKE_MISSED' })}
-              className="flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 cursor-pointer"
+              className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95"
             >
               {t.retakeMissedBtn}
             </button>
@@ -155,14 +155,14 @@ export default function PracticeReview({
           <button
             type="button"
             onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
-            className="flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs sm:text-sm font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95 cursor-pointer"
+            className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:text-sm"
           >
             ↺ {t.discardBtn}
           </button>
 
           <a
             href={`/${state.currentLocale}/questions`}
-            className="inline-flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs sm:text-sm font-bold text-slate-700 transition hover:bg-stone-100 hover:text-blue-700 no-underline active:scale-95"
+            className="inline-flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-bold text-slate-700 no-underline transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:text-sm"
             onClick={() => {
               // Leaving Practice/Exam -> don't keep the in-progress session around.
               // This avoids the "Saved Session" card showing up next time.
