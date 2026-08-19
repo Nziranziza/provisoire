@@ -3,6 +3,7 @@ import type { I18nDictionary } from './constants';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
 import { PASSING_SCORE } from './constants';
+import { clearSessionFromStorage } from './storage';
 
 interface PracticeReviewProps {
   state: PracticeState;
@@ -131,12 +132,12 @@ export default function PracticeReview({
           </div>
         </div>
 
-        {/* Action Buttons with Large Tap Targets */}
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        {/* Action Buttons on Top */}
+        <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3">
           <button
             type="button"
             onClick={onRetake}
-            className="flex min-h-[50px] flex-1 touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95"
+            className="flex min-h-[48px] flex-1 touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95 cursor-pointer"
           >
             {t.retakeBtn}
           </button>
@@ -145,11 +146,31 @@ export default function PracticeReview({
             <button
               type="button"
               onClick={() => dispatch({ type: 'RETAKE_MISSED' })}
-              className="flex min-h-[50px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-6 text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95"
+              className="flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 cursor-pointer"
             >
               {t.retakeMissedBtn}
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
+            className="flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs sm:text-sm font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95 cursor-pointer"
+          >
+            ↺ {t.discardBtn}
+          </button>
+
+          <a
+            href={`/${state.currentLocale}/questions`}
+            className="inline-flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs sm:text-sm font-bold text-slate-700 transition hover:bg-stone-100 hover:text-blue-700 no-underline active:scale-95"
+            onClick={() => {
+              // Leaving Practice/Exam -> don't keep the in-progress session around.
+              // This avoids the "Saved Session" card showing up next time.
+              clearSessionFromStorage();
+            }}
+          >
+            ← {t.bankBtn}
+          </a>
         </div>
       </div>
 
@@ -337,23 +358,6 @@ export default function PracticeReview({
             },
           )}
         </div>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <button
-          type="button"
-          onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
-          className="inline-flex min-h-[42px] touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-5 text-xs font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:text-sm"
-        >
-          ↺ {t.discardBtn}
-        </button>
-
-        <a
-          href={`/${state.currentLocale}/questions`}
-          className="inline-flex min-h-[42px] touch-manipulation items-center gap-1.5 rounded-full border border-slate-900 bg-white px-5 text-xs font-bold text-slate-900 transition hover:bg-stone-100 sm:text-sm"
-        >
-          ← {t.bankBtn}
-        </a>
       </div>
     </div>
   );

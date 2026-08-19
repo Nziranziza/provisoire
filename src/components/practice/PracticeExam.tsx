@@ -1,6 +1,7 @@
-import { useRef, type Dispatch, type TouchEvent } from 'react';
+import { useState, useRef, type Dispatch, type TouchEvent } from 'react';
 import type { I18nDictionary } from './constants';
 import { EXAM_CONFIG } from './constants';
+import { clearSessionFromStorage } from './storage';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState } from './types';
 
@@ -17,6 +18,7 @@ export default function PracticeExam({
   t,
   imageBase,
 }: PracticeExamProps) {
+  const [showGridModal, setShowGridModal] = useState(false);
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(
     null,
   );
@@ -47,8 +49,6 @@ export default function PracticeExam({
     isMockMode &&
     state.timeRemaining <= EXAM_CONFIG.TIME_CRITICAL_WARNING_SECONDS;
 
-  const isLastQuestion = state.currentIndex === totalQuestions - 1;
-
   // Touch Swipe Handlers for mobile swipe navigation
   const handleTouchStart = (e: TouchEvent) => {
     const touch = e.touches[0];
@@ -71,8 +71,7 @@ export default function PracticeExam({
 
     touchStartRef.current = null;
 
-    // Must be a quick swipe (< 600ms) with at least 45px horizontal movement
-    // and predominantly horizontal (deltaX > 1.3 * deltaY)
+    // Quick swipe (< 600ms) with at least 45px horizontal movement
     if (
       deltaTime < 600 &&
       Math.abs(deltaX) > 45 &&
@@ -82,8 +81,6 @@ export default function PracticeExam({
         // Swipe Left -> Next Question
         if (state.currentIndex < totalQuestions - 1) {
           dispatch({ type: 'NEXT_QUESTION' });
-        } else if (unansweredCount > 0) {
-          dispatch({ type: 'JUMP_TO_NEXT_UNANSWERED' });
         }
       } else {
         // Swipe Right -> Previous Question
@@ -95,56 +92,57 @@ export default function PracticeExam({
   };
 
   return (
-    <div className="space-y-4 select-none sm:select-auto">
-      {/* Sticky Header Bar */}
-      <div className="sticky top-2 z-20 rounded-2xl border border-stone-200 bg-white/95 p-3.5 shadow-md backdrop-blur-md sm:p-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* Progress Summary & Mode Badge */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-black text-slate-900 sm:text-base">
-              {t.questionOf(state.currentIndex + 1, totalQuestions)}
+    <div
+      className="h-full flex flex-col justify-between select-none sm:select-auto overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      style={{ touchAction: 'pan-y' }}
+    >
+      {/* 1. Compact Header Bar (Progress, Timer, Flag, Language & Navigation) */}
+      <header className="flex-none rounded-2xl border border-stone-200 bg-white/95 p-2.5 sm:p-3 shadow-xs backdrop-blur-md">
+        <div className="flex items-center justify-between gap-2">
+          {/* Left: Back to Question Bank link & Progress Badge & Category */}
+          <div className="flex flex-wrap items-center justify-end gap-1.5 sm:flex-nowrap sm:gap-2">
+            <a
+              href={`/${state.currentLocale}/questions`}
+              className="flex min-h-[40px] sm:h-8 items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 sm:px-3 text-[11px] sm:text-xs font-bold text-slate-700 hover:bg-stone-100 hover:text-blue-700 transition active:scale-95 no-underline shadow-2xs whitespace-nowrap"
+              title={t.bankBtn}
+              onClick={() => {
+                // The user left Practice/Exam to browse questions.
+                // Start fresh next time (and prevent the saved session banner).
+                clearSessionFromStorage();
+              }}
+            >
+              <span>←</span>
+              <span className="hidden sm:inline text-[11px] font-bold">{t.bankBtn}</span>
+              <span className="sm:hidden text-[11px] font-bold">Bank</span>
+            </a>
+
+            <span className="flex min-h-[40px] sm:h-8 min-w-[72px] items-center justify-center rounded-lg bg-blue-700 px-2 sm:px-2.5 font-mono text-[11px] sm:text-sm font-black text-white whitespace-nowrap shadow-2xs">
+              {String(state.currentIndex + 1).padStart(2, '0')} / {totalQuestions}
             </span>
 
-            {/* Answered count & percentage badge */}
-            <span className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-3 py-1 text-xs font-bold text-slate-700">
-              <span>{t.answeredCount(answeredCount, totalQuestions)}</span>
-              <span className="text-slate-400">·</span>
-              <span className="font-extrabold text-blue-700">
-                {percentCompleted}%
-              </span>
-            </span>
-
-            {/* Flagged counter pill (if any flagged) */}
-            {flaggedCount > 0 && (
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'JUMP_TO_NEXT_FLAGGED' })}
-                title={t.nextFlagged}
-                className="inline-flex h-7 items-center gap-1 rounded-full bg-amber-100 px-2.5 text-xs font-extrabold text-amber-900 transition hover:bg-amber-200 active:scale-95"
-              >
-                <span>⚑</span>
-                <span>{t.flaggedCount(flaggedCount)}</span>
-              </button>
-            )}
-
-            {/* Mode badge */}
             <span
-              className={`hidden rounded-full px-2.5 py-1 text-[11px] font-bold sm:inline-flex ${
-                isMockMode
-                  ? 'bg-blue-100 text-blue-800'
-                  : 'bg-emerald-100 text-emerald-800'
+              className={`hidden xs:inline-flex rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
+                currentQ.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
               }`}
             >
-              {isMockMode ? t.modeMockExam : t.modePractice}
+              {currentQ.category_name}
+            </span>
+
+            <span className="hidden md:inline-flex items-center gap-1 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-bold text-slate-600">
+              <span>{answeredCount}/{totalQuestions}</span>
+              <span className="text-slate-400">·</span>
+              <span className="text-blue-700">{percentCompleted}%</span>
             </span>
           </div>
 
-          {/* Controls: Timer, Pause, Flag, Finish */}
-          <div className="flex items-center gap-2">
-            {/* Timer: Countdown in Mock Exam, Elapsed in Practice */}
+          {/* Center: Timer & Mode / Language Switcher */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Timer */}
             {isMockMode ? (
               <div
-                className={`flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-xs font-bold transition ${
+                className={`flex min-h-[40px] sm:h-8 items-center gap-1 rounded-full px-2.5 font-mono text-[11px] sm:text-xs font-bold transition ${
                   isTimeCritical
                     ? 'animate-pulse bg-rose-600 text-white shadow-xs'
                     : isTimeLow
@@ -159,7 +157,7 @@ export default function PracticeExam({
               </div>
             ) : (
               <div
-                className="flex h-9 items-center gap-1.5 rounded-full bg-stone-100 px-3 font-mono text-xs font-bold text-slate-700"
+                className="flex min-h-[40px] sm:h-8 items-center gap-1 rounded-full bg-stone-100 px-2.5 font-mono text-[11px] sm:text-xs font-bold text-slate-700"
                 title={t.timeSpent}
               >
                 <span>⏱</span>
@@ -167,17 +165,18 @@ export default function PracticeExam({
               </div>
             )}
 
-            {/* Pause Button */}
-            <button
-              type="button"
-              onClick={() => dispatch({ type: 'TOGGLE_PAUSE' })}
-              className="flex h-9 min-w-[40px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-stone-50 px-3 text-xs font-bold text-slate-700 transition hover:bg-stone-200 active:scale-95"
-              aria-label={state.isPaused ? t.resume : t.pause}
+            {/* Locked Language Badge */}
+            <span
+              className="hidden sm:inline-flex items-center rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 uppercase"
+              title="Test language is locked"
             >
-              {state.isPaused ? t.resume : t.pause}
-            </button>
+              {state.currentLocale.toUpperCase()}
+            </span>
+          </div>
 
-            {/* Flag for review toggle button */}
+          {/* Right: Flag, Pause, Grid Modal Trigger & Finish */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Flag Button */}
             <button
               type="button"
               onClick={() =>
@@ -187,55 +186,66 @@ export default function PracticeExam({
                 })
               }
               title={t.flaggedCardTooltip}
-              className={`flex h-9 touch-manipulation items-center gap-1.5 rounded-full px-3 text-xs font-bold transition active:scale-95 ${
+              aria-pressed={isCurrentFlagged}
+              className={`flex min-h-[40px] sm:h-8 touch-manipulation items-center gap-1 rounded-full px-2.5 text-[11px] sm:text-xs font-bold transition active:scale-95 cursor-pointer ${
                 isCurrentFlagged
                   ? 'bg-amber-500 text-white shadow-xs'
-                  : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-100'
+                  : 'border border-stone-200 bg-white text-slate-700 hover:bg-stone-100'
               }`}
-              aria-pressed={isCurrentFlagged}
             >
-              <span className="text-sm">⚑</span>
-              <span className="hidden sm:inline">
+              <span className="text-xs">⚑</span>
+              <span className="hidden sm:inline text-[11px]">
                 {isCurrentFlagged ? t.unflagQuestion : t.flagQuestion}
               </span>
             </button>
 
-            {/* Submit / Finish button */}
+            {/* 20 Questions Navigator Grid Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowGridModal(true)}
+              className="flex min-h-[40px] sm:h-8 touch-manipulation items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] sm:text-xs font-bold text-slate-800 hover:bg-stone-100 active:scale-95 cursor-pointer"
+              title={t.questionGrid}
+            >
+              <span>⊞</span>
+              <span className="hidden xs:inline text-[11px]">20 Qs</span>
+              {flaggedCount > 0 && (
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-900">
+                  {flaggedCount}
+                </span>
+              )}
+            </button>
+
+            {/* Finish Test Button */}
             <button
               type="button"
               onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="flex h-9 touch-manipulation items-center rounded-full bg-slate-900 px-4 text-xs font-bold text-white transition hover:bg-slate-700 active:scale-95"
+              className="order-last flex min-h-[40px] w-full sm:h-8 sm:w-auto sm:order-none touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-[11px] sm:text-xs font-bold text-white transition hover:bg-slate-700 active:scale-95 cursor-pointer"
             >
               {t.finishBtn}
             </button>
           </div>
         </div>
 
-        {/* Multi-track Visual Progress Bar */}
-        <div className="mt-3">
-          <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-stone-100">
-            {/* Answered progress fill */}
-            <div
-              className="h-full bg-blue-700 transition-all duration-300 ease-out"
-              style={{
-                width: `${percentCompleted}%`,
-              }}
-            />
-          </div>
-          {/* Progress Segment indicators: mini dots representing 20 questions */}
-          <div className="mt-2 flex justify-between px-0.5">
-            {state.sessionQuestions.map((_, dotIdx) => {
+        {/* 20-Segment Interactive Multi-Track Bar */}
+        <div className="mt-2">
+          <div className="flex gap-1 w-full">
+            {state.sessionQuestions.map((q, dotIdx) => {
               const isDotCurrent = dotIdx === state.currentIndex;
               const isDotAnswered = typeof state.answers[dotIdx] === 'number';
+              const isDotCorrect =
+                isDotAnswered && state.answers[dotIdx] === q.correct_index;
               const isDotFlagged = Boolean(state.flagged[dotIdx]);
 
-              let dotStyle = 'bg-stone-200';
+              let segmentColor = 'bg-stone-200 hover:bg-stone-300';
               if (isDotCurrent) {
-                dotStyle = 'bg-blue-700 ring-2 ring-blue-300 scale-150 z-10';
+                segmentColor =
+                  'bg-blue-700 ring-2 ring-blue-300 ring-offset-1 z-10';
               } else if (isDotFlagged) {
-                dotStyle = 'bg-amber-400';
+                segmentColor = 'bg-amber-400 hover:bg-amber-500';
+              } else if (!isMockMode && isDotAnswered) {
+                segmentColor = isDotCorrect ? 'bg-emerald-500' : 'bg-rose-500';
               } else if (isDotAnswered) {
-                dotStyle = 'bg-slate-800';
+                segmentColor = 'bg-slate-800';
               }
 
               return (
@@ -248,67 +258,26 @@ export default function PracticeExam({
                       payload: { index: dotIdx },
                     })
                   }
-                  title={`Question ${dotIdx + 1}${isDotAnswered ? ' (Answered)' : ' (Unanswered)'}${isDotFlagged ? ' ⚑' : ''}`}
-                  className={`h-2 w-2 touch-manipulation rounded-full transition-all duration-150 ${dotStyle}`}
+                  title={`Q${dotIdx + 1}${isDotAnswered ? ' (Answered)' : ' (Unanswered)'}${isDotFlagged ? ' ⚑' : ''}`}
+                  className={`flex-1 h-2 sm:h-2.5 touch-manipulation rounded-xs transition-all duration-150 cursor-pointer ${segmentColor}`}
                   aria-label={`Jump to question ${dotIdx + 1}`}
                 />
               );
             })}
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Pause overlay banner */}
-      {state.isPaused && (
-        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-5 text-center shadow-sm">
-          <p className="text-sm font-bold text-amber-900">{t.pausedMsg}</p>
-          <button
-            type="button"
-            onClick={() =>
-              dispatch({ type: 'SET_PAUSE', payload: { isPaused: false } })
-            }
-            className="mt-3 min-h-[44px] touch-manipulation rounded-full bg-amber-600 px-6 text-sm font-bold text-white shadow-sm hover:bg-amber-700 active:scale-95"
-          >
-            {t.resume}
-          </button>
-        </div>
-      )}
-
-      {/* Helper Banner when on last question with unanswered/skipped items */}
-      {isLastQuestion && unansweredCount > 0 && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50/95 p-4 text-xs text-amber-950 shadow-xs">
+      {/* 2. Main Question Card Area (Engineered to fit viewport perfectly) */}
+      <main className="flex-1 flex flex-col justify-between my-1.5 sm:my-2 rounded-2xl sm:rounded-3xl border border-stone-200 bg-white p-3.5 sm:p-5 md:p-6 shadow-xs overflow-hidden">
+        {/* Question Header Row */}
+        <div className="flex-none mb-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-lg">⚠️</span>
-            <span className="font-bold">
-              {t.unansweredBanner(unansweredCount)}
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={() => dispatch({ type: 'JUMP_TO_NEXT_UNANSWERED' })}
-            className="flex min-h-[40px] touch-manipulation items-center rounded-full bg-amber-600 px-4 font-bold text-white shadow-xs transition hover:bg-amber-700 active:scale-95"
-          >
-            {t.returnToSkipped(unansweredCount)} →
-          </button>
-        </div>
-      )}
-
-      {/* Main Question Card with Swipe Gesture Support */}
-      <div
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        style={{ touchAction: 'pan-y' }}
-        className="rounded-3xl border border-stone-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-8"
-      >
-        {/* Category & Card Header */}
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
             <span className="text-xs font-black tracking-widest text-slate-400 uppercase">
-              {String(state.currentIndex + 1).padStart(2, '0')} /{' '}
-              {totalQuestions}
+              {t.questionOf(state.currentIndex + 1, totalQuestions)}
             </span>
             <span
-              className={`rounded-full px-3 py-1 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
+              className={`rounded-full px-2.5 py-0.5 text-[10px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
                 currentQ.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
               }`}
             >
@@ -316,7 +285,7 @@ export default function PracticeExam({
             </span>
           </div>
 
-          {/* Direct Card Flag Action */}
+          {/* Quick Flag Chip */}
           <button
             type="button"
             onClick={() =>
@@ -325,222 +294,337 @@ export default function PracticeExam({
                 payload: { questionIndex: state.currentIndex },
               })
             }
-            title={t.flaggedCardTooltip}
-            className={`inline-flex min-h-[36px] touch-manipulation items-center gap-1.5 rounded-xl px-3 py-1 text-xs font-bold transition active:scale-95 ${
+            className={`inline-flex items-center gap-1 rounded-lg px-2 py-0.5 text-[11px] font-bold transition active:scale-95 cursor-pointer ${
               isCurrentFlagged
                 ? 'border border-amber-300 bg-amber-50 text-amber-900'
-                : 'text-slate-500 hover:bg-stone-100 hover:text-slate-900'
+                : 'text-slate-400 hover:text-slate-700 hover:bg-stone-100'
             }`}
           >
-            <span
-              className={`text-base ${isCurrentFlagged ? 'text-amber-600' : 'text-slate-400'}`}
-            >
-              ⚑
-            </span>
-            <span className="text-xs">
-              {isCurrentFlagged ? t.unflagQuestion : t.flagQuestion}
-            </span>
+            <span>⚑</span>
+            <span>{isCurrentFlagged ? t.unflagQuestion : t.flagQuestion}</span>
           </button>
         </div>
 
-        {/* Question Image (if any) */}
-        {currentQ.image_url && (
-          <div className="my-4 flex justify-center">
-            <img
-              src={`${imageBase}${currentQ.image_url.replace(/^\//, '')}`}
-              alt="Road sign"
-              className="max-h-60 max-w-full rounded-2xl border border-stone-200 object-contain p-1 shadow-xs"
-            />
-          </div>
-        )}
+        {/* Question Content & Options Container */}
+        <div className="flex-1 flex flex-col justify-center overflow-y-auto pr-1">
+          {currentQ.image_url ? (
+            /* Road Sign Question: Responsive 2-Column on Tablet/Desktop, Compact Stacked on Mobile */
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-center">
+              {/* Left Column: Sign Image + Question Title + Practice Feedback */}
+              <div className="md:col-span-5 flex flex-col items-center justify-center text-center">
+                <div className="flex justify-center my-1">
+                  <img
+                    src={`${imageBase}${currentQ.image_url.replace(/^\//, '')}`}
+                    alt="Road sign"
+                    className="max-h-24 sm:max-h-32 md:max-h-44 max-w-full rounded-xl border border-stone-200 bg-stone-50 p-1.5 shadow-2xs object-contain"
+                  />
+                </div>
 
-        {/* Question Text */}
-        <h2 className="mb-6 text-base leading-relaxed font-bold text-slate-900 sm:text-lg">
-          {questionTitle}
-        </h2>
+                <h2 className="mt-1.5 text-xs sm:text-sm md:text-base font-bold text-slate-900 leading-snug">
+                  {questionTitle}
+                </h2>
 
-        {/* Options List with Large Tap Targets (min 56px height) */}
-        <div className="space-y-3" role="radiogroup" aria-label={questionTitle}>
-          {options.map((opt, optIdx) => {
-            const isSelected = userAnswer === optIdx;
-            const letter = String.fromCharCode(65 + optIdx);
-
-            // In PRACTICE MODE: immediate feedback styling after answering
-            if (!isMockMode && isAnswered) {
-              const isCorrectOption = optIdx === currentQ.correct_index;
-              const isUserWrongChoice = isSelected && !isCorrect;
-
-              let optionStyle =
-                'border-stone-200 bg-stone-50/40 text-slate-600 opacity-75';
-              let badgeStyle =
-                'border border-slate-300 bg-white text-slate-600';
-
-              if (isCorrectOption) {
-                optionStyle =
-                  'border-emerald-600 bg-emerald-50 text-slate-950 font-medium shadow-xs';
-                badgeStyle =
-                  'bg-emerald-600 text-white font-extrabold shadow-xs';
-              } else if (isUserWrongChoice) {
-                optionStyle =
-                  'border-rose-400 bg-rose-50 text-rose-950 font-medium';
-                badgeStyle = 'bg-rose-600 text-white font-extrabold';
-              }
-
-              return (
-                <button
-                  key={optIdx}
-                  type="button"
-                  role="radio"
-                  aria-checked={isSelected}
-                  onClick={() =>
-                    dispatch({
-                      type: 'SELECT_ANSWER',
-                      payload: {
-                        questionIndex: state.currentIndex,
-                        optionIndex: optIdx,
-                      },
-                    })
-                  }
-                  className={`flex min-h-[58px] w-full touch-manipulation items-center gap-3.5 rounded-2xl border-2 p-4 text-left transition active:scale-[0.985] ${optionStyle}`}
-                >
-                  <span
-                    className={`flex h-8 w-8 flex-none items-center justify-center rounded-full text-xs font-black transition sm:text-sm ${badgeStyle}`}
+                {/* Immediate Feedback in Practice Mode */}
+                {!isMockMode && isAnswered && (
+                  <div
+                    className={`mt-2 w-full rounded-xl border p-2 text-left transition-all ${
+                      isCorrect
+                        ? 'border-emerald-300 bg-emerald-50 text-emerald-950'
+                        : 'border-rose-300 bg-rose-50 text-rose-950'
+                    }`}
                   >
-                    {isCorrectOption ? '✓' : isUserWrongChoice ? '✗' : letter}
-                  </span>
-                  <span className="flex-1 text-sm leading-relaxed sm:text-base">
-                    {opt}
-                  </span>
-                  {isCorrectOption && (
-                    <span className="flex-none text-xs font-bold text-emerald-700">
-                      {t.correctAnswer}
-                    </span>
-                  )}
-                  {isUserWrongChoice && (
-                    <span className="flex-none text-xs font-bold text-rose-700">
-                      {t.yourAnswer}
-                    </span>
-                  )}
-                </button>
-              );
-            }
+                    <div className="flex items-center gap-1.5 text-xs font-extrabold">
+                      <span>{isCorrect ? '✓' : '✗'}</span>
+                      <span>
+                        {isCorrect
+                          ? t.feedbackCorrectTitle
+                          : t.feedbackIncorrectTitle}
+                      </span>
+                    </div>
+                    {qTrans?.explanation && (
+                      <p className="mt-1 text-[11px] leading-tight text-slate-800">
+                        <strong className="font-semibold">{t.explanation}:</strong>{' '}
+                        {qTrans.explanation}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
 
-            // In MOCK EXAM MODE or unanswered practice question: regular selection without feedback
-            return (
-              <button
-                key={optIdx}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                onClick={() =>
-                  dispatch({
-                    type: 'SELECT_ANSWER',
-                    payload: {
-                      questionIndex: state.currentIndex,
-                      optionIndex: optIdx,
-                    },
-                  })
-                }
-                className={`flex min-h-[58px] w-full cursor-pointer touch-manipulation items-center gap-3.5 rounded-2xl border-2 p-4 text-left transition active:scale-[0.985] ${
-                  isSelected
-                    ? 'border-blue-700 bg-blue-50/80 text-slate-950 shadow-sm ring-1 ring-blue-700'
-                    : 'border-stone-200 bg-stone-50/80 text-slate-700 hover:border-slate-400 hover:bg-white'
-                }`}
+              {/* Right Column: Option Buttons */}
+              <div
+                className="md:col-span-7 flex flex-col justify-center space-y-2 sm:space-y-2.5"
+                role="radiogroup"
+                aria-label={questionTitle}
               >
-                <span
-                  className={`flex h-8 w-8 flex-none items-center justify-center rounded-full text-xs font-extrabold transition sm:text-sm ${
-                    isSelected
-                      ? 'bg-blue-700 text-white shadow-xs'
-                      : 'border border-slate-300 bg-white text-slate-700'
+                {options.map((opt, optIdx) => {
+                  const isSelected = userAnswer === optIdx;
+                  const letter = String.fromCharCode(65 + optIdx);
+
+                  // Practice mode answered feedback
+                  if (!isMockMode && isAnswered) {
+                    const isCorrectOption = optIdx === currentQ.correct_index;
+                    const isUserWrongChoice = isSelected && !isCorrect;
+
+                    let optionStyle =
+                      'border-stone-200 bg-stone-50/40 text-slate-600 opacity-75';
+                    let badgeStyle =
+                      'border border-slate-300 bg-white text-slate-600';
+
+                    if (isCorrectOption) {
+                      optionStyle =
+                        'border-emerald-600 bg-emerald-50 text-slate-950 font-medium shadow-xs ring-1 ring-emerald-600';
+                      badgeStyle =
+                        'bg-emerald-600 text-white font-extrabold shadow-xs';
+                    } else if (isUserWrongChoice) {
+                      optionStyle =
+                        'border-rose-400 bg-rose-50 text-rose-950 font-medium';
+                      badgeStyle = 'bg-rose-600 text-white font-extrabold';
+                    }
+
+                    return (
+                      <button
+                        key={optIdx}
+                        type="button"
+                        role="radio"
+                        aria-checked={isSelected}
+                        onClick={() =>
+                          dispatch({
+                            type: 'SELECT_ANSWER',
+                            payload: {
+                              questionIndex: state.currentIndex,
+                              optionIndex: optIdx,
+                            },
+                          })
+                        }
+                        className={`flex min-h-[44px] sm:min-h-[48px] w-full touch-manipulation items-center gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-3.5 text-left transition active:scale-[0.985] cursor-pointer ${optionStyle}`}
+                      >
+                        <span
+                          className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-black transition ${badgeStyle}`}
+                        >
+                          {isCorrectOption ? '✓' : isUserWrongChoice ? '✗' : letter}
+                        </span>
+                        <span className="flex-1 text-xs sm:text-sm leading-snug font-medium">
+                          {opt}
+                        </span>
+                        {isCorrectOption && (
+                          <span className="flex-none text-[11px] font-bold text-emerald-700">
+                            {t.correctAnswer}
+                          </span>
+                        )}
+                        {isUserWrongChoice && (
+                          <span className="flex-none text-[11px] font-bold text-rose-700">
+                            {t.yourAnswer}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  }
+
+                  // Default / Mock exam option selection
+                  return (
+                    <button
+                      key={optIdx}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() =>
+                        dispatch({
+                          type: 'SELECT_ANSWER',
+                          payload: {
+                            questionIndex: state.currentIndex,
+                            optionIndex: optIdx,
+                          },
+                        })
+                      }
+                      className={`flex min-h-[44px] sm:min-h-[48px] w-full cursor-pointer touch-manipulation items-center gap-2.5 sm:gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-3.5 text-left transition active:scale-[0.985] ${
+                        isSelected
+                          ? 'border-blue-700 bg-blue-50/80 text-slate-950 shadow-xs ring-1 ring-blue-700'
+                          : 'border-stone-200 bg-stone-50/80 text-slate-700 hover:border-slate-400 hover:bg-white'
+                      }`}
+                    >
+                      <span
+                        className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-extrabold transition ${
+                          isSelected
+                            ? 'bg-blue-700 text-white shadow-2xs'
+                            : 'border border-slate-300 bg-white text-slate-700'
+                        }`}
+                      >
+                        {letter}
+                      </span>
+                      <span className="flex-1 text-xs sm:text-sm leading-snug font-medium">
+                        {opt}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* Traffic Rules Question: Single Column Clean Layout */
+            <div className="max-w-3xl mx-auto w-full flex flex-col justify-center">
+              <h2 className="mb-3 sm:mb-4 text-sm sm:text-base md:text-lg font-bold text-slate-900 leading-snug">
+                {questionTitle}
+              </h2>
+
+              <div
+                className="space-y-2 sm:space-y-2.5"
+                role="radiogroup"
+                aria-label={questionTitle}
+              >
+                {options.map((opt, optIdx) => {
+                  const isSelected = userAnswer === optIdx;
+                  const letter = String.fromCharCode(65 + optIdx);
+
+                  // Practice mode answered feedback
+                  if (!isMockMode && isAnswered) {
+                    const isCorrectOption = optIdx === currentQ.correct_index;
+                    const isUserWrongChoice = isSelected && !isCorrect;
+
+                    let optionStyle =
+                      'border-stone-200 bg-stone-50/40 text-slate-600 opacity-75';
+                    let badgeStyle =
+                      'border border-slate-300 bg-white text-slate-600';
+
+                    if (isCorrectOption) {
+                      optionStyle =
+                        'border-emerald-600 bg-emerald-50 text-slate-950 font-medium shadow-xs ring-1 ring-emerald-600';
+                      badgeStyle =
+                        'bg-emerald-600 text-white font-extrabold shadow-xs';
+                    } else if (isUserWrongChoice) {
+                      optionStyle =
+                        'border-rose-400 bg-rose-50 text-rose-950 font-medium';
+                      badgeStyle = 'bg-rose-600 text-white font-extrabold';
+                    }
+
+                    return (
+                      <button
+                        key={optIdx}
+                        type="button"
+                        role="radio"
+                        aria-checked={isSelected}
+                        onClick={() =>
+                          dispatch({
+                            type: 'SELECT_ANSWER',
+                            payload: {
+                              questionIndex: state.currentIndex,
+                              optionIndex: optIdx,
+                            },
+                          })
+                        }
+                        className={`flex min-h-[44px] sm:min-h-[48px] w-full touch-manipulation items-center gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-4 text-left transition active:scale-[0.985] cursor-pointer ${optionStyle}`}
+                      >
+                        <span
+                          className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-black transition ${badgeStyle}`}
+                        >
+                          {isCorrectOption ? '✓' : isUserWrongChoice ? '✗' : letter}
+                        </span>
+                        <span className="flex-1 text-xs sm:text-sm md:text-base leading-snug font-medium">
+                          {opt}
+                        </span>
+                        {isCorrectOption && (
+                          <span className="flex-none text-xs font-bold text-emerald-700">
+                            {t.correctAnswer}
+                          </span>
+                        )}
+                        {isUserWrongChoice && (
+                          <span className="flex-none text-xs font-bold text-rose-700">
+                            {t.yourAnswer}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  }
+
+                  // Default / Mock exam option selection
+                  return (
+                    <button
+                      key={optIdx}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() =>
+                        dispatch({
+                          type: 'SELECT_ANSWER',
+                          payload: {
+                            questionIndex: state.currentIndex,
+                            optionIndex: optIdx,
+                          },
+                        })
+                      }
+                      className={`flex min-h-[44px] sm:min-h-[48px] w-full cursor-pointer touch-manipulation items-center gap-3 rounded-xl sm:rounded-2xl border-2 py-2 px-3 sm:py-2.5 sm:px-4 text-left transition active:scale-[0.985] ${
+                        isSelected
+                          ? 'border-blue-700 bg-blue-50/80 text-slate-950 shadow-xs ring-1 ring-blue-700'
+                          : 'border-stone-200 bg-stone-50/80 text-slate-700 hover:border-slate-400 hover:bg-white'
+                      }`}
+                    >
+                      <span
+                        className={`flex h-7 w-7 sm:h-8 sm:w-8 flex-none items-center justify-center rounded-full text-xs font-extrabold transition ${
+                          isSelected
+                            ? 'bg-blue-700 text-white shadow-2xs'
+                            : 'border border-slate-300 bg-white text-slate-700'
+                        }`}
+                      >
+                        {letter}
+                      </span>
+                      <span className="flex-1 text-xs sm:text-sm md:text-base leading-snug font-medium">
+                        {opt}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Immediate Feedback in Practice Mode */}
+              {!isMockMode && isAnswered && (
+                <div
+                  className={`mt-3 rounded-xl border p-3 text-left transition-all ${
+                    isCorrect
+                      ? 'border-emerald-300 bg-emerald-50 text-emerald-950'
+                      : 'border-rose-300 bg-rose-50 text-rose-950'
                   }`}
                 >
-                  {letter}
-                </span>
-                <span className="flex-1 text-sm leading-relaxed font-medium sm:text-base">
-                  {opt}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Immediate feedback card in PRACTICE MODE */}
-        {!isMockMode && isAnswered && (
-          <div
-            className={`mt-6 rounded-2xl border p-4 transition-all duration-200 sm:p-5 ${
-              isCorrect
-                ? 'border-emerald-200 bg-emerald-50/90 text-emerald-950'
-                : 'border-rose-200 bg-rose-50/90 text-rose-950'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-black">
-                {isCorrect ? '✓' : '✗'}
-              </span>
-              <strong className="text-sm font-bold sm:text-base">
-                {isCorrect ? t.feedbackCorrectTitle : t.feedbackIncorrectTitle}
-              </strong>
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-extrabold">
+                    <span>{isCorrect ? '✓' : '✗'}</span>
+                    <span>
+                      {isCorrect
+                        ? t.feedbackCorrectTitle
+                        : t.feedbackIncorrectTitle}
+                    </span>
+                  </div>
+                  {qTrans?.explanation && (
+                    <p className="mt-1.5 text-xs leading-relaxed text-slate-800">
+                      <strong className="font-semibold">{t.explanation}:</strong>{' '}
+                      {qTrans.explanation}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
-
-            {qTrans?.explanation && (
-              <div className="mt-2 text-xs leading-relaxed text-slate-800 sm:text-sm">
-                <strong className="font-semibold">{t.explanation}:</strong>{' '}
-                {qTrans.explanation}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Swipe Affordance Indicator (visible on touch devices) */}
-        <div className="mt-5 flex items-center justify-center gap-1.5 text-[11px] font-medium text-slate-400">
-          <span>👈</span>
-          <span>{t.swipeHint}</span>
-          <span>👉</span>
+          )}
         </div>
 
-        {/* Navigation & Skip Bar with Large Touch Targets (min 44px-48px height) */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 pt-6">
-          {/* Previous Button */}
+        {/* Bottom Navigation: ONLY TWO BUTTONS (Previous & Next/Finish) */}
+        <nav
+          className="flex-none border-t border-stone-100 pt-2.5 sm:pt-3 flex items-center justify-between gap-3"
+          aria-label="Question navigation"
+        >
+          {/* 1. Previous Button */}
           <button
             type="button"
             disabled={state.currentIndex === 0}
             onClick={() => dispatch({ type: 'PREV_QUESTION' })}
-            className="flex min-h-[46px] touch-manipulation items-center rounded-full border-2 border-slate-900 bg-white px-5 text-xs font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 disabled:border-stone-200 disabled:text-stone-300 disabled:hover:bg-transparent sm:px-6 sm:text-sm"
+            className="flex h-11 sm:h-12 min-w-[120px] sm:min-w-[140px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 sm:px-7 text-xs sm:text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 disabled:border-stone-200 disabled:text-stone-300 disabled:hover:bg-transparent cursor-pointer"
           >
             ← {t.prevBtn}
           </button>
 
-          {/* Middle Actions: Skip for now & Jump to next unanswered */}
-          <div className="flex items-center gap-2">
-            {/* Skip for now button */}
-            <button
-              type="button"
-              onClick={() => dispatch({ type: 'SKIP_QUESTION' })}
-              title={t.skipForNow}
-              className="flex min-h-[46px] touch-manipulation items-center rounded-full border border-stone-300 bg-stone-50 px-4 text-xs font-bold text-slate-700 transition hover:border-slate-400 hover:bg-stone-200 active:scale-95 sm:px-5 sm:text-sm"
-            >
-              ↷ {t.skipForNow}
-            </button>
-
-            {/* Quick jump to Next Unanswered when user answered this question and others remain */}
-            {unansweredCount > 0 && isAnswered && (
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'JUMP_TO_NEXT_UNANSWERED' })}
-                title={t.nextUnanswered}
-                className="hidden min-h-[46px] touch-manipulation items-center rounded-full border border-blue-200 bg-blue-50 px-4 text-xs font-bold text-blue-800 transition hover:bg-blue-100 active:scale-95 sm:flex sm:text-sm"
-              >
-                {t.nextUnanswered} →
-              </button>
-            )}
-          </div>
-
-          {/* Next or Finish Button */}
+          {/* 2. Next or Finish Button */}
           {state.currentIndex < totalQuestions - 1 ? (
             <button
               type="button"
               onClick={() => dispatch({ type: 'NEXT_QUESTION' })}
-              className="flex min-h-[46px] touch-manipulation items-center rounded-full bg-slate-900 px-6 text-xs font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95 sm:px-8 sm:text-sm"
+              className="flex h-11 sm:h-12 min-w-[120px] sm:min-w-[140px] touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 sm:px-8 text-xs sm:text-sm font-bold text-white shadow-xs transition hover:bg-slate-700 active:scale-95 cursor-pointer"
             >
               {t.nextBtn} →
             </button>
@@ -548,142 +632,153 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="flex min-h-[46px] touch-manipulation items-center rounded-full bg-emerald-600 px-6 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-95 sm:px-8 sm:text-sm"
+              className="flex h-11 sm:h-12 min-w-[120px] sm:min-w-[140px] touch-manipulation items-center justify-center rounded-full bg-emerald-600 px-6 sm:px-8 text-xs sm:text-sm font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-95 cursor-pointer"
             >
               {t.finishBtn} ✓
             </button>
           )}
-        </div>
-      </div>
+        </nav>
+      </main>
 
-      {/* Question Navigator Grid (1-20 Matrix with Large Tap Targets) */}
-      <div className="rounded-3xl border border-stone-200 bg-stone-50 p-4 shadow-2xs sm:p-6">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <h3 className="text-xs font-extrabold tracking-wider text-slate-600 uppercase">
-              {t.questionGrid}
-            </h3>
-            <span className="text-xs font-bold text-slate-500">
-              ({answeredCount}/{totalQuestions} · {percentCompleted}%)
-            </span>
-          </div>
-
-          {/* Quick jump helpers */}
-          <div className="flex items-center gap-2">
-            {unansweredCount > 0 && (
+      {/* 3. On-Demand 20-Questions Grid Modal */}
+      {showGridModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-lg rounded-3xl border border-stone-200 bg-white p-5 sm:p-6 shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <div>
+                <h3 className="text-base font-extrabold text-slate-900">
+                  {t.questionGrid}
+                </h3>
+                <span className="text-xs font-semibold text-slate-500">
+                  {answeredCount} / {totalQuestions} {t.legendAnswered} ({percentCompleted}%)
+                </span>
+              </div>
               <button
                 type="button"
-                onClick={() => dispatch({ type: 'JUMP_TO_NEXT_UNANSWERED' })}
-                className="flex min-h-[34px] touch-manipulation items-center rounded-full border border-stone-300 bg-white px-3 text-xs font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95"
+                onClick={() => setShowGridModal(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-100 text-sm font-bold text-slate-600 hover:bg-stone-200 cursor-pointer"
+                aria-label="Close"
               >
-                ○ {t.nextUnanswered}
+                ✕
               </button>
-            )}
+            </div>
 
-            {flaggedCount > 0 && (
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'JUMP_TO_NEXT_FLAGGED' })}
-                className="flex min-h-[34px] touch-manipulation items-center rounded-full border border-amber-300 bg-amber-50 px-3 text-xs font-bold text-amber-900 transition hover:bg-amber-100 active:scale-95"
-              >
-                ⚑ {t.nextFlagged}
-              </button>
-            )}
-          </div>
-        </div>
+            {/* Quick Filter Jump Helpers */}
+            <div className="my-3 flex items-center justify-between gap-2">
+              {unansweredCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch({ type: 'JUMP_TO_NEXT_UNANSWERED' });
+                    setShowGridModal(false);
+                  }}
+                  className="flex min-h-[34px] touch-manipulation items-center rounded-full border border-stone-300 bg-stone-50 px-3 text-xs font-bold text-slate-700 hover:bg-stone-100 cursor-pointer"
+                >
+                  ○ {t.nextUnanswered}
+                </button>
+              )}
 
-        {/* 20 Question matrix with accessible 48px touch targets */}
-        <div className="grid grid-cols-5 gap-2.5 sm:grid-cols-10">
-          {state.sessionQuestions.map((q, idx) => {
-            const isCurrent = idx === state.currentIndex;
-            const userAns = state.answers[idx];
-            const isQAnswered = typeof userAns === 'number';
-            const isQCorrect = isQAnswered && userAns === q.correct_index;
-            const isFlag = Boolean(state.flagged[idx]);
+              {flaggedCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch({ type: 'JUMP_TO_NEXT_FLAGGED' });
+                    setShowGridModal(false);
+                  }}
+                  className="flex min-h-[34px] touch-manipulation items-center rounded-full border border-amber-300 bg-amber-50 px-3 text-xs font-bold text-amber-900 hover:bg-amber-100 cursor-pointer"
+                >
+                  ⚑ {t.nextFlagged}
+                </button>
+              )}
+            </div>
 
-            // Styling matrix buttons based on current, answered, correct, incorrect, and flagged
-            let btnColor =
-              'border border-dashed border-stone-300 bg-white text-slate-600 hover:border-slate-500 hover:bg-stone-100';
+            {/* 20 Questions Matrix */}
+            <div className="grid grid-cols-5 gap-2 sm:grid-cols-10 my-3">
+              {state.sessionQuestions.map((q, idx) => {
+                const isCurrent = idx === state.currentIndex;
+                const userAns = state.answers[idx];
+                const isQAnswered = typeof userAns === 'number';
+                const isQCorrect = isQAnswered && userAns === q.correct_index;
+                const isFlag = Boolean(state.flagged[idx]);
 
-            if (isCurrent) {
-              btnColor =
-                'border-2 border-blue-700 bg-blue-700 text-white font-black shadow-sm ring-2 ring-blue-300';
-            } else if (!isMockMode && isQAnswered) {
-              btnColor = isQCorrect
-                ? 'border border-emerald-600 bg-emerald-600 text-white font-bold'
-                : 'border border-rose-600 bg-rose-600 text-white font-bold';
-            } else if (isQAnswered) {
-              // Mock exam mode: neutral answered style (solid dark)
-              btnColor =
-                'border border-slate-900 bg-slate-900 text-white font-bold';
-            }
+                let btnColor =
+                  'border border-dashed border-stone-300 bg-white text-slate-600 hover:border-slate-500 hover:bg-stone-100';
 
-            return (
-              <button
-                key={idx}
-                type="button"
-                onClick={() =>
-                  dispatch({
-                    type: 'SET_CURRENT_INDEX',
-                    payload: { index: idx },
-                  })
+                if (isCurrent) {
+                  btnColor =
+                    'border-2 border-blue-700 bg-blue-700 text-white font-black shadow-sm ring-2 ring-blue-300';
+                } else if (!isMockMode && isQAnswered) {
+                  btnColor = isQCorrect
+                    ? 'border border-emerald-600 bg-emerald-600 text-white font-bold'
+                    : 'border border-rose-600 bg-rose-600 text-white font-bold';
+                } else if (isQAnswered) {
+                  btnColor =
+                    'border border-slate-900 bg-slate-900 text-white font-bold';
                 }
-                title={`Question ${idx + 1} · ${isQAnswered ? (isMockMode ? 'Answered' : isQCorrect ? 'Correct' : 'Incorrect') : 'Unanswered / Skipped'}${isFlag ? ' (Flagged)' : ''}`}
-                className={`relative flex h-11 min-w-[44px] cursor-pointer touch-manipulation flex-col items-center justify-center rounded-xl font-mono text-xs font-bold transition active:scale-95 sm:h-12 sm:text-sm ${btnColor} ${
-                  isFlag && !isCurrent ? 'ring-2 ring-amber-400' : ''
-                }`}
-              >
-                <span>{idx + 1}</span>
-                {isFlag && (
-                  <span
-                    className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-950 shadow-xs"
-                    title={t.flaggedDuringTest}
+
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      dispatch({
+                        type: 'SET_CURRENT_INDEX',
+                        payload: { index: idx },
+                      });
+                      setShowGridModal(false);
+                    }}
+                    title={`Question ${idx + 1}`}
+                    className={`relative flex h-11 min-w-[40px] cursor-pointer touch-manipulation flex-col items-center justify-center rounded-xl font-mono text-xs font-bold transition active:scale-95 ${btnColor} ${
+                      isFlag && !isCurrent ? 'ring-2 ring-amber-400' : ''
+                    }`}
                   >
-                    ⚑
+                    <span>{idx + 1}</span>
+                    {isFlag && (
+                      <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-950 shadow-xs">
+                        ⚑
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Legend */}
+            <div className="mt-3 border-t border-stone-100 pt-3 flex flex-wrap items-center gap-3 text-[11px] font-semibold text-slate-500">
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block h-3 w-3 rounded-md bg-blue-700" />
+                {t.legendCurrent}
+              </span>
+              {!isMockMode ? (
+                <>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block h-3 w-3 rounded-md bg-emerald-600" />
+                    {t.legendCorrect}
                   </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Legend */}
-        <div className="mt-4 flex flex-wrap items-center gap-3.5 text-[11px] font-semibold text-slate-500">
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3.5 w-3.5 rounded-md bg-blue-700 ring-1 ring-blue-300" />
-            {t.legendCurrent}
-          </span>
-          {!isMockMode ? (
-            <>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block h-3 w-3 rounded-md bg-rose-600" />
+                    {t.legendIncorrect}
+                  </span>
+                </>
+              ) : (
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-3 w-3 rounded-md bg-slate-900" />
+                  {t.legendAnswered}
+                </span>
+              )}
               <span className="flex items-center gap-1.5">
-                <span className="inline-block h-3.5 w-3.5 rounded-md bg-emerald-600" />
-                {t.legendCorrect}
+                <span className="inline-block h-3 w-3 rounded-md border border-dashed border-stone-400 bg-white" />
+                {t.legendSkipped}
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="inline-block h-3.5 w-3.5 rounded-md bg-rose-600" />
-                {t.legendIncorrect}
+                <span className="inline-block h-3 w-3 rounded-md bg-amber-400" />
+                {t.legendFlagged}
               </span>
-            </>
-          ) : (
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block h-3.5 w-3.5 rounded-md bg-slate-900" />
-              {t.legendAnswered}
-            </span>
-          )}
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3.5 w-3.5 rounded-md border border-dashed border-stone-400 bg-white" />
-            {t.legendSkipped}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3.5 w-3.5 rounded-md bg-amber-400" />
-            {t.legendFlagged}
-          </span>
+            </div>
+          </div>
         </div>
-
-        <p className="mt-3 text-center text-[10px] text-slate-400">
-          {t.keyboardTips}
-        </p>
-      </div>
+      )}
     </div>
   );
 }

@@ -10,6 +10,7 @@ import {
   DEFAULT_TOTAL_QUESTIONS,
   EXAM_CONFIG,
   EXAM_DURATION_SECONDS,
+  STORAGE_KEY_SKIP_AUTO_RESTORE,
   PASSING_SCORE,
 } from './constants';
 import {
@@ -198,20 +199,33 @@ export function practiceReducer(
     case 'INIT_STORAGE': {
       const { history, savedSession, urlCategory, urlMode, detectedLocale } =
         action.payload;
-      const initialCat = savedSession
-        ? (savedSession.selectedCategory ?? null)
-        : (urlCategory ?? state.selectedCategory);
-      const initialMode = savedSession
-        ? savedSession.mode
-        : (urlMode ?? state.mode);
+      const initialCat = urlCategory ?? state.selectedCategory ?? null;
+      // The route ( /practice vs /exam ) should win over whatever is stored in localStorage.
+      // We'll only auto-restore if the stored mode matches the requested mode.
+      const requestedMode: ExamMode = (urlMode ?? state.mode) as ExamMode;
       const activeLocale =
         detectedLocale || savedSession?.locale || state.currentLocale;
+
+      // If user explicitly went "back to question bank", don't auto-resume
+      // the previously running in-progress session on the next navigation.
+      let skipAutoRestore = false;
+      try {
+        if (typeof window !== 'undefined') {
+          skipAutoRestore =
+            localStorage.getItem(STORAGE_KEY_SKIP_AUTO_RESTORE) === '1';
+          if (skipAutoRestore) {
+            localStorage.removeItem(STORAGE_KEY_SKIP_AUTO_RESTORE);
+          }
+        }
+      } catch {
+        // ignore
+      }
 
       if (!savedSession || savedSession.sessionQuestions.length === 0) {
         return {
           ...state,
           history,
-          mode: initialMode,
+          mode: requestedMode,
           currentLocale: activeLocale,
           selectedCategory: initialCat,
           hasSavedSession: false,
@@ -219,17 +233,21 @@ export function practiceReducer(
         };
       }
 
-      // If session was in_progress, restore it directly and account for elapsed time
+      const normalizedSavedMode: ExamMode =
+        savedSession.mode === 'mock_exam' ||
+        (savedSession.mode as string) === 'timed'
+          ? 'mock_exam'
+          : 'practice';
+      const canAutoRestore =
+        normalizedSavedMode === requestedMode && !skipAutoRestore;
+
+      // If session was in_progress, restore it directly (only when mode matches)
       if (savedSession.stage === 'in_progress') {
         const now = Date.now();
         const elapsedSeconds = savedSession.savedAt
           ? Math.max(0, Math.floor((now - savedSession.savedAt) / 1000))
           : 0;
-
-        const isMock =
-          savedSession.mode === 'mock_exam' ||
-          (savedSession.mode as string) === 'timed';
-        const normalizedMode: ExamMode = isMock ? 'mock_exam' : 'practice';
+        const isMock = normalizedSavedMode === 'mock_exam';
 
         const adjustedTimeRemaining = isMock
           ? Math.max(0, savedSession.timeRemaining - elapsedSeconds)
@@ -237,7 +255,7 @@ export function practiceReducer(
 
         const adjustedTimeSpent = savedSession.timeSpent + elapsedSeconds;
 
-        if (isMock && adjustedTimeRemaining <= 0) {
+        if (canAutoRestore && isMock && adjustedTimeRemaining <= 0) {
           // Time ran out while away: auto-submit exam results
           return calculateFinishState({
             ...state,
@@ -247,7 +265,7 @@ export function practiceReducer(
             flagged: savedSession.flagged || {},
             timeRemaining: 0,
             timeSpent: adjustedTimeSpent,
-            mode: normalizedMode,
+            mode: normalizedSavedMode,
             selectedCategory: savedSession.selectedCategory ?? null,
             currentLocale: activeLocale,
             history,
@@ -257,7 +275,7 @@ export function practiceReducer(
 
         return {
           ...state,
-          stage: 'in_progress',
+          stage: canAutoRestore ? 'in_progress' : 'intro',
           sessionQuestions: savedSession.sessionQuestions,
           currentIndex: Math.min(
             savedSession.sessionQuestions.length - 1,
@@ -267,27 +285,23 @@ export function practiceReducer(
           flagged: savedSession.flagged || {},
           timeRemaining: adjustedTimeRemaining,
           timeSpent: adjustedTimeSpent,
-          mode: normalizedMode,
-          selectedCategory: savedSession.selectedCategory ?? null,
+          mode: requestedMode,
+          selectedCategory: initialCat,
           currentLocale: activeLocale,
           isPaused: false,
           showSubmitModal: false,
           hasSavedSession: true,
           history,
           isHydrated: true,
+          reviewFilter: 'all',
         };
       }
 
-      // If session was in review_all (results screen), restore review screen
+      // If session was in review_all (results screen), restore review screen only when mode matches.
       if (savedSession.stage === 'review_all') {
-        const isMock =
-          savedSession.mode === 'mock_exam' ||
-          (savedSession.mode as string) === 'timed';
-        const normalizedMode: ExamMode = isMock ? 'mock_exam' : 'practice';
-
         return {
           ...state,
-          stage: 'review_all',
+          stage: canAutoRestore ? 'review_all' : 'intro',
           sessionQuestions: savedSession.sessionQuestions,
           currentIndex: Math.min(
             savedSession.sessionQuestions.length - 1,
@@ -297,8 +311,8 @@ export function practiceReducer(
           flagged: savedSession.flagged || {},
           timeRemaining: savedSession.timeRemaining,
           timeSpent: savedSession.timeSpent,
-          mode: normalizedMode,
-          selectedCategory: savedSession.selectedCategory ?? null,
+          mode: requestedMode,
+          selectedCategory: initialCat,
           currentLocale: activeLocale,
           isPaused: false,
           showSubmitModal: false,
@@ -316,6 +330,7 @@ export function practiceReducer(
         selectedCategory: initialCat,
         hasSavedSession: true,
         isHydrated: true,
+        mode: requestedMode,
       };
     }
 

@@ -42,44 +42,60 @@ const allLabel: Record<Lang, string> = {
     </h2>
   </div>
 
-  <div class="flex flex-wrap items-center gap-2.5">
+  <div class="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
     <div
-      class="inline-flex items-center gap-1 overflow-hidden rounded-full border-2 border-slate-900 bg-white p-0.5 shadow-2xs"
+      class="inline-flex w-full flex-wrap items-center gap-1 rounded-full border-2 border-slate-900 bg-white p-0.5 shadow-2xs sm:w-auto"
     >
       <a
         href={`/${lang}/practice`}
-        class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold tracking-wide text-slate-800 transition hover:bg-stone-100 active:scale-95"
+        class:list={[
+          'inline-flex min-h-[40px] flex-1 items-center justify-center gap-1 rounded-full px-3 py-1.5 font-bold text-slate-800 whitespace-nowrap leading-none transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px] sm:flex-none',
+          lang === 'fr'
+            ? 'text-[11px] tracking-normal sm:text-xs'
+            : 'text-[11px] tracking-wide sm:text-xs',
+        ]}
       >
         <span>💡</span>
-        <span
-          >{
-            lang === 'fr'
-              ? 'Entraînement'
-              : lang === 'rw'
-                ? 'Imyitozo'
-                : 'Practice'
-          }</span
-        >
+        {
+          lang === 'fr' ? (
+            <>
+              <span class="sm:hidden">Pratique</span>
+              <span class="hidden sm:inline">Entraînement</span>
+            </>
+          ) : lang === 'rw' ? (
+            'Imyitozo'
+          ) : (
+            'Practice'
+          )
+        }
       </a>
       <a
         href={`/${lang}/exam`}
-        class="inline-flex items-center gap-1 rounded-full bg-amber-400 px-3 py-1 text-xs font-bold tracking-wide text-slate-900 transition hover:bg-amber-300 active:scale-95"
+        class:list={[
+          'inline-flex min-h-[40px] flex-1 items-center justify-center gap-1 rounded-full bg-amber-400 px-3 py-1.5 font-bold text-slate-900 whitespace-nowrap leading-none transition hover:bg-amber-300 active:scale-95 sm:min-h-[36px] sm:flex-none',
+          lang === 'fr'
+            ? 'text-[11px] tracking-normal sm:text-xs'
+            : 'text-[11px] tracking-wide sm:text-xs',
+        ]}
       >
         <span>⏱</span>
-        <span
-          >{
-            lang === 'fr'
-              ? 'Examen Blanc'
-              : lang === 'rw'
-                ? 'Ikizamini (20m)'
-                : 'Mock Exam (20m)'
-          }</span
-        >
+        {
+          lang === 'fr' ? (
+            <>
+              <span class="sm:hidden">Examen</span>
+              <span class="hidden sm:inline">Examen Blanc</span>
+            </>
+          ) : lang === 'rw' ? (
+            'Ikizamini (20m)'
+          ) : (
+            'Mock Exam (20m)'
+          )
+        }
       </a>
     </div>
 
     <div
-      class="inline-flex divide-x-2 divide-slate-900 overflow-hidden rounded-full border-2 border-slate-900"
+      class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
       role="group"
       aria-label="Language"
     >
@@ -92,7 +108,7 @@ const allLabel: Record<Lang, string> = {
               hreflang={code}
               aria-current={active ? 'page' : undefined}
               class:list={[
-                'px-3 py-1.5 text-xs font-bold tracking-wide transition',
+                'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
                 active
                   ? 'bg-blue-700 text-white'
                   : 'bg-stone-50 text-slate-900 hover:bg-stone-200',

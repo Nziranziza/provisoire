@@ -33,6 +33,10 @@ export const EXAM_DURATION_MINUTES = EXAM_CONFIG.DURATION_MINUTES;
 
 export const STORAGE_KEY_SESSION = 'provisoire_active_practice_session_v1';
 export const STORAGE_KEY_HISTORY = 'provisoire_practice_history_v1';
+// One-shot flag: when user leaves Practice/Exam and goes back to the question bank,
+// we don't want Practice/Exam to auto-resume the exact in-progress question.
+export const STORAGE_KEY_SKIP_AUTO_RESTORE =
+  'provisoire_skip_practice_autoresume_v1';
 
 export type I18nDictionary = typeof I18N.en;
 

@@ -271,7 +271,6 @@ export default function PracticeSession({
       if (typeof window !== 'undefined') {
         localStorage.setItem('provisoire_user_locale', newLocale);
 
-        // Update the browser URL so a page refresh (F5) stays in this exact locale & mode!
         const currentPath = window.location.pathname;
         const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
         let newPath = `/${newLocale}/${targetSlug}`;
@@ -286,84 +285,99 @@ export default function PracticeSession({
   };
 
   return (
-    <div className="practice-engine mx-auto max-w-3xl text-slate-900">
-      {/* Top Locale Bar */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-3">
-        <div className="flex items-center gap-2">
-          <span
-            className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"
-            aria-hidden="true"
-          />
-          <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
-            Rwanda Provisional Driving Test · 20 Qs
-          </span>
-        </div>
+    <div className="practice-engine mx-auto w-full max-w-5xl h-full flex flex-col text-slate-900 overflow-hidden">
+      {/* Top Locale & Navigation Bar (Only visible before test starts or during review) */}
+      {state.stage !== 'in_progress' && (
+        <div className="mb-3 flex flex-none flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-3">
+          <div className="flex items-center gap-3">
+            <a
+              href={`/${state.currentLocale}/questions`}
+              className="inline-flex min-h-[40px] touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-[11px] sm:px-3.5 sm:text-xs font-bold text-slate-700 shadow-2xs no-underline transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 whitespace-nowrap"
+              title={t.bankBtn}
+              onClick={() => {
+                // User left Practice/Exam to browse questions: clear in-progress session.
+                clearSessionFromStorage();
+              }}
+            >
+              <span>←</span>
+              <span className="hidden sm:inline">{t.bankBtn}</span>
+              <span className="sm:hidden">Bank</span>
+            </a>
+          </div>
 
-        <div
-          className="flex items-center gap-1.5"
-          role="group"
-          aria-label="Language selector"
-        >
-          {(['en', 'fr', 'rw'] as Lang[]).map((code) => {
-            const active = state.currentLocale === code;
-            const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
-            const catSearch =
-              state.selectedCategory === 1
-                ? '?category=traffic-rules'
-                : state.selectedCategory === 2
-                  ? '?category=road-signs'
-                  : '';
-            return (
-              <a
-                key={code}
-                href={`/${code}/${targetSlug}${catSearch}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLocaleChange(code);
-                }}
-                aria-pressed={active}
-                className={`flex min-h-[36px] min-w-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-full px-3.5 text-xs font-bold no-underline transition active:scale-95 ${
-                  active
-                    ? 'bg-blue-700 text-white shadow-sm'
-                    : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-200'
-                }`}
-              >
-                {code.toUpperCase()}
-              </a>
-            );
-          })}
+          <div
+            className="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
+            role="group"
+            aria-label="Language selector"
+          >
+            {(['en', 'fr', 'rw'] as Lang[]).map((code) => {
+              const active = state.currentLocale === code;
+              const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
+              const catSearch =
+                state.selectedCategory === 1
+                  ? '?category=traffic-rules'
+                  : state.selectedCategory === 2
+                    ? '?category=road-signs'
+                    : '';
+              return (
+                <a
+                  key={code}
+                  href={`/${code}/${targetSlug}${catSearch}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLocaleChange(code);
+                  }}
+                  aria-current={active ? 'page' : undefined}
+                  className={`border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0 no-underline ${
+                    active
+                      ? 'bg-blue-700 text-white'
+                      : 'bg-stone-50 text-slate-900 hover:bg-stone-200'
+                  }`}
+                >
+                  {code.toUpperCase()}
+                </a>
+              );
+            })}
+          </div>
+
         </div>
-      </div>
+      )}
 
       {/* 1. Intro Stage */}
       {state.stage === 'intro' && (
-        <PracticeIntro
-          state={state}
-          dispatch={dispatch}
-          allQuestions={allQuestions}
-          t={t}
-        />
+        <div className="flex-1 overflow-y-auto pr-1 pb-4">
+          <PracticeIntro
+            state={state}
+            dispatch={dispatch}
+            allQuestions={allQuestions}
+            t={t}
+          />
+        </div>
       )}
 
       {/* 2. In-Progress Exam Stage */}
       {state.stage === 'in_progress' && (
-        <PracticeExam
-          state={state}
-          dispatch={dispatch}
-          t={t}
-          imageBase={imageBase}
-        />
+        <div className="flex-1 h-full flex flex-col overflow-hidden">
+          <PracticeExam
+            state={state}
+            dispatch={dispatch}
+            t={t}
+            imageBase={imageBase}
+          />
+        </div>
       )}
 
       {/* 3. Review / Results Stage */}
       {state.stage === 'review_all' && (
-        <PracticeReview
-          state={state}
-          dispatch={dispatch}
-          t={t}
-          imageBase={imageBase}
-          onRetake={() => handleStartExam(state.mode, state.selectedCategory)}
-        />
+        <div className="flex-1 overflow-y-auto pr-1 pb-4">
+          <PracticeReview
+            state={state}
+            dispatch={dispatch}
+            t={t}
+            imageBase={imageBase}
+            onRetake={() => handleStartExam(state.mode, state.selectedCategory)}
+          />
+        </div>
       )}
 
       {/* Submit / Finish Confirmation Modal */}

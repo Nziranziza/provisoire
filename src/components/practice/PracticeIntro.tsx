@@ -92,6 +92,38 @@ export default function PracticeIntro({
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
+        {/* Saved Session Alert Banner at Top */}
+        {state.hasSavedSession && (
+          <div className="mb-6 rounded-2xl border-2 border-blue-600 bg-blue-50/80 p-4 sm:p-5 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <span className="inline-flex items-center gap-1 rounded-md bg-blue-700 px-2 py-0.5 text-[11px] font-extrabold text-white uppercase">
+                  Saved Session
+                </span>
+                <p className="mt-1.5 text-xs sm:text-sm font-semibold text-blue-950">
+                  You have an unfinished practice/exam session in progress.
+                </p>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'RESUME_SESSION' })}
+                  className="flex min-h-[42px] touch-manipulation items-center justify-center rounded-full bg-blue-700 px-4 py-2 text-center text-xs leading-tight sm:text-sm font-bold text-white shadow-xs transition hover:bg-blue-800 active:scale-95 cursor-pointer"
+                >
+                  {t.resumeBtn} →
+                </button>
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
+                  className="flex min-h-[42px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-4 py-2 text-center text-xs leading-tight sm:text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95 cursor-pointer"
+                >
+                  ↺ {t.discardBtn}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
           <span>🇷🇼</span>
           <span>Provisoire Exam Simulator</span>
@@ -300,14 +332,14 @@ export default function PracticeIntro({
               <button
                 type="button"
                 onClick={() => dispatch({ type: 'RESUME_SESSION' })}
-                className="flex min-h-[50px] flex-1 touch-manipulation items-center justify-center rounded-full bg-blue-700 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-blue-800 active:scale-95"
+                className="flex min-h-[50px] flex-1 touch-manipulation items-center justify-center rounded-full bg-blue-700 px-5 py-2 text-center text-sm leading-tight font-bold text-white shadow-sm transition hover:bg-blue-800 active:scale-95"
               >
                 {t.resumeBtn}
               </button>
               <button
                 type="button"
                 onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
-                className="flex min-h-[50px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-6 text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95"
+                className="flex min-h-[50px] touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 py-2 text-center text-sm leading-tight font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95"
               >
                 {t.discardBtn}
               </button>
@@ -323,15 +355,6 @@ export default function PracticeIntro({
               {t.startBtn} →
             </button>
           )}
-        </div>
-
-        <div className="mt-4 text-center">
-          <a
-            href={`/${state.currentLocale}/questions`}
-            className="text-xs font-semibold text-slate-500 underline-offset-2 hover:text-blue-700 hover:underline"
-          >
-            {t.bankBtn}
-          </a>
         </div>
       </div>
 
