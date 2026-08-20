@@ -127,7 +127,7 @@ export default function PracticeExam({
               </span>
 
               <span
-                className={`hidden flex-none rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs xs:inline-flex ${
+                className={`xs:inline-flex hidden flex-none rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
                   currentQ.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
                 }`}
               >
