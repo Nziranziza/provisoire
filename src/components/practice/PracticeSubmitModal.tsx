@@ -135,20 +135,21 @@ export default function PracticeSubmitModal({
           </div>
         )}
 
-        <div className="flex flex-col gap-2.5 sm:flex-row-reverse">
-          <button
-            type="button"
-            onClick={() => dispatch({ type: 'FINISH_EXAM' })}
-            className="flex min-h-[48px] touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95"
-          >
-            {t.modalConfirmSubmit}
-          </button>
+        {/* Keep Practicing (left) / View Results (right) — always side by side, never stacked, so the two actions stay clearly separated by position at any screen size */}
+        <div className="flex gap-2.5">
           <button
             type="button"
             onClick={() => dispatch({ type: 'CLOSE_SUBMIT_MODAL' })}
-            className="flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border-2 border-stone-300 bg-white px-6 text-sm font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95"
+            className="flex min-h-[48px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-stone-300 bg-white px-3 text-xs font-bold whitespace-nowrap text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:px-6 sm:text-sm"
           >
             {t.modalContinue}
+          </button>
+          <button
+            type="button"
+            onClick={() => dispatch({ type: 'FINISH_EXAM' })}
+            className="flex min-h-[48px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-xs font-bold whitespace-nowrap text-white shadow-sm transition hover:bg-slate-700 active:scale-95 sm:px-6 sm:text-sm"
+          >
+            {t.modalConfirmSubmit}
           </button>
         </div>
       </div>

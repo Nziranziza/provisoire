@@ -35,6 +35,7 @@ const allLabel: Record<Lang, string> = {
     >
       Rwanda provisional driving-test question bank
     </span>
+
     <h2
       class="text-xl font-extrabold tracking-wide text-slate-900 uppercase sm:text-2xl"
     >
@@ -43,57 +44,33 @@ const allLabel: Record<Lang, string> = {
   </div>
 
   <div class="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
-    <div
-      class="inline-flex w-full flex-wrap items-center gap-1 rounded-full border-2 border-slate-900 bg-white p-0.5 shadow-2xs sm:w-auto"
+    <!-- Practice button -->
+    <a
+      href={`/${lang}/practice`}
+      class:list={[
+        'inline-flex min-h-[40px] items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-4 py-2 leading-none font-bold whitespace-nowrap text-slate-800 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px]',
+        lang === 'fr'
+          ? 'text-[11px] tracking-normal sm:text-xs'
+          : 'text-[11px] tracking-wide sm:text-xs',
+      ]}
     >
-      <a
-        href={`/${lang}/practice`}
-        class:list={[
-          'inline-flex min-h-[40px] flex-1 items-center justify-center gap-1 rounded-full px-3 py-1.5 leading-none font-bold whitespace-nowrap text-slate-800 transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px] sm:flex-none',
-          lang === 'fr'
-            ? 'text-[11px] tracking-normal sm:text-xs'
-            : 'text-[11px] tracking-wide sm:text-xs',
-        ]}
-      >
-        <span>💡</span>
-        {
-          lang === 'fr' ? (
-            <>
-              <span class="sm:hidden">Pratique</span>
-              <span class="hidden sm:inline">Entraînement</span>
-            </>
-          ) : lang === 'rw' ? (
-            'Imyitozo'
-          ) : (
-            'Practice'
-          )
-        }
-      </a>
-      <a
-        href={`/${lang}/exam`}
-        class:list={[
-          'inline-flex min-h-[40px] flex-1 items-center justify-center gap-1 rounded-full bg-amber-400 px-3 py-1.5 leading-none font-bold whitespace-nowrap text-slate-900 transition hover:bg-amber-300 active:scale-95 sm:min-h-[36px] sm:flex-none',
-          lang === 'fr'
-            ? 'text-[11px] tracking-normal sm:text-xs'
-            : 'text-[11px] tracking-wide sm:text-xs',
-        ]}
-      >
-        <span>⏱</span>
-        {
-          lang === 'fr' ? (
-            <>
-              <span class="sm:hidden">Examen</span>
-              <span class="hidden sm:inline">Examen Blanc</span>
-            </>
-          ) : lang === 'rw' ? (
-            'Ikizamini (20m)'
-          ) : (
-            'Mock Exam (20m)'
-          )
-        }
-      </a>
-    </div>
+      <span aria-hidden="true">💡</span>
 
+      {
+        lang === 'fr' ? (
+          <>
+            <span class="sm:hidden">Pratique</span>
+            <span class="hidden sm:inline">Entraînement</span>
+          </>
+        ) : lang === 'rw' ? (
+          'Imyitozo'
+        ) : (
+          'Practice'
+        )
+      }
+    </a>
+
+    <!-- Language selector -->
     <div
       class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
       role="group"
@@ -102,6 +79,7 @@ const allLabel: Record<Lang, string> = {
       {
         locales.map(({ code, label }) => {
           const active = lang === code;
+
           return (
             <a
               href={questionsListHref(code, page, categoryId)}
@@ -121,6 +99,7 @@ const allLabel: Record<Lang, string> = {
       }
     </div>
 
+    <!-- Category selector -->
     <select
       class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-sm text-slate-900"
       data-category-select
@@ -134,11 +113,14 @@ const allLabel: Record<Lang, string> = {
       >
         {allLabel[lang]}
       </option>
+
       {
         categories.map((c) => {
           const count = categoryCounts?.[c.id];
+
           const label =
             typeof count === 'number' ? `${c.name} (${count})` : c.name;
+
           return (
             <option
               value={String(c.id)}
