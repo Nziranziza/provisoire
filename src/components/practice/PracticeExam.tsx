@@ -98,56 +98,67 @@ export default function PracticeExam({
       onTouchEnd={handleTouchEnd}
       style={{ touchAction: 'pan-y' }}
     >
-      {/* 1. Compact Header Bar (Progress, Timer, Flag, Language & Navigation) */}
-      <header className="flex-none rounded-2xl border border-stone-200 bg-white/95 p-2.5 shadow-xs backdrop-blur-md sm:p-3">
-        <div className="flex items-center justify-between gap-2">
-          {/* Left: Back to Question Bank link & Progress Badge & Category */}
-          <div className="flex flex-wrap items-center justify-end gap-1.5 sm:flex-nowrap sm:gap-2">
-            <a
-              href={`/${state.currentLocale}/questions`}
-              className="flex min-h-[40px] items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] font-bold whitespace-nowrap text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:h-8 sm:px-3 sm:text-xs"
-              title={t.bankBtn}
-              onClick={() => {
-                // The user left Practice/Exam to browse questions.
-                // Start fresh next time (and prevent the saved session banner).
-                clearSessionFromStorage();
-              }}
-            >
-              <span>←</span>
-              <span className="hidden text-[11px] font-bold sm:inline">
-                {t.bankBtn}
+      {/* 1. Responsive Header Bar (Progress, Timer, Flag, Language & Navigation) */}
+      <header className="flex-none rounded-2xl border border-stone-200 bg-white/95 p-2 shadow-xs backdrop-blur-md sm:p-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          {/* Row 1 on mobile: Back link + Progress badge + Finish button. On sm+, these fall back into the normal left/right groups via `sm:contents`. */}
+          <div className="flex items-center justify-between gap-1.5 sm:contents">
+            <div className="flex min-w-0 items-center gap-1.5 sm:order-1 sm:flex-wrap sm:gap-2">
+              <a
+                href={`/${state.currentLocale}/questions`}
+                className="flex h-9 flex-none items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] font-bold whitespace-nowrap text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:h-8 sm:px-3 sm:text-xs"
+                title={t.bankBtn}
+                onClick={() => {
+                  // The user left Practice/Exam to browse questions.
+                  // Start fresh next time (and prevent the saved session banner).
+                  clearSessionFromStorage();
+                }}
+              >
+                <span>←</span>
+                <span className="hidden text-[11px] font-bold sm:inline">
+                  {t.bankBtn}
+                </span>
+                <span className="text-[11px] font-bold sm:hidden">Bank</span>
+              </a>
+
+              <span className="flex h-9 flex-none items-center justify-center rounded-lg bg-blue-700 px-2 font-mono text-[11px] font-black whitespace-nowrap text-white shadow-2xs sm:h-8 sm:px-2.5 sm:text-sm">
+                {String(state.currentIndex + 1).padStart(2, '0')} /{' '}
+                {totalQuestions}
               </span>
-              <span className="text-[11px] font-bold sm:hidden">Bank</span>
-            </a>
 
-            <span className="flex min-h-[40px] min-w-[72px] items-center justify-center rounded-lg bg-blue-700 px-2 font-mono text-[11px] font-black whitespace-nowrap text-white shadow-2xs sm:h-8 sm:px-2.5 sm:text-sm">
-              {String(state.currentIndex + 1).padStart(2, '0')} /{' '}
-              {totalQuestions}
-            </span>
-
-            <span
-              className={`xs:inline-flex hidden rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
-                currentQ.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
-              }`}
-            >
-              {currentQ.category_name}
-            </span>
-
-            <span className="hidden items-center gap-1 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-bold text-slate-600 md:inline-flex">
-              <span>
-                {answeredCount}/{totalQuestions}
+              <span
+                className={`hidden flex-none rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs xs:inline-flex ${
+                  currentQ.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
+                }`}
+              >
+                {currentQ.category_name}
               </span>
-              <span className="text-slate-400">·</span>
-              <span className="text-blue-700">{percentCompleted}%</span>
-            </span>
+
+              <span className="hidden flex-none items-center gap-1 rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-bold text-slate-600 md:inline-flex">
+                <span>
+                  {answeredCount}/{totalQuestions}
+                </span>
+                <span className="text-slate-400">·</span>
+                <span className="text-blue-700">{percentCompleted}%</span>
+              </span>
+            </div>
+
+            {/* Finish Test Button (mobile: inline in row 1; sm+: joins right-hand group) */}
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
+              className="flex h-9 flex-none cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-[11px] font-bold whitespace-nowrap text-white transition hover:bg-slate-700 active:scale-95 sm:order-4 sm:h-8 sm:text-xs"
+            >
+              {t.finishBtn}
+            </button>
           </div>
 
-          {/* Center: Timer & Mode / Language Switcher */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Row 2 on mobile: Timer + Language badge + Flag + Grid trigger */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:order-2 sm:ml-auto sm:flex-nowrap sm:gap-2">
             {/* Timer */}
             {isMockMode ? (
               <div
-                className={`flex min-h-[40px] items-center gap-1 rounded-full px-2.5 font-mono text-[11px] font-bold transition sm:h-8 sm:text-xs ${
+                className={`flex h-9 flex-none items-center gap-1 rounded-full px-2.5 font-mono text-[11px] font-bold transition sm:h-8 sm:text-xs ${
                   isTimeCritical
                     ? 'animate-pulse bg-rose-600 text-white shadow-xs'
                     : isTimeLow
@@ -162,7 +173,7 @@ export default function PracticeExam({
               </div>
             ) : (
               <div
-                className="flex min-h-[40px] items-center gap-1 rounded-full bg-stone-100 px-2.5 font-mono text-[11px] font-bold text-slate-700 sm:h-8 sm:text-xs"
+                className="flex h-9 flex-none items-center gap-1 rounded-full bg-stone-100 px-2.5 font-mono text-[11px] font-bold text-slate-700 sm:h-8 sm:text-xs"
                 title={t.timeSpent}
               >
                 <span>⏱</span>
@@ -172,15 +183,12 @@ export default function PracticeExam({
 
             {/* Locked Language Badge */}
             <span
-              className="hidden items-center rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 uppercase sm:inline-flex"
+              className="hidden flex-none items-center rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 uppercase sm:inline-flex"
               title="Test language is locked"
             >
               {state.currentLocale.toUpperCase()}
             </span>
-          </div>
 
-          {/* Right: Flag, Pause, Grid Modal Trigger & Finish */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Flag Button */}
             <button
               type="button"
@@ -192,7 +200,7 @@ export default function PracticeExam({
               }
               title={t.flaggedCardTooltip}
               aria-pressed={isCurrentFlagged}
-              className={`flex min-h-[40px] cursor-pointer touch-manipulation items-center gap-1 rounded-full px-2.5 text-[11px] font-bold transition active:scale-95 sm:h-8 sm:text-xs ${
+              className={`flex h-9 flex-none cursor-pointer touch-manipulation items-center gap-1 rounded-full px-2.5 text-[11px] font-bold transition active:scale-95 sm:h-8 sm:text-xs ${
                 isCurrentFlagged
                   ? 'bg-amber-500 text-white shadow-xs'
                   : 'border border-stone-200 bg-white text-slate-700 hover:bg-stone-100'
@@ -208,7 +216,7 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => setShowGridModal(true)}
-              className="flex min-h-[40px] cursor-pointer touch-manipulation items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] font-bold text-slate-800 hover:bg-stone-100 active:scale-95 sm:h-8 sm:text-xs"
+              className="flex h-9 flex-none cursor-pointer touch-manipulation items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-[11px] font-bold text-slate-800 hover:bg-stone-100 active:scale-95 sm:h-8 sm:text-xs"
               title={t.questionGrid}
             >
               <span>⊞</span>
@@ -218,15 +226,6 @@ export default function PracticeExam({
                   {flaggedCount}
                 </span>
               )}
-            </button>
-
-            {/* Finish Test Button */}
-            <button
-              type="button"
-              onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="order-last flex min-h-[40px] w-full cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-[11px] font-bold text-white transition hover:bg-slate-700 active:scale-95 sm:order-none sm:h-8 sm:w-auto sm:text-xs"
-            >
-              {t.finishBtn}
             </button>
           </div>
         </div>
