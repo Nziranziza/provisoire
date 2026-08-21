@@ -65,8 +65,6 @@ export default function PracticeExam({
   const isAnswered = typeof userAnswer === 'number';
   const isCorrect = isAnswered && userAnswer === currentQ.correct_index;
   const unansweredCount = totalQuestions - Object.keys(state.answers).length;
-  const flaggedCount = Object.values(state.flagged).filter(Boolean).length;
-  const isCurrentFlagged = Boolean(state.flagged[state.currentIndex]);
   const isMockMode = state.mode === 'mock_exam';
   const percentCompleted = Math.round(
     (Object.keys(state.answers).length / Math.max(1, totalQuestions)) * 100,
@@ -209,11 +207,6 @@ export default function PracticeExam({
             >
               <span>⊞</span>
               <span className="xs:inline hidden text-[11px]">20 Qs</span>
-              {flaggedCount > 0 && (
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-900">
-                  {flaggedCount}
-                </span>
-              )}
             </button>
 
             {/* Finish Test Button */}
@@ -235,14 +228,11 @@ export default function PracticeExam({
               const isDotAnswered = typeof state.answers[dotIdx] === 'number';
               const isDotCorrect =
                 isDotAnswered && state.answers[dotIdx] === q.correct_index;
-              const isDotFlagged = Boolean(state.flagged[dotIdx]);
 
               let segmentColor = 'bg-stone-200 hover:bg-stone-300';
               if (isDotCurrent) {
                 segmentColor =
                   'bg-blue-700 ring-2 ring-blue-300 ring-offset-1 z-10';
-              } else if (isDotFlagged) {
-                segmentColor = 'bg-amber-400 hover:bg-amber-500';
               } else if (!isMockMode && isDotAnswered) {
                 segmentColor = isDotCorrect ? 'bg-emerald-500' : 'bg-rose-500';
               } else if (isDotAnswered) {
@@ -259,7 +249,7 @@ export default function PracticeExam({
                       payload: { index: dotIdx },
                     })
                   }
-                  title={`Q${dotIdx + 1}${isDotAnswered ? ' (Answered)' : ' (Unanswered)'}${isDotFlagged ? ' ⚑' : ''}`}
+                  title={`Q${dotIdx + 1}${isDotAnswered ? ' (Answered)' : ' (Unanswered)'}`}
                   className={`h-2 flex-1 cursor-pointer touch-manipulation rounded-xs transition-all duration-150 sm:h-2.5 ${segmentColor}`}
                   aria-label={`Jump to question ${dotIdx + 1}`}
                 />
@@ -285,25 +275,6 @@ export default function PracticeExam({
               {currentQ.category_name}
             </span>
           </div>
-
-          {/* Quick Flag Chip */}
-          <button
-            type="button"
-            onClick={() =>
-              dispatch({
-                type: 'TOGGLE_FLAG',
-                payload: { questionIndex: state.currentIndex },
-              })
-            }
-            className={`inline-flex cursor-pointer items-center gap-1 rounded-lg px-2 py-0.5 text-[11px] font-bold transition active:scale-95 ${
-              isCurrentFlagged
-                ? 'border border-amber-300 bg-amber-50 text-amber-900'
-                : 'text-slate-400 hover:bg-stone-100 hover:text-slate-700'
-            }`}
-          >
-            <span>⚑</span>
-            <span>{isCurrentFlagged ? t.unflagQuestion : t.flagQuestion}</span>
-          </button>
         </div>
 
         {/* Question Content & Options Container */}
@@ -726,8 +697,8 @@ export default function PracticeExam({
             </div>
 
             {/* Quick Filter Jump Helpers */}
-            <div className="my-3 flex items-center justify-between gap-2">
-              {unansweredCount > 0 && (
+            {unansweredCount > 0 && (
+              <div className="my-3 flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -738,21 +709,8 @@ export default function PracticeExam({
                 >
                   ○ {t.nextUnanswered}
                 </button>
-              )}
-
-              {flaggedCount > 0 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch({ type: 'JUMP_TO_NEXT_FLAGGED' });
-                    setShowGridModal(false);
-                  }}
-                  className="flex min-h-[34px] cursor-pointer touch-manipulation items-center rounded-full border border-amber-300 bg-amber-50 px-3 text-xs font-bold text-amber-900 hover:bg-amber-100"
-                >
-                  ⚑ {t.nextFlagged}
-                </button>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* 20 Questions Matrix */}
             <div className="my-3 grid grid-cols-5 gap-2 sm:grid-cols-10">
@@ -761,7 +719,6 @@ export default function PracticeExam({
                 const userAns = state.answers[idx];
                 const isQAnswered = typeof userAns === 'number';
                 const isQCorrect = isQAnswered && userAns === q.correct_index;
-                const isFlag = Boolean(state.flagged[idx]);
 
                 let btnColor =
                   'border border-dashed border-stone-300 bg-white text-slate-600 hover:border-slate-500 hover:bg-stone-100';
@@ -790,16 +747,9 @@ export default function PracticeExam({
                       setShowGridModal(false);
                     }}
                     title={`Question ${idx + 1}`}
-                    className={`relative flex h-11 min-w-[40px] cursor-pointer touch-manipulation flex-col items-center justify-center rounded-xl font-mono text-xs font-bold transition active:scale-95 ${btnColor} ${
-                      isFlag && !isCurrent ? 'ring-2 ring-amber-400' : ''
-                    }`}
+                    className={`relative flex h-11 min-w-[40px] cursor-pointer touch-manipulation flex-col items-center justify-center rounded-xl font-mono text-xs font-bold transition active:scale-95 ${btnColor}`}
                   >
                     <span>{idx + 1}</span>
-                    {isFlag && (
-                      <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-950 shadow-xs">
-                        ⚑
-                      </span>
-                    )}
                   </button>
                 );
               })}
@@ -831,10 +781,6 @@ export default function PracticeExam({
               <span className="flex items-center gap-1.5">
                 <span className="inline-block h-3 w-3 rounded-md border border-dashed border-stone-400 bg-white" />
                 {t.legendSkipped}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="inline-block h-3 w-3 rounded-md bg-amber-400" />
-                {t.legendFlagged}
               </span>
             </div>
           </div>
