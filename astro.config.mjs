@@ -105,12 +105,20 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { en: 'en', fr: 'fr', rw: 'rw' },
       },
-      filter: (page) => !page.includes('/practice'),
+      filter: (page) => !page.includes('/practice') && !page.includes('/exam'),
       customPages: listPageUrls,
     }),
   ],
 
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      dedupe: ['react', 'react-dom'],
+    },
+    esbuild: {
+      jsx: 'automatic',
+      // Avoid _jsxDEV runtime mismatch when NODE_ENV is inconsistent (e.g. Tailwind/PostCSS).
+      jsxDev: false,
+    },
   },
 });

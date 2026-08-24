@@ -35,6 +35,7 @@ const allLabel: Record<Lang, string> = {
     >
       Rwanda provisional driving-test question bank
     </span>
+
     <h2
       class="text-xl font-extrabold tracking-wide text-slate-900 uppercase sm:text-2xl"
     >
@@ -42,22 +43,50 @@ const allLabel: Record<Lang, string> = {
     </h2>
   </div>
 
-  <div class="flex flex-wrap items-center gap-3">
+  <div class="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
+    <!-- Practice button -->
+    <a
+      href={`/${lang}/practice`}
+      class:list={[
+        'inline-flex min-h-[40px] items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-4 py-2 leading-none font-bold whitespace-nowrap text-slate-800 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px]',
+        lang === 'fr'
+          ? 'text-[11px] tracking-normal sm:text-xs'
+          : 'text-[11px] tracking-wide sm:text-xs',
+      ]}
+    >
+      <span aria-hidden="true">💡</span>
+
+      {
+        lang === 'fr' ? (
+          <>
+            <span class="sm:hidden">Pratique</span>
+            <span class="hidden sm:inline">Entraînement</span>
+          </>
+        ) : lang === 'rw' ? (
+          'Imyitozo'
+        ) : (
+          'Practice'
+        )
+      }
+    </a>
+
+    <!-- Language selector -->
     <div
-      class="inline-flex divide-x-2 divide-slate-900 overflow-hidden rounded-full border-2 border-slate-900"
+      class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
       role="group"
       aria-label="Language"
     >
       {
         locales.map(({ code, label }) => {
           const active = lang === code;
+
           return (
             <a
               href={questionsListHref(code, page, categoryId)}
               hreflang={code}
               aria-current={active ? 'page' : undefined}
               class:list={[
-                'px-3 py-1.5 text-xs font-bold tracking-wide transition',
+                'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
                 active
                   ? 'bg-blue-700 text-white'
                   : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
@@ -70,6 +99,7 @@ const allLabel: Record<Lang, string> = {
       }
     </div>
 
+    <!-- Category selector -->
     <select
       class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-sm text-slate-900"
       data-category-select
@@ -83,11 +113,14 @@ const allLabel: Record<Lang, string> = {
       >
         {allLabel[lang]}
       </option>
+
       {
         categories.map((c) => {
           const count = categoryCounts?.[c.id];
+
           const label =
             typeof count === 'number' ? `${c.name} (${count})` : c.name;
+
           return (
             <option
               value={String(c.id)}
