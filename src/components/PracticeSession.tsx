@@ -285,10 +285,10 @@ export default function PracticeSession({
   };
 
   return (
-    <div className="practice-engine mx-auto flex h-full w-full max-w-3xl flex-1 flex-col overflow-hidden text-slate-900">
+    <div className="practice-engine mx-auto w-full max-w-3xl text-slate-900">
       {/* Top Locale & Navigation Bar (Only visible before test starts or during review) */}
       {state.stage !== 'in_progress' && (
-        <div className="mb-3 flex flex-none flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-3">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-3">
           <div className="flex items-center gap-3">
             <a
               href={`/${state.currentLocale}/questions`}
@@ -345,7 +345,7 @@ export default function PracticeSession({
 
       {/* 1. Intro Stage */}
       {state.stage === 'intro' && (
-        <div className="flex-1 overflow-y-auto pr-1 pb-4">
+        <div className="w-full pb-8">
           <PracticeIntro
             state={state}
             dispatch={dispatch}
@@ -357,19 +357,17 @@ export default function PracticeSession({
 
       {/* 2. In-Progress Exam Stage */}
       {state.stage === 'in_progress' && (
-        <div className="flex h-full flex-1 flex-col overflow-hidden">
-          <PracticeExam
-            state={state}
-            dispatch={dispatch}
-            t={t}
-            imageBase={imageBase}
-          />
-        </div>
+        <PracticeExam
+          state={state}
+          dispatch={dispatch}
+          t={t}
+          imageBase={imageBase}
+        />
       )}
 
       {/* 3. Review / Results Stage */}
       {state.stage === 'review_all' && (
-        <div className="flex-1 overflow-y-auto pr-1 pb-4">
+        <div className="w-full pb-8">
           <PracticeReview
             state={state}
             dispatch={dispatch}
