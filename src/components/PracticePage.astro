@@ -81,8 +81,12 @@ const jsonLd = [
   robots="noindex,nofollow"
   jsonLd={jsonLd}
 >
-  <main class="min-h-screen bg-stone-100 px-4 py-8 sm:px-6 sm:py-12">
-    <div class="mx-auto max-w-3xl">
+  <main
+    class="flex h-dvh max-h-dvh flex-col overflow-hidden bg-stone-100 px-4 py-3"
+  >
+    <div
+      class="mx-auto flex h-full w-full max-w-3xl flex-1 flex-col overflow-hidden"
+    >
       <PracticeSession
         client:load
         lang={lang}

@@ -285,7 +285,7 @@ export default function PracticeSession({
   };
 
   return (
-    <div className="practice-engine mx-auto flex h-full w-full max-w-5xl flex-col overflow-hidden text-slate-900">
+    <div className="practice-engine mx-auto flex h-full w-full max-w-3xl flex-1 flex-col overflow-hidden text-slate-900">
       {/* Top Locale & Navigation Bar (Only visible before test starts or during review) */}
       {state.stage !== 'in_progress' && (
         <div className="mb-3 flex flex-none flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-3">
