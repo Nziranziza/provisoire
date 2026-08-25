@@ -61,9 +61,9 @@ const listPageUrls = locales.flatMap((lang) => {
 const pageOneRedirects = Object.fromEntries(
   locales.flatMap((lang) => [
     [`/${lang}/questions/page/1`, `/${lang}/questions`],
-    ...Object.keys(CATEGORY_SLUGS).map((id) => [
-      `/${lang}/questions/category/${CATEGORY_SLUGS[id]}/page/1`,
-      `/${lang}/questions/category/${CATEGORY_SLUGS[id]}`,
+    ...Object.values(CATEGORY_SLUGS).map((slug) => [
+      `/${lang}/questions/category/${slug}/page/1`,
+      `/${lang}/questions/category/${slug}`,
     ]),
   ]),
 );
