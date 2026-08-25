@@ -107,13 +107,18 @@ const jsonLd = [
     [
       { name: 'Provisoire', path: '/' },
       { name: 'Questions', path: questionsListHref(lang, 1) },
-      ...(page > 1
-        ? [{ name: `Page ${page}`, path: questionsListHref(lang, page) }]
-        : []),
       ...(category
         ? [
             {
               name: listLabel,
+              path: questionsListHref(lang, 1, categoryId),
+            },
+          ]
+        : []),
+      ...(page > 1
+        ? [
+            {
+              name: `Page ${page}`,
               path: questionsListHref(lang, page, categoryId),
             },
           ]

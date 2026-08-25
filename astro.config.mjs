@@ -44,36 +44,44 @@ const listPageUrls = locales.flatMap((lang) => {
   const all = pageUrlsForCount(
     `/${lang}/questions`,
     questionBank.questions.length,
+    2,
   );
   const byCategory = Object.entries(categoryPageCounts).flatMap(
     ([slug, totalPages]) =>
-      Array.from({ length: totalPages }, (_, i) => {
-        const page = i + 1;
-        return `${SITE}/${lang}/questions/page/${page}/category/${slug}`;
-      }),
+      pageUrlsForCount(
+        `/${lang}/questions/category/${slug}`,
+        totalPages * PAGE_SIZE,
+        2,
+      ),
   );
   return [...all, ...byCategory];
 });
 
-/** /questions/page/1 → canonical /questions (page 1 has no /page/1 route). */
+/** Page 1 redirects → canonical root URLs (page 1 has no /page/1 route). */
 const pageOneRedirects = Object.fromEntries(
-  locales.map((lang) => [`/${lang}/questions/page/1`, `/${lang}/questions`]),
+  locales.flatMap((lang) => [
+    [`/${lang}/questions/page/1`, `/${lang}/questions`],
+    ...Object.keys(CATEGORY_SLUGS).map((id) => [
+      `/${lang}/questions/category/${CATEGORY_SLUGS[id]}/page/1`,
+      `/${lang}/questions/category/${CATEGORY_SLUGS[id]}`,
+    ]),
+  ]),
 );
 
-/** Old /category/... paths → /page/N/category/... */
+/** Legacy /page/N/category/... paths → /category/...[/page/N] */
 const categoryRedirects = Object.fromEntries(
   locales.flatMap((lang) =>
     Object.entries(categoryPageCounts).flatMap(([slug, totalPages]) => {
       const entries = [
         [
-          `/${lang}/questions/category/${slug}`,
           `/${lang}/questions/page/1/category/${slug}`,
+          `/${lang}/questions/category/${slug}`,
         ],
       ];
       for (let page = 2; page <= totalPages; page++) {
         entries.push([
-          `/${lang}/questions/category/${slug}/page/${page}`,
           `/${lang}/questions/page/${page}/category/${slug}`,
+          `/${lang}/questions/category/${slug}/page/${page}`,
         ]);
       }
       return entries;
@@ -105,7 +113,21 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { en: 'en', fr: 'fr', rw: 'rw' },
       },
-      filter: (page) => !page.includes('/practice') && !page.includes('/exam'),
+      filter: (page) => {
+        // Exclude client-only interactive routes (practice sessions, exam simulators, results)
+        // and internal API endpoints from the XML sitemap.
+        const isClientOnlyRoute =
+          page.includes('/practice') ||
+          page.includes('/exam') ||
+          page.includes('/results') ||
+          page.includes('/session');
+        const isApiEndpoint =
+          page.includes('/q-index') ||
+          page.includes('/search-index') ||
+          page.endsWith('.json');
+
+        return !isClientOnlyRoute && !isApiEndpoint;
+      },
       customPages: listPageUrls,
     }),
   ],

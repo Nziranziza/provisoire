@@ -105,7 +105,7 @@ export function categoryIdFromSlug(slug: string): number | undefined {
 /**
  * List URL:
  * - all: /[lang]/questions[/page/N]
- * - category on that same bank page: /[lang]/questions/page/N/category/[slug]
+ * - category: /[lang]/questions/category/[slug][/page/N]
  */
 export function questionsListHref(
   lang: Lang,
@@ -114,8 +114,8 @@ export function questionsListHref(
 ): string {
   const slug = categoryId ? CATEGORY_SLUGS[categoryId] : undefined;
   if (slug) {
-    const p = Math.max(1, page);
-    return `/${lang}/questions/page/${p}/category/${slug}`;
+    if (page <= 1) return `/${lang}/questions/category/${slug}`;
+    return `/${lang}/questions/category/${slug}/page/${page}`;
   }
   if (page <= 1) return `/${lang}/questions`;
   return `/${lang}/questions/page/${page}`;

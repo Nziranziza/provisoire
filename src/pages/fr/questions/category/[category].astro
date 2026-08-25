@@ -1,0 +1,17 @@
+---
+import QuestionsPage from '../../../../components/QuestionsPage.astro';
+import {
+  CATEGORY_SLUGS,
+  categoryIdFromSlug,
+} from '../../../../lib/quiz';
+
+export function getStaticPaths() {
+  return Object.values(CATEGORY_SLUGS).map((category) => ({
+    params: { category },
+  }));
+}
+
+const categoryId = categoryIdFromSlug(Astro.params.category ?? '')!;
+---
+
+<QuestionsPage lang="fr" page={1} categoryId={categoryId} />

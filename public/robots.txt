@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
 
-Disallow: /practice
-Disallow: /*/practice
-
 Sitemap: https://provisoire.pages.dev/sitemap-index.xml
-

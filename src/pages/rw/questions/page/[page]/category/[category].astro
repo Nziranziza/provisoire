@@ -1,27 +1,6 @@
 ---
-import QuestionsPage from '../../../../../../components/QuestionsPage.astro';
-import questionBank from '../../../../../../../questions.json';
-import {
-  CATEGORY_SLUGS,
-  PAGE_SIZE,
-  categoryIdFromSlug,
-  totalQuestionPages,
-} from '../../../../../../lib/quiz';
-
+// Deprecated alternative route pattern: eliminated in favor of canonical /questions/category/[category]/page/[page]
 export function getStaticPaths() {
-  return Object.entries(CATEGORY_SLUGS).flatMap(([id, category]) => {
-    const count = questionBank.questions.filter(
-      (q) => q.category_id === Number(id),
-    ).length;
-    const total = totalQuestionPages(count, PAGE_SIZE);
-    return Array.from({ length: total }, (_, i) => ({
-      params: { page: String(i + 1), category },
-    }));
-  });
+  return [];
 }
-
-const categoryId = categoryIdFromSlug(Astro.params.category ?? '')!;
-const page = Number(Astro.params.page);
 ---
-
-<QuestionsPage lang="rw" page={page} categoryId={categoryId} />
