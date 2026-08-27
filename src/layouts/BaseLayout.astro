@@ -3,6 +3,7 @@ import '../styles/global.css';
 import type { HreflangLink } from '../lib/seo';
 import { absoluteUrl, ogLocale } from '../lib/seo';
 import type { Lang } from '../lib/quiz';
+import OfflineIndicator from '../components/OfflineIndicator';
 
 interface Props {
   title: string;
@@ -68,6 +69,14 @@ const locale = (lang as Lang) || 'en';
       ))
     }
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1d4ed8" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Provisoire" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 
     <meta property="og:site_name" content="Provisoire" />
     <meta property="og:locale" content={ogLocale(locale)} />
@@ -107,5 +116,10 @@ const locale = (lang as Lang) || 'en';
   </head>
   <body class="bg-white text-slate-900">
     <slot />
+    <OfflineIndicator client:load lang={locale} />
+    <script>
+      import { registerServiceWorker } from '../lib/pwa';
+      registerServiceWorker();
+    </script>
   </body>
 </html>

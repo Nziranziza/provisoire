@@ -4,6 +4,7 @@ import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
 import { PASSING_SCORE } from './constants';
 import { clearSessionFromStorage } from './storage';
+import InstallAppPrompt from '../InstallAppPrompt';
 
 interface PracticeReviewProps {
   state: PracticeState;
@@ -173,6 +174,9 @@ export default function PracticeReview({
           </a>
         </div>
       </div>
+
+      {/* Sensible Add to Home Screen Prompt after completed session */}
+      <InstallAppPrompt lang={state.currentLocale} />
 
       {/* Detailed Question Review List */}
       <div className="rounded-3xl border border-stone-200 bg-stone-50 p-4 sm:p-7">

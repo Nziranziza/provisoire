@@ -1,0 +1,69 @@
+{
+  "name": "Provisoire — Rwanda Driving Test",
+  "short_name": "Provisoire",
+  "description": "Practice Rwanda provisional driving license questions, road signs, and simulated mock exams offline.",
+  "start_url": "/en/practice",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f5f4",
+  "theme_color": "#1d4ed8",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Practice Mode",
+      "short_name": "Practice",
+      "description": "Start an untimed practice session with instant feedback",
+      "url": "/en/practice",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mock Exam",
+      "short_name": "Exam",
+      "description": "Take a 20-minute timed exam simulator",
+      "url": "/en/exam",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Question Bank",
+      "short_name": "Questions",
+      "description": "Browse and search all traffic rules and road signs",
+      "url": "/en/questions",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

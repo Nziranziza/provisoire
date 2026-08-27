@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+
+  <!-- Outer Steering Wheel Ring -->
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#ffffff" stroke-width="26" filter="url(#shadow)" />
+
+  <!-- Inner wheel background accent -->
+  <circle cx="256" cy="256" r="146" fill="#1e40af" fill-opacity="0.5" />
+
+  <!-- Spokes -->
+  <!-- Left spoke -->
+  <rect x="96" y="244" width="80" height="24" rx="12" fill="#ffffff" />
+  <!-- Right spoke -->
+  <rect x="336" y="244" width="80" height="24" rx="12" fill="#ffffff" />
+  <!-- Bottom spoke -->
+  <rect x="244" y="320" width="24" height="80" rx="12" fill="#ffffff" />
+
+  <!-- Center Hub / Horn Badge -->
+  <circle cx="256" cy="256" r="54" fill="#ffffff" />
+  <circle cx="256" cy="256" r="44" fill="url(#goldGrad)" />
+  
+  <!-- "P" for Provisoire in Center -->
+  <text x="256" y="274" font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="900" text-anchor="middle" fill="#0f172a">P</text>
+</svg>
