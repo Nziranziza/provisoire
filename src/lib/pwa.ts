@@ -31,7 +31,6 @@ export type DownloadProgressCallback = (
   total: number,
 ) => void;
 
-let swRegistration: ServiceWorkerRegistration | null = null;
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
 const networkListeners = new Set<NetworkStatusCallback>();
 
@@ -48,7 +47,6 @@ export function registerServiceWorker(): void {
       const reg = await navigator.serviceWorker.register('/sw.js', {
         scope: '/',
       });
-      swRegistration = reg;
 
       // Handle updates
       reg.addEventListener('updatefound', () => {
@@ -243,7 +241,12 @@ export async function downloadImagePack(
 
   try {
     // If Service Worker controller is active, send message
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+    const controller =
+      typeof navigator !== 'undefined' && 'serviceWorker' in navigator
+        ? navigator.serviceWorker.controller
+        : null;
+
+    if (controller) {
       return new Promise<boolean>((resolve) => {
         const messageHandler = (event: MessageEvent) => {
           const data = event.data;
@@ -262,7 +265,7 @@ export async function downloadImagePack(
         };
 
         navigator.serviceWorker.addEventListener('message', messageHandler);
-        navigator.serviceWorker.controller.postMessage({
+        controller.postMessage({
           type: 'DOWNLOAD_ALL_IMAGES',
           images,
         });

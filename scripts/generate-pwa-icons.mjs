@@ -107,7 +107,6 @@ function renderAppIcon(size, isMaskable = false) {
         a = 255;
       } else {
         // Rounded squircle / circular badge
-        const cornerR = size * 0.22;
         const inBadge = dist <= outerR;
         if (!inBadge) {
           a = 0;
