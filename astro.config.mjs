@@ -26,54 +26,31 @@ const categoryPageCounts = Object.fromEntries(
   }),
 );
 
-/**
- * @param {string} basePath
- * @param {number} questionCount
- * @param {number} [fromPage=2]
- */
-function pageUrlsForCount(basePath, questionCount, fromPage = 2) {
-  const total = Math.max(1, Math.ceil(questionCount / PAGE_SIZE));
-  return Array.from({ length: Math.max(0, total - fromPage + 1) }, (_, i) => {
-    const page = fromPage + i;
-    return `${SITE}${basePath}/page/${page}`;
-  });
-}
-
-/** Extra list pagination URLs so crawlers discover them. */
-const listPageUrls = locales.flatMap((lang) => {
-  const all = pageUrlsForCount(
-    `/${lang}/questions`,
-    questionBank.questions.length,
-  );
-  const byCategory = Object.entries(categoryPageCounts).flatMap(
-    ([slug, totalPages]) =>
-      Array.from({ length: totalPages }, (_, i) => {
-        const page = i + 1;
-        return `${SITE}/${lang}/questions/page/${page}/category/${slug}`;
-      }),
-  );
-  return [...all, ...byCategory];
-});
-
-/** /questions/page/1 → canonical /questions (page 1 has no /page/1 route). */
+/** Page 1 redirects → canonical root URLs (page 1 has no /page/1 route). */
 const pageOneRedirects = Object.fromEntries(
-  locales.map((lang) => [`/${lang}/questions/page/1`, `/${lang}/questions`]),
+  locales.flatMap((lang) => [
+    [`/${lang}/questions/page/1`, `/${lang}/questions`],
+    ...Object.values(CATEGORY_SLUGS).map((slug) => [
+      `/${lang}/questions/category/${slug}/page/1`,
+      `/${lang}/questions/category/${slug}`,
+    ]),
+  ]),
 );
 
-/** Old /category/... paths → /page/N/category/... */
+/** Legacy /page/N/category/... paths → /category/...[/page/N] */
 const categoryRedirects = Object.fromEntries(
   locales.flatMap((lang) =>
     Object.entries(categoryPageCounts).flatMap(([slug, totalPages]) => {
       const entries = [
         [
-          `/${lang}/questions/category/${slug}`,
           `/${lang}/questions/page/1/category/${slug}`,
+          `/${lang}/questions/category/${slug}`,
         ],
       ];
       for (let page = 2; page <= totalPages; page++) {
         entries.push([
-          `/${lang}/questions/category/${slug}/page/${page}`,
           `/${lang}/questions/page/${page}/category/${slug}`,
+          `/${lang}/questions/category/${slug}/page/${page}`,
         ]);
       }
       return entries;
@@ -105,8 +82,21 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { en: 'en', fr: 'fr', rw: 'rw' },
       },
-      filter: (page) => !page.includes('/practice') && !page.includes('/exam'),
-      customPages: listPageUrls,
+      filter: (page) => {
+        // Exclude client-only interactive routes (practice sessions, exam simulators, results)
+        // and internal API endpoints from the XML sitemap.
+        const isClientOnlyRoute =
+          page.includes('/practice') ||
+          page.includes('/exam') ||
+          page.includes('/results') ||
+          page.includes('/session');
+        const isApiEndpoint =
+          page.includes('/q-index') ||
+          page.includes('/search-index') ||
+          page.endsWith('.json');
+
+        return !isClientOnlyRoute && !isApiEndpoint;
+      },
     }),
   ],
 
