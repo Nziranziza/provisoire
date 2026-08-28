@@ -3,7 +3,7 @@ import '../styles/global.css';
 import type { HreflangLink } from '../lib/seo';
 import { absoluteUrl, ogLocale } from '../lib/seo';
 import type { Lang } from '../lib/quiz';
-import OfflineIndicator from '../components/OfflineIndicator';
+import AppChrome from '../components/AppChrome.astro';
 
 interface Props {
   title: string;
@@ -75,8 +75,21 @@ const locale = (lang as Lang) || 'en';
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Provisoire" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/icons/icon-192x192.png"
+    />
 
     <meta property="og:site_name" content="Provisoire" />
     <meta property="og:locale" content={ogLocale(locale)} />
@@ -113,12 +126,27 @@ const locale = (lang as Lang) || 'en';
         />
       ))
     }
+    <script is:inline>
+      // Early synchronous capture of beforeinstallprompt to ensure it's never missed
+      window.__pwaInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        window.__pwaInstallPrompt = e;
+        window.dispatchEvent(new CustomEvent('pwa-installable'));
+      });
+      window.addEventListener('appinstalled', () => {
+        window.__pwaInstallPrompt = null;
+        window.__pwaIsInstalled = true;
+        window.dispatchEvent(new CustomEvent('pwa-installed'));
+      });
+    </script>
   </head>
   <body class="bg-white text-slate-900">
     <slot />
-    <OfflineIndicator client:load lang={locale} />
+    <AppChrome lang={locale} />
     <script>
-      import { registerServiceWorker } from '../lib/pwa';
+      import { initPwaClient, registerServiceWorker } from '../lib/pwa';
+      initPwaClient();
       registerServiceWorker();
     </script>
   </body>

@@ -1,5 +1,6 @@
 import type { PastResult, SavedSession } from './types';
 import { STORAGE_KEY_HISTORY, STORAGE_KEY_SESSION } from './constants';
+import { enqueueOfflineAction, isOnline } from '../../lib/pwa';
 
 export function loadHistoryFromStorage(): PastResult[] {
   try {
@@ -40,9 +41,15 @@ export function loadSessionFromStorage(): SavedSession | null {
 export function saveSessionToStorage(session: SavedSession): void {
   try {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(session));
+    const serialized = JSON.stringify(session);
+    localStorage.setItem(STORAGE_KEY_SESSION, serialized);
+    if (!isOnline()) {
+      enqueueOfflineAction('SAVE_SESSION', serialized);
+    }
   } catch {
-    // ignore
+    if (!isOnline()) {
+      enqueueOfflineAction('SAVE_SESSION');
+    }
   }
 }
 
@@ -50,17 +57,28 @@ export function clearSessionFromStorage(): void {
   try {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(STORAGE_KEY_SESSION);
+    if (!isOnline()) {
+      enqueueOfflineAction('CLEAR_SESSION');
+    }
   } catch {
-    // ignore
+    if (!isOnline()) {
+      enqueueOfflineAction('CLEAR_SESSION');
+    }
   }
 }
 
 export function saveHistoryToStorage(history: PastResult[]): void {
   try {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(history));
+    const serialized = JSON.stringify(history);
+    localStorage.setItem(STORAGE_KEY_HISTORY, serialized);
+    if (!isOnline()) {
+      enqueueOfflineAction('SAVE_HISTORY', serialized);
+    }
   } catch {
-    // ignore
+    if (!isOnline()) {
+      enqueueOfflineAction('SAVE_HISTORY');
+    }
   }
 }
 

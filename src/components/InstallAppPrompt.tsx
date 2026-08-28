@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import type { Lang } from '../lib/quiz';
 import {
+  initPwaClient,
   canInstall,
   promptInstall,
   dismissInstallPrompt,
   isInstallPromptDismissed,
   isStandalone,
+  shouldShowInstallButton,
 } from '../lib/pwa';
 
 interface InstallAppPromptProps {
@@ -15,9 +17,9 @@ interface InstallAppPromptProps {
 
 const copy = {
   en: {
-    badge: '📱 Offline App',
-    title: 'Install Provisoire on Your Phone',
-    desc: 'Practice driving test questions anywhere without internet or data costs. Installs directly from your browser.',
+    badge: '📱 Phone & Laptop',
+    title: 'Install on your phone or laptop',
+    desc: 'Download Provisoire to practice offline anywhere — open from your home screen or desktop app.',
     installBtn: 'Install App',
     notNowBtn: 'Not now',
   },
@@ -47,15 +49,17 @@ export default function InstallAppPrompt({
   const t = copy[lang] || copy.en;
 
   useEffect(() => {
+    initPwaClient();
+
     if (isStandalone() || isInstallPromptDismissed()) {
       return;
     }
 
-    setInstallable(canInstall());
+    setInstallable(canInstall() || shouldShowInstallButton());
 
     const handleInstallable = () => {
       if (!isStandalone() && !isInstallPromptDismissed()) {
-        setInstallable(true);
+        setInstallable(canInstall() || shouldShowInstallButton());
       }
     };
 

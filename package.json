@@ -7,9 +7,11 @@
     "node": ">=22.22.3"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
+    "predev": "node scripts/prepare-pwa.mjs",
+    "prebuild": "node scripts/prepare-pwa.mjs",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "astro preview --host",
     "check": "astro check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

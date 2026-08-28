@@ -1,6 +1,7 @@
 ---
 import type { Category, Lang } from '../../lib/quiz';
 import { categorySlug, questionsListHref } from '../../lib/quiz';
+import HeaderInstallButton from '../HeaderInstallButton.astro';
 
 interface Props {
   categories: Category[];
@@ -69,6 +70,9 @@ const allLabel: Record<Lang, string> = {
         )
       }
     </a>
+
+    <!-- Install App button -->
+    <HeaderInstallButton lang={lang} />
 
     <!-- Language selector -->
     <div

@@ -1,4 +1,3 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -96,6 +95,14 @@ export default defineConfig({
   // which is the directory Cloudflare Pages serves.
   output: 'static',
 
+  server: {
+    host: true,
+  },
+
+  devToolbar: {
+    enabled: false,
+  },
+
   redirects: { ...pageOneRedirects, ...categoryRedirects },
 
   i18n: {
@@ -134,13 +141,5 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      dedupe: ['react', 'react-dom'],
-    },
-    esbuild: {
-      jsx: 'automatic',
-      // Avoid _jsxDEV runtime mismatch when NODE_ENV is inconsistent (e.g. Tailwind/PostCSS).
-      jsxDev: false,
-    },
   },
 });

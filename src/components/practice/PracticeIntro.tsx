@@ -5,6 +5,7 @@ import { formatTime, sampleQuestions } from './reducer';
 import type { ExamMode, PracticeAction, PracticeState } from './types';
 import { DEFAULT_TOTAL_QUESTIONS, PASSING_SCORE } from './constants';
 import OfflinePackManager from '../OfflinePackManager';
+import InstallAppPanel from '../InstallAppPanel';
 
 interface PracticeIntroProps {
   state: PracticeState;
@@ -358,6 +359,9 @@ export default function PracticeIntro({
           )}
         </div>
       </div>
+
+      {/* Download app for phone & laptop */}
+      <InstallAppPanel lang={state.currentLocale} />
 
       {/* Offline Learning Pack & Road Sign Downloader */}
       <OfflinePackManager lang={state.currentLocale} />

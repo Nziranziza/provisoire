@@ -1,12 +1,12 @@
-// Provisoire Service Worker v1.0.0
-const CACHE_VERSION = 'v1';
+// Provisoire Service Worker — bump CACHE_VERSION on deploy to bust caches
+const CACHE_VERSION = 'v4';
 const SHELL_CACHE = `provisoire-shell-${CACHE_VERSION}`;
 const DATA_CACHE = `provisoire-data-${CACHE_VERSION}`;
 const IMAGE_CACHE = `provisoire-images-${CACHE_VERSION}`;
 
 const CURRENT_CACHES = [SHELL_CACHE, DATA_CACHE, IMAGE_CACHE];
 
-// Core app shell pages to precache immediately on first load
+// App shell: HTML entry points + icons (precached on install)
 const SHELL_ASSETS = [
   '/',
   '/en/practice',
@@ -19,7 +19,10 @@ const SHELL_ASSETS = [
   '/fr/questions',
   '/rw/questions',
   '/manifest.webmanifest',
+  '/favicon.ico',
   '/favicon.svg',
+  '/favicon-16x16.png',
+  '/favicon-32x32.png',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/icon-maskable-192x192.png',
@@ -28,8 +31,9 @@ const SHELL_ASSETS = [
   '/icons/icon.svg',
 ];
 
-// Pre-rendered search indexes and question data
+// Question text + search indexes (precached on install; images are opt-in)
 const DATA_ASSETS = [
+  '/data/questions.json',
   '/q-index/en',
   '/q-index/fr',
   '/q-index/rw',
@@ -38,33 +42,40 @@ const DATA_ASSETS = [
   '/rw/search-index.json',
 ];
 
-// 1. Install Event: Precache App Shell & Question Datasets
+async function cacheUrls(cacheName, urls) {
+  const cache = await caches.open(cacheName);
+  await Promise.allSettled(
+    urls.map(async (rawUrl) => {
+      const url = rawUrl.startsWith('/') ? rawUrl : `/${rawUrl}`;
+      try {
+        const existing = await cache.match(url);
+        if (existing) return;
+        const response = await fetch(url);
+        if (response && response.ok) {
+          if (response.redirected) {
+            await cache.put(response.url, response.clone());
+          }
+          await cache.put(url, response);
+        }
+      } catch {
+        // Silently catch in case browser is offline during install
+      }
+    }),
+  );
+}
+
+// 1. Install: precache shell + question data immediately
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     (async () => {
-      // Precache app shell
-      const shell = await caches.open(SHELL_CACHE);
-      try {
-        await shell.addAll(SHELL_ASSETS);
-      } catch (err) {
-        console.warn('[SW] Non-fatal shell caching warning:', err);
-      }
-
-      // Precache data payloads
-      const data = await caches.open(DATA_CACHE);
-      try {
-        await data.addAll(DATA_ASSETS);
-      } catch (err) {
-        console.warn('[SW] Non-fatal data caching warning:', err);
-      }
-
-      // Activate worker immediately
-      await self.skipWaiting();
+      await cacheUrls(SHELL_CACHE, SHELL_ASSETS);
+      await cacheUrls(DATA_CACHE, DATA_ASSETS);
     })(),
   );
 });
 
-// 2. Activate Event: Clean up outdated caches
+// 2. Activate: delete outdated caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
@@ -72,7 +83,6 @@ self.addEventListener('activate', (event) => {
       await Promise.all(
         cacheNames.map((name) => {
           if (!CURRENT_CACHES.includes(name)) {
-            console.log('[SW] Deleting old cache:', name);
             return caches.delete(name);
           }
           return Promise.resolve();
@@ -83,103 +93,146 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Fetch Event Routing
+// 3. Fetch routing
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // Only handle same-origin GET requests
   if (request.method !== 'GET' || url.origin !== self.location.origin) {
     return;
   }
 
-  // A. Navigation Requests (HTML Pages)
+  // Bypass live Vite HMR websocket pings
+  if (
+    url.pathname.includes('hot-update') ||
+    url.pathname.includes('__vite_ping')
+  ) {
+    return;
+  }
+
+  // A. Navigation (HTML) — network-first, cache fallback
   if (request.mode === 'navigate') {
     event.respondWith(
       (async () => {
         try {
-          // Network first for navigations when online to get freshest updates
-          const networkResponse = await fetch(request);
+          const networkResponse = await fetch(request.url, {
+            headers: request.headers,
+            credentials: 'same-origin',
+            redirect: 'follow',
+          });
+
           if (networkResponse && networkResponse.ok) {
             const cache = await caches.open(SHELL_CACHE);
+            if (networkResponse.redirected) {
+              cache.put(networkResponse.url, networkResponse.clone());
+              return new Response(networkResponse.body, {
+                status: networkResponse.status,
+                statusText: networkResponse.statusText,
+                headers: networkResponse.headers,
+              });
+            }
             cache.put(request, networkResponse.clone());
+            return networkResponse;
           }
-          return networkResponse;
-        } catch (err) {
-          // Offline navigation fallback: Check exact path, then localized practice shell
-          const cachedPage = await caches.match(request);
-          if (cachedPage) return cachedPage;
+        } catch {
+          // Network failed, proceed to cache fallback
+        }
 
-          // Attempt matching language fallback
-          const pathname = url.pathname;
-          const match = pathname.match(/^\/(en|fr|rw)/);
-          const lang = match ? match[1] : 'en';
+        const cachedPage =
+          (await caches.match(request, { ignoreSearch: true })) ||
+          (await caches.match(url.pathname, { ignoreSearch: true }));
+        if (cachedPage) return cachedPage;
 
-          if (pathname.includes('/exam')) {
-            const examFallback = await caches.match(`/${lang}/exam`);
-            if (examFallback) return examFallback;
-          }
+        const pathname = url.pathname;
+        const match = pathname.match(/^\/(en|fr|rw)/);
+        const lang = match ? match[1] : 'en';
 
-          if (pathname.includes('/questions')) {
-            const questionsFallback = await caches.match(`/${lang}/questions`);
-            if (questionsFallback) return questionsFallback;
-          }
+        if (pathname.includes('/exam')) {
+          const examFallback = await caches.match(`/${lang}/exam`, {
+            ignoreSearch: true,
+          });
+          if (examFallback) return examFallback;
+        }
 
-          const practiceFallback = await caches.match(`/${lang}/practice`);
-          if (practiceFallback) return practiceFallback;
+        if (pathname.includes('/questions')) {
+          const questionsFallback = await caches.match(`/${lang}/questions`, {
+            ignoreSearch: true,
+          });
+          if (questionsFallback) return questionsFallback;
+        }
 
-          const defaultFallback = await caches.match('/en/practice');
-          if (defaultFallback) return defaultFallback;
+        const practiceFallback = await caches.match(`/${lang}/practice`, {
+          ignoreSearch: true,
+        });
+        if (practiceFallback) return practiceFallback;
 
-          throw err;
+        const defaultFallback =
+          (await caches.match('/en/practice', { ignoreSearch: true })) ||
+          (await caches.match('/en/questions', { ignoreSearch: true }));
+        if (defaultFallback) return defaultFallback;
+
+        try {
+          return await fetch(request);
+        } catch {
+          return new Response(
+            'Offline — open Practice from your home screen.',
+            {
+              status: 503,
+              headers: { 'Content-Type': 'text/plain' },
+            },
+          );
         }
       })(),
     );
     return;
   }
 
-  // B. Road Sign Images (/images/*)
+  // B. Road sign images — cache-first (opt-in bulk download or on-demand)
   if (url.pathname.startsWith('/images/') || request.destination === 'image') {
     event.respondWith(
       (async () => {
-        // Cache-first for images
+        const imageCache = await caches.open(IMAGE_CACHE);
         const cachedImage =
-          (await caches.match(request)) ||
-          (await (await caches.open(IMAGE_CACHE)).match(request));
+          (await caches.match(request, { ignoreSearch: true })) ||
+          (await imageCache.match(request, { ignoreSearch: true }));
         if (cachedImage) return cachedImage;
 
         try {
           const networkResponse = await fetch(request);
           if (networkResponse && networkResponse.ok) {
-            const imageCache = await caches.open(IMAGE_CACHE);
             imageCache.put(request, networkResponse.clone());
           }
           return networkResponse;
-        } catch (err) {
-          // Return cached if available
+        } catch {
           if (cachedImage) return cachedImage;
-          throw err;
+          return new Response('', {
+            status: 404,
+            statusText: 'Image not cached',
+          });
         }
       })(),
     );
     return;
   }
 
-  // C. Question Data / Search Index Endpoints (/q-index/*, *.json)
+  // C. Question data / search indexes — cache-first + background revalidate
   if (
+    url.pathname.startsWith('/data/') ||
     url.pathname.startsWith('/q-index/') ||
     url.pathname.endsWith('.json') ||
     url.pathname.includes('search-index')
   ) {
     event.respondWith(
       (async () => {
-        const cachedData = await caches.match(request);
+        const dataCache = await caches.open(DATA_CACHE);
+        const cachedData =
+          (await caches.match(request, { ignoreSearch: true })) ||
+          (await dataCache.match(request, { ignoreSearch: true }));
+
         if (cachedData) {
-          // Revalidate in background if online
           fetch(request)
             .then(async (response) => {
               if (response && response.ok) {
-                const dataCache = await caches.open(DATA_CACHE);
                 dataCache.put(request, response);
               }
             })
@@ -190,60 +243,85 @@ self.addEventListener('fetch', (event) => {
         try {
           const networkResponse = await fetch(request);
           if (networkResponse && networkResponse.ok) {
-            const dataCache = await caches.open(DATA_CACHE);
             dataCache.put(request, networkResponse.clone());
           }
           return networkResponse;
-        } catch (err) {
+        } catch {
           if (cachedData) return cachedData;
-          throw err;
+          throw new Error('Data unavailable offline');
         }
       })(),
     );
     return;
   }
 
-  // D. Static Assets (Scripts, Styles, Fonts, Icons)
+  // D. Static assets, scripts, stylesheets, fonts, icons, manifests & modules — cache-first
   event.respondWith(
     (async () => {
-      const cachedAsset = await caches.match(request);
+      const shellCache = await caches.open(SHELL_CACHE);
+      const cachedAsset =
+        (await caches.match(request, { ignoreSearch: true })) ||
+        (await caches.match(url.pathname, { ignoreSearch: true })) ||
+        (await shellCache.match(request, { ignoreSearch: true }));
       if (cachedAsset) return cachedAsset;
 
       try {
         const networkResponse = await fetch(request);
         if (
           networkResponse &&
-          networkResponse.ok &&
-          (url.pathname.startsWith('/_astro/') ||
-            url.pathname.startsWith('/icons/') ||
-            url.pathname.endsWith('.js') ||
-            url.pathname.endsWith('.css'))
+          (networkResponse.ok || networkResponse.type === 'opaque')
         ) {
-          const shellCache = await caches.open(SHELL_CACHE);
+          if (networkResponse.redirected) {
+            shellCache.put(networkResponse.url, networkResponse.clone());
+            return new Response(networkResponse.body, {
+              status: networkResponse.status,
+              statusText: networkResponse.statusText,
+              headers: networkResponse.headers,
+            });
+          }
           shellCache.put(request, networkResponse.clone());
         }
         return networkResponse;
-      } catch (err) {
+      } catch {
         if (cachedAsset) return cachedAsset;
-        throw err;
+        const fallback =
+          (await caches.match(request.url, { ignoreSearch: true })) ||
+          (await caches.match(url.pathname, { ignoreSearch: true }));
+        if (fallback) return fallback;
+
+        // If manifest requested while offline
+        if (url.pathname.includes('manifest')) {
+          const manifestFallback = await caches.match('/manifest.webmanifest');
+          if (manifestFallback) return manifestFallback;
+        }
+
+        return new Response('', {
+          status: 503,
+          statusText: 'Asset unavailable offline',
+        });
       }
     })(),
   );
 });
 
-// 4. Message Event Handling (On-Demand Image Precache & Cache Status)
+// 4. Messages: image pack, precache URLs, skip waiting
 self.addEventListener('message', async (event) => {
   const data = event.data;
   if (!data || typeof data !== 'object') return;
 
-  // A. Download All Road Sign Images on Demand
+  if (data.type === 'PRECACHE_URLS' && Array.isArray(data.urls)) {
+    await cacheUrls(SHELL_CACHE, data.urls);
+    if (event.source) {
+      event.source.postMessage({ type: 'PRECACHE_COMPLETE' });
+    }
+  }
+
   if (data.type === 'DOWNLOAD_ALL_IMAGES' && Array.isArray(data.images)) {
     const imagesToCache = data.images;
     const total = imagesToCache.length;
     let downloaded = 0;
     const imageCache = await caches.open(IMAGE_CACHE);
 
-    // Notify clients that download started
     broadcast({
       type: 'IMAGE_DOWNLOAD_PROGRESS',
       downloaded: 0,
@@ -289,7 +367,6 @@ self.addEventListener('message', async (event) => {
     });
   }
 
-  // B. Check Image Cache Status
   if (data.type === 'CHECK_IMAGE_CACHE_STATUS' && Array.isArray(data.images)) {
     const imagesToCheck = data.images;
     const totalCount = imagesToCheck.length;
@@ -312,7 +389,6 @@ self.addEventListener('message', async (event) => {
     }
   }
 
-  // C. Clear Image Cache
   if (data.type === 'CLEAR_IMAGE_CACHE') {
     await caches.delete(IMAGE_CACHE);
     await caches.open(IMAGE_CACHE);
@@ -321,7 +397,6 @@ self.addEventListener('message', async (event) => {
     }
   }
 
-  // D. Skip Waiting
   if (data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
