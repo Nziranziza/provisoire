@@ -323,78 +323,37 @@ export function getInstallGuide(lang: InstallGuideLang = 'en') {
   return installGuideCopy[lang] || installGuideCopy.en;
 }
 
-/**
- * Trigger the Add to Home Screen prompt
- */
 export async function promptInstall(): Promise<
   'accepted' | 'dismissed' | 'unavailable'
 > {
   if (typeof window === 'undefined') return 'unavailable';
 
-  // 1. Check if prompt is already captured
-  let prompt =
+  // 1. Capture prompt immediately within active user gesture
+  const prompt =
     deferredPrompt ||
     (window.__pwaInstallPrompt ? window.__pwaInstallPrompt : null);
 
-  // 2. If not yet captured, wait up to 1500ms for beforeinstallprompt event
-  if (!prompt) {
-    prompt = await new Promise<BeforeInstallPromptEvent | null>((resolve) => {
-      let resolved = false;
-      const cleanup = () => {
-        window.removeEventListener('beforeinstallprompt', onPrompt);
-        window.removeEventListener('pwa-installable', onInstallable);
-      };
-
-      const onPrompt = (e: Event) => {
-        if (resolved) return;
-        resolved = true;
-        cleanup();
-        clearTimeout(timer);
-        resolve((window.__pwaInstallPrompt || e) as BeforeInstallPromptEvent);
-      };
-
-      const onInstallable = () => {
-        if (resolved) return;
-        resolved = true;
-        cleanup();
-        clearTimeout(timer);
-        resolve(window.__pwaInstallPrompt || null);
-      };
-
-      window.addEventListener('beforeinstallprompt', onPrompt, { once: true });
-      window.addEventListener('pwa-installable', onInstallable, { once: true });
-
-      const timer = setTimeout(() => {
-        if (resolved) return;
-        resolved = true;
-        cleanup();
-        resolve(window.__pwaInstallPrompt || null);
-      }, 1500);
-    });
-  }
-
-  if (!prompt) {
-    console.warn(
-      '[PWA] Native install prompt is not supported or not available on this browser/origin.',
-    );
-    return 'unavailable';
-  }
-
-  try {
-    await prompt.prompt();
-    const choice = await prompt.userChoice;
-    if (choice.outcome === 'accepted') {
-      deferredPrompt = null;
-      window.__pwaInstallPrompt = null;
-      window.__pwaIsInstalled = true;
-      window.dispatchEvent(new CustomEvent('pwa-installed'));
-      console.log('[PWA] User accepted installation prompt.');
+  // If native prompt is supported and ready, trigger native OS installation immediately!
+  if (prompt) {
+    try {
+      const promptPromise = prompt.prompt();
+      await promptPromise;
+      const choice = await prompt.userChoice;
+      if (choice.outcome === 'accepted') {
+        deferredPrompt = null;
+        window.__pwaInstallPrompt = null;
+        window.__pwaIsInstalled = true;
+        window.dispatchEvent(new CustomEvent('pwa-installed'));
+        console.log('[PWA] User accepted installation prompt.');
+      }
+      return choice.outcome;
+    } catch (err) {
+      console.warn('[PWA] Install prompt failed:', err);
+      return 'dismissed';
     }
-    return choice.outcome;
-  } catch (err) {
-    console.warn('[PWA] Install prompt failed:', err);
-    return 'dismissed';
   }
+
+  return 'unavailable';
 }
 
 /**

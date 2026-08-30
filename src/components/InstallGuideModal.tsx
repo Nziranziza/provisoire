@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import type { Lang } from '../lib/quiz';
 import {
   getInstallGuide,
   type InstallGuideLang,
-  canInstall,
   promptInstall,
 } from '../lib/pwa';
 
@@ -17,15 +17,24 @@ export default function InstallGuideModal({
   open,
   onClose,
 }: InstallGuideModalProps) {
+  const [loading, setLoading] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+
   if (!open) return null;
 
   const guide = getInstallGuide(lang as InstallGuideLang);
-  const isDirectInstallable = canInstall();
 
   const handleDirectInstall = async () => {
-    const outcome = await promptInstall();
-    if (outcome === 'accepted') {
-      onClose();
+    setLoading(true);
+    try {
+      const outcome = await promptInstall();
+      if (outcome === 'accepted') {
+        onClose();
+      } else if (outcome === 'unavailable') {
+        setShowFeedback(true);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,24 +93,38 @@ export default function InstallGuideModal({
           </div>
         </div>
 
-        <div className="mt-4 flex flex-col gap-2">
-          {isDirectInstallable ? (
-            <button
-              type="button"
-              onClick={handleDirectInstall}
-              className="flex min-h-[44px] w-full cursor-pointer touch-manipulation items-center justify-center rounded-full bg-blue-700 text-sm font-bold text-white transition hover:bg-blue-800 active:scale-95"
-            >
-              📲 Open Install Dialog Now
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex min-h-[44px] w-full cursor-pointer touch-manipulation items-center justify-center rounded-full bg-blue-700 text-sm font-bold text-white transition hover:bg-blue-800 active:scale-95"
-            >
-              {guide.close}
-            </button>
-          )}
+        {showFeedback && (
+          <div className="mt-3 rounded-xl border-2 border-blue-600 bg-blue-50 p-3 text-xs text-blue-950">
+            <p className="font-extrabold text-blue-900">
+              👉 Browser Install Action:
+            </p>
+            <p className="mt-1 font-medium text-slate-700">
+              In Chrome/Edge, click the <strong>Install icon (⊕ / 🖵)</strong> in
+              your address bar above, or tap{' '}
+              <strong>Menu (⋮) → &ldquo;Install app&rdquo;</strong>.
+            </p>
+          </div>
+        )}
+
+        <div className="mt-4 flex gap-2">
+          <button
+            type="button"
+            disabled={loading}
+            onClick={handleDirectInstall}
+            className="flex min-h-[44px] flex-1 cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-full bg-blue-700 text-sm font-bold text-white transition hover:bg-blue-800 active:scale-95 disabled:opacity-50"
+          >
+            <span>{loading ? '⏳' : '📲'}</span>
+            <span>
+              {loading ? 'Opening Installer...' : 'Try Direct Install'}
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex min-h-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-full border border-slate-300 bg-white px-5 text-sm font-bold text-slate-700 hover:bg-stone-100"
+          >
+            {guide.close}
+          </button>
         </div>
       </div>
     </div>

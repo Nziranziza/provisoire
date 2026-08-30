@@ -1,5 +1,5 @@
 // Provisoire Service Worker — bump CACHE_VERSION on deploy to bust caches
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const SHELL_CACHE = `provisoire-shell-${CACHE_VERSION}`;
 const DATA_CACHE = `provisoire-data-${CACHE_VERSION}`;
 const IMAGE_CACHE = `provisoire-images-${CACHE_VERSION}`;
@@ -19,6 +19,7 @@ const SHELL_ASSETS = [
   '/fr/questions',
   '/rw/questions',
   '/manifest.webmanifest',
+  '/manifest.json',
   '/favicon.ico',
   '/favicon.svg',
   '/favicon-16x16.png',
@@ -102,10 +103,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Bypass live Vite HMR websocket pings
+  // Bypass WebSocket handshakes, HMR tokens, live pings & hot-updates
   if (
-    url.pathname.includes('hot-update') ||
-    url.pathname.includes('__vite_ping')
+    url.searchParams.has('token') ||
+    url.protocol.startsWith('ws') ||
+    request.headers.get('Upgrade') === 'websocket' ||
+    url.pathname.includes('hot-update')
   ) {
     return;
   }
@@ -293,6 +296,62 @@ self.addEventListener('fetch', (event) => {
         if (url.pathname.includes('manifest')) {
           const manifestFallback = await caches.match('/manifest.webmanifest');
           if (manifestFallback) return manifestFallback;
+        }
+
+        // If Vite client or dev runtime requested while offline
+        if (url.pathname.includes('@vite/client')) {
+          return new Response(
+            'export function createHotContext() { return { accept() {}, dispose() {}, prune() {}, data: {}, on() {}, off() {}, send() {} }; } export function injectQuery() {} export function updateStyle() {} export function removeStyle() {} export default {};',
+            {
+              status: 200,
+              headers: {
+                'Content-Type': 'application/javascript; charset=utf-8',
+              },
+            },
+          );
+        }
+
+        // If before-hydration or other virtual Astro/Vite script requested while offline
+        if (
+          url.pathname.includes('before-hydration') ||
+          url.pathname.includes('@id/')
+        ) {
+          return new Response(
+            '/* offline module fallback */ export default {};',
+            {
+              status: 200,
+              headers: {
+                'Content-Type': 'application/javascript; charset=utf-8',
+              },
+            },
+          );
+        }
+
+        // Generic JavaScript module fallback for offline dynamic imports
+        if (
+          request.destination === 'script' ||
+          url.pathname.endsWith('.js') ||
+          url.pathname.endsWith('.mjs') ||
+          url.pathname.endsWith('.tsx') ||
+          url.pathname.endsWith('.ts')
+        ) {
+          return new Response(
+            '/* offline script fallback */ export default {};',
+            {
+              status: 200,
+              headers: {
+                'Content-Type': 'application/javascript; charset=utf-8',
+              },
+            },
+          );
+        }
+
+        // Generic CSS fallback
+        if (request.destination === 'style' || url.pathname.endsWith('.css')) {
+          return new Response('/* offline style fallback */', {
+            status: 200,
+            headers: { 'Content-Type': 'text/css; charset=utf-8' },
+          });
         }
 
         return new Response('', {

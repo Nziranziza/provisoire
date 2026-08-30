@@ -25,6 +25,7 @@ export default function InstallAppButton({
 }: InstallAppButtonProps) {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [installed, setInstalled] = useState(false);
   const label = labels[lang] || labels.en;
 
   useEffect(() => {
@@ -34,7 +35,10 @@ export default function InstallAppButton({
       setVisible(shouldShowInstallButton());
     };
 
-    const handleInstalled = () => setVisible(false);
+    const handleInstalled = () => {
+      setInstalled(true);
+      setTimeout(() => setVisible(false), 2000);
+    };
 
     updateVisibility();
     window.addEventListener('pwa-installable', updateVisibility);
@@ -53,7 +57,10 @@ export default function InstallAppButton({
     try {
       const outcome = await promptInstall();
       if (outcome === 'accepted') {
-        setVisible(false);
+        setInstalled(true);
+        setTimeout(() => setVisible(false), 2000);
+      } else if (outcome === 'unavailable') {
+        window.dispatchEvent(new CustomEvent('pwa-open-install-guide'));
       }
     } finally {
       setLoading(false);
@@ -69,13 +76,13 @@ export default function InstallAppButton({
     <button
       type="button"
       onClick={handleClick}
-      disabled={loading}
+      disabled={loading || installed}
       className={buttonClass}
       title={label}
       aria-label={label}
     >
-      <span aria-hidden="true">{loading ? '⏳' : '📲'}</span>
-      <span>{label}</span>
+      <span aria-hidden="true">{installed ? '✅' : loading ? '⏳' : '📲'}</span>
+      <span>{installed ? 'Saved to Device' : label}</span>
     </button>
   );
 }

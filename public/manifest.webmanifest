@@ -1,9 +1,9 @@
 {
-  "id": "/en/practice",
+  "id": "/",
   "name": "Provisoire — Rwanda Driving Test",
   "short_name": "Provisoire",
   "description": "Practice Rwanda provisional driving license questions, road signs, and simulated mock exams offline.",
-  "start_url": "/en/practice",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
@@ -43,7 +43,7 @@
       "src": "/icons/icon.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
   "shortcuts": [
