@@ -254,7 +254,9 @@ self.addEventListener('fetch', (event) => {
 
         const cachedPage =
           (await caches.match(request, { ignoreSearch: true })) ||
-          (await caches.match(url.pathname, { ignoreSearch: true }));
+          (await caches.match(url.pathname, { ignoreSearch: true })) ||
+          (await caches.match(url.href, { ignoreSearch: true })) ||
+          (await caches.match('/', { ignoreSearch: true }));
         if (cachedPage) return cachedPage;
 
         const pathname = url.pathname;
@@ -262,25 +264,28 @@ self.addEventListener('fetch', (event) => {
         const lang = match ? match[1] : 'en';
 
         if (pathname.includes('/exam')) {
-          const examFallback = await caches.match(`/${lang}/exam`, {
-            ignoreSearch: true,
-          });
+          const examFallback =
+            (await caches.match(`/${lang}/exam`, { ignoreSearch: true })) ||
+            (await caches.match('/en/exam', { ignoreSearch: true }));
           if (examFallback) return examFallback;
         }
 
         if (pathname.includes('/questions')) {
-          const questionsFallback = await caches.match(`/${lang}/questions`, {
-            ignoreSearch: true,
-          });
+          const questionsFallback =
+            (await caches.match(`/${lang}/questions`, {
+              ignoreSearch: true,
+            })) ||
+            (await caches.match('/en/questions', { ignoreSearch: true }));
           if (questionsFallback) return questionsFallback;
         }
 
-        const practiceFallback = await caches.match(`/${lang}/practice`, {
-          ignoreSearch: true,
-        });
+        const practiceFallback =
+          (await caches.match(`/${lang}/practice`, { ignoreSearch: true })) ||
+          (await caches.match('/en/practice', { ignoreSearch: true }));
         if (practiceFallback) return practiceFallback;
 
         const defaultFallback =
+          (await caches.match('/', { ignoreSearch: true })) ||
           (await caches.match('/en/practice', { ignoreSearch: true })) ||
           (await caches.match('/en/questions', { ignoreSearch: true }));
         if (defaultFallback) return defaultFallback;
