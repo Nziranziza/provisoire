@@ -1,13 +1,11 @@
 ---
 import type { Lang } from '../lib/quiz';
-import { getInstallGuide, type InstallGuideLang } from '../lib/pwa';
 
 interface Props {
   lang?: Lang;
 }
 
 const { lang = 'en' } = Astro.props;
-const guide = getInstallGuide(lang as InstallGuideLang);
 
 const swCopy = {
   en: { message: 'A new version is ready.', action: 'Update now' },
