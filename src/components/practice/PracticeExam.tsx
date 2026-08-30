@@ -253,8 +253,12 @@ export default function PracticeExam({
           <div className="quiz-image-wrap my-1.5 flex justify-center">
             <img
               src={`${imageBase}${currentQ.image_url.replace(/^\//, '')}`}
-              alt=""
-              loading="lazy"
+              alt="Road sign"
+              loading="eager"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.style.display = 'none';
+              }}
               className="block max-h-32 max-w-full rounded-lg border border-stone-200 object-contain sm:max-h-40"
             />
           </div>

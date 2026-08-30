@@ -286,6 +286,11 @@ export default function PracticeReview({
                       <img
                         src={`${imageBase}${q.image_url.replace(/^\//, '')}`}
                         alt="Road sign"
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = 'none';
+                        }}
                         className="max-h-40 max-w-full rounded-lg border border-stone-200 object-contain"
                       />
                     </div>

@@ -1,5 +1,5 @@
 // Provisoire Service Worker — bump CACHE_VERSION on deploy to bust caches
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v6';
 const SHELL_CACHE = `provisoire-shell-${CACHE_VERSION}`;
 const DATA_CACHE = `provisoire-data-${CACHE_VERSION}`;
 const IMAGE_CACHE = `provisoire-images-${CACHE_VERSION}`;
@@ -32,7 +32,7 @@ const SHELL_ASSETS = [
   '/icons/icon.svg',
 ];
 
-// Question text + search indexes (precached on install; images are opt-in)
+// Question text + search indexes (precached on install)
 const DATA_ASSETS = [
   '/data/questions.json',
   '/q-index/en',
@@ -42,6 +42,56 @@ const DATA_ASSETS = [
   '/fr/search-index.json',
   '/rw/search-index.json',
 ];
+
+/**
+ * Scan HTML for script and stylesheet links to precache client bundles
+ */
+async function extractAndCacheSubresources(htmlText, cache) {
+  const subresourceUrls = new Set();
+
+  // Match <script ... src="..."
+  const scriptRegex = /<script\b[^>]*?\bsrc=["']([^"']+)["']/gi;
+  let match;
+  while ((match = scriptRegex.exec(htmlText)) !== null) {
+    if (
+      match[1] &&
+      !match[1].startsWith('http:') &&
+      !match[1].startsWith('https:') &&
+      !match[1].startsWith('//')
+    ) {
+      subresourceUrls.add(match[1]);
+    }
+  }
+
+  // Match <link ... href="..." (CSS, modulepreload)
+  const linkRegex = /<link\b[^>]*?\bhref=["']([^"']+)["']/gi;
+  while ((match = linkRegex.exec(htmlText)) !== null) {
+    if (
+      match[1] &&
+      (match[1].endsWith('.css') ||
+        match[1].includes('/_astro/') ||
+        match[1].includes('modulepreload'))
+    ) {
+      subresourceUrls.add(match[1]);
+    }
+  }
+
+  await Promise.allSettled(
+    Array.from(subresourceUrls).map(async (subUrl) => {
+      const url = subUrl.startsWith('/') ? subUrl : `/${subUrl}`;
+      try {
+        const existing = await cache.match(url);
+        if (existing) return;
+        const res = await fetch(url);
+        if (res && (res.ok || res.type === 'opaque')) {
+          await cache.put(url, res);
+        }
+      } catch {
+        // Silently catch offline errors
+      }
+    }),
+  );
+}
 
 async function cacheUrls(cacheName, urls) {
   const cache = await caches.open(cacheName);
@@ -56,13 +106,72 @@ async function cacheUrls(cacheName, urls) {
           if (response.redirected) {
             await cache.put(response.url, response.clone());
           }
-          await cache.put(url, response);
+          await cache.put(url, response.clone());
+
+          // If HTML page, extract and cache its script/CSS sub-resources
+          const contentType = response.headers.get('content-type') || '';
+          if (contentType.includes('text/html')) {
+            try {
+              const htmlText = await response.text();
+              await extractAndCacheSubresources(htmlText, cache);
+            } catch {
+              // ignore
+            }
+          }
         }
       } catch {
         // Silently catch in case browser is offline during install
       }
     }),
   );
+}
+
+/**
+ * Automatically background-cache all road sign images in questions.json on first visit
+ */
+async function precacheAllImagesInBackground() {
+  try {
+    const dataCache = await caches.open(DATA_CACHE);
+    let questionsResp = await dataCache.match('/data/questions.json');
+    if (!questionsResp) {
+      questionsResp = await fetch('/data/questions.json');
+      if (questionsResp && questionsResp.ok) {
+        await dataCache.put('/data/questions.json', questionsResp.clone());
+      }
+    }
+    if (questionsResp && questionsResp.ok) {
+      const data = await questionsResp.json();
+      if (data && Array.isArray(data.questions)) {
+        const imageCache = await caches.open(IMAGE_CACHE);
+        const images = Array.from(
+          new Set(
+            data.questions
+              .map((q) => q.image_url)
+              .filter((url) => Boolean(url)),
+          ),
+        );
+
+        // Download in background batches of 6 to avoid throttling
+        const batchSize = 6;
+        for (let i = 0; i < images.length; i += batchSize) {
+          const batch = images.slice(i, i + batchSize);
+          await Promise.allSettled(
+            batch.map(async (imgUrl) => {
+              const normalized = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
+              const exists = await imageCache.match(normalized);
+              if (exists) return;
+              const res = await fetch(normalized);
+              if (res && res.ok) {
+                await imageCache.put(normalized, res);
+              }
+            }),
+          );
+        }
+      }
+    }
+  } catch {
+    // Non-fatal background task
+  }
 }
 
 // 1. Install: precache shell + question data immediately
@@ -76,7 +185,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. Activate: delete outdated caches
+// 2. Activate: delete outdated caches and start background image caching
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
@@ -90,6 +199,8 @@ self.addEventListener('activate', (event) => {
         }),
       );
       await self.clients.claim();
+      // Start background road sign image caching
+      precacheAllImagesInBackground();
     })(),
   );
 });

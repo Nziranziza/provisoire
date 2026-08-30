@@ -109,6 +109,7 @@ export function registerServiceWorker(): void {
         if (typeof window === 'undefined') return;
         const urls = [
           window.location.pathname,
+          '/',
           '/en/practice',
           '/fr/practice',
           '/rw/practice',
@@ -120,6 +121,7 @@ export function registerServiceWorker(): void {
           '/rw/questions',
           '/data/questions.json',
           '/manifest.webmanifest',
+          '/manifest.json',
           '/favicon.ico',
           '/favicon.svg',
         ];
