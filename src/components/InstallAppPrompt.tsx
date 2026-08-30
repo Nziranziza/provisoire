@@ -83,10 +83,10 @@ export default function InstallAppPrompt({
     const outcome = await promptInstall();
     if (outcome === 'accepted') {
       setInstallable(false);
+      window.dispatchEvent(new CustomEvent('pwa-installed'));
       if (onInstalled) onInstalled();
-    } else {
-      setDismissed(true);
-      dismissInstallPrompt();
+    } else if (outcome === 'unavailable') {
+      window.dispatchEvent(new CustomEvent('pwa-install-instruction'));
     }
   };
 

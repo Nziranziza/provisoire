@@ -52,8 +52,9 @@ const label = labels[lang] || labels.en;
       const outcome = await promptInstall();
       if (outcome === 'accepted') {
         buttons.forEach((b) => b.classList.add('hidden'));
+        window.dispatchEvent(new CustomEvent('pwa-installed'));
       } else if (outcome === 'unavailable') {
-        window.dispatchEvent(new CustomEvent('pwa-open-install-guide'));
+        window.dispatchEvent(new CustomEvent('pwa-install-instruction'));
       }
     });
   });

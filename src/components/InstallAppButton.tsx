@@ -58,9 +58,10 @@ export default function InstallAppButton({
       const outcome = await promptInstall();
       if (outcome === 'accepted') {
         setInstalled(true);
-        setTimeout(() => setVisible(false), 2000);
+        window.dispatchEvent(new CustomEvent('pwa-installed'));
+        setTimeout(() => setVisible(false), 3000);
       } else if (outcome === 'unavailable') {
-        window.dispatchEvent(new CustomEvent('pwa-open-install-guide'));
+        window.dispatchEvent(new CustomEvent('pwa-install-instruction'));
       }
     } finally {
       setLoading(false);

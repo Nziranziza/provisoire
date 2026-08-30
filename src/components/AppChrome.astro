@@ -50,102 +50,44 @@ const tSw = swCopy[lang] || swCopy.en;
   </button>
 </aside>
 
-<!-- App Installed Toast -->
+<!-- App Installed Toast (When Installation Actually Completes) -->
 <aside
   id="pwa-installed-toast"
   role="status"
-  class="fixed top-4 right-4 left-4 z-[95] mx-auto hidden max-w-md items-center gap-3 rounded-2xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-xs font-bold text-emerald-900 shadow-xl sm:right-6 sm:left-auto"
+  aria-live="polite"
+  class="fixed top-4 right-4 left-4 z-[99] mx-auto hidden max-w-md items-center gap-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/98 p-4 text-xs font-bold text-emerald-950 shadow-2xl backdrop-blur-md transition-all duration-300 sm:right-6 sm:left-auto"
 >
-  <span class="text-base">🎉</span>
-  <p class="flex-1 leading-snug">
-    Provisoire is saved & ready for offline practice!
-  </p>
+  <span class="text-3xl">🎉</span>
+  <div class="flex-1">
+    <p class="text-sm leading-tight font-extrabold text-emerald-900">
+      App Installed Successfully!
+    </p>
+    <p class="mt-1 text-xs leading-snug font-medium text-emerald-800">
+      Provisoire icon is now on your device home screen / desktop and ready for
+      offline practice.
+    </p>
+  </div>
 </aside>
 
-<!-- Interactive Install Sheet Modal -->
-<div
-  id="pwa-install-modal"
-  class="fixed inset-0 z-[100] hidden items-end justify-center bg-slate-900/60 p-4 backdrop-blur-xs sm:items-center"
-  role="dialog"
-  aria-modal="true"
+<!-- Browser Direct Action Toast (When Browser Requires Address Bar or Menu Action) -->
+<aside
+  id="pwa-instruction-toast"
+  role="status"
+  aria-live="polite"
+  class="fixed top-4 right-4 left-4 z-[99] mx-auto hidden max-w-md items-center gap-3.5 rounded-2xl border-2 border-blue-600 bg-blue-50/98 p-4 text-xs font-bold text-blue-950 shadow-2xl backdrop-blur-md transition-all duration-300 sm:right-6 sm:left-auto"
 >
-  <div
-    class="w-full max-w-md rounded-2xl border-2 border-slate-900 bg-white p-5 shadow-2xl sm:p-6"
-  >
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <span class="text-2xl">🚗</span>
-        <h2 class="text-base font-extrabold text-slate-900 sm:text-lg">
-          {guide.title}
-        </h2>
-      </div>
-      <button
-        type="button"
-        id="pwa-install-modal-close"
-        class="flex h-8 w-8 items-center justify-center rounded-full bg-stone-100 text-slate-600 hover:bg-stone-200"
-        aria-label="Close"
-      >
-        ✕
-      </button>
-    </div>
-    <p class="mt-2 text-xs leading-relaxed text-slate-600 sm:text-sm">
-      {guide.subtitle}
+  <span class="text-3xl">📲</span>
+  <div class="flex-1">
+    <p class="text-sm leading-tight font-extrabold text-blue-900">
+      Complete Installation in Browser
     </p>
-
-    <div class="mt-4 space-y-3">
-      <div class="rounded-xl border border-slate-200 bg-slate-50 p-3.5">
-        <h3 class="text-xs font-extrabold text-slate-900 uppercase">
-          {guide.phoneTitle}
-        </h3>
-        <ul class="mt-1.5 space-y-1 text-xs text-slate-700 sm:text-sm">
-          {guide.phoneSteps.map((step) => <li>{step}</li>)}
-        </ul>
-      </div>
-      <div class="rounded-xl border border-slate-200 bg-slate-50 p-3.5">
-        <h3 class="text-xs font-extrabold text-slate-900 uppercase">
-          {guide.laptopTitle}
-        </h3>
-        <ul class="mt-1.5 space-y-1 text-xs text-slate-700 sm:text-sm">
-          {guide.laptopSteps.map((step) => <li>{step}</li>)}
-        </ul>
-      </div>
-    </div>
-
-    <!-- Feedback container if browser requires menu action -->
-    <div
-      id="pwa-modal-feedback"
-      class="mt-3 hidden rounded-xl border-2 border-blue-600 bg-blue-50 p-3.5 text-xs text-blue-950"
-    >
-      <p class="font-extrabold text-blue-900">
-        👉 To complete installation on your browser:
-      </p>
-      <p class="mt-1 leading-relaxed font-medium text-slate-700">
-        Click the <strong>Install icon (⊕ / 🖵)</strong> in your address bar at the
-        top, or open the browser menu <strong
-          >(⋮) → "Save and share" → "Install Provisoire..."</strong
-        > (on Android: tap <strong>menu (⋮) → "Install app"</strong>).
-      </p>
-    </div>
-
-    <div class="mt-5 flex gap-2">
-      <button
-        type="button"
-        id="pwa-modal-try-install"
-        class="flex min-h-[44px] flex-1 cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-full bg-blue-700 text-sm font-bold text-white transition hover:bg-blue-800 active:scale-95"
-      >
-        <span>📲</span>
-        <span>Try Direct Install</span>
-      </button>
-      <button
-        type="button"
-        id="pwa-install-modal-ok"
-        class="flex min-h-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-full border border-slate-300 bg-white px-5 text-sm font-bold text-slate-700 hover:bg-stone-100"
-      >
-        {guide.close}
-      </button>
-    </div>
+    <p class="mt-1 text-xs leading-snug font-medium text-blue-800">
+      Click the <strong>Install icon (⊕)</strong> in the top address bar, or tap <strong
+        >Menu (⋮) → "Install app"</strong
+      > to add the icon to your home screen.
+    </p>
   </div>
-</div>
+</aside>
 
 <script>
   import {
@@ -154,7 +96,6 @@ const tSw = swCopy[lang] || swCopy.en;
     isSwUpdateReady,
     subscribeSwUpdate,
     activateSwUpdate,
-    promptInstall,
   } from '../lib/pwa';
 
   const indicator = document.getElementById('pwa-offline-indicator');
@@ -163,70 +104,34 @@ const tSw = swCopy[lang] || swCopy.en;
   const swBanner = document.getElementById('pwa-sw-banner');
   const swUpdateBtn = document.getElementById('pwa-sw-update-btn');
   const installedToast = document.getElementById('pwa-installed-toast');
-  const installModal = document.getElementById('pwa-install-modal');
-  const modalCloseBtn = document.getElementById('pwa-install-modal-close');
-  const modalOkBtn = document.getElementById('pwa-install-modal-ok');
-  const modalTryInstall = document.getElementById('pwa-modal-try-install');
-  const modalFeedback = document.getElementById('pwa-modal-feedback');
+  const instructionToast = document.getElementById('pwa-instruction-toast');
 
-  function openModal() {
-    if (!installModal) return;
-    if (modalFeedback) modalFeedback.classList.add('hidden');
-    installModal.classList.remove('hidden');
-    installModal.classList.add('flex');
-  }
-
-  function closeModal() {
-    if (!installModal) return;
-    if (modalFeedback) modalFeedback.classList.add('hidden');
-    installModal.classList.add('hidden');
-    installModal.classList.remove('flex');
-  }
-
-  modalCloseBtn?.addEventListener('click', closeModal);
-  modalOkBtn?.addEventListener('click', closeModal);
-  installModal?.addEventListener('click', (e) => {
-    if (e.target === installModal) closeModal();
-  });
-
-  window.addEventListener('pwa-open-install-guide', openModal);
-
-  modalTryInstall?.addEventListener('click', async () => {
-    if (!modalTryInstall) return;
-    modalTryInstall.setAttribute('disabled', 'true');
-    const originalText = modalTryInstall.innerHTML;
-    modalTryInstall.innerHTML =
-      '<span>⏳</span><span>Opening installer...</span>';
-
-    try {
-      const outcome = await promptInstall();
-      if (outcome === 'accepted') {
-        closeModal();
-      } else if (outcome === 'dismissed') {
-        modalTryInstall.removeAttribute('disabled');
-        modalTryInstall.innerHTML = originalText;
-      } else {
-        // Direct browser prompt couldn't trigger automatically
-        modalTryInstall.removeAttribute('disabled');
-        modalTryInstall.innerHTML = originalText;
-        if (modalFeedback) {
-          modalFeedback.classList.remove('hidden');
-        }
-      }
-    } catch {
-      modalTryInstall.removeAttribute('disabled');
-      modalTryInstall.innerHTML = originalText;
+  let instructionTimeout: ReturnType<typeof setTimeout> | null = null;
+  window.addEventListener('pwa-install-instruction', () => {
+    if (instructionToast) {
+      if (installedToast) installedToast.classList.add('hidden');
+      instructionToast.classList.remove('hidden');
+      instructionToast.classList.add('flex');
+      if (instructionTimeout) clearTimeout(instructionTimeout);
+      instructionTimeout = setTimeout(() => {
+        instructionToast.classList.add('hidden');
+        instructionToast.classList.remove('flex');
+      }, 6000);
     }
   });
 
   window.addEventListener('pwa-installed', () => {
+    if (instructionToast) {
+      instructionToast.classList.add('hidden');
+      instructionToast.classList.remove('flex');
+    }
     if (installedToast) {
       installedToast.classList.remove('hidden');
       installedToast.classList.add('flex');
       setTimeout(() => {
         installedToast.classList.add('hidden');
         installedToast.classList.remove('flex');
-      }, 4000);
+      }, 5000);
     }
   });
 
