@@ -4,6 +4,7 @@ import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
 import { PASSING_SCORE } from './constants';
 import { clearSessionFromStorage } from './storage';
+import InstallAppPrompt from '../InstallAppPrompt';
 
 interface PracticeReviewProps {
   state: PracticeState;
@@ -174,6 +175,9 @@ export default function PracticeReview({
         </div>
       </div>
 
+      {/* Sensible Add to Home Screen Prompt after completed session */}
+      <InstallAppPrompt lang={state.currentLocale} />
+
       {/* Detailed Question Review List */}
       <div className="rounded-3xl border border-stone-200 bg-stone-50 p-4 sm:p-7">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -282,6 +286,11 @@ export default function PracticeReview({
                       <img
                         src={`${imageBase}${q.image_url.replace(/^\//, '')}`}
                         alt="Road sign"
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = 'none';
+                        }}
                         className="max-h-40 max-w-full rounded-lg border border-stone-200 object-contain"
                       />
                     </div>

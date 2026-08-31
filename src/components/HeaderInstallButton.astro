@@ -1,0 +1,67 @@
+---
+import type { Lang } from '../lib/quiz';
+
+interface Props {
+  lang?: Lang;
+  compact?: boolean;
+}
+
+const { lang = 'en', compact = false } = Astro.props;
+
+const labels: Record<Lang, { full: string; short: string }> = {
+  en: { full: 'Install App', short: 'Install' },
+  fr: { full: 'Installer l’app', short: 'Installer' },
+  rw: { full: 'Shyiramo App', short: 'Shyiramo' },
+};
+
+const label = labels[lang] || labels.en;
+---
+
+<button
+  type="button"
+  class="header-install-btn hidden inline-flex min-h-[40px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3.5 py-2 text-[11px] font-bold whitespace-nowrap text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px] sm:text-xs"
+  title={label.full}
+  aria-label={label.full}
+>
+  <span aria-hidden="true">📲</span>
+  <span>{compact ? label.short : label.full}</span>
+</button>
+
+<script>
+  import { initPwaClient, promptInstall, isStandalone } from '../lib/pwa';
+
+  initPwaClient();
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    '.header-install-btn',
+  );
+
+  function updateVisibility() {
+    const shouldShow = !isStandalone();
+    buttons.forEach((btn) => {
+      if (shouldShow) {
+        btn.classList.remove('hidden');
+      } else {
+        btn.classList.add('hidden');
+      }
+    });
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const outcome = await promptInstall();
+      if (outcome === 'accepted') {
+        buttons.forEach((b) => b.classList.add('hidden'));
+        window.dispatchEvent(new CustomEvent('pwa-installed'));
+      } else if (outcome === 'unavailable') {
+        window.dispatchEvent(new CustomEvent('pwa-install-instruction'));
+      }
+    });
+  });
+
+  updateVisibility();
+  window.addEventListener('pwa-installable', updateVisibility);
+  window.addEventListener('pwa-installed', () => {
+    buttons.forEach((btn) => btn.classList.add('hidden'));
+  });
+</script>

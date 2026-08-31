@@ -21,4 +21,13 @@ export default defineConfig(
       globals: globals.node,
     },
   },
+  {
+    files: ['public/sw.js', '**/sw.js'],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+        ...globals.builtin,
+      },
+    },
+  },
 );

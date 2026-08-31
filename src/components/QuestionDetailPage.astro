@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import QuestionCard from './quiz/QuestionCard.astro';
+import HeaderInstallButton from './HeaderInstallButton.astro';
 import type { Lang, Question } from '../lib/quiz';
 import {
   LOCALES,
@@ -119,6 +120,7 @@ const jsonLd = [
           ← {labels.back}
         </a>
         <div class="flex items-center gap-2" role="group" aria-label="Language">
+          <HeaderInstallButton lang={lang} />
           {
             LOCALES.map((code) => {
               const active = lang === code;
