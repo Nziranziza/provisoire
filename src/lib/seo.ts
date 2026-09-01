@@ -1,12 +1,15 @@
 import type { Lang, Question } from './quiz';
 import {
+  ANSWER_LABEL,
   LOCALES,
   PAGE_SIZE,
-  questionHref,
-  questionsListHref,
-  questionText,
   correctAnswerText,
   imageSrc,
+  questionExplanation,
+  questionHref,
+  questionOptions,
+  questionsListHref,
+  questionText,
   totalQuestionPages,
 } from './quiz';
 
@@ -68,7 +71,7 @@ export function ogLocale(lang: Lang): string {
   return 'en_US';
 }
 
-export function listJsonLd(options: {
+export interface ListJsonLdOptions {
   lang: Lang;
   page: number;
   totalPages: number;
@@ -78,7 +81,9 @@ export function listJsonLd(options: {
   categoryId?: number | null;
   /** Global 1-based question numbers (bank order). Defaults to startIndex + i + 1. */
   questionNumbers?: number[];
-}) {
+}
+
+export function listJsonLd(options: ListJsonLdOptions) {
   const {
     lang,
     page,
@@ -93,7 +98,7 @@ export function listJsonLd(options: {
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
+    '@type': 'CollectionPage' as const,
     name:
       page > 1
         ? `Rwanda provisional driving-test question bank — page ${page}`
@@ -101,17 +106,17 @@ export function listJsonLd(options: {
     inLanguage: lang,
     url: pageUrl,
     isPartOf: {
-      '@type': 'WebSite',
+      '@type': 'WebSite' as const,
       name: 'Provisoire',
       url: absoluteUrl('/', site),
     },
     mainEntity: {
-      '@type': 'ItemList',
+      '@type': 'ItemList' as const,
       numberOfItems: questions.length,
       itemListElement: questions.map((q, i) => {
         const number = questionNumbers?.[i] ?? startIndex + i + 1;
         return {
-          '@type': 'ListItem',
+          '@type': 'ListItem' as const,
           position: i + 1,
           url: absoluteUrl(questionHref(lang, number), site),
           name: truncateMeta(questionText(q, lang), 110),
@@ -122,49 +127,171 @@ export function listJsonLd(options: {
   };
 }
 
-export function questionJsonLd(options: {
+export interface QuizJsonLdOptions {
   lang: Lang;
   question: Question;
   number: number;
   site: string | URL | undefined;
   imageBase?: string;
-}) {
+}
+
+export function questionJsonLd(options: QuizJsonLdOptions) {
   const { lang, question, number, site, imageBase = '/' } = options;
   const url = absoluteUrl(questionHref(lang, number), site);
   const text = questionText(question, lang);
   const answer = correctAnswerText(question, lang);
+  const explanation = questionExplanation(question, lang);
+  const optionsList = questionOptions(question, lang);
   const img = question.image_url
     ? absoluteUrl(imageSrc(imageBase, question.image_url), site)
     : undefined;
 
+  const suggestedAnswers = optionsList
+    .map((optText, idx) => ({ optText, idx }))
+    .filter(({ idx }) => idx !== question.correct_index)
+    .map(({ optText, idx }) => ({
+      '@type': 'Answer' as const,
+      text: optText,
+      inLanguage: lang,
+      position: idx + 1,
+    }));
+
   return {
     '@context': 'https://schema.org',
-    '@type': 'QAPage',
-    mainEntity: {
-      '@type': 'Question',
-      name: truncateMeta(text, 110),
-      text,
-      inLanguage: lang,
-      url,
-      ...(img ? { image: img } : {}),
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: answer,
+    '@type': 'Quiz' as const,
+    name: truncateMeta(text, 110),
+    description: truncateMeta(
+      `${text} ${ANSWER_LABEL[lang] ?? 'Correct answer:'} ${answer}`,
+      155,
+    ),
+    inLanguage: lang,
+    url,
+    ...(img ? { image: img } : {}),
+    hasPart: [
+      {
+        '@type': 'Question' as const,
+        name: truncateMeta(text, 110),
+        text,
         inLanguage: lang,
+        eduQuestionType: 'Multiple choice',
+        ...(img ? { image: img } : {}),
+        acceptedAnswer: {
+          '@type': 'Answer' as const,
+          text: answer,
+          inLanguage: lang,
+          position: question.correct_index + 1,
+          ...(explanation
+            ? {
+                comment: {
+                  '@type': 'Comment' as const,
+                  text: explanation,
+                },
+              }
+            : {}),
+        },
+        suggestedAnswer: suggestedAnswers,
       },
-    },
+    ],
   };
 }
 
+export interface CategoryFaqJsonLdOptions {
+  lang: Lang;
+  questions: Question[];
+  categoryName?: string;
+  site: string | URL | undefined;
+}
+
+export function categoryFaqJsonLd(options: CategoryFaqJsonLdOptions) {
+  const { lang, questions } = options;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage' as const,
+    inLanguage: lang,
+    mainEntity: questions.map((q) => {
+      const qText = questionText(q, lang);
+      const answer = correctAnswerText(q, lang);
+      const explanation = questionExplanation(q, lang);
+      return {
+        '@type': 'Question' as const,
+        name: qText,
+        inLanguage: lang,
+        acceptedAnswer: {
+          '@type': 'Answer' as const,
+          text: answer,
+          inLanguage: lang,
+          ...(explanation
+            ? {
+                comment: {
+                  '@type': 'Comment' as const,
+                  text: explanation,
+                },
+              }
+            : {}),
+        },
+      };
+    }),
+  };
+}
+
+export interface WebSiteJsonLdOptions {
+  site: string | URL | undefined;
+  name?: string;
+  description?: string;
+  inLanguage?: string | string[];
+}
+
+export function webSiteJsonLd(options?: WebSiteJsonLdOptions) {
+  const site = options?.site;
+  const siteUrl = absoluteUrl('/', site);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite' as const,
+    name: options?.name ?? 'Provisoire',
+    url: siteUrl,
+    description:
+      options?.description ??
+      'Rwanda provisional driving test question bank, practice quizzes, and timed mock exam simulator in English, French, and Kinyarwanda.',
+    inLanguage: options?.inLanguage ?? ['en', 'fr', 'rw'],
+  };
+}
+
+export interface OrganizationJsonLdOptions {
+  site: string | URL | undefined;
+  name?: string;
+  logoPath?: string;
+}
+
+export function organizationJsonLd(options?: OrganizationJsonLdOptions) {
+  const site = options?.site;
+  const siteUrl = absoluteUrl('/', site);
+  const logo = absoluteUrl(
+    options?.logoPath ?? '/icons/icon-192x192.png',
+    site,
+  );
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization' as const,
+    name: options?.name ?? 'Provisoire',
+    url: siteUrl,
+    logo,
+  };
+}
+
+export interface BreadcrumbItem {
+  name: string;
+  path: string;
+}
+
 export function breadcrumbJsonLd(
-  items: { name: string; path: string }[],
+  items: BreadcrumbItem[],
   site: string | URL | undefined,
 ) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    '@type': 'BreadcrumbList' as const,
     itemListElement: items.map((item, i) => ({
-      '@type': 'ListItem',
+      '@type': 'ListItem' as const,
       position: i + 1,
       name: item.name,
       item: absoluteUrl(item.path, site),

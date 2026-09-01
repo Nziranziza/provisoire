@@ -71,6 +71,12 @@ export const ANSWER_LABEL: Record<Lang, string> = {
   rw: 'Igisubizo cy’ukuri:',
 };
 
+export const EXPLANATION_LABEL: Record<Lang, string> = {
+  en: 'Explanation',
+  fr: 'Explication',
+  rw: 'Ibisobanuro',
+};
+
 export const LOCALES: Lang[] = ['en', 'fr', 'rw'];
 
 export function isLang(value: string | undefined): value is Lang {

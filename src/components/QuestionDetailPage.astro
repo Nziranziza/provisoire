@@ -44,6 +44,7 @@ const copy: Record<
     pageTitle: string;
     home: string;
     list: string;
+    item: string;
   }
 > = {
   en: {
@@ -53,6 +54,7 @@ const copy: Record<
     pageTitle: `Question ${number}: ${truncateMeta(titleText, 60)} — Provisoire`,
     home: 'Provisoire',
     list: 'Questions',
+    item: 'Question',
   },
   fr: {
     back: 'Retour à toutes les questions',
@@ -61,6 +63,7 @@ const copy: Record<
     pageTitle: `Question ${number} : ${truncateMeta(titleText, 60)} — Provisoire`,
     home: 'Provisoire',
     list: 'Questions',
+    item: 'Question',
   },
   rw: {
     back: 'Subira ku bibazo byose',
@@ -69,6 +72,7 @@ const copy: Record<
     pageTitle: `Ikibazo ${number}: ${truncateMeta(titleText, 60)} — Provisoire`,
     home: 'Provisoire',
     list: 'Ibibazo',
+    item: 'Ikibazo',
   },
 };
 
@@ -92,7 +96,7 @@ const jsonLd = [
     [
       { name: labels.home, path: '/' },
       { name: labels.list, path: questionsListHref(lang) },
-      { name: `${labels.list} ${number}`, path: canonical },
+      { name: `${labels.item} ${number}`, path: canonical },
     ],
     Astro.site,
   ),

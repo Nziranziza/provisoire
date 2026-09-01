@@ -12,18 +12,22 @@ import {
 import questionBank from '../../questions.json';
 import {
   breadcrumbJsonLd,
+  categoryFaqJsonLd,
   listJsonLd,
   listPageAlternates,
+  organizationJsonLd,
   truncateMeta,
+  webSiteJsonLd,
 } from '../lib/seo';
 
 interface Props {
   lang: Lang;
   page?: number;
   categoryId?: number;
+  isHome?: boolean;
 }
 
-const { lang, page: pageProp, categoryId } = Astro.props;
+const { lang, page: pageProp, categoryId, isHome = false } = Astro.props;
 
 const category = categoryId
   ? questionBank.categories.find((c) => c.id === categoryId)
@@ -92,7 +96,25 @@ const questionNumbers = pageQuestions.map(
   (q) => globalQuestionIndex(bankQuestions, q) + 1,
 );
 
-const jsonLd = [
+const jsonLd: Record<string, unknown>[] = [];
+
+if (isHome) {
+  jsonLd.push(webSiteJsonLd({ site: Astro.site }));
+  jsonLd.push(organizationJsonLd({ site: Astro.site }));
+}
+
+if (category) {
+  jsonLd.push(
+    categoryFaqJsonLd({
+      lang,
+      questions: pageQuestions,
+      categoryName: category.name,
+      site: Astro.site,
+    }),
+  );
+}
+
+jsonLd.push(
   listJsonLd({
     lang,
     page,
@@ -103,8 +125,11 @@ const jsonLd = [
     categoryId,
     questionNumbers,
   }),
-  breadcrumbJsonLd(
-    [
+);
+
+const breadcrumbItems = isHome
+  ? [{ name: 'Provisoire', path: '/' }]
+  : [
       { name: 'Provisoire', path: '/' },
       { name: 'Questions', path: questionsListHref(lang, 1) },
       ...(category
@@ -123,10 +148,9 @@ const jsonLd = [
             },
           ]
         : []),
-    ],
-    Astro.site,
-  ),
-];
+    ];
+
+jsonLd.push(breadcrumbJsonLd(breadcrumbItems, Astro.site));
 ---
 
 <BaseLayout
