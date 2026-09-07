@@ -138,20 +138,6 @@ export function questionsListHref(
   return `/${lang}/questions/page/${page}`;
 }
 
-/** Slice the full bank for a page, then optionally keep one category. */
-export function pageQuestionsFor(
-  questions: Question[],
-  page: number,
-  categoryId?: number | null,
-  pageSize = PAGE_SIZE,
-): Question[] {
-  const safePage = Math.max(1, page);
-  const start = (safePage - 1) * pageSize;
-  const slice = questions.slice(start, start + pageSize);
-  if (!categoryId) return slice;
-  return slice.filter((q) => q.category_id === categoryId);
-}
-
 export function totalQuestionPages(
   questionCount: number,
   pageSize = PAGE_SIZE,

@@ -25,37 +25,6 @@ const categoryPageCounts = Object.fromEntries(
   }),
 );
 
-/**
- * @param {string} basePath
- * @param {number} questionCount
- * @param {number} [fromPage=2]
- */
-function pageUrlsForCount(basePath, questionCount, fromPage = 2) {
-  const total = Math.max(1, Math.ceil(questionCount / PAGE_SIZE));
-  return Array.from({ length: Math.max(0, total - fromPage + 1) }, (_, i) => {
-    const page = fromPage + i;
-    return `${SITE}${basePath}/page/${page}`;
-  });
-}
-
-/** Extra list pagination URLs so crawlers discover them. */
-const listPageUrls = locales.flatMap((lang) => {
-  const all = pageUrlsForCount(
-    `/${lang}/questions`,
-    questionBank.questions.length,
-    2,
-  );
-  const byCategory = Object.entries(categoryPageCounts).flatMap(
-    ([slug, totalPages]) =>
-      pageUrlsForCount(
-        `/${lang}/questions/category/${slug}`,
-        totalPages * PAGE_SIZE,
-        2,
-      ),
-  );
-  return [...all, ...byCategory];
-});
-
 /** Page 1 redirects → canonical root URLs (page 1 has no /page/1 route). */
 const pageOneRedirects = Object.fromEntries(
   locales.flatMap((lang) => [
@@ -135,7 +104,6 @@ export default defineConfig({
 
         return !isClientOnlyRoute && !isApiEndpoint;
       },
-      customPages: listPageUrls,
     }),
   ],
 

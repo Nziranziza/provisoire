@@ -22,9 +22,6 @@ export function getStaticPaths() {
 
 const categoryId = categoryIdFromSlug(Astro.params.category ?? '')!;
 const page = Number(Astro.params.page);
-if (page <= 1) {
-  return Astro.redirect(`/fr/questions/category/${Astro.params.category}`, 301);
-}
 ---
 
 <QuestionsPage lang="fr" page={page} categoryId={categoryId} />
