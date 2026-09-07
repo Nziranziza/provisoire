@@ -1,11 +1,12 @@
 ---
 import type { Lang } from '../../lib/quiz';
-import { ANSWER_LABEL } from '../../lib/quiz';
+import { ANSWER_LABEL, EXPLANATION_LABEL } from '../../lib/quiz';
 
 interface Props {
   title: string;
   answer: string;
   answerLetter: string;
+  explanation?: string;
   imageUrl: string | null;
   imageSrc: string;
   lang: Lang;
@@ -15,6 +16,7 @@ const {
   title,
   answer,
   answerLetter,
+  explanation,
   imageUrl,
   imageSrc: src,
   lang,
@@ -63,4 +65,17 @@ const {
       <span data-answer-text>{answerLetter}. {answer}</span>
     </p>
   </div>
+
+  {
+    explanation && (
+      <div class="border-t border-emerald-200 px-4 py-3">
+        <p class="text-sm leading-relaxed text-slate-700">
+          <span class="font-bold text-slate-900">
+            {EXPLANATION_LABEL[lang]}:
+          </span>{' '}
+          <span data-answer-explanation>{explanation}</span>
+        </p>
+      </div>
+    )
+  }
 </div>
