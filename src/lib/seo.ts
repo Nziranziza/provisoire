@@ -3,6 +3,7 @@ import {
   ANSWER_LABEL,
   LOCALES,
   PAGE_SIZE,
+  categoryHubHref,
   correctAnswerText,
   imageSrc,
   questionExplanation,
@@ -63,6 +64,13 @@ export function questionPageAlternates(
   site: string | URL | undefined,
 ) {
   return hreflangAlternates((lang) => questionHref(lang, number), site);
+}
+
+export function categoryHubAlternates(
+  slugOrId: string | number,
+  site: string | URL | undefined,
+) {
+  return hreflangAlternates((lang) => categoryHubHref(lang, slugOrId), site);
 }
 
 export function ogLocale(lang: Lang): string {

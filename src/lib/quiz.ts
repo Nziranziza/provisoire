@@ -109,6 +109,17 @@ export function categoryIdFromSlug(slug: string): number | undefined {
 }
 
 /**
+ * Category Hub URL:
+ * - /[lang]/traffic-rules
+ * - /[lang]/road-signs
+ */
+export function categoryHubHref(lang: Lang, slugOrId: string | number): string {
+  const slug =
+    typeof slugOrId === 'number' ? CATEGORY_SLUGS[slugOrId] : slugOrId;
+  return `/${lang}/${slug}`;
+}
+
+/**
  * List URL:
  * - all: /[lang]/questions[/page/N]
  * - category: /[lang]/questions/category/[slug][/page/N]
