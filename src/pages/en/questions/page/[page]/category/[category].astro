@@ -1,10 +1,10 @@
 ---
-import CategoryHubPage from '../../../../components/CategoryHubPage.astro';
-import { CATEGORY_SLUGS } from '../../../../lib/quiz';
+import CategoryHubPage from '../../../../../../components/CategoryHubPage.astro';
+import { CATEGORY_SLUGS } from '../../../../../../lib/quiz';
 
 export function getStaticPaths() {
   return Object.values(CATEGORY_SLUGS).map((category) => ({
-    params: { category },
+    params: { page: '1', category },
   }));
 }
 

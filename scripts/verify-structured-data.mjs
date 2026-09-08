@@ -308,6 +308,24 @@ if (existsSync(distDir)) {
       );
     }
   }
+
+  const trafficHubPath = resolve(distDir, 'en', 'traffic-rules', 'index.html');
+  if (existsSync(trafficHubPath)) {
+    const html = readFileSync(trafficHubPath, 'utf8');
+    const items = extractJsonLd(html);
+    const faq = items.find((i) => i['@type'] === 'FAQPage');
+    const collection = items.find((i) => i['@type'] === 'CollectionPage');
+    assert.ok(faq, 'FAQPage schema must exist on traffic-rules hub');
+    assert.ok(
+      collection,
+      'CollectionPage schema must exist on traffic-rules hub',
+    );
+    assert.equal(faq.inLanguage, 'en');
+    assert.equal(collection.mainEntity.numberOfItems, 101);
+    console.log(
+      '✓ Verified live FAQPage & CollectionPage JSON-LD in dist/en/traffic-rules/index.html',
+    );
+  }
 }
 
 console.log('\n======================================================');

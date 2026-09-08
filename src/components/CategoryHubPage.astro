@@ -1,0 +1,646 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QuestionCard from './quiz/QuestionCard.astro';
+import HeaderInstallButton from './HeaderInstallButton.astro';
+import type { Lang, Question } from '../lib/quiz';
+import {
+  CATEGORY_SLUGS,
+  categoryHubHref,
+  globalQuestionIndex,
+  questionHref,
+  questionsListHref,
+  questionText,
+} from '../lib/quiz';
+import {
+  breadcrumbJsonLd,
+  categoryFaqJsonLd,
+  categoryHubAlternates,
+  organizationJsonLd,
+  truncateMeta,
+  webSiteJsonLd,
+} from '../lib/seo';
+import { getCategoryContent } from '../lib/category-content';
+import questionBank from '../../questions.json';
+
+interface Props {
+  lang: Lang;
+  categorySlug: 'traffic-rules' | 'road-signs';
+}
+
+const { lang, categorySlug } = Astro.props;
+const content = getCategoryContent(lang, categorySlug);
+const categoryId = content.categoryId;
+
+const bankQuestions = questionBank.questions as Question[];
+const categoryQuestions = bankQuestions.filter(
+  (q) => q.category_id === categoryId,
+);
+
+const canonical = categoryHubHref(lang, categorySlug);
+const alternates = categoryHubAlternates(categorySlug, Astro.site);
+
+// Curated FAQ questions for structured data & FAQ section
+const faqQuestions = content.curatedFaqQuestionIds
+  .map((id) => bankQuestions.find((q) => q.id === id))
+  .filter((q): q is Question => Boolean(q));
+
+// Fallback to first 5 questions if curated ones not found
+const activeFaqQuestions =
+  faqQuestions.length > 0 ? faqQuestions : categoryQuestions.slice(0, 5);
+
+const locales: { code: Lang; label: string }[] = [
+  { code: 'en', label: 'EN' },
+  { code: 'fr', label: 'FR' },
+  { code: 'rw', label: 'RW' },
+];
+
+const homeLabels: Record<Lang, string> = {
+  en: 'Home',
+  fr: 'Accueil',
+  rw: 'Ahabanza',
+};
+
+const bankLabels: Record<Lang, string> = {
+  en: 'All Questions',
+  fr: 'Toutes les questions',
+  rw: 'Ibibazo byose',
+};
+
+const studyGuideLabel: Record<Lang, string> = {
+  en: 'Exam Syllabus & Legal Study Guide',
+  fr: 'Programme de l’Examen & Synthèse Juridique',
+  rw: 'Incamake y’Amategeko n’Ibyo Kwiga',
+};
+
+const readGuideLabel: Record<Lang, string> = {
+  en: 'Read guide',
+  fr: 'Lire le guide',
+  rw: 'Soma ibyigwa',
+};
+
+const jumpToQuestionsLabel: Record<Lang, string> = {
+  en: 'Browse Questions',
+  fr: 'Voir les questions',
+  rw: 'Reba ibibazo',
+};
+
+const isRoadSigns = categorySlug === 'road-signs';
+
+// JSON-LD Structured Data
+const jsonLd: Record<string, unknown>[] = [
+  webSiteJsonLd({ site: Astro.site }),
+  organizationJsonLd({ site: Astro.site }),
+  categoryFaqJsonLd({
+    lang,
+    questions: activeFaqQuestions,
+    categoryName: content.categoryName,
+    site: Astro.site,
+  }),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: content.title,
+    description: content.metaDescription,
+    inLanguage: lang,
+    url: new URL(canonical, Astro.site).href,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'Provisoire',
+      url: new URL('/', Astro.site).href,
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: categoryQuestions.length,
+      itemListElement: categoryQuestions.map((q, i) => {
+        const num = globalQuestionIndex(bankQuestions, q) + 1;
+        return {
+          '@type': 'ListItem',
+          position: i + 1,
+          url: new URL(questionHref(lang, num), Astro.site).href,
+          name: truncateMeta(questionText(q, lang), 110),
+        };
+      }),
+    },
+  },
+  breadcrumbJsonLd(
+    [
+      { name: homeLabels[lang], path: '/' },
+      { name: bankLabels[lang], path: questionsListHref(lang, 1) },
+      { name: content.categoryName, path: canonical },
+    ],
+    Astro.site,
+  ),
+];
+---
+
+<BaseLayout
+  title={content.metaTitle}
+  description={content.metaDescription}
+  lang={lang}
+  canonical={canonical}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
+  <main class="min-h-screen bg-stone-100 px-4 py-6 sm:py-10">
+    <div class="mx-auto max-w-3xl">
+      <!-- Top Navigation / Chrome Bar -->
+      <nav
+        class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-3.5 shadow-2xs sm:p-4"
+        aria-label="Breadcrumb navigation"
+      >
+        <div
+          class="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 sm:text-sm"
+        >
+          <a href="/" class="text-blue-700 transition hover:underline">
+            {homeLabels[lang]}
+          </a>
+          <span class="text-stone-300">/</span>
+          <a
+            href={questionsListHref(lang, 1)}
+            class="text-blue-700 transition hover:underline"
+          >
+            {bankLabels[lang]}
+          </a>
+          <span class="text-stone-300">/</span>
+          <span class="font-bold text-slate-900">{content.categoryName}</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Practice CTA -->
+          <a
+            href={`/${lang}/practice?category=${categorySlug}`}
+            class:list={[
+              'inline-flex min-h-[40px] items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-4 py-2 leading-none font-bold whitespace-nowrap text-slate-800 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px]',
+              lang === 'fr'
+                ? 'text-[11px] tracking-normal sm:text-xs'
+                : 'text-[11px] tracking-wide sm:text-xs',
+            ]}
+          >
+            <span aria-hidden="true">💡</span>
+            {
+              lang === 'fr' ? (
+                <>
+                  <span class="sm:hidden">Pratique</span>
+                  <span class="hidden sm:inline">Entraînement</span>
+                </>
+              ) : lang === 'rw' ? (
+                'Imyitozo'
+              ) : (
+                'Practice'
+              )
+            }
+          </a>
+
+          <!-- Install App -->
+          <HeaderInstallButton lang={lang} />
+
+          <!-- Language Switcher -->
+          <div
+            class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
+            role="group"
+            aria-label="Language selector"
+          >
+            {
+              locales.map(({ code, label }) => {
+                const active = lang === code;
+                return (
+                  <a
+                    href={categoryHubHref(code, categorySlug)}
+                    hreflang={code}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
+                      active
+                        ? 'bg-blue-700 text-white'
+                        : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
+                    ]}
+                  >
+                    {label}
+                  </a>
+                );
+              })
+            }
+          </div>
+
+          <!-- Category Selector Dropdown -->
+          <select
+            class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-sm text-slate-900"
+            aria-label="Category Switcher"
+            onchange="const href = this.selectedOptions[0]?.dataset?.href; if (href) window.location.assign(href);"
+          >
+            <option value="all" data-href={questionsListHref(lang, 1)}>
+              {bankLabels[lang]} (198)
+            </option>
+            <option
+              value="traffic-rules"
+              data-href={categoryHubHref(lang, 'traffic-rules')}
+              selected={categorySlug === 'traffic-rules'}
+            >
+              {CATEGORY_SLUGS[1] === categorySlug ? '✓ ' : ''}Traffic Rules
+              (101)
+            </option>
+            <option
+              value="road-signs"
+              data-href={categoryHubHref(lang, 'road-signs')}
+              selected={categorySlug === 'road-signs'}
+            >
+              {CATEGORY_SLUGS[2] === categorySlug ? '✓ ' : ''}Road Signs (97)
+            </option>
+          </select>
+        </div>
+      </nav>
+
+      <!-- Category Hero Section -->
+      <header
+        class:list={[
+          'relative mb-4 overflow-hidden rounded-2xl border p-4 text-slate-900 shadow-2xs sm:p-5',
+          isRoadSigns
+            ? 'border-sky-300 bg-gradient-to-br from-sky-50 via-white to-blue-50/50'
+            : 'border-amber-300 bg-gradient-to-br from-amber-50 via-white to-orange-50/50',
+        ]}
+      >
+        <div class="relative z-10">
+          <div class="mb-2 flex flex-wrap items-center gap-2">
+            <span
+              class:list={[
+                'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold tracking-wide uppercase',
+                isRoadSigns
+                  ? 'bg-sky-700 text-white'
+                  : 'bg-amber-700 text-white',
+              ]}
+            >
+              <span>{isRoadSigns ? '🚦' : '⚖️'}</span>
+              <span>{content.badge}</span>
+            </span>
+
+            <span
+              class="rounded-full bg-slate-900/5 px-2 py-0.5 text-[10px] font-bold text-slate-700"
+            >
+              RNP Official Syllabus 2026
+            </span>
+          </div>
+
+          <h1
+            class="text-lg font-black tracking-tight text-slate-950 sm:text-xl"
+          >
+            {content.headline}
+          </h1>
+
+          <p class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-600">
+            {content.subheadline}
+          </p>
+
+          <!-- Key Metrics Grid -->
+          <div class="mt-3.5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div
+              class="rounded-xl border border-stone-200/80 bg-white/90 p-2.5 shadow-2xs"
+            >
+              <span
+                class="block text-[10px] font-bold tracking-wider text-slate-500 uppercase"
+              >
+                Questions
+              </span>
+              <span
+                class="mt-0.5 block text-base font-black text-slate-900 sm:text-lg"
+              >
+                {content.stats.questionCount}
+              </span>
+            </div>
+
+            <div
+              class="rounded-xl border border-stone-200/80 bg-white/90 p-2.5 shadow-2xs"
+            >
+              <span
+                class="block text-[10px] font-bold tracking-wider text-slate-500 uppercase"
+              >
+                Pass Mark
+              </span>
+              <span
+                class="mt-0.5 block text-base font-black text-emerald-700 sm:text-lg"
+              >
+                {content.stats.passRequirement}
+              </span>
+            </div>
+
+            <div
+              class="rounded-xl border border-stone-200/80 bg-white/90 p-2.5 shadow-2xs"
+            >
+              <span
+                class="block text-[10px] font-bold tracking-wider text-slate-500 uppercase"
+              >
+                Exam Weight
+              </span>
+              <span
+                class="mt-0.5 block text-base font-black text-blue-700 sm:text-lg"
+              >
+                {content.stats.examWeight}
+              </span>
+            </div>
+
+            <div
+              class="rounded-xl border border-stone-200/80 bg-white/90 p-2.5 shadow-2xs"
+            >
+              <span
+                class="block text-[10px] font-bold tracking-wider text-slate-500 uppercase"
+              >
+                Test Type
+              </span>
+              <span class="mt-0.5 block text-xs font-extrabold text-slate-800">
+                {content.stats.format}
+              </span>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="mt-3.5 flex flex-wrap items-center gap-2">
+            <a
+              href={`/${lang}/practice?category=${categorySlug}`}
+              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-xl bg-blue-700 px-4 py-1.5 text-xs font-bold text-white shadow-2xs transition hover:bg-blue-800 active:scale-95"
+            >
+              <span>⚡</span>
+              <span>{content.cta.practiceBtn}</span>
+            </a>
+
+            <a
+              href={`/${lang}/exam?category=${categorySlug}`}
+              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-xl border border-stone-300 bg-white px-4 py-1.5 text-xs font-bold text-slate-800 shadow-2xs transition hover:bg-stone-50 active:scale-95"
+            >
+              <span>⏱️</span>
+              <span>{content.cta.examBtn}</span>
+            </a>
+
+            <a
+              href="#questions-directory"
+              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-stone-100 hover:text-slate-900"
+            >
+              <span>↓</span>
+              <span
+                >{jumpToQuestionsLabel[lang]} ({categoryQuestions.length})</span
+              >
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <!-- Collapsible Study Guide / Editorial Breakdown (SEO + Learner Reference) -->
+      <details
+        class="group mb-5 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-2xs transition open:border-blue-300 open:bg-stone-50/50"
+      >
+        <summary
+          class="flex cursor-pointer items-center justify-between p-3.5 text-xs font-bold text-slate-900 select-none hover:text-blue-700 sm:text-sm"
+        >
+          <span class="flex items-center gap-2">
+            <span class="text-base">📖</span>
+            <span class="font-extrabold text-slate-950"
+              >{studyGuideLabel[lang]}</span
+            >
+            <span
+              class="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700"
+            >
+              {content.categoryName}
+            </span>
+          </span>
+          <span class="flex items-center gap-1 text-xs font-bold text-blue-700">
+            <span class="group-open:hidden">{readGuideLabel[lang]} ↓</span>
+            <span class="hidden group-open:inline">Collapse ↑</span>
+            <span
+              class="text-slate-400 transition-transform duration-200 group-open:rotate-180"
+              >▾</span
+            >
+          </span>
+        </summary>
+
+        <div class="border-t border-stone-200 bg-white p-4 sm:p-6">
+          <p
+            class="text-xs leading-relaxed font-medium text-slate-700 sm:text-sm"
+          >
+            {content.editorial.lead}
+          </p>
+
+          <div class="mt-4 flex flex-col gap-4">
+            {
+              content.editorial.sections.map((sec) => (
+                <section class="rounded-xl border border-stone-100 bg-stone-50/80 p-4 sm:p-5">
+                  <div class="flex items-center gap-2">
+                    {sec.icon && <span class="text-lg">{sec.icon}</span>}
+                    <h3 class="text-sm font-black text-slate-950 sm:text-base">
+                      {sec.title}
+                    </h3>
+                  </div>
+
+                  <div class="mt-2 flex flex-col gap-2 text-xs leading-relaxed text-slate-600 sm:text-sm">
+                    {sec.paragraphs.map((p) => (
+                      <p>{p}</p>
+                    ))}
+                  </div>
+
+                  {sec.keyPoints && (
+                    <div class="mt-3.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                      {sec.keyPoints.map((kp) => (
+                        <div class="rounded-lg border border-stone-200/90 bg-white p-3 shadow-2xs">
+                          <h4 class="text-[11px] font-bold tracking-wide text-blue-900 uppercase">
+                            {kp.label}
+                          </h4>
+                          <p class="mt-1 text-xs leading-relaxed text-slate-600">
+                            {kp.text}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </section>
+              ))
+            }
+          </div>
+        </div>
+      </details>
+
+      <!-- Full Category Question Bank List (Immediate Access) -->
+      <section
+        id="questions-directory"
+        class="mb-8 scroll-mt-6 rounded-2xl border border-stone-200 bg-stone-50 p-4 sm:p-6"
+        aria-labelledby="all-questions-heading"
+      >
+        <div
+          class="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3.5"
+        >
+          <div>
+            <span
+              class="text-[10px] font-bold tracking-wider text-blue-700 uppercase"
+            >
+              Complete Question Bank
+            </span>
+            <h2
+              id="all-questions-heading"
+              class="mt-0.5 text-base font-black text-slate-950 sm:text-lg"
+            >
+              {content.allQuestionsHeading}
+            </h2>
+          </div>
+          <span
+            class="rounded-full bg-slate-900 px-2.5 py-0.5 text-[11px] font-extrabold text-white"
+          >
+            {categoryQuestions.length} Questions
+          </span>
+        </div>
+
+        <ol class="m-0 flex list-none flex-col gap-4 p-0">
+          {
+            categoryQuestions.map((q) => {
+              const globalIdx = globalQuestionIndex(bankQuestions, q);
+              return (
+                <QuestionCard
+                  question={q}
+                  index={globalIdx}
+                  lang={lang}
+                  imageBase="/"
+                  linked
+                />
+              );
+            })
+          }
+        </ol>
+      </section>
+
+      <!-- Curated FAQ Section -->
+      <section
+        class="mb-8 rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs sm:p-7"
+        aria-labelledby="faq-section-heading"
+      >
+        <div class="mb-4 border-b border-stone-100 pb-3">
+          <span
+            class="text-[10px] font-bold tracking-wider text-blue-700 uppercase"
+          >
+            Frequently Asked
+          </span>
+          <h2
+            id="faq-section-heading"
+            class="mt-0.5 text-base font-black text-slate-950 sm:text-lg"
+          >
+            {content.faqHeading}
+          </h2>
+          <p class="mt-0.5 text-xs leading-relaxed text-slate-600">
+            {content.faqSubheading}
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          {
+            activeFaqQuestions.map((q, idx) => {
+              const globalIdx = globalQuestionIndex(bankQuestions, q);
+              const num = globalIdx + 1;
+              return (
+                <details class="group overflow-hidden rounded-xl border border-stone-200 bg-stone-50/70 transition open:border-blue-300 open:bg-blue-50/20">
+                  <summary class="flex cursor-pointer items-center justify-between p-3.5 text-xs font-bold text-slate-900 select-none hover:text-blue-700 sm:text-sm">
+                    <span class="flex items-center gap-2.5 pr-3">
+                      <span class="flex h-5 w-5 flex-none items-center justify-center rounded-full bg-slate-900 text-[10px] font-extrabold text-white">
+                        {idx + 1}
+                      </span>
+                      <span>{questionText(q, lang)}</span>
+                    </span>
+                    <span class="text-sm text-slate-400 transition-transform duration-200 group-open:rotate-180">
+                      ▾
+                    </span>
+                  </summary>
+
+                  <div class="border-t border-stone-200 bg-white p-4 sm:p-5">
+                    <ul class="m-0 mb-3 list-none p-0">
+                      <QuestionCard
+                        question={q}
+                        index={globalIdx}
+                        lang={lang}
+                        imageBase="/"
+                        linked
+                      />
+                    </ul>
+
+                    <div class="flex justify-end pt-1">
+                      <a
+                        href={questionHref(lang, num)}
+                        class="text-xs font-bold text-blue-700 underline-offset-2 hover:underline"
+                      >
+                        Open standalone study page for Question #{num} →
+                      </a>
+                    </div>
+                  </div>
+                </details>
+              );
+            })
+          }
+        </div>
+      </section>
+
+      <!-- Related Category & Practice Cross-Navigation -->
+      <section class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div
+          class="flex flex-col justify-between rounded-3xl border border-stone-200 bg-white p-6 shadow-2xs"
+        >
+          <div>
+            <span
+              class="text-xs font-bold tracking-wider text-slate-400 uppercase"
+            >
+              Next Category Hub
+            </span>
+            <h3 class="mt-1 text-lg font-black text-slate-900">
+              {content.relatedCategory.title}
+            </h3>
+            <p class="mt-2 text-xs leading-relaxed text-slate-600 sm:text-sm">
+              {content.relatedCategory.description}
+            </p>
+          </div>
+
+          <div class="mt-6">
+            <a
+              href={categoryHubHref(lang, content.relatedCategory.slug)}
+              class="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-2xl border-2 border-slate-900 bg-stone-50 px-4 py-2.5 text-xs font-bold text-slate-900 shadow-2xs transition hover:bg-stone-200 active:scale-95"
+            >
+              <span>{content.relatedCategory.btnText}</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col justify-between rounded-3xl border border-blue-200 bg-blue-50/70 p-6 shadow-2xs"
+        >
+          <div>
+            <span
+              class="text-xs font-bold tracking-wider text-blue-700 uppercase"
+            >
+              Ready for the Real Test?
+            </span>
+            <h3 class="mt-1 text-lg font-black text-blue-950">
+              {content.cta.heading}
+            </h3>
+            <p class="mt-2 text-xs leading-relaxed text-blue-900 sm:text-sm">
+              Practice all {categoryQuestions.length} questions in this category with
+              instant answers, scoring, and bookmarking.
+            </p>
+          </div>
+
+          <div class="mt-6 flex flex-col gap-2 sm:flex-row">
+            <a
+              href={`/${lang}/practice?category=${categorySlug}`}
+              class="inline-flex min-h-[42px] flex-1 items-center justify-center gap-1.5 rounded-2xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white shadow-2xs transition hover:bg-blue-800 active:scale-95"
+            >
+              <span>💡</span>
+              <span>Practice Now</span>
+            </a>
+            <a
+              href={`/${lang}/exam?category=${categorySlug}`}
+              class="inline-flex min-h-[42px] flex-1 items-center justify-center gap-1.5 rounded-2xl border border-blue-300 bg-white px-4 py-2.5 text-xs font-bold text-blue-900 shadow-2xs transition hover:bg-blue-50 active:scale-95"
+            >
+              <span>⏱️</span>
+              <span>Mock Exam</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import { initAllQuizzes } from '../scripts/quiz-client';
+  initAllQuizzes();
+</script>
