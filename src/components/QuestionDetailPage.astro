@@ -123,28 +123,34 @@ const jsonLd = [
         >
           ← {labels.back}
         </a>
-        <div class="flex items-center gap-2" role="group" aria-label="Language">
+        <div class="flex items-center gap-2.5">
           <HeaderInstallButton lang={lang} />
-          {
-            LOCALES.map((code) => {
-              const active = lang === code;
-              return (
-                <a
-                  href={questionHref(code, number)}
-                  hreflang={code}
-                  aria-current={active ? 'page' : undefined}
-                  class:list={[
-                    'rounded-full border-2 border-slate-900 px-3 py-1 text-xs font-bold tracking-wide',
-                    active
-                      ? 'bg-blue-700 text-white'
-                      : 'bg-white text-slate-900 hover:bg-stone-200',
-                  ]}
-                >
-                  {code.toUpperCase()}
-                </a>
-              );
-            })
-          }
+          <div
+            class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
+            role="group"
+            aria-label="Language"
+          >
+            {
+              LOCALES.map((code) => {
+                const active = lang === code;
+                return (
+                  <a
+                    href={questionHref(code, number)}
+                    hreflang={code}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
+                      active
+                        ? 'bg-blue-700 text-white'
+                        : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
+                    ]}
+                  >
+                    {code.toUpperCase()}
+                  </a>
+                );
+              })
+            }
+          </div>
         </div>
       </div>
 

@@ -66,12 +66,6 @@ const bankLabels: Record<Lang, string> = {
   rw: 'Ibibazo byose',
 };
 
-const practiceModeLabels: Record<Lang, string> = {
-  en: 'Practice Mode',
-  fr: 'Entraînement',
-  rw: 'Imyitozo',
-};
-
 const studyGuideLabel: Record<Lang, string> = {
   en: 'Exam Syllabus & Legal Study Guide',
   fr: 'Programme de l’Examen & Synthèse Juridique',
@@ -175,18 +169,62 @@ const jsonLd: Record<string, unknown>[] = [
           <!-- Practice CTA -->
           <a
             href={`/${lang}/practice?category=${categorySlug}`}
-            class="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-blue-700 px-3.5 py-1.5 text-xs font-bold text-white shadow-2xs transition hover:bg-blue-800 active:scale-95"
+            class:list={[
+              'inline-flex min-h-[40px] items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-4 py-2 leading-none font-bold whitespace-nowrap text-slate-800 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px]',
+              lang === 'fr'
+                ? 'text-[11px] tracking-normal sm:text-xs'
+                : 'text-[11px] tracking-wide sm:text-xs',
+            ]}
           >
-            <span>💡</span>
-            <span>{practiceModeLabels[lang]}</span>
+            <span aria-hidden="true">💡</span>
+            {
+              lang === 'fr' ? (
+                <>
+                  <span class="sm:hidden">Pratique</span>
+                  <span class="hidden sm:inline">Entraînement</span>
+                </>
+              ) : lang === 'rw' ? (
+                'Imyitozo'
+              ) : (
+                'Practice'
+              )
+            }
           </a>
 
           <!-- Install App -->
           <HeaderInstallButton lang={lang} />
 
+          <!-- Language Switcher -->
+          <div
+            class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
+            role="group"
+            aria-label="Language selector"
+          >
+            {
+              locales.map(({ code, label }) => {
+                const active = lang === code;
+                return (
+                  <a
+                    href={categoryHubHref(code, categorySlug)}
+                    hreflang={code}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
+                      active
+                        ? 'bg-blue-700 text-white'
+                        : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
+                    ]}
+                  >
+                    {label}
+                  </a>
+                );
+              })
+            }
+          </div>
+
           <!-- Category Selector Dropdown -->
           <select
-            class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-1.5 text-xs font-bold text-slate-900"
+            class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-sm text-slate-900"
             aria-label="Category Switcher"
             onchange="const href = this.selectedOptions[0]?.dataset?.href; if (href) window.location.assign(href);"
           >
@@ -209,34 +247,6 @@ const jsonLd: Record<string, unknown>[] = [
               {CATEGORY_SLUGS[2] === categorySlug ? '✓ ' : ''}Road Signs (97)
             </option>
           </select>
-
-          <!-- Language Switcher -->
-          <div
-            class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
-            role="group"
-            aria-label="Language selector"
-          >
-            {
-              locales.map(({ code, label }) => {
-                const active = lang === code;
-                return (
-                  <a
-                    href={categoryHubHref(code, categorySlug)}
-                    hreflang={code}
-                    aria-current={active ? 'page' : undefined}
-                    class:list={[
-                      'border-r-2 border-slate-900 px-3 py-1.5 text-xs font-bold tracking-wide transition last:border-r-0',
-                      active
-                        ? 'bg-blue-700 text-white'
-                        : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
-                    ]}
-                  >
-                    {label}
-                  </a>
-                );
-              })
-            }
-          </div>
         </div>
       </nav>
 
