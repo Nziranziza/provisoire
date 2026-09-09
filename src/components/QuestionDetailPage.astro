@@ -5,19 +5,11 @@ import HeaderInstallButton from './HeaderInstallButton.astro';
 import type { Lang, Question } from '../lib/quiz';
 import {
   LOCALES,
-  correctAnswerText,
-  imageSrc,
   questionHref,
   questionNumber,
-  questionText,
   questionsListHref,
 } from '../lib/quiz';
-import {
-  breadcrumbJsonLd,
-  questionJsonLd,
-  questionPageAlternates,
-  truncateMeta,
-} from '../lib/seo';
+import { getQuestionPageMetadata } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -29,11 +21,6 @@ interface Props {
 
 const { lang, question, index, total, imageBase = '/' } = Astro.props;
 const number = questionNumber(index);
-const titleText = questionText(question, lang);
-const answerText = correctAnswerText(question, lang);
-const imagePath = question.image_url
-  ? imageSrc(imageBase, question.image_url)
-  : null;
 
 const copy: Record<
   Lang,
@@ -41,78 +28,50 @@ const copy: Record<
     back: string;
     prev: string;
     next: string;
-    pageTitle: string;
-    home: string;
-    list: string;
-    item: string;
   }
 > = {
   en: {
     back: 'Back to all questions',
     prev: 'Previous',
     next: 'Next',
-    pageTitle: `Question ${number}: ${truncateMeta(titleText, 60)} — Provisoire`,
-    home: 'Provisoire',
-    list: 'Questions',
-    item: 'Question',
   },
   fr: {
     back: 'Retour à toutes les questions',
     prev: 'Précédente',
     next: 'Suivante',
-    pageTitle: `Question ${number} : ${truncateMeta(titleText, 60)} — Provisoire`,
-    home: 'Provisoire',
-    list: 'Questions',
-    item: 'Question',
   },
   rw: {
     back: 'Subira ku bibazo byose',
     prev: 'Ibanza',
     next: 'Ikurikira',
-    pageTitle: `Ikibazo ${number}: ${truncateMeta(titleText, 60)} — Provisoire`,
-    home: 'Provisoire',
-    list: 'Ibibazo',
-    item: 'Ikibazo',
   },
 };
 
 const labels = copy[lang];
 const hasPrev = number > 1;
 const hasNext = number < total;
-const canonical = questionHref(lang, number);
-const prevUrl = hasPrev ? questionHref(lang, number - 1) : null;
-const nextUrl = hasNext ? questionHref(lang, number + 1) : null;
-const description = truncateMeta(`${titleText} Correct answer: ${answerText}`);
-const alternates = questionPageAlternates(number, Astro.site);
-const jsonLd = [
-  questionJsonLd({
-    lang,
-    question,
-    number,
-    site: Astro.site,
-    imageBase,
-  }),
-  breadcrumbJsonLd(
-    [
-      { name: labels.home, path: '/' },
-      { name: labels.list, path: questionsListHref(lang) },
-      { name: `${labels.item} ${number}`, path: canonical },
-    ],
-    Astro.site,
-  ),
-];
+
+const seo = getQuestionPageMetadata({
+  lang,
+  question,
+  number,
+  total,
+  site: Astro.site,
+  imageBase,
+});
 ---
 
 <BaseLayout
-  title={labels.pageTitle}
-  description={description}
-  lang={lang}
-  canonical={canonical}
-  prev={prevUrl}
-  next={nextUrl}
-  alternates={alternates}
-  image={imagePath}
-  jsonLd={jsonLd}
+  title={seo.title}
+  description={seo.description}
+  lang={seo.lang}
+  canonical={seo.canonical}
+  prev={seo.prev}
+  next={seo.next}
+  alternates={seo.alternates}
+  image={seo.image}
+  type="article"
+  jsonLd={seo.jsonLd}
 >
   <main class="m-0 bg-stone-100 px-4 py-10">
     <div class="mx-auto max-w-3xl">

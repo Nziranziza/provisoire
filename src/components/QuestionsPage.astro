@@ -13,10 +13,9 @@ import questionBank from '../../questions.json';
 import {
   breadcrumbJsonLd,
   categoryFaqJsonLd,
+  getListPageMetadata,
   listJsonLd,
-  listPageAlternates,
   organizationJsonLd,
-  truncateMeta,
   webSiteJsonLd,
 } from '../lib/seo';
 
@@ -33,39 +32,6 @@ const category = categoryId
   ? questionBank.categories.find((c) => c.id === categoryId)
   : undefined;
 
-const meta: Record<
-  Lang,
-  { title: string; description: string; listLabel: string }
-> = {
-  en: {
-    title: category
-      ? `${category.name} — Rwanda provisional driving-test question bank`
-      : 'Rwanda provisional driving-test question bank',
-    description: category
-      ? `Rwanda provisional ${category.name.toLowerCase()} questions on this page, in English.`
-      : 'Practice Rwanda provisional driving-test questions and answers in English. Traffic rules and road signs with correct answers.',
-    listLabel: category?.name ?? 'Questions',
-  },
-  fr: {
-    title: category
-      ? `${category.name} — Rwanda provisional driving-test question bank`
-      : 'Rwanda provisional driving-test question bank',
-    description: category
-      ? `Questions ${category.name.toLowerCase()} du permis provisoire sur cette page, en français.`
-      : 'Questions et réponses du permis provisoire rwandais en français. Règles de circulation et panneaux avec bonnes réponses.',
-    listLabel: category?.name ?? 'Questions',
-  },
-  rw: {
-    title: category
-      ? `${category.name} — Rwanda provisional driving-test question bank`
-      : 'Rwanda provisional driving-test question bank',
-    description: category
-      ? `Ibibazo bya ${category.name} kuri iyi paji mu Kinyarwanda.`
-      : 'Ibibazo n’ibisubizo by’ikizamini cy’uruhushya rwo gutwara mu Kinyarwanda. Amategeko n’ibyapa n’ibisubizo by’ukuri.',
-    listLabel: category?.name ?? 'Ibibazo',
-  },
-};
-
 const bankQuestions = questionBank.questions as Question[];
 const filteredQuestions = categoryId
   ? bankQuestions.filter((q) => q.category_id === categoryId)
@@ -75,22 +41,14 @@ const page = parsePageParam(String(pageProp ?? 1), totalPages);
 const start = (page - 1) * PAGE_SIZE;
 const pageQuestions = filteredQuestions.slice(start, start + PAGE_SIZE);
 
-const {
-  title: baseTitle,
-  description: baseDescription,
-  listLabel,
-} = meta[lang];
-const title = page > 1 ? `${baseTitle} · Page ${page}` : baseTitle;
-const description =
-  page > 1
-    ? truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
-    : truncateMeta(baseDescription);
-
-const canonical = questionsListHref(lang, page, categoryId);
-const prev = page > 1 ? questionsListHref(lang, page - 1, categoryId) : null;
-const next =
-  page < totalPages ? questionsListHref(lang, page + 1, categoryId) : null;
-const alternates = listPageAlternates(page, Astro.site, categoryId);
+const seo = getListPageMetadata({
+  lang,
+  page,
+  totalPages,
+  categoryId,
+  site: Astro.site,
+  isHome,
+});
 
 const questionNumbers = pageQuestions.map(
   (q) => globalQuestionIndex(bankQuestions, q) + 1,
@@ -127,11 +85,30 @@ jsonLd.push(
   }),
 );
 
+const listLabels: Record<Lang, { all: string; home: string }> = {
+  en: { all: 'Questions', home: 'Provisoire' },
+  fr: { all: 'Questions', home: 'Provisoire' },
+  rw: { all: 'Ibibazo', home: 'Provisoire' },
+};
+const listLabel = category
+  ? categoryId === 1
+    ? lang === 'fr'
+      ? 'Code de la route'
+      : lang === 'rw'
+        ? "Amategeko y'umuhanda"
+        : 'Traffic Rules'
+    : lang === 'fr'
+      ? 'Panneaux de signalisation'
+      : lang === 'rw'
+        ? 'Ibyapa byo mu muhanda'
+        : 'Road Signs'
+  : listLabels[lang].all;
+
 const breadcrumbItems = isHome
   ? [{ name: 'Provisoire', path: '/' }]
   : [
-      { name: 'Provisoire', path: '/' },
-      { name: 'Questions', path: questionsListHref(lang, 1) },
+      { name: listLabels[lang].home, path: '/' },
+      { name: listLabels[lang].all, path: questionsListHref(lang, 1) },
       ...(category
         ? [
             {
@@ -143,7 +120,7 @@ const breadcrumbItems = isHome
       ...(page > 1
         ? [
             {
-              name: `Page ${page}`,
+              name: lang === 'rw' ? `Paji ya ${page}` : `Page ${page}`,
               path: questionsListHref(lang, page, categoryId),
             },
           ]
@@ -154,13 +131,13 @@ jsonLd.push(breadcrumbJsonLd(breadcrumbItems, Astro.site));
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  lang={lang}
-  canonical={canonical}
-  prev={prev}
-  next={next}
-  alternates={alternates}
+  title={seo.title}
+  description={seo.description}
+  lang={seo.lang}
+  canonical={seo.canonical}
+  prev={seo.prev}
+  next={seo.next}
+  alternates={seo.alternates}
   jsonLd={jsonLd}
 >
   <main class="m-0 bg-stone-100 px-4 py-10">

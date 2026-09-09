@@ -10,6 +10,7 @@ import {
   questionPayload,
   questionText,
 } from '../../lib/quiz';
+import { questionImageAlt } from '../../lib/seo';
 import QuestionAnswerCard from './QuestionAnswerCard.astro';
 
 interface Props {
@@ -40,6 +41,7 @@ const answerLetter = String.fromCharCode(65 + q.correct_index);
 const number = questionNumber(index);
 const href = questionHref(lang, number);
 const isRoadSigns = q.category_id === 2;
+const imageAlt = questionImageAlt(q, lang, number);
 ---
 
 <li
@@ -98,7 +100,7 @@ const isRoadSigns = q.category_id === 2;
             <img
               class="block max-h-56 max-w-full rounded-lg border border-stone-200"
               src={src}
-              alt=""
+              alt={imageAlt}
               loading="lazy"
               onerror="this.closest('.quiz-image-wrap').classList.add('hidden')"
             />
@@ -107,7 +109,7 @@ const isRoadSigns = q.category_id === 2;
           <img
             class="block max-h-56 max-w-full rounded-lg border border-stone-200"
             src={src}
-            alt=""
+            alt={imageAlt}
             loading="lazy"
             onerror="this.closest('.quiz-image-wrap').classList.add('hidden')"
           />
@@ -176,6 +178,7 @@ const isRoadSigns = q.category_id === 2;
     explanation={explanation}
     imageUrl={q.image_url}
     imageSrc={src}
+    imageAlt={imageAlt}
     lang={lang}
   />
 </li>

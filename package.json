@@ -18,7 +18,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify:search": "node scripts/verify-search.mjs",
-    "verify:seo": "node scripts/verify-structured-data.mjs"
+    "verify:structured-data": "node scripts/verify-structured-data.mjs",
+    "verify:crawl": "node scripts/verify-seo-crawl.mjs",
+    "verify:seo": "node scripts/verify-structured-data.mjs && node scripts/verify-seo-crawl.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.2",
