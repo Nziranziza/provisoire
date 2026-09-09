@@ -267,8 +267,8 @@ export function getListPageMetadata(
     isHome = false,
   } = options;
 
-  let baseTitle = '';
-  let baseDescription = '';
+  let baseTitle: string;
+  let baseDescription: string;
 
   if (isHome) {
     if (lang === 'fr') {
