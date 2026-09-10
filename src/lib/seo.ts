@@ -412,8 +412,8 @@ export function getListPageMetadata(
         ? truncateMeta(`${baseDescription} Page ${page} sur ${totalPages}.`)
         : lang === 'rw'
           ? truncateMeta(
-            `${baseDescription} Paji ya ${page} kuri ${totalPages}.`,
-          )
+              `${baseDescription} Paji ya ${page} kuri ${totalPages}.`,
+            )
           : truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
       : truncateMeta(baseDescription);
 
@@ -746,11 +746,11 @@ export function questionJsonLd(options: QuizJsonLdOptions) {
           position: question.correct_index + 1,
           ...(explanation
             ? {
-              comment: {
-                '@type': 'Comment' as const,
-                text: explanation,
-              },
-            }
+                comment: {
+                  '@type': 'Comment' as const,
+                  text: explanation,
+                },
+              }
             : {}),
         },
         suggestedAnswer: suggestedAnswers,
@@ -792,11 +792,11 @@ export function categoryFaqJsonLd(options: CategoryFaqJsonLdOptions) {
           inLanguage: lang,
           ...(explanation
             ? {
-              comment: {
-                '@type': 'Comment' as const,
-                text: explanation,
-              },
-            }
+                comment: {
+                  '@type': 'Comment' as const,
+                  text: explanation,
+                },
+              }
             : {}),
         },
       };
@@ -897,4 +897,3 @@ export function breadcrumbJsonLd(
 export function siteListPageCount(questionCount: number) {
   return totalQuestionPages(questionCount, PAGE_SIZE);
 }
-

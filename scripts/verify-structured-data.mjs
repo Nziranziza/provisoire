@@ -121,11 +121,11 @@ function questionJsonLd(options) {
           position: question.correct_index + 1,
           ...(explanation
             ? {
-              comment: {
-                '@type': 'Comment',
-                text: explanation,
-              },
-            }
+                comment: {
+                  '@type': 'Comment',
+                  text: explanation,
+                },
+              }
             : {}),
         },
         suggestedAnswer: suggestedAnswers,
@@ -160,11 +160,11 @@ function categoryFaqJsonLd(options) {
           inLanguage: lang,
           ...(explanation
             ? {
-              comment: {
-                '@type': 'Comment',
-                text: explanation,
-              },
-            }
+                comment: {
+                  '@type': 'Comment',
+                  text: explanation,
+                },
+              }
             : {}),
         },
       };
