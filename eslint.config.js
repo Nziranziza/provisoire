@@ -7,7 +7,15 @@ import globals from 'globals';
 // Note: eslint-plugin-jsx-a11y is deliberately absent — its current release
 // caps out at ESLint 9. Revisit once it supports ESLint 10.
 export default defineConfig(
-  globalIgnores(['dist/**', '.astro/**', 'node_modules/**', 'tools/**']),
+  // `.wrangler/**` holds the Pages emulator's generated bundles — linting them
+  // fails the run for code we do not own.
+  globalIgnores([
+    'dist/**',
+    '.astro/**',
+    '.wrangler/**',
+    'node_modules/**',
+    'tools/**',
+  ]),
   js.configs.recommended,
   tseslint.configs.recommended,
   astro.configs.recommended,
@@ -16,7 +24,12 @@ export default defineConfig(
     extends: [tseslint.configs.disableTypeChecked],
   },
   {
-    files: ['scripts/**/*.{js,mjs}'],
+    // Build-time Node code: scripts, the Astro config, and build integrations.
+    files: [
+      'scripts/**/*.{js,mjs}',
+      'integrations/**/*.{js,mjs}',
+      'astro.config.mjs',
+    ],
     languageOptions: {
       globals: globals.node,
     },

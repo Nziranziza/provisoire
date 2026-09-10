@@ -1,0 +1,48 @@
+# Cloudflare Pages header rules. Copied into dist/ verbatim by the build.
+# Limits: 100 rules, 2,000 characters per line. A request matching several
+# patterns inherits every matching rule's headers.
+# These do NOT apply to Pages Functions responses — this site has none.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()
+  # No `preload` — that is a one-way commitment and the domain is still new.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Astro fingerprints these filenames, so they can never go stale.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Question images are content-addressed by UUID; long cache, no `immutable`
+# so a corrected image still propagates within a month.
+/images/*
+  Cache-Control: public, max-age=2592000
+
+/icons/*
+  Cache-Control: public, max-age=604800
+
+# The service worker must never be served stale or the app cannot update.
+/sw.js
+  Cache-Control: no-cache
+
+/manifest.webmanifest
+  Content-Type: application/manifest+json; charset=utf-8
+  Cache-Control: no-cache
+
+/manifest.json
+  Cache-Control: no-cache
+
+# Offline question pack: revalidate hourly, serve stale while it does.
+/data/questions.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/q-index/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600
