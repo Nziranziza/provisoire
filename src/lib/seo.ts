@@ -20,6 +20,13 @@ export type HreflangLink = {
   href: string;
 };
 
+/**
+ * Returns an absolute URL string given a path or URL and an optional site origin.
+ *
+ * @param pathOrUrl - Relative pathname or absolute URL string.
+ * @param site - Base site URL or origin.
+ * @returns Fully qualified absolute URL string.
+ */
 export function absoluteUrl(
   pathOrUrl: string,
   site: string | URL | undefined,
@@ -27,13 +34,26 @@ export function absoluteUrl(
   return new URL(pathOrUrl, site).href;
 }
 
+/**
+ * Truncates meta text to a given maximum character length with an ellipsis.
+ *
+ * @param text - Raw input text to truncate.
+ * @param max - Maximum character limit (default 155).
+ * @returns Cleaned and truncated string.
+ */
 export function truncateMeta(text: string, max = 155): string {
   const clean = text.replace(/\s+/g, ' ').trim();
   if (clean.length <= max) return clean;
   return `${clean.slice(0, max - 1).trimEnd()}…`;
 }
 
-/** Build hreflang alternates for the same logical page across locales (ISO 639-1: en, fr, rw). */
+/**
+ * Builds hreflang alternates for the same logical page across locales (ISO 639-1: en, fr, rw).
+ *
+ * @param hrefForLocale - Callback mapping each locale to its relative or absolute path.
+ * @param site - Base site URL or origin.
+ * @returns Array of hreflang links including x-default (pointing to English).
+ */
 export function hreflangAlternates(
   hrefForLocale: (lang: Lang) => string,
   site: string | URL | undefined,
@@ -49,6 +69,14 @@ export function hreflangAlternates(
   return links;
 }
 
+/**
+ * Generates hreflang alternate links for a paginated question list page.
+ *
+ * @param page - Current 1-based page number.
+ * @param site - Base site URL or origin.
+ * @param categoryId - Optional category identifier filter.
+ * @returns Array of hreflang links.
+ */
 export function listPageAlternates(
   page: number,
   site: string | URL | undefined,
@@ -60,6 +88,13 @@ export function listPageAlternates(
   );
 }
 
+/**
+ * Generates hreflang alternate links for an individual question detail page.
+ *
+ * @param number - 1-based question number in the bank.
+ * @param site - Base site URL or origin.
+ * @returns Array of hreflang links.
+ */
 export function questionPageAlternates(
   number: number,
   site: string | URL | undefined,
@@ -67,6 +102,13 @@ export function questionPageAlternates(
   return hreflangAlternates((lang) => questionHref(lang, number), site);
 }
 
+/**
+ * Generates hreflang alternate links for a category hub page.
+ *
+ * @param slugOrId - Category slug or numerical identifier.
+ * @param site - Base site URL or origin.
+ * @returns Array of hreflang links.
+ */
 export function categoryHubAlternates(
   slugOrId: string | number,
   site: string | URL | undefined,
@@ -74,13 +116,26 @@ export function categoryHubAlternates(
   return hreflangAlternates((lang) => categoryHubHref(lang, slugOrId), site);
 }
 
+/**
+ * Maps a supported language code to its Open Graph locale string format.
+ *
+ * @param lang - Target language ('en' | 'fr' | 'rw').
+ * @returns Open Graph locale identifier (e.g. 'en_US', 'fr_FR', 'rw_RW').
+ */
 export function ogLocale(lang: Lang): string {
   if (lang === 'fr') return 'fr_FR';
   if (lang === 'rw') return 'rw_RW';
   return 'en_US';
 }
 
-/** Generates descriptive, localized alt text for question and sign images. */
+/**
+ * Generates descriptive, localized alt text for question and sign images.
+ *
+ * @param question - The question data object.
+ * @param lang - Target language ('en' | 'fr' | 'rw').
+ * @param number - Optional question number in the bank.
+ * @returns Localized alt text string.
+ */
 export function questionImageAlt(
   question: Question,
   lang: Lang,
@@ -147,6 +202,9 @@ export interface PageMetadataResult {
 /**
  * Builds unique per-locale metadata for question detail pages.
  * Title and description are dynamically derived from question text and correct answer.
+ *
+ * @param options - Configuration options for question page metadata.
+ * @returns Complete PageMetadataResult object with titles, OpenGraph, JSON-LD, etc.
  */
 export function getQuestionPageMetadata(
   options: QuestionPageMetadataOptions,
@@ -204,7 +262,7 @@ export function getQuestionPageMetadata(
     }),
     breadcrumbJsonLd(
       [
-        { name: bLabels.home, path: '/' },
+        { name: bLabels.home, path: `/${lang}` },
         { name: bLabels.list, path: questionsListHref(lang) },
         { name: `${bLabels.item} ${number}`, path: questionHref(lang, number) },
       ],
@@ -254,6 +312,9 @@ export interface ListPageMetadataOptions {
 
 /**
  * Builds unique per-locale metadata for question list and pagination pages.
+ *
+ * @param options - Configuration options for list page metadata.
+ * @returns Complete PageMetadataResult object with titles, canonicals, alternates, and pagination.
  */
 export function getListPageMetadata(
   options: ListPageMetadataOptions,
@@ -351,14 +412,18 @@ export function getListPageMetadata(
         ? truncateMeta(`${baseDescription} Page ${page} sur ${totalPages}.`)
         : lang === 'rw'
           ? truncateMeta(
-              `${baseDescription} Paji ya ${page} kuri ${totalPages}.`,
-            )
+            `${baseDescription} Paji ya ${page} kuri ${totalPages}.`,
+          )
           : truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
       : truncateMeta(baseDescription);
 
-  const canonicalPath = questionsListHref(lang, page, categoryId);
+  const canonicalPath = isHome
+    ? `/${lang}`
+    : questionsListHref(lang, page, categoryId);
   const canonical = absoluteUrl(canonicalPath, site);
-  const alternates = listPageAlternates(page, site, categoryId);
+  const alternates = isHome
+    ? hreflangAlternates((l) => `/${l}`, site)
+    : listPageAlternates(page, site, categoryId);
 
   const prev =
     page > 1
@@ -407,6 +472,9 @@ export interface CategoryHubMetadataOptions {
 
 /**
  * Builds metadata for Category Hub pages (/traffic-rules, /road-signs).
+ *
+ * @param options - Configuration options for category hub metadata.
+ * @returns Complete PageMetadataResult object with category-specific meta.
  */
 export function getCategoryHubMetadata(
   options: CategoryHubMetadataOptions,
@@ -454,6 +522,9 @@ export interface PracticePageMetadataOptions {
 
 /**
  * Builds metadata for interactive Practice and Mock Exam pages.
+ *
+ * @param options - Configuration options for practice/exam metadata.
+ * @returns Complete PageMetadataResult object with noindex directives.
  */
 export function getPracticePageMetadata(
   options: PracticePageMetadataOptions,
@@ -532,7 +603,10 @@ export type PageMetadataOptions =
   | ({ type: 'practice' } & PracticePageMetadataOptions);
 
 /**
- * Unified metadata helper that any page can call.
+ * Unified metadata helper that any page can call to generate comprehensive SEO metadata.
+ *
+ * @param options - Discriminated union options for any page type.
+ * @returns Complete PageMetadataResult object.
  */
 export function getPageMetadata(
   options: PageMetadataOptions,
@@ -561,6 +635,12 @@ export interface ListJsonLdOptions {
   questionNumbers?: number[];
 }
 
+/**
+ * Builds Schema.org CollectionPage & ItemList JSON-LD for paginated question listings.
+ *
+ * @param options - Configuration options for list structured data.
+ * @returns CollectionPage schema object.
+ */
 export function listJsonLd(options: ListJsonLdOptions) {
   const {
     lang,
@@ -613,6 +693,12 @@ export interface QuizJsonLdOptions {
   imageBase?: string;
 }
 
+/**
+ * Builds Schema.org Quiz & Question JSON-LD for question detail pages.
+ *
+ * @param options - Configuration options for quiz structured data.
+ * @returns Quiz schema object with acceptedAnswer and suggestedAnswers.
+ */
 export function questionJsonLd(options: QuizJsonLdOptions) {
   const { lang, question, number, site, imageBase = '/' } = options;
   const url = absoluteUrl(questionHref(lang, number), site);
@@ -660,11 +746,11 @@ export function questionJsonLd(options: QuizJsonLdOptions) {
           position: question.correct_index + 1,
           ...(explanation
             ? {
-                comment: {
-                  '@type': 'Comment' as const,
-                  text: explanation,
-                },
-              }
+              comment: {
+                '@type': 'Comment' as const,
+                text: explanation,
+              },
+            }
             : {}),
         },
         suggestedAnswer: suggestedAnswers,
@@ -680,6 +766,12 @@ export interface CategoryFaqJsonLdOptions {
   site: string | URL | undefined;
 }
 
+/**
+ * Builds Schema.org FAQPage JSON-LD for category hubs and FAQ sections.
+ *
+ * @param options - Configuration options for FAQ structured data.
+ * @returns FAQPage schema object.
+ */
 export function categoryFaqJsonLd(options: CategoryFaqJsonLdOptions) {
   const { lang, questions } = options;
   return {
@@ -700,11 +792,11 @@ export function categoryFaqJsonLd(options: CategoryFaqJsonLdOptions) {
           inLanguage: lang,
           ...(explanation
             ? {
-                comment: {
-                  '@type': 'Comment' as const,
-                  text: explanation,
-                },
-              }
+              comment: {
+                '@type': 'Comment' as const,
+                text: explanation,
+              },
+            }
             : {}),
         },
       };
@@ -719,6 +811,12 @@ export interface WebSiteJsonLdOptions {
   inLanguage?: string | string[];
 }
 
+/**
+ * Builds Schema.org WebSite JSON-LD.
+ *
+ * @param options - Optional configuration options for website structured data.
+ * @returns WebSite schema object.
+ */
 export function webSiteJsonLd(options?: WebSiteJsonLdOptions) {
   const site = options?.site;
   const siteUrl = absoluteUrl('/', site);
@@ -740,6 +838,12 @@ export interface OrganizationJsonLdOptions {
   logoPath?: string;
 }
 
+/**
+ * Builds Schema.org Organization JSON-LD.
+ *
+ * @param options - Optional configuration options for organization structured data.
+ * @returns Organization schema object.
+ */
 export function organizationJsonLd(options?: OrganizationJsonLdOptions) {
   const site = options?.site;
   const siteUrl = absoluteUrl('/', site);
@@ -761,6 +865,13 @@ export interface BreadcrumbItem {
   path: string;
 }
 
+/**
+ * Builds Schema.org BreadcrumbList JSON-LD.
+ *
+ * @param items - Array of breadcrumb elements containing display name and path.
+ * @param site - Base site URL or origin.
+ * @returns BreadcrumbList schema object.
+ */
 export function breadcrumbJsonLd(
   items: BreadcrumbItem[],
   site: string | URL | undefined,
@@ -777,6 +888,13 @@ export function breadcrumbJsonLd(
   };
 }
 
+/**
+ * Calculates the total number of paginated list pages for a given question count.
+ *
+ * @param questionCount - Total number of questions in the subset.
+ * @returns Number of pages.
+ */
 export function siteListPageCount(questionCount: number) {
   return totalQuestionPages(questionCount, PAGE_SIZE);
 }
+

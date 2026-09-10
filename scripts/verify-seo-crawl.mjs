@@ -16,6 +16,12 @@ if (!existsSync(DIST_DIR)) {
   process.exit(1);
 }
 
+/**
+ * Recursively discovers all HTML files in a given directory.
+ *
+ * @param {string} dir - Directory path to search.
+ * @returns {string[]} Array of absolute file paths to HTML files.
+ */
 function findHtmlFiles(dir) {
   const results = [];
   const entries = readdirSync(dir, { withFileTypes: true });
@@ -33,13 +39,20 @@ function findHtmlFiles(dir) {
 const htmlFiles = findHtmlFiles(DIST_DIR);
 console.log(`Found ${htmlFiles.length} HTML files to inspect in dist/\n`);
 
-const titlesMap = new Map(); // title -> [filePath]
-const canonicalsMap = new Map(); // filePath -> canonical
+const titlesMap = new Map(); // title -> Map(canonical -> [relPath])
+const descriptionsMap = new Map(); // description -> Map(canonical -> [relPath])
+const canonicalsMap = new Map(); // relPath -> canonical
 const hreflangsMap = new Map(); // canonical -> Map(hreflang -> href)
 let pagesChecked = 0;
 let questionPagesChecked = 0;
 let imagesChecked = 0;
 
+/**
+ * Parses raw HTML string and extracts key SEO tags and OpenGraph/Twitter attributes.
+ *
+ * @param {string} html - Raw HTML content of a page.
+ * @returns {object} Extracted SEO metadata including title, canonical, alternates, descriptions, OG, Twitter, and images.
+ */
 function parseHtml(html) {
   // Title
   const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
@@ -139,11 +152,36 @@ for (const filePath of htmlFiles) {
   const parsed = parseHtml(html);
   pagesChecked++;
 
-  // 1. Canonical check
+  // 1. Canonical check: must be a valid URL matching SITE_ORIGIN and exactly equal the self URL for relPath
   assert.ok(parsed.canonical, `Page ${relPath} must have a canonical <link>`);
-  assert.ok(
-    parsed.canonical.startsWith(SITE_ORIGIN),
-    `Page ${relPath} canonical must be absolute starting with ${SITE_ORIGIN}, got ${parsed.canonical}`,
+  let canonicalUrlObj;
+  try {
+    canonicalUrlObj = new URL(parsed.canonical);
+  } catch {
+    assert.fail(
+      `Page ${relPath} canonical must be a valid URL, got ${parsed.canonical}`,
+    );
+  }
+  assert.equal(
+    canonicalUrlObj.origin,
+    SITE_ORIGIN,
+    `Page ${relPath} canonical origin must exactly match ${SITE_ORIGIN}, got ${canonicalUrlObj.origin}`,
+  );
+
+  let expectedPath = '/' + relPath;
+  if (expectedPath.endsWith('/index.html')) {
+    expectedPath = expectedPath.slice(0, -'/index.html'.length);
+  } else if (expectedPath.endsWith('.html')) {
+    expectedPath = expectedPath.slice(0, -'.html'.length);
+  }
+  if (expectedPath === '/index' || expectedPath === '') {
+    expectedPath = '/';
+  }
+  const expectedCanonical = `${SITE_ORIGIN}${expectedPath}`;
+  assert.equal(
+    parsed.canonical,
+    expectedCanonical,
+    `Page ${relPath} self-referencing canonical mismatch: expected ${expectedCanonical}, got ${parsed.canonical}`,
   );
   canonicalsMap.set(relPath, parsed.canonical);
 
@@ -160,11 +198,18 @@ for (const filePath of htmlFiles) {
   }
   titlesMap.get(parsed.title).get(parsed.canonical).push(relPath);
 
-  // 3. Description check
+  // 3. Description check & uniqueness tracking
   assert.ok(
     parsed.description && parsed.description.length > 0,
     `Page ${relPath} must have a non-empty meta description`,
   );
+  if (!descriptionsMap.has(parsed.description)) {
+    descriptionsMap.set(parsed.description, new Map());
+  }
+  if (!descriptionsMap.get(parsed.description).has(parsed.canonical)) {
+    descriptionsMap.get(parsed.description).set(parsed.canonical, []);
+  }
+  descriptionsMap.get(parsed.description).get(parsed.canonical).push(relPath);
 
   // 4. OpenGraph & Twitter tags check
   assert.ok(parsed.og.title, `Page ${relPath} missing og:title`);
@@ -181,7 +226,7 @@ for (const filePath of htmlFiles) {
     relPath.startsWith('rw/') ||
     relPath === 'index.html';
 
-  if (isLocalizedPage && parsed.alternates.length > 0) {
+  if (isLocalizedPage) {
     const langMap = new Map();
     for (const alt of parsed.alternates) {
       assert.ok(
@@ -209,6 +254,21 @@ for (const filePath of htmlFiles) {
       langMap.get('en'),
       `Page ${relPath} x-default must point to en version`,
     );
+
+    // Validate self-reference for the current page locale
+    let currentLocale = null;
+    if (relPath.startsWith('en/')) currentLocale = 'en';
+    else if (relPath.startsWith('fr/')) currentLocale = 'fr';
+    else if (relPath.startsWith('rw/')) currentLocale = 'rw';
+    else if (relPath === 'index.html') currentLocale = 'en';
+
+    if (currentLocale) {
+      assert.equal(
+        langMap.get(currentLocale),
+        parsed.canonical,
+        `Page ${relPath} (${currentLocale}) must self-reference in hreflang: expected ${parsed.canonical}, got ${langMap.get(currentLocale)}`,
+      );
+    }
 
     hreflangsMap.set(parsed.canonical, langMap);
   }
@@ -263,7 +323,29 @@ console.log(
   '✓ All page titles are 100% unique across distinct canonical pages! No duplicates found.',
 );
 
-// 8. Reciprocity check across all hreflang clusters
+// 8. Check description uniqueness across distinct content pages (distinct canonicals)
+console.log('\n--- Checking Description Uniqueness ---');
+let duplicateDescCount = 0;
+for (const [description, canonicals] of descriptionsMap.entries()) {
+  if (canonicals.size > 1) {
+    const canonicalList = [...canonicals.keys()];
+    console.warn(
+      `⚠️ Warning: Duplicate description "${description}" across distinct canonical URLs: ${canonicalList.join(', ')}`,
+    );
+    duplicateDescCount++;
+  }
+}
+
+assert.equal(
+  duplicateDescCount,
+  0,
+  `Found ${duplicateDescCount} duplicate descriptions across distinct canonical pages! Every page per locale must have a unique description.`,
+);
+console.log(
+  '✓ All page descriptions are 100% unique across distinct canonical pages! No duplicates found.',
+);
+
+// 9. Reciprocity check across all hreflang clusters
 console.log('\n--- Checking hreflang Reciprocity ---');
 let clustersChecked = 0;
 for (const [canonicalUrl, langMap] of hreflangsMap.entries()) {

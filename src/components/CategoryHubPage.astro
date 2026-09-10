@@ -124,7 +124,7 @@ const jsonLd: Record<string, unknown>[] = [
   },
   breadcrumbJsonLd(
     [
-      { name: homeLabels[lang], path: '/' },
+      { name: homeLabels[lang], path: `/${lang}` },
       { name: bankLabels[lang], path: questionsListHref(lang, 1) },
       { name: content.categoryName, path: canonical },
     ],
@@ -151,7 +151,7 @@ const jsonLd: Record<string, unknown>[] = [
         <div
           class="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 sm:text-sm"
         >
-          <a href="/" class="text-blue-700 transition hover:underline">
+          <a href={`/${lang}`} class="text-blue-700 transition hover:underline">
             {homeLabels[lang]}
           </a>
           <span class="text-stone-300">/</span>

@@ -7,13 +7,26 @@ const SITE = 'https://provisoire.pages.dev';
 
 console.log('--- Verifying Structured Data Schemas & Rules ---');
 
-// Helper functions replicating the exact logic of seo.ts for direct unit testing in node
+/**
+ * Truncates text to max length with ellipsis.
+ *
+ * @param {string} text - Input text to clean and truncate.
+ * @param {number} [max=155] - Maximum character length.
+ * @returns {string} Truncated text.
+ */
 function truncateMeta(text, max = 155) {
   const clean = text.replace(/\s+/g, ' ').trim();
   if (clean.length <= max) return clean;
   return `${clean.slice(0, max - 1).trimEnd()}…`;
 }
 
+/**
+ * Retrieves localized question text.
+ *
+ * @param {object} q - Question object.
+ * @param {string} lang - Locale code.
+ * @returns {string} Question text.
+ */
 function questionText(q, lang) {
   return (
     q.translations[lang]?.question ??
@@ -22,21 +35,48 @@ function questionText(q, lang) {
   );
 }
 
+/**
+ * Retrieves localized question options list.
+ *
+ * @param {object} q - Question object.
+ * @param {string} lang - Locale code.
+ * @returns {string[]} List of options.
+ */
 function questionOptions(q, lang) {
   return q.translations[lang]?.options ?? q.translations.en?.options ?? [];
 }
 
+/**
+ * Retrieves correct answer text for a question in a given locale.
+ *
+ * @param {object} q - Question object.
+ * @param {string} lang - Locale code.
+ * @returns {string} Correct answer string.
+ */
 function correctAnswerText(q, lang) {
   const t = q.translations[lang] ?? q.translations.en;
   if (!t) return '';
   return t.correct_answer || t.options[q.correct_index] || '';
 }
 
+/**
+ * Retrieves explanation text for a question in a given locale.
+ *
+ * @param {object} q - Question object.
+ * @param {string} lang - Locale code.
+ * @returns {string} Explanation string.
+ */
 function questionExplanation(q, lang) {
   const t = q.translations[lang] ?? q.translations.en;
   return t?.explanation ?? '';
 }
 
+/**
+ * Builds Schema.org Quiz & Question structured data.
+ *
+ * @param {object} options - Options containing question, lang, number, site.
+ * @returns {object} Quiz schema JSON-LD object.
+ */
 function questionJsonLd(options) {
   const { lang, question, number, site, imageBase = '/' } = options;
   const url = new URL(`/${lang}/questions/${number}`, site).href;
@@ -81,11 +121,11 @@ function questionJsonLd(options) {
           position: question.correct_index + 1,
           ...(explanation
             ? {
-                comment: {
-                  '@type': 'Comment',
-                  text: explanation,
-                },
-              }
+              comment: {
+                '@type': 'Comment',
+                text: explanation,
+              },
+            }
             : {}),
         },
         suggestedAnswer: suggestedAnswers,
@@ -94,6 +134,12 @@ function questionJsonLd(options) {
   };
 }
 
+/**
+ * Builds Schema.org FAQPage structured data for a list of questions.
+ *
+ * @param {object} options - Options containing questions and locale.
+ * @returns {object} FAQPage schema JSON-LD object.
+ */
 function categoryFaqJsonLd(options) {
   const { lang, questions } = options;
   return {
@@ -114,11 +160,11 @@ function categoryFaqJsonLd(options) {
           inLanguage: lang,
           ...(explanation
             ? {
-                comment: {
-                  '@type': 'Comment',
-                  text: explanation,
-                },
-              }
+              comment: {
+                '@type': 'Comment',
+                text: explanation,
+              },
+            }
             : {}),
         },
       };
@@ -126,6 +172,12 @@ function categoryFaqJsonLd(options) {
   };
 }
 
+/**
+ * Builds Schema.org WebSite structured data.
+ *
+ * @param {object} [options] - Options containing site origin, name, description.
+ * @returns {object} WebSite schema JSON-LD object.
+ */
 function webSiteJsonLd(options) {
   const site = options?.site;
   const siteUrl = new URL('/', site).href;
@@ -141,6 +193,12 @@ function webSiteJsonLd(options) {
   };
 }
 
+/**
+ * Builds Schema.org Organization structured data.
+ *
+ * @param {object} [options] - Options containing site origin, name, logoPath.
+ * @returns {object} Organization schema JSON-LD object.
+ */
 function organizationJsonLd(options) {
   const site = options?.site;
   const siteUrl = new URL('/', site).href;
@@ -155,6 +213,13 @@ function organizationJsonLd(options) {
   };
 }
 
+/**
+ * Builds Schema.org BreadcrumbList structured data.
+ *
+ * @param {Array<{name: string, path: string}>} items - List of breadcrumb items.
+ * @param {string} site - Site origin.
+ * @returns {object} BreadcrumbList schema JSON-LD object.
+ */
 function breadcrumbJsonLd(items, site) {
   return {
     '@context': 'https://schema.org',
@@ -278,6 +343,12 @@ console.log('✓ BreadcrumbList schema passed');
 // 5. Test dist HTML if built
 const distDir = resolve('dist');
 if (existsSync(distDir)) {
+  /**
+   * Extracts JSON-LD scripts from rendered HTML content.
+   *
+   * @param {string} html - HTML string.
+   * @returns {object[]} Parsed JSON-LD objects.
+   */
   function extractJsonLd(html) {
     const regex =
       /<script\s+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;

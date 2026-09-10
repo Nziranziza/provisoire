@@ -50,7 +50,7 @@ const pageLabel = isExam ? pageLabels[lang].exam : pageLabels[lang].practice;
 const jsonLd = [
   breadcrumbJsonLd(
     [
-      { name: homeLabels[lang], path: '/' },
+      { name: homeLabels[lang], path: `/${lang}` },
       { name: pageLabel, path: seo.canonical },
     ],
     Astro.site,
