@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { relative, resolve } from 'node:path';
 import questionsBank from '../questions.json' with { type: 'json' };
 
-const SITE = 'https://provisoire.pages.dev';
+const SITE = 'https://umuhanda.rw';
 
 console.log('--- Verifying Structured Data Schemas & Rules ---');
 
@@ -181,7 +181,7 @@ for (const lang of ['en', 'fr', 'rw']) {
   assert.equal(schema['@context'], 'https://schema.org');
   assert.equal(schema['@type'], 'Quiz');
   assert.equal(schema.inLanguage, lang);
-  assert.equal(schema.url, `https://provisoire.pages.dev/${lang}/questions/1`);
+  assert.equal(schema.url, `https://umuhanda.rw/${lang}/questions/1`);
   assert.equal(schema.hasPart.length, 1);
 
   const mainQ = schema.hasPart[0];
@@ -245,17 +245,14 @@ const siteObj = webSiteJsonLd({ site: SITE });
 assert.equal(siteObj['@context'], 'https://schema.org');
 assert.equal(siteObj['@type'], 'WebSite');
 assert.equal(siteObj.name, 'Provisoire');
-assert.equal(siteObj.url, 'https://provisoire.pages.dev/');
+assert.equal(siteObj.url, 'https://umuhanda.rw/');
 
 const orgObj = organizationJsonLd({ site: SITE });
 assert.equal(orgObj['@context'], 'https://schema.org');
 assert.equal(orgObj['@type'], 'Organization');
 assert.equal(orgObj.name, 'Provisoire');
-assert.equal(orgObj.url, 'https://provisoire.pages.dev/');
-assert.equal(
-  orgObj.logo,
-  'https://provisoire.pages.dev/icons/icon-192x192.png',
-);
+assert.equal(orgObj.url, 'https://umuhanda.rw/');
+assert.equal(orgObj.logo, 'https://umuhanda.rw/icons/icon-192x192.png');
 console.log('✓ WebSite and Organization schema passed');
 
 // 4. Validate BreadcrumbList schema
@@ -272,7 +269,7 @@ assert.equal(crumbs['@type'], 'BreadcrumbList');
 assert.equal(crumbs.itemListElement.length, 3);
 assert.equal(crumbs.itemListElement[0].position, 1);
 assert.equal(crumbs.itemListElement[0].name, 'Provisoire');
-assert.equal(crumbs.itemListElement[0].item, 'https://provisoire.pages.dev/');
+assert.equal(crumbs.itemListElement[0].item, 'https://umuhanda.rw/');
 console.log('✓ BreadcrumbList schema passed');
 
 // 5. Test dist HTML if built
@@ -293,8 +290,23 @@ if (existsSync(distDir)) {
     return results;
   }
 
-  const qPath = resolve(distDir, 'en', 'questions', '1', 'index.html');
-  if (existsSync(qPath)) {
+  /**
+   * Resolve a built page across both Astro output layouts: `build.format:
+   * 'file'` emits `a/b.html`, `'directory'` emits `a/b/index.html`. Returns
+   * null only when the page genuinely was not built.
+   */
+  function findPage(...segments) {
+    const last = segments.pop();
+    const candidates = [
+      resolve(distDir, ...segments, `${last}.html`),
+      resolve(distDir, ...segments, last, 'index.html'),
+    ];
+    return candidates.find((candidate) => existsSync(candidate)) ?? null;
+  }
+
+  const qPath = findPage('en', 'questions', '1');
+  assert.ok(qPath, 'question page 1 must be present in dist');
+  {
     const html = readFileSync(qPath, 'utf8');
     const items = extractJsonLd(html);
     const quiz = items.find((i) => i['@type'] === 'Quiz');
@@ -304,13 +316,14 @@ if (existsSync(distDir)) {
       assert.equal(quiz.hasPart[0].eduQuestionType, 'Multiple choice');
       assert.equal(quiz.hasPart[0].acceptedAnswer['@type'], 'Answer');
       console.log(
-        '✓ Verified live Quiz JSON-LD in dist/en/questions/1/index.html',
+        `✓ Verified live Quiz JSON-LD in ${relative(distDir, qPath)}`,
       );
     }
   }
 
-  const trafficHubPath = resolve(distDir, 'en', 'traffic-rules', 'index.html');
-  if (existsSync(trafficHubPath)) {
+  const trafficHubPath = findPage('en', 'traffic-rules');
+  assert.ok(trafficHubPath, 'traffic-rules hub must be present in dist');
+  {
     const html = readFileSync(trafficHubPath, 'utf8');
     const items = extractJsonLd(html);
     const faq = items.find((i) => i['@type'] === 'FAQPage');
@@ -323,7 +336,7 @@ if (existsSync(distDir)) {
     assert.equal(faq.inLanguage, 'en');
     assert.equal(collection.mainEntity.numberOfItems, 101);
     console.log(
-      '✓ Verified live FAQPage & CollectionPage JSON-LD in dist/en/traffic-rules/index.html',
+      `✓ Verified live FAQPage & CollectionPage JSON-LD in ${relative(distDir, trafficHubPath)}`,
     );
   }
 }
