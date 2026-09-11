@@ -1,12 +1,12 @@
 ---
-import QuestionsPage from '../../../../../../components/QuestionsPage.astro';
 import questionBank from '../../../../../../../questions.json';
 import {
   CATEGORY_SLUGS,
   PAGE_SIZE,
-  categoryIdFromSlug,
+  categoryHubHref,
   totalQuestionPages,
 } from '../../../../../../lib/quiz';
+import type { Lang } from '../../../../../../lib/quiz';
 
 export function getStaticPaths() {
   return Object.entries(CATEGORY_SLUGS).flatMap(([id, category]) => {
@@ -20,8 +20,7 @@ export function getStaticPaths() {
   });
 }
 
-const categoryId = categoryIdFromSlug(Astro.params.category ?? '')!;
-const page = Number(Astro.params.page);
+const lang = 'fr' as Lang;
+const category = Astro.params.category ?? 'traffic-rules';
+return Astro.redirect(categoryHubHref(lang, category), 301);
 ---
-
-<QuestionsPage lang="fr" page={page} categoryId={categoryId} />

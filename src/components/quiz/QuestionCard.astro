@@ -1,6 +1,7 @@
 ---
 import type { Lang, Question } from '../../lib/quiz';
 import {
+  categoryLabel,
   correctAnswerText,
   imageSrc,
   questionExplanation,
@@ -42,6 +43,7 @@ const number = questionNumber(index);
 const href = questionHref(lang, number);
 const isRoadSigns = q.category_id === 2;
 const imageAlt = questionImageAlt(q, lang, number);
+const categoryName = categoryLabel(q.category_id, lang);
 ---
 
 <li
@@ -72,7 +74,7 @@ const imageAlt = questionImageAlt(q, lang, number);
             isRoadSigns ? 'bg-sky-700' : 'bg-amber-700',
           ]}
         >
-          {q.category_name}
+          {categoryName}
         </span>
       </a>
     ) : (
@@ -86,7 +88,7 @@ const imageAlt = questionImageAlt(q, lang, number);
             isRoadSigns ? 'bg-sky-700' : 'bg-amber-700',
           ]}
         >
-          {q.category_name}
+          {categoryName}
         </span>
       </div>
     )

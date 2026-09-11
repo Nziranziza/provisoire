@@ -137,11 +137,11 @@ export function ogLocale(lang: Lang): string {
  * @returns Localized alt text string.
  */
 export function questionImageAlt(
-  question: Question,
+  question: Pick<Question, 'category_id' | 'translations'>,
   lang: Lang,
   number?: number,
 ): string {
-  const qText = questionText(question, lang);
+  const qText = questionText(question as Question, lang);
   const isRoadSign = question.category_id === 2;
   const numStr = number ? ` #${number}` : '';
 
@@ -221,8 +221,15 @@ export function getQuestionPageMetadata(
         ? `Ikibazo cya ${number}: ${truncateMeta(qText, 65)} — Provisoire`
         : `Question ${number}: ${truncateMeta(qText, 65)} — Provisoire`;
 
+  const qPrefix =
+    lang === 'fr'
+      ? `Question ${number} :`
+      : lang === 'rw'
+        ? `Ikibazo cya ${number}:`
+        : `Question ${number}:`;
+
   const description = truncateMeta(
-    `${qText} ${answerLabel} ${answer}`.trim(),
+    `${qPrefix} ${qText} ${answerLabel} ${answer}`.trim(),
     155,
   );
 
@@ -654,13 +661,31 @@ export function listJsonLd(options: ListJsonLdOptions) {
   } = options;
   const pageUrl = absoluteUrl(questionsListHref(lang, page, categoryId), site);
 
+  const collectionNames: Record<
+    Lang,
+    { base: string; page: (n: number) => string }
+  > = {
+    en: {
+      base: 'Rwanda provisional driving-test question bank',
+      page: (n) => `Rwanda provisional driving-test question bank — page ${n}`,
+    },
+    fr: {
+      base: 'Banque de questions du permis provisoire rwandais',
+      page: (n) =>
+        `Banque de questions du permis provisoire rwandais — page ${n}`,
+    },
+    rw: {
+      base: 'Ububiko bw’ibibazo by’uruhushya rw’agateganyo mu Rwanda',
+      page: (n) =>
+        `Ububiko bw’ibibazo by’uruhushya rw’agateganyo mu Rwanda — ipaji ${n}`,
+    },
+  };
+  const names = collectionNames[lang] || collectionNames.en;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage' as const,
-    name:
-      page > 1
-        ? `Rwanda provisional driving-test question bank — page ${page}`
-        : 'Rwanda provisional driving-test question bank',
+    name: page > 1 ? names.page(page) : names.base,
     inLanguage: lang,
     url: pageUrl,
     isPartOf: {

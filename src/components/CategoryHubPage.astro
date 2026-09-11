@@ -4,7 +4,6 @@ import QuestionCard from './quiz/QuestionCard.astro';
 import HeaderInstallButton from './HeaderInstallButton.astro';
 import type { Lang, Question } from '../lib/quiz';
 import {
-  CATEGORY_SLUGS,
   categoryHubHref,
   globalQuestionIndex,
   questionHref,
@@ -12,9 +11,10 @@ import {
   questionText,
 } from '../lib/quiz';
 import {
+  absoluteUrl,
   breadcrumbJsonLd,
   categoryFaqJsonLd,
-  categoryHubAlternates,
+  getCategoryHubMetadata,
   organizationJsonLd,
   truncateMeta,
   webSiteJsonLd,
@@ -30,14 +30,19 @@ interface Props {
 const { lang, categorySlug } = Astro.props;
 const content = getCategoryContent(lang, categorySlug);
 const categoryId = content.categoryId;
+const seo = getCategoryHubMetadata({
+  lang,
+  categorySlug,
+  site: Astro.site,
+});
 
 const bankQuestions = questionBank.questions as Question[];
 const categoryQuestions = bankQuestions.filter(
   (q) => q.category_id === categoryId,
 );
 
-const canonical = categoryHubHref(lang, categorySlug);
-const alternates = categoryHubAlternates(categorySlug, Astro.site);
+const canonicalPath = categoryHubHref(lang, categorySlug);
+const alternates = seo.alternates;
 
 // Curated FAQ questions for structured data & FAQ section
 const faqQuestions = content.curatedFaqQuestionIds
@@ -84,6 +89,9 @@ const jumpToQuestionsLabel: Record<Lang, string> = {
   rw: 'Reba ibibazo',
 };
 
+const trafficRulesContent = getCategoryContent(lang, 'traffic-rules');
+const roadSignsContent = getCategoryContent(lang, 'road-signs');
+
 const isRoadSigns = categorySlug === 'road-signs';
 
 // JSON-LD Structured Data
@@ -102,11 +110,11 @@ const jsonLd: Record<string, unknown>[] = [
     name: content.title,
     description: content.metaDescription,
     inLanguage: lang,
-    url: new URL(canonical, Astro.site).href,
+    url: absoluteUrl(canonicalPath, Astro.site),
     isPartOf: {
       '@type': 'WebSite',
       name: 'Provisoire',
-      url: new URL('/', Astro.site).href,
+      url: absoluteUrl('/', Astro.site),
     },
     mainEntity: {
       '@type': 'ItemList',
@@ -116,7 +124,7 @@ const jsonLd: Record<string, unknown>[] = [
         return {
           '@type': 'ListItem',
           position: i + 1,
-          url: new URL(questionHref(lang, num), Astro.site).href,
+          url: absoluteUrl(questionHref(lang, num), Astro.site),
           name: truncateMeta(questionText(q, lang), 110),
         };
       }),
@@ -126,7 +134,7 @@ const jsonLd: Record<string, unknown>[] = [
     [
       { name: homeLabels[lang], path: `/${lang}` },
       { name: bankLabels[lang], path: questionsListHref(lang, 1) },
-      { name: content.categoryName, path: canonical },
+      { name: content.categoryName, path: canonicalPath },
     ],
     Astro.site,
   ),
@@ -134,10 +142,10 @@ const jsonLd: Record<string, unknown>[] = [
 ---
 
 <BaseLayout
-  title={content.metaTitle}
-  description={content.metaDescription}
+  title={seo.title}
+  description={seo.description}
   lang={lang}
-  canonical={canonical}
+  canonical={canonicalPath}
   alternates={alternates}
   jsonLd={jsonLd}
 >
@@ -236,15 +244,18 @@ const jsonLd: Record<string, unknown>[] = [
               data-href={categoryHubHref(lang, 'traffic-rules')}
               selected={categorySlug === 'traffic-rules'}
             >
-              {CATEGORY_SLUGS[1] === categorySlug ? '✓ ' : ''}Traffic Rules
-              (101)
+              {categorySlug === 'traffic-rules' ? '✓ ' : ''}
+              {trafficRulesContent.categoryName} (
+              {trafficRulesContent.stats.questionCount})
             </option>
             <option
               value="road-signs"
               data-href={categoryHubHref(lang, 'road-signs')}
               selected={categorySlug === 'road-signs'}
             >
-              {CATEGORY_SLUGS[2] === categorySlug ? '✓ ' : ''}Road Signs (97)
+              {categorySlug === 'road-signs' ? '✓ ' : ''}
+              {roadSignsContent.categoryName} (
+              {roadSignsContent.stats.questionCount})
             </option>
           </select>
         </div>

@@ -1,6 +1,6 @@
 ---
-import CategoryHubPage from '../../../../../../components/CategoryHubPage.astro';
-import { CATEGORY_SLUGS } from '../../../../../../lib/quiz';
+import { CATEGORY_SLUGS, categoryHubHref } from '../../../../../../lib/quiz';
+import type { Lang } from '../../../../../../lib/quiz';
 
 export function getStaticPaths() {
   return Object.values(CATEGORY_SLUGS).map((category) => ({
@@ -8,8 +8,9 @@ export function getStaticPaths() {
   }));
 }
 
-const { category } = Astro.params;
-const categorySlug = category as 'traffic-rules' | 'road-signs';
+const lang = 'en' as Lang;
+return Astro.redirect(
+  categoryHubHref(lang, Astro.params.category ?? 'traffic-rules'),
+  301,
+);
 ---
-
-<CategoryHubPage lang="en" categorySlug={categorySlug} />

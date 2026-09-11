@@ -99,6 +99,28 @@ export const CATEGORY_SLUGS: Record<number, string> = {
   2: 'road-signs',
 };
 
+/** Localized display names for category hubs and UI badges. */
+export const CATEGORY_LABELS: Record<number, Record<Lang, string>> = {
+  1: {
+    en: 'Traffic Rules',
+    fr: 'Règles de circulation',
+    rw: 'Amategeko y’umuhanda',
+  },
+  2: {
+    en: 'Road Signs',
+    fr: 'Panneaux de signalisation',
+    rw: 'Ibyapa byo ku muhanda',
+  },
+};
+
+export function categoryLabel(categoryId: number, lang: Lang): string {
+  return (
+    CATEGORY_LABELS[categoryId]?.[lang] ??
+    CATEGORY_LABELS[categoryId]?.en ??
+    'Category'
+  );
+}
+
 export function categorySlug(categoryId: number): string | undefined {
   return CATEGORY_SLUGS[categoryId];
 }
