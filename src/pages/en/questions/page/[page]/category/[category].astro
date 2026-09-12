@@ -1,6 +1,5 @@
 ---
-import { CATEGORY_SLUGS, categoryHubHref } from '../../../../../../lib/quiz';
-import type { Lang } from '../../../../../../lib/quiz';
+import { CATEGORY_SLUGS } from '../../../../../../lib/quiz';
 
 export function getStaticPaths() {
   return Object.values(CATEGORY_SLUGS).map((category) => ({
@@ -8,9 +7,5 @@ export function getStaticPaths() {
   }));
 }
 
-const lang = 'en' as Lang;
-return Astro.redirect(
-  categoryHubHref(lang, Astro.params.category ?? 'traffic-rules'),
-  301,
-);
+return Astro.redirect(`/en/${Astro.params.category ?? 'traffic-rules'}`, 301);
 ---

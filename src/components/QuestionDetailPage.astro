@@ -2,14 +2,17 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import QuestionCard from './quiz/QuestionCard.astro';
 import HeaderInstallButton from './HeaderInstallButton.astro';
-import type { Lang, Question } from '../lib/quiz';
+import type { Category, Lang, Question } from '../lib/quiz';
 import {
   LOCALES,
+  categoryHubHref,
+  categoryLabel,
   questionHref,
   questionNumber,
   questionsListHref,
 } from '../lib/quiz';
 import { getQuestionPageMetadata } from '../lib/seo';
+import questionBank from '../../questions.json';
 
 interface Props {
   lang: Lang;
@@ -48,8 +51,14 @@ const copy: Record<
 };
 
 const labels = copy[lang];
+const allCategoriesLabel: Record<Lang, string> = {
+  en: 'All categories',
+  fr: 'Toutes les catégories',
+  rw: 'Ibyiciro byose',
+};
 const hasPrev = number > 1;
 const hasNext = number < total;
+const categories = questionBank.categories as Category[];
 
 const seo = getQuestionPageMetadata({
   lang,
@@ -111,6 +120,28 @@ const seo = getQuestionPageMetadata({
               })
             }
           </div>
+          <select
+            class="max-w-full rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-xs font-bold text-slate-900"
+            aria-label="Category filter"
+            onchange="if (this.value) window.location.assign(this.value);"
+          >
+            <option
+              value={questionsListHref(lang, 1)}
+              selected={!question.category_id}
+            >
+              {allCategoriesLabel[lang]}
+            </option>
+            {
+              categories.map((category) => (
+                <option
+                  value={categoryHubHref(lang, category.id)}
+                  selected={question.category_id === category.id}
+                >
+                  {categoryLabel(category.id, lang)}
+                </option>
+              ))
+            }
+          </select>
         </div>
       </div>
 
