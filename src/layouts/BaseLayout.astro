@@ -4,6 +4,7 @@ import type { HreflangLink } from '../lib/seo';
 import { absoluteUrl, ogLocale } from '../lib/seo';
 import type { Lang } from '../lib/quiz';
 import AppChrome from '../components/AppChrome.astro';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title: string;
@@ -57,6 +58,13 @@ const imageHref = image
   : toAbsolute('/icons/icon-512x512.png');
 const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const locale = (lang as Lang) || 'en';
+
+// Ownership verification tokens for Google Search Console and Bing Webmaster
+// Tools. Both are set as Cloudflare Pages environment variables; when unset the
+// tags are omitted. (DNS TXT verification is preferred where available — these
+// are the fallback for the HTML-tag method.)
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
 ---
 
 <!doctype html>
@@ -77,6 +85,19 @@ const locale = (lang as Lang) || 'en';
       ))
     }
     <link rel="sitemap" href="/sitemap-index.xml" />
+    {
+      googleSiteVerification && (
+        <meta
+          name="google-site-verification"
+          content={googleSiteVerification}
+        />
+      )
+    }
+    {
+      bingSiteVerification && (
+        <meta name="msvalidate.01" content={bingSiteVerification} />
+      )
+    }
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#1d4ed8" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -154,6 +175,7 @@ const locale = (lang as Lang) || 'en';
   <body class="bg-white text-slate-900">
     <slot />
     <AppChrome lang={locale} />
+    <Analytics />
     <script>
       import { initPwaClient, registerServiceWorker } from '../lib/pwa';
       initPwaClient();
