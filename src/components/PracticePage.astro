@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PracticeSession from './PracticeSession';
 import type { Lang } from '../lib/quiz';
 import type { ExamMode } from './practice/types';
-import { breadcrumbJsonLd, hreflangAlternates } from '../lib/seo';
+import { breadcrumbJsonLd, getPracticePageMetadata } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -28,58 +28,30 @@ if (initialCategory === null && urlCatParam) {
 }
 
 const isExam = initialMode === 'mock_exam';
-const routeSlug = isExam ? 'exam' : 'practice';
+const seo = getPracticePageMetadata({
+  lang,
+  mode: isExam ? 'mock_exam' : 'practice',
+  site: Astro.site,
+});
 
-const meta: Record<
-  Lang,
-  {
-    title: string;
-    description: string;
-    homeLabel: string;
-    pageLabel: string;
-  }
-> = {
-  en: {
-    title: isExam
-      ? 'Mock Exam (20 Questions, 20 Min) — Rwanda Provisional Driving Test'
-      : 'Practice Mode (Instant Feedback) — Rwanda Provisional Driving Test',
-    description: isExam
-      ? 'Official 20-minute timed mock exam simulation for the Rwanda provisional driving license. 20 questions, 12/20 pass mark, official score breakdown.'
-      : 'Interactive 20-question practice mode for the Rwanda provisional driving test with immediate answer feedback, detailed explanations, and scoring.',
-    homeLabel: 'Provisoire',
-    pageLabel: isExam ? 'Mock Exam' : 'Practice Mode',
-  },
-  fr: {
-    title: isExam
-      ? 'Examen Blanc (20 Questions, 20 Min) — Permis Provisoire Rwandais'
-      : 'Mode Entraînement (Correction Immédiate) — Permis Provisoire Rwandais',
-    description: isExam
-      ? 'Simulation officielle d’examen blanc chronométré de 20 questions en 20 minutes pour le permis provisoire rwandais. Note de passage 12/20.'
-      : 'Entraînement interactif de 20 questions pour le permis provisoire rwandais avec correction immédiate et explications détaillées.',
-    homeLabel: 'Provisoire',
-    pageLabel: isExam ? 'Examen Blanc' : 'Mode Entraînement',
-  },
-  rw: {
-    title: isExam
-      ? 'Ikizamini cy’Ikitegererezo (Ibibazo 20, Iminota 20) — Uruhushya rw’Agateganyo'
-      : 'Uburyo bw’Imyitozo (Ibisubizo Ako Kanya) — Uruhushya rw’Agateganyo',
-    description: isExam
-      ? 'Ikizamini nyakuri cy’ikitegererezo cy’iminota 20 n’ibibazo 20 by’uruhushya rw’agateganyo mu Rwanda. Amanota 12/20 asabwa gutsinda.'
-      : 'Imyitozo y’ibibazo 20 by’uruhushya rw’agateganyo mu Rwanda: guhita ubona ibisubizo n’ibisobanuro kuri buri kibazo.',
-    homeLabel: 'Provisoire',
-    pageLabel: isExam ? 'Ikizamini cy’ikitegererezo' : 'Uburyo bw’imyitozo',
-  },
+const homeLabels: Record<Lang, string> = {
+  en: 'Provisoire',
+  fr: 'Provisoire',
+  rw: 'Provisoire',
+};
+const pageLabels: Record<Lang, { practice: string; exam: string }> = {
+  en: { practice: 'Practice Mode', exam: 'Mock Exam' },
+  fr: { practice: 'Mode Entraînement', exam: 'Examen Blanc' },
+  rw: { practice: 'Uburyo bw’imyitozo', exam: 'Ikizamini cy’ikitegererezo' },
 };
 
-const { title, description, homeLabel, pageLabel } = meta[lang];
-const canonical = `/${lang}/${routeSlug}`;
-const alternates = hreflangAlternates((l) => `/${l}/${routeSlug}`, Astro.site);
+const pageLabel = isExam ? pageLabels[lang].exam : pageLabels[lang].practice;
 
 const jsonLd = [
   breadcrumbJsonLd(
     [
-      { name: homeLabel, path: '/' },
-      { name: pageLabel, path: canonical },
+      { name: homeLabels[lang], path: `/${lang}` },
+      { name: pageLabel, path: seo.canonical },
     ],
     Astro.site,
   ),
@@ -87,11 +59,11 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  lang={lang}
-  canonical={canonical}
-  alternates={alternates}
+  title={seo.title}
+  description={seo.description}
+  lang={seo.lang}
+  canonical={seo.canonical}
+  alternates={seo.alternates}
   robots="noindex,nofollow"
   jsonLd={jsonLd}
 >

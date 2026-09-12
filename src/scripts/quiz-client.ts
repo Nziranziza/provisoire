@@ -641,14 +641,27 @@ function initQuiz(root: HTMLElement) {
     return;
   }
 
-  // Old: /questions/category/slug[/page/N] → /questions/page/N/category/slug
-  const legacyCategory = path.match(
-    /^\/(en|fr|rw)\/questions\/category\/([^/]+)(?:\/page\/(\d+))?\/?$/,
+  // Legacy: /questions/page/N/category/slug → /[lang]/[category-hub]
+  const legacyPageCategory = path.match(
+    /^\/(en|fr|rw)\/questions\/page\/(\d+)\/category\/([^/]+)\/?$/,
   );
-  if (legacyCategory) {
-    const slug = legacyCategory[2];
-    const page = legacyCategory[3] || '1';
-    window.location.replace(`/${lang}/questions/page/${page}/category/${slug}`);
+  if (legacyPageCategory) {
+    const targetLang = legacyPageCategory[1];
+    const slug = legacyPageCategory[3];
+    if (!targetLang || !slug) return;
+    window.location.replace(`/${targetLang}/${slug}`);
+    return;
+  }
+
+  // Legacy: /questions/category/slug[/page/N] → /[lang]/[category-hub]
+  const legacyCategoryList = path.match(
+    /^\/(en|fr|rw)\/questions\/category\/([^/]+)(?:\/page\/\d+)?\/?$/,
+  );
+  if (legacyCategoryList) {
+    const targetLang = legacyCategoryList[1];
+    const slug = legacyCategoryList[2];
+    if (!targetLang || !slug) return;
+    window.location.replace(`/${targetLang}/${slug}`);
     return;
   }
 
