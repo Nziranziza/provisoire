@@ -424,7 +424,7 @@ export function getListPageMetadata(
           : truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
       : truncateMeta(baseDescription);
 
-  const homePath = (locale: Lang) => questionsListHref(locale, 1);
+  const homePath = (locale: Lang) => `/${locale}`;
   const canonicalPath = isHome
     ? homePath(lang)
     : questionsListHref(lang, page, categoryId);
