@@ -38,6 +38,7 @@ export function buildRedirectMap({
   /** Page 1 redirects → canonical root URLs (page 1 has no /page/1 route). */
   const pageOneRedirects = Object.fromEntries(
     locales.flatMap((lang) => [
+      [`/${lang}`, `/${lang}/questions`],
       [`/${lang}/questions/page/1`, `/${lang}/questions`],
       ...Object.values(categorySlugs).map((slug) => [
         `/${lang}/questions/category/${slug}/page/1`,
@@ -67,5 +68,32 @@ export function buildRedirectMap({
     ),
   );
 
-  return { ...pageOneRedirects, ...categoryRedirects };
+  /** Legacy category routes → locale category hub URLs. */
+  const legacyCategoryRedirects = Object.fromEntries(
+    locales.flatMap((lang) =>
+      Object.entries(categoryPageCounts).flatMap(([slug, totalPages]) => [
+        [`/${lang}/questions/category/${slug}`, `/${lang}/${slug}`],
+        ...Array.from({ length: totalPages }, (_, index) => {
+          const page = index + 1;
+          return [
+            `/${lang}/questions/category/${slug}/page/${page}`,
+            `/${lang}/${slug}`,
+          ];
+        }),
+        ...Array.from({ length: totalPages }, (_, index) => {
+          const page = index + 1;
+          return [
+            `/${lang}/questions/page/${page}/category/${slug}`,
+            `/${lang}/${slug}`,
+          ];
+        }),
+      ]),
+    ),
+  );
+
+  return {
+    ...pageOneRedirects,
+    ...categoryRedirects,
+    ...legacyCategoryRedirects,
+  };
 }
