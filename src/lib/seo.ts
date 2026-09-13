@@ -424,12 +424,22 @@ export function getListPageMetadata(
           : truncateMeta(`${baseDescription} Page ${page} of ${totalPages}.`)
       : truncateMeta(baseDescription);
 
+  const homePath = (locale: Lang) => questionsListHref(locale, 1);
   const canonicalPath = isHome
-    ? `/${lang}`
+    ? homePath(lang)
     : questionsListHref(lang, page, categoryId);
   const canonical = absoluteUrl(canonicalPath, site);
   const alternates = isHome
-    ? hreflangAlternates((l) => `/${l}`, site)
+    ? [
+        ...LOCALES.map((locale) => ({
+          lang: locale,
+          href: absoluteUrl(homePath(locale), site),
+        })),
+        {
+          lang: 'x-default',
+          href: absoluteUrl(homePath('en'), site),
+        },
+      ]
     : listPageAlternates(page, site, categoryId);
 
   const prev =

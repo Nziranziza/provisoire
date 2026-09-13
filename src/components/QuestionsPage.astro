@@ -105,7 +105,7 @@ const listLabel = category
   : listLabels[lang].all;
 
 const breadcrumbItems = isHome
-  ? [{ name: 'Provisoire', path: `/${lang}` }]
+  ? [{ name: 'Provisoire', path: questionsListHref(lang, 1) }]
   : [
       { name: listLabels[lang].home, path: `/${lang}` },
       { name: listLabels[lang].all, path: questionsListHref(lang, 1) },

@@ -233,9 +233,18 @@ for (const filePath of htmlFiles) {
         ['en', 'fr', 'rw', 'x-default'].includes(alt.lang),
         `Page ${relPath} contains invalid hreflang code: "${alt.lang}". Must use ISO 639-1 (en, fr, rw) or x-default.`,
       );
-      assert.ok(
-        alt.href.startsWith(SITE_ORIGIN),
-        `Page ${relPath} hreflang href must be absolute: ${alt.href}`,
+      let alternateUrl;
+      try {
+        alternateUrl = new URL(alt.href);
+      } catch {
+        assert.fail(
+          `Page ${relPath} hreflang href must be an absolute URL: ${alt.href}`,
+        );
+      }
+      assert.equal(
+        alternateUrl.origin,
+        SITE_ORIGIN,
+        `Page ${relPath} hreflang href origin must exactly match ${SITE_ORIGIN}, got ${alternateUrl.origin}`,
       );
       langMap.set(alt.lang, alt.href);
     }
