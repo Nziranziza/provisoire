@@ -38,7 +38,6 @@ export function buildRedirectMap({
   /** Page 1 redirects → canonical root URLs (page 1 has no /page/1 route). */
   const pageOneRedirects = Object.fromEntries(
     locales.flatMap((lang) => [
-      [`/${lang}`, `/${lang}/questions`],
       [`/${lang}/questions/page/1`, `/${lang}/questions`],
       ...Object.values(categorySlugs).map((slug) => [
         `/${lang}/questions/category/${slug}/page/1`,
