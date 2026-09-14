@@ -1,9 +1,17 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, relative, join } from 'node:path';
+import { loadEnv } from 'vite';
 
 const DIST_DIR = resolve('dist');
-const SITE_ORIGIN = 'https://umuhanda.rw';
+const fileEnv = loadEnv(
+  process.env.NODE_ENV ?? 'production',
+  process.cwd(),
+  '',
+);
+const SITE_ORIGIN = new URL(
+  process.env.SITE_URL ?? fileEnv.SITE_URL ?? 'https://umuhanda.rw',
+).origin;
 
 console.log('======================================================');
 console.log('--- Crawling dist/ for SEO & Metadata Verification ---');
