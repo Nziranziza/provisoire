@@ -22,6 +22,8 @@ export type HreflangLink = {
 
 /**
  * Returns an absolute URL string given a path or URL and an optional site origin.
+ * Throws a descriptive error rather than an opaque `Invalid URL` when `site` is
+ * missing, since every metadata helper in this module depends on it.
  *
  * @param pathOrUrl - Relative pathname or absolute URL string.
  * @param site - Base site URL or origin.
@@ -31,6 +33,11 @@ export function absoluteUrl(
   pathOrUrl: string,
   site: string | URL | undefined,
 ): string {
+  if (!site) {
+    throw new Error(
+      `absoluteUrl: "site" is undefined — check that Astro.site is configured in astro.config.* for path "${pathOrUrl}"`,
+    );
+  }
   return new URL(pathOrUrl, site).href;
 }
 
@@ -621,6 +628,8 @@ export type PageMetadataOptions =
 
 /**
  * Unified metadata helper that any page can call to generate comprehensive SEO metadata.
+ * The switch is exhaustive: adding a new `PageType` without a matching case here will
+ * now fail to typecheck instead of silently returning `undefined` at runtime.
  *
  * @param options - Discriminated union options for any page type.
  * @returns Complete PageMetadataResult object.
@@ -637,6 +646,12 @@ export function getPageMetadata(
       return getCategoryHubMetadata(options);
     case 'practice':
       return getPracticePageMetadata(options);
+    default: {
+      const _exhaustive: never = options;
+      throw new Error(
+        `Unhandled page type: ${(_exhaustive as { type: string }).type}`,
+      );
+    }
   }
 }
 

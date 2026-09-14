@@ -44,12 +44,27 @@ function findHtmlFiles(dir) {
   return results;
 }
 
+/**
+ * Determines whether an image src should be subject to alt-text verification.
+ * Covers common raster/vector web image formats, not just png/jpg.
+ *
+ * @param {string} src - The image `src` attribute value.
+ * @returns {boolean} True if the image should be checked for alt text.
+ */
+function isCheckableImage(src) {
+  return (
+    src.includes('images/') ||
+    /\.(png|jpe?g|webp|gif|avif|svg)(\?.*)?$/i.test(src)
+  );
+}
+
 const htmlFiles = findHtmlFiles(DIST_DIR);
 console.log(`Found ${htmlFiles.length} HTML files to inspect in dist/\n`);
 
 const titlesMap = new Map(); // title -> Map(canonical -> [relPath])
 const descriptionsMap = new Map(); // description -> Map(canonical -> [relPath])
 const canonicalsMap = new Map(); // relPath -> canonical
+const canonicalOwnersMap = new Map(); // canonical -> [relPath] (for duplicate detection)
 const hreflangsMap = new Map(); // canonical -> Map(hreflang -> href)
 let pagesChecked = 0;
 let questionPagesChecked = 0;
@@ -57,6 +72,8 @@ let imagesChecked = 0;
 
 /**
  * Parses raw HTML string and extracts key SEO tags and OpenGraph/Twitter attributes.
+ * Attribute-order-agnostic for all meta tags: each tag can be matched regardless of
+ * whether `name`/`property` or `content` appears first in the source.
  *
  * @param {string} html - Raw HTML content of a page.
  * @returns {object} Extracted SEO metadata including title, canonical, alternates, descriptions, OG, Twitter, and images.
@@ -66,55 +83,75 @@ function parseHtml(html) {
   const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   const title = titleMatch ? titleMatch[1].trim() : null;
 
-  // Description
-  const descMatch =
-    html.match(/<meta\s+name="description"\s+content="([^"]*)"/i) ||
-    html.match(/<meta\s+content="([^"]*)"\s+name="description"/i);
-  const description = descMatch ? descMatch[1] : null;
+  /**
+   * Matches a <meta> tag by `name` regardless of attribute order.
+   * @param {string} name - The meta name attribute value to match.
+   * @returns {string|null} The content attribute value, or null if not found.
+   */
+  function matchMetaByName(name) {
+    const forward = html.match(
+      new RegExp(`<meta\\s+name="${name}"\\s+content="([^"]*)"`, 'i'),
+    );
+    if (forward) return forward[1];
+    const reverse = html.match(
+      new RegExp(`<meta\\s+content="([^"]*)"\\s+name="${name}"`, 'i'),
+    );
+    return reverse ? reverse[1] : null;
+  }
 
-  // Canonical
+  /**
+   * Matches a <meta> tag by `property` regardless of attribute order.
+   * @param {string} property - The meta property attribute value to match.
+   * @returns {string|null} The content attribute value, or null if not found.
+   */
+  function matchMetaByProperty(property) {
+    const forward = html.match(
+      new RegExp(`<meta\\s+property="${property}"\\s+content="([^"]*)"`, 'i'),
+    );
+    if (forward) return forward[1];
+    const reverse = html.match(
+      new RegExp(`<meta\\s+content="([^"]*)"\\s+property="${property}"`, 'i'),
+    );
+    return reverse ? reverse[1] : null;
+  }
+
+  // Description
+  const description = matchMetaByName('description');
+
+  // Canonical (order-agnostic)
   const canonMatch =
     html.match(/<link\s+rel="canonical"\s+href="([^"]*)"/i) ||
     html.match(/<link\s+href="([^"]*)"\s+rel="canonical"/i);
   const canonical = canonMatch ? canonMatch[1] : null;
 
-  // Hreflang alternates
+  // Hreflang alternates (order-agnostic: rel/hreflang/href can appear in any order)
   const alternates = [];
-  const altRegex =
-    /<link\s+rel="alternate"\s+hreflang="([^"]*)"\s+href="([^"]*)"/gi;
-  let match;
-  while ((match = altRegex.exec(html)) !== null) {
-    alternates.push({ lang: match[1], href: match[2] });
+  const linkTagRegex = /<link\s+[^>]*rel="alternate"[^>]*>/gi;
+  let linkTagMatch;
+  while ((linkTagMatch = linkTagRegex.exec(html)) !== null) {
+    const tag = linkTagMatch[0];
+    const hreflangMatch = tag.match(/hreflang="([^"]*)"/i);
+    const hrefMatch = tag.match(/href="([^"]*)"/i);
+    if (hreflangMatch && hrefMatch) {
+      alternates.push({ lang: hreflangMatch[1], href: hrefMatch[1] });
+    }
   }
 
   // OpenGraph
-  const ogTitleMatch = html.match(
-    /<meta\s+property="og:title"\s+content="([^"]*)"/i,
-  );
-  const ogDescMatch = html.match(
-    /<meta\s+property="og:description"\s+content="([^"]*)"/i,
-  );
-  const ogUrlMatch = html.match(
-    /<meta\s+property="og:url"\s+content="([^"]*)"/i,
-  );
-  const ogTypeMatch = html.match(
-    /<meta\s+property="og:type"\s+content="([^"]*)"/i,
-  );
+  const ogTitle = matchMetaByProperty('og:title');
+  const ogDesc = matchMetaByProperty('og:description');
+  const ogUrl = matchMetaByProperty('og:url');
+  const ogType = matchMetaByProperty('og:type');
 
   // Twitter
-  const twCardMatch = html.match(
-    /<meta\s+name="twitter:card"\s+content="([^"]*)"/i,
-  );
-  const twTitleMatch = html.match(
-    /<meta\s+name="twitter:title"\s+content="([^"]*)"/i,
-  );
-  const twDescMatch = html.match(
-    /<meta\s+name="twitter:description"\s+content="([^"]*)"/i,
-  );
+  const twCard = matchMetaByName('twitter:card');
+  const twTitle = matchMetaByName('twitter:title');
+  const twDesc = matchMetaByName('twitter:description');
 
   // Images
   const imgRegex = /<img\s+[^>]*>/gi;
   const images = [];
+  let match;
   while ((match = imgRegex.exec(html)) !== null) {
     const imgTag = match[0];
     const srcMatch = imgTag.match(/src="([^"]*)"/i);
@@ -134,15 +171,15 @@ function parseHtml(html) {
     canonical,
     alternates,
     og: {
-      title: ogTitleMatch ? ogTitleMatch[1] : null,
-      desc: ogDescMatch ? ogDescMatch[1] : null,
-      url: ogUrlMatch ? ogUrlMatch[1] : null,
-      type: ogTypeMatch ? ogTypeMatch[1] : null,
+      title: ogTitle,
+      desc: ogDesc,
+      url: ogUrl,
+      type: ogType,
     },
     twitter: {
-      card: twCardMatch ? twCardMatch[1] : null,
-      title: twTitleMatch ? twTitleMatch[1] : null,
-      desc: twDescMatch ? twDescMatch[1] : null,
+      card: twCard,
+      title: twTitle,
+      desc: twDesc,
     },
     images,
   };
@@ -192,6 +229,12 @@ for (const filePath of htmlFiles) {
     `Page ${relPath} self-referencing canonical mismatch: expected ${expectedCanonical}, got ${parsed.canonical}`,
   );
   canonicalsMap.set(relPath, parsed.canonical);
+
+  // 1b. Track pages sharing a canonical URL (should be exactly one owner per canonical)
+  if (!canonicalOwnersMap.has(parsed.canonical)) {
+    canonicalOwnersMap.set(parsed.canonical, []);
+  }
+  canonicalOwnersMap.get(parsed.canonical).push(relPath);
 
   // 2. Title check
   assert.ok(
@@ -294,11 +337,7 @@ for (const filePath of htmlFiles) {
   if (relPath.includes('/questions/')) {
     questionPagesChecked++;
     for (const img of parsed.images) {
-      if (
-        img.src.includes('images/') ||
-        img.src.includes('.png') ||
-        img.src.includes('.jpg')
-      ) {
+      if (isCheckableImage(img.src)) {
         imagesChecked++;
         assert.ok(
           img.alt !== null &&
@@ -362,7 +401,28 @@ console.log(
   '✓ All page descriptions are 100% unique across distinct canonical pages! No duplicates found.',
 );
 
-// 9. Reciprocity check across all hreflang clusters
+// 9. Check that no two distinct output files claim the same canonical URL
+console.log('\n--- Checking Canonical URL Uniqueness ---');
+let duplicateCanonicalCount = 0;
+for (const [canonical, owners] of canonicalOwnersMap.entries()) {
+  if (owners.length > 1) {
+    console.warn(
+      `⚠️ Warning: Canonical URL "${canonical}" is claimed by multiple output files: ${owners.join(', ')}`,
+    );
+    duplicateCanonicalCount++;
+  }
+}
+
+assert.equal(
+  duplicateCanonicalCount,
+  0,
+  `Found ${duplicateCanonicalCount} canonical URLs claimed by more than one output file! Each canonical URL must map to exactly one page.`,
+);
+console.log(
+  '✓ Every canonical URL is claimed by exactly one output file. No duplicates found.',
+);
+
+// 10. Reciprocity check across all hreflang clusters
 console.log('\n--- Checking hreflang Reciprocity ---');
 let clustersChecked = 0;
 for (const [canonicalUrl, langMap] of hreflangsMap.entries()) {
