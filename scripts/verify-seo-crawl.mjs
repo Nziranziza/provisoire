@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, relative, join } from 'node:path';
 
 const DIST_DIR = resolve('dist');
-const SITE_ORIGIN = 'https://provisoire.pages.dev';
+const SITE_ORIGIN = 'https://umuhanda.rw';
 
 console.log('======================================================');
 console.log('--- Crawling dist/ for SEO & Metadata Verification ---');
@@ -369,8 +369,8 @@ for (const [canonicalUrl, langMap] of hreflangsMap.entries()) {
     }
     // Verify target points back to canonicalUrl for current page's lang
     // Determine the current page's locale from canonicalUrl
-    const currentLangMatch = canonicalUrl.match(
-      /https:\/\/provisoire\.pages\.dev\/(en|fr|rw)\//,
+    const currentLangMatch = new URL(canonicalUrl).pathname.match(
+      /^\/(en|fr|rw)(?:\/|$)/,
     );
     const currentLang = currentLangMatch
       ? currentLangMatch[1]
