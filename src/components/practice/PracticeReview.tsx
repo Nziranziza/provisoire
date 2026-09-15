@@ -5,6 +5,8 @@ import type { PracticeAction, PracticeState, ReviewFilter } from './types';
 import { PASSING_SCORE } from './constants';
 import { clearSessionFromStorage } from './storage';
 import InstallAppPrompt from '../InstallAppPrompt';
+import { categoryLabel } from '../../lib/quiz';
+import { questionImageAlt } from '../../lib/seo';
 
 interface PracticeReviewProps {
   state: PracticeState;
@@ -277,7 +279,7 @@ export default function PracticeReview({
                         q.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
                       }`}
                     >
-                      {q.category_name}
+                      {categoryLabel(q.category_id, state.currentLocale)}
                     </span>
                   </div>
 
@@ -285,7 +287,11 @@ export default function PracticeReview({
                     <div className="my-2">
                       <img
                         src={`${imageBase}${q.image_url.replace(/^\//, '')}`}
-                        alt="Road sign"
+                        alt={questionImageAlt(
+                          q,
+                          state.currentLocale,
+                          q.sessionNumber,
+                        )}
                         loading="lazy"
                         onError={(e) => {
                           const target = e.currentTarget;

@@ -4,6 +4,8 @@ import { EXAM_CONFIG } from './constants';
 import { clearSessionFromStorage } from './storage';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState } from './types';
+import { categoryLabel } from '../../lib/quiz';
+import { questionImageAlt } from '../../lib/seo';
 
 interface PracticeExamProps {
   state: PracticeState;
@@ -125,7 +127,7 @@ export default function PracticeExam({
                 isRoadSigns ? 'bg-sky-700' : 'bg-amber-700'
               }`}
             >
-              {currentQ.category_name}
+              {categoryLabel(currentQ.category_id, state.currentLocale)}
             </span>
           </div>
 
@@ -244,7 +246,7 @@ export default function PracticeExam({
               isRoadSigns ? 'bg-sky-700' : 'bg-amber-700'
             }`}
           >
-            {currentQ.category_name}
+            {categoryLabel(currentQ.category_id, state.currentLocale)}
           </span>
         </div>
 
@@ -253,7 +255,11 @@ export default function PracticeExam({
           <div className="quiz-image-wrap my-1.5 flex justify-center">
             <img
               src={`${imageBase}${currentQ.image_url.replace(/^\//, '')}`}
-              alt="Road sign"
+              alt={questionImageAlt(
+                currentQ,
+                state.currentLocale,
+                currentQ.sessionNumber,
+              )}
               loading="eager"
               onError={(e) => {
                 const target = e.currentTarget;

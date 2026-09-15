@@ -9,6 +9,7 @@ interface Props {
   explanation?: string;
   imageUrl: string | null;
   imageSrc: string;
+  imageAlt?: string;
   lang: Lang;
 }
 
@@ -19,6 +20,7 @@ const {
   explanation,
   imageUrl,
   imageSrc: src,
+  imageAlt = '',
   lang,
 } = Astro.props;
 ---
@@ -48,7 +50,7 @@ const {
         <img
           class="mx-auto block max-h-48 max-w-full rounded-lg border border-stone-200"
           src={src}
-          alt=""
+          alt={imageAlt}
           loading="lazy"
           data-answer-card-image
           onerror="this.closest('[data-answer-card-image-wrap]')?.classList.add('hidden')"

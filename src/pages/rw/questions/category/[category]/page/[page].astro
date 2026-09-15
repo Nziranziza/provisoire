@@ -1,10 +1,8 @@
 ---
-import QuestionsPage from '../../../../../../components/QuestionsPage.astro';
 import questionBank from '../../../../../../../questions.json';
 import {
   CATEGORY_SLUGS,
   PAGE_SIZE,
-  categoryIdFromSlug,
   totalQuestionPages,
 } from '../../../../../../lib/quiz';
 
@@ -20,8 +18,5 @@ export function getStaticPaths() {
   });
 }
 
-const categoryId = categoryIdFromSlug(Astro.params.category ?? '')!;
-const page = Number(Astro.params.page);
+return Astro.redirect(`/rw/${Astro.params.category ?? 'traffic-rules'}`, 301);
 ---
-
-<QuestionsPage lang="rw" page={page} categoryId={categoryId} />

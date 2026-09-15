@@ -67,5 +67,32 @@ export function buildRedirectMap({
     ),
   );
 
-  return { ...pageOneRedirects, ...categoryRedirects };
+  /** Legacy category routes → locale category hub URLs. */
+  const legacyCategoryRedirects = Object.fromEntries(
+    locales.flatMap((lang) =>
+      Object.entries(categoryPageCounts).flatMap(([slug, totalPages]) => [
+        [`/${lang}/questions/category/${slug}`, `/${lang}/${slug}`],
+        ...Array.from({ length: totalPages }, (_, index) => {
+          const page = index + 1;
+          return [
+            `/${lang}/questions/category/${slug}/page/${page}`,
+            `/${lang}/${slug}`,
+          ];
+        }),
+        ...Array.from({ length: totalPages }, (_, index) => {
+          const page = index + 1;
+          return [
+            `/${lang}/questions/page/${page}/category/${slug}`,
+            `/${lang}/${slug}`,
+          ];
+        }),
+      ]),
+    ),
+  );
+
+  return {
+    ...pageOneRedirects,
+    ...categoryRedirects,
+    ...legacyCategoryRedirects,
+  };
 }

@@ -21,6 +21,10 @@ interface Props {
   alternates?: HreflangLink[];
   /** Optional Open Graph image (absolute or site-relative). */
   image?: string | null;
+  /** Accessible description for the Open Graph / Twitter image. */
+  imageAlt?: string | null;
+  /** Open Graph type. */
+  type?: 'website' | 'article';
   /** JSON-LD objects to embed. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /** robots directive, e.g. "index,follow" or "noindex,nofollow". */
@@ -36,6 +40,8 @@ const {
   next,
   alternates = [],
   image,
+  imageAlt = null,
+  type = 'website',
   jsonLd,
   robots = 'index,follow',
 } = Astro.props;
@@ -47,7 +53,9 @@ function toAbsolute(url: string): string {
 const canonical = toAbsolute(canonicalProp ?? Astro.url.pathname);
 const prevHref = prev ? toAbsolute(prev) : null;
 const nextHref = next ? toAbsolute(next) : null;
-const imageHref = image ? toAbsolute(image) : null;
+const imageHref = image
+  ? toAbsolute(image)
+  : toAbsolute('/icons/icon-512x512.png');
 const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const locale = (lang as Lang) || 'en';
 
@@ -116,9 +124,10 @@ const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
     <meta property="og:locale" content={ogLocale(locale)} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
     <meta property="og:url" content={canonical} />
-    {imageHref && <meta property="og:image" content={imageHref} />}
+    <meta property="og:image" content={imageHref} />
+    {image && imageAlt && <meta property="og:image:alt" content={imageAlt} />}
     {
       alternates
         .filter((alt) => alt.lang !== 'x-default' && alt.lang !== lang)
@@ -132,11 +141,12 @@ const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
 
     <meta
       name="twitter:card"
-      content={imageHref ? 'summary_large_image' : 'summary'}
+      content={image ? 'summary_large_image' : 'summary'}
     />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {imageHref && <meta name="twitter:image" content={imageHref} />}
+    <meta name="twitter:image" content={imageHref} />
+    {image && imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
 
     {
       jsonLdItems.map((item) => (
