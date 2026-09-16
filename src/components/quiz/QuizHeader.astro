@@ -47,6 +47,12 @@ const categoryFilterLabel: Record<Lang, string> = {
   fr: 'Filtre de catégorie',
   rw: 'Akayunguruzo k’icyiciro',
 };
+
+const aboutLabel: Record<Lang, string> = {
+  en: 'About',
+  fr: 'À propos',
+  rw: 'Ibyerekeye',
+};
 ---
 
 <header
@@ -95,6 +101,14 @@ const categoryFilterLabel: Record<Lang, string> = {
 
     <!-- Install App button -->
     <HeaderInstallButton lang={lang} />
+
+    <!-- About link -->
+    <a
+      href={`/${lang}/about`}
+      class="inline-flex min-h-[40px] items-center justify-center rounded-full border-2 border-slate-900 bg-amber-300 px-4 py-2 text-xs font-extrabold text-slate-950 shadow-2xs transition hover:bg-amber-400 active:scale-95 sm:min-h-[36px]"
+    >
+      {aboutLabel[lang]}
+    </a>
 
     <!-- Language selector -->
     <div
