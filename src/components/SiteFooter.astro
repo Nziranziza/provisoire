@@ -92,6 +92,11 @@ function getLocalizedPath(targetLang: Lang, currentPath: string): string {
   return `/${targetLang}/${parts.join('/')}`;
 }
 
+const isAboutPage =
+  Astro.url.pathname.endsWith('/about') ||
+  Astro.url.pathname.endsWith('/about/') ||
+  Astro.url.pathname.includes('/about');
+
 const navLinks = [
   {
     href: `/${lang}/practice`,
@@ -123,96 +128,75 @@ const navLinks = [
     icon: null,
     variant: 'default',
   },
-  {
-    href: `/${lang}/about`,
-    label: t.about,
-    icon: null,
-    variant: 'amber',
-  },
+  ...(!isAboutPage
+    ? [
+        {
+          href: `/${lang}/about`,
+          label: t.about,
+          icon: null,
+          variant: 'amber',
+        },
+      ]
+    : []),
 ];
 ---
 
 <footer class="border-t border-slate-800 bg-[#14181F] text-[#F2F4F7]">
-  <div class="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
+  <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <!-- Top Row: Brand & Utility Actions -->
     <div
-      class="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-6"
+      class="flex flex-col items-start justify-between gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-center"
     >
       <!-- Brand & Tagline -->
-      <div class="flex items-center gap-3">
-        <a
-          href={`/${lang}`}
-          class="flex items-center gap-3 transition hover:opacity-90"
-        >
-          <div class="relative shrink-0">
-            <img
-              src="/icons/icon.svg"
-              alt="Provisoire logo"
-              width="40"
-              height="40"
-              class="h-10 w-10 rounded-xl object-contain shadow-xs"
-              loading="lazy"
-            />
-            <span
-              class="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]"
-              aria-hidden="true"></span>
+      <a
+        href={`/${lang}`}
+        class="flex items-center gap-3 transition hover:opacity-90"
+      >
+        <div class="relative shrink-0">
+          <img
+            src="/icons/icon.svg"
+            alt="Provisoire logo"
+            width="40"
+            height="40"
+            class="h-10 w-10 rounded-xl object-contain shadow-xs"
+            loading="lazy"
+          />
+          <span
+            class="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]"
+            aria-hidden="true"></span>
+        </div>
+        <div>
+          <div
+            class="text-base font-black tracking-tight text-[#F2F4F7] sm:text-lg"
+          >
+            Provisoire
           </div>
-          <div>
-            <div
-              class="text-base font-black tracking-tight text-[#F2F4F7] sm:text-lg"
-            >
-              Provisoire
-            </div>
-            <p
-              class="mt-0.5 text-[11px] leading-snug text-[#F2F4F7]/70 sm:text-xs"
-            >
-              {t.tagline}
-            </p>
-          </div>
-        </a>
-      </div>
+          <p
+            class="mt-0.5 text-[11px] leading-snug text-[#F2F4F7]/70 sm:text-xs"
+          >
+            {t.tagline}
+          </p>
+        </div>
+      </a>
 
-      <!-- Navigation buttons styled exactly as home page buttons -->
-      <nav aria-label={t.nav}>
-        <ul class="flex flex-wrap items-center justify-center gap-2">
-          {
-            navLinks.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class:list={[
-                    'inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 px-3.5 py-1.5 text-[11px] font-extrabold shadow-2xs transition active:scale-95 sm:min-h-[34px]',
-                    link.variant === 'amber'
-                      ? 'bg-amber-300 text-slate-950 hover:bg-amber-400'
-                      : 'bg-white text-slate-900 hover:bg-stone-100',
-                  ]}
-                >
-                  {link.icon && <span aria-hidden="true">{link.icon}</span>}
-                  <span>{link.label}</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <!-- Utility Actions (Share, Language Group, Back to Top) matching Home page styles -->
-      <div class="flex flex-wrap items-center justify-center gap-2">
+      <!-- Right Utility Actions: Share, Language Switcher, Back to Top -->
+      <div class="flex flex-wrap items-center gap-2">
         <!-- Share button -->
         <button
           type="button"
           id="footer-share-btn"
-          class="inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-3 py-1.5 text-[11px] font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[34px]"
+          class="inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3.5 py-1.5 text-xs font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95"
           title={t.share}
         >
           <span aria-hidden="true">🔗</span>
           <span>{t.share}</span>
         </button>
 
-        <!-- Language selector identical to QuizHeader.astro -->
+        <!-- Language selector -->
         <div
-          class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs sm:min-h-[34px]"
+          class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
           role="group"
-          aria-label="Language"
+          aria-label="Language selector"
         >
           {
             locales.map(({ code, label }) => {
@@ -242,7 +226,7 @@ const navLinks = [
         <button
           type="button"
           id="footer-back-to-top"
-          class="inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-3 py-1.5 text-[11px] font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[34px]"
+          class="inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3.5 py-1.5 text-xs font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95"
           aria-label={t.backToTop}
           title={t.backToTop}
         >
@@ -252,14 +236,38 @@ const navLinks = [
       </div>
     </div>
 
+    <!-- Navigation Links aligned left to right -->
+    <nav class="py-4" aria-label={t.nav}>
+      <ul class="flex flex-wrap items-center justify-start gap-2">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class:list={[
+                  'inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 px-4 py-1.5 text-xs font-extrabold shadow-2xs transition active:scale-95',
+                  link.variant === 'amber'
+                    ? 'bg-amber-300 text-slate-950 hover:bg-amber-400'
+                    : 'bg-white text-slate-900 hover:bg-stone-100',
+                ]}
+              >
+                {link.icon && <span aria-hidden="true">{link.icon}</span>}
+                <span>{link.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
     <!-- Bottom Disclaimer & Copyright Row -->
     <div
-      class="mt-4 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-3.5 text-center text-[11px] text-[#F2F4F7]/60 sm:flex-row sm:text-left"
+      class="flex flex-col items-start justify-between gap-2 border-t border-white/10 pt-4 text-[11px] text-[#F2F4F7]/60 sm:flex-row sm:items-center sm:text-left"
     >
-      <p class="max-w-xl leading-tight">
+      <p class="max-w-xl leading-relaxed">
         {t.disclaimer}
       </p>
-      <p class="shrink-0 font-medium text-[#F2F4F7]/80">© 2026 Provisoire.</p>
+      <p class="shrink-0 font-semibold text-[#F2F4F7]/80">© 2026 Provisoire.</p>
     </div>
   </div>
 
