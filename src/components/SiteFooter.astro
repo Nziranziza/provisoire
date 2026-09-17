@@ -20,6 +20,9 @@ const labels: Record<
     about: string;
     share: string;
     shareToast: string;
+    shareTitle: string;
+    shareText: string;
+    languageSelector: string;
     backToTop: string;
     disclaimer: string;
     nav: string;
@@ -35,6 +38,10 @@ const labels: Record<
     about: 'About',
     share: 'Share',
     shareToast: 'Link copied to clipboard!',
+    shareTitle: 'Provisoire - Rwanda Driving Theory Test Prep',
+    shareText:
+      'Practice official Rwanda driving questions and mock exams offline for free!',
+    languageSelector: 'Language selector',
     backToTop: 'Top',
     disclaimer:
       'Independent study support for the Rwanda National Police (RNP) provisional driving test.',
@@ -50,6 +57,10 @@ const labels: Record<
     about: 'À propos',
     share: 'Partager',
     shareToast: 'Lien copié dans le presse-papiers !',
+    shareTitle: 'Provisoire — Entraînement au code de la route rwandais',
+    shareText:
+      'Entraînez-vous gratuitement aux questions officielles du code rwandais et aux examens blancs hors ligne !',
+    languageSelector: 'Sélecteur de langue',
     backToTop: 'Haut',
     disclaimer:
       'Support d’étude indépendant pour l’examen du permis provisoire au Rwanda.',
@@ -65,6 +76,11 @@ const labels: Record<
     about: 'Ibyerekeye',
     share: 'Sangiza',
     shareToast: 'Ihuza ryamaze gukopororwa !',
+    shareTitle:
+      'Provisoire — Kwitegura ikizamini cy’amategeko y’umuhanda mu Rwanda',
+    shareText:
+      'Itoze ibibazo by’amategeko y’umuhanda n’ibizamini by’ikitegererezo ku buntu ndetse no kuri interineti itariho!',
+    languageSelector: 'Guhitamo ururimi',
     backToTop: 'Hejuru',
     disclaimer:
       'Umfashanyigisho yigenga ifasha kwitegura ikizamini cy’uruhushya rw’agateganyo.',
@@ -196,7 +212,7 @@ const navLinks = [
         <div
           class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
           role="group"
-          aria-label="Language selector"
+          aria-label={t.languageSelector}
         >
           {
             locales.map(({ code, label }) => {
@@ -283,7 +299,14 @@ const navLinks = [
   </div>
 </footer>
 
-<script is:inline define:vars={{ shareToastMsg: t.shareToast }}>
+<script
+  is:inline
+  define:vars={{
+    shareToastMsg: t.shareToast,
+    shareTitleMsg: t.shareTitle,
+    shareTextMsg: t.shareText,
+  }}
+>
   (function initFooter() {
     // Smooth Back to Top
     const backToTopBtn = document.getElementById('footer-back-to-top');
@@ -314,8 +337,8 @@ const navLinks = [
     if (shareBtn) {
       shareBtn.addEventListener('click', async () => {
         const shareData = {
-          title: 'Provisoire - Rwanda Driving Theory Test Prep',
-          text: 'Practice 500+ official Rwanda driving questions and mock exams offline for free!',
+          title: shareTitleMsg,
+          text: shareTextMsg,
           url: window.location.href,
         };
 
