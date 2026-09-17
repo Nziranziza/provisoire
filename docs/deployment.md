@@ -135,22 +135,28 @@ in Cloudflare's managed content will be caught.
 question page as Googlebot and as Bingbot and failing on a `cf-mitigated`
 response header.
 
-## 4. Analytics — Microsoft Clarity
+## 4. Analytics — Microsoft Clarity & Cookie Consent
 
-`src/components/Analytics.astro` injects the Clarity tag only from a Cloudflare
-Pages build of the production branch — it requires `CF_PAGES=1` _and_
-`CF_PAGES_BRANCH=main`, so a local build, `astro preview` and the
-`wrangler pages dev` flow below all stay silent rather than sending activity to
-the real project. To exercise the tag locally, build with
-`CF_PAGES=1 CF_PAGES_BRANCH=main`. The project id is public by design and
-defaulted in that file.
+`src/components/Analytics.astro` injects Microsoft Clarity, which is dual-gated:
 
-**Consent note:** Clarity sets first-party cookies (`_clck`, `_clsk`) and
-records sessions, so it is _not_ cookieless. The original plan assumed
-Cloudflare Web Analytics, which is, and therefore needed no consent banner.
-If EU/UK traffic becomes material, either add a consent gate before the Clarity
-tag or switch to Cloudflare Web Analytics (Dashboard → Web Analytics; it
-auto-injects its own beacon and needs no code change here).
+1. **Build environment gate:** The tag is only active on a Cloudflare Pages
+   production build (`CF_PAGES=1` _and_ `CF_PAGES_BRANCH=main`). Local builds,
+   `astro preview`, and emulator flows stay silent.
+2. **Client-side cookie consent gate:** Under GDPR/PECR and Rwanda's Law No.
+   058/2021 on Personal Data Protection, Clarity is gated behind user consent.
+   A consent banner (`src/components/CookieConsent.astro`) prompts users on
+   their first visit. The decision is saved to `localStorage` under the key
+   `provisoire_cookie_consent` (`granted` or `denied`). Clarity is initialized
+   _only_ when consent is `granted`. If declined, no analytics script is
+   executed and no cookies (`_clck`, `_clsk`) are set.
+
+Users can view and adjust their consent preferences at any time via the
+dedicated management widget on the Privacy Policy page (`/privacy`,
+`/rw/privacy`, `/en/privacy`, `/fr/privacy`).
+
+The project ID is public by design and configured in `Analytics.astro`, with
+optional override via `PUBLIC_CLARITY_PROJECT_ID`. Setting that variable to an
+empty string disables Clarity entirely.
 
 ## 5. Google Search Console
 

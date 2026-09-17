@@ -1,45 +1,54 @@
 ---
 /**
- * Microsoft Clarity, injected only on the production deployment.
+ * Microsoft Clarity analytics, gated behind user cookie consent.
  *
- * The project id is public by design (it ships in the page source), so it has
- * a default here; `PUBLIC_CLARITY_PROJECT_ID` overrides it and setting that
- * variable to an empty string disables Clarity entirely.
+ * Gating is dual-layer:
+ * 1. Build-time: Injected only on production Cloudflare Pages builds (`CF_PAGES=1` & `CF_PAGES_BRANCH=main`).
+ * 2. Client-time: Evaluates `localStorage.getItem('provisoire_cookie_consent') === 'granted'`.
+ *    If consent is not granted, no script is injected and no cookies (_clck, _clsk) are set.
  *
- * Gating is fail-closed: the tag ships only from a Cloudflare Pages build of
- * the production branch. A missing `CF_PAGES_BRANCH` is NOT treated as
- * production — `astro dev`, a local `npm run build`, `astro preview` and the
- * `wrangler pages dev` flow in docs/deployment.md all lack it, and opening any
- * of those in a browser would otherwise send activity to the real project.
- * (`src/pages/robots.txt.ts` deliberately fails the other way: an unknown host
- * should still be indexable, whereas analytics should stay silent.)
- *
- * To exercise the tag locally, build with `CF_PAGES=1 CF_PAGES_BRANCH=main`.
- *
- * Note: Clarity sets first-party cookies (`_clck`, `_clsk`). It is not
- * cookieless the way Cloudflare Web Analytics is — see docs/deployment.md
- * before serving EU traffic without a consent banner.
+ * `PUBLIC_CLARITY_PROJECT_ID` allows overriding the default project ID, or disabling it with an empty string.
  */
 const DEFAULT_PROJECT_ID = 'yg4zez2uiv';
 
 const configured = import.meta.env.PUBLIC_CLARITY_PROJECT_ID;
 const projectId = configured === undefined ? DEFAULT_PROJECT_ID : configured;
 
-// `CF_PAGES` is set to "1" only by a Cloudflare Pages build — the documented
-// way to branch on "running on Pages versus locally".
 const isPagesProductionBuild =
   process.env.CF_PAGES === '1' && process.env.CF_PAGES_BRANCH === 'main';
 
 const enabled =
   Boolean(projectId) && import.meta.env.PROD && isPagesProductionBuild;
 
-// Clarity's own loader snippet, kept verbatim as a string so neither Astro nor
-// Prettier reformats it. `projectId` is a literal from the build environment.
-const snippet = `(function(c,l,a,r,i,t,y){
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", ${JSON.stringify(projectId)});`;
+const snippet = `(function initGatedClarity() {
+  const STORAGE_KEY = 'provisoire_cookie_consent';
+  let clarityInitialized = false;
+
+  function loadClarity() {
+    if (clarityInitialized) return;
+    clarityInitialized = true;
+
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", ${JSON.stringify(projectId)});
+  }
+
+  try {
+    if (localStorage.getItem(STORAGE_KEY) === 'granted') {
+      loadClarity();
+    }
+  } catch {
+    // localStorage disabled
+  }
+
+  window.addEventListener('cookie-consent-updated', function(evt) {
+    if (evt && evt.detail && evt.detail.consent === 'granted') {
+      loadClarity();
+    }
+  });
+})();`;
 ---
 
 {enabled && <script is:inline set:html={snippet} />}
