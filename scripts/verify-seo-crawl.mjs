@@ -275,7 +275,9 @@ for (const filePath of htmlFiles) {
     relPath.startsWith('en/') ||
     relPath.startsWith('fr/') ||
     relPath.startsWith('rw/') ||
-    relPath === 'index.html';
+    relPath === 'en.html' ||
+    relPath === 'fr.html' ||
+    relPath === 'rw.html';
 
   if (isLocalizedPage) {
     const langMap = new Map();
@@ -317,10 +319,12 @@ for (const filePath of htmlFiles) {
 
     // Validate self-reference for the current page locale
     let currentLocale = null;
-    if (relPath.startsWith('en/')) currentLocale = 'en';
-    else if (relPath.startsWith('fr/')) currentLocale = 'fr';
-    else if (relPath.startsWith('rw/')) currentLocale = 'rw';
-    else if (relPath === 'index.html') currentLocale = 'en';
+    if (relPath.startsWith('en/') || relPath === 'en.html')
+      currentLocale = 'en';
+    else if (relPath.startsWith('fr/') || relPath === 'fr.html')
+      currentLocale = 'fr';
+    else if (relPath.startsWith('rw/') || relPath === 'rw.html')
+      currentLocale = 'rw';
 
     if (currentLocale) {
       assert.equal(

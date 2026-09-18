@@ -90,7 +90,18 @@ export function buildRedirectMap({
     ),
   );
 
+  /** Unprefixed root aliases → default locale (en) pages */
+  const rootAliases = {
+    '/privacy': '/en/privacy',
+    '/about': '/en/about',
+    '/practice': '/en/practice',
+    '/exam': '/en/exam',
+    '/traffic-rules': '/en/traffic-rules',
+    '/road-signs': '/en/road-signs',
+  };
+
   return {
+    ...rootAliases,
     ...pageOneRedirects,
     ...categoryRedirects,
     ...legacyCategoryRedirects,
