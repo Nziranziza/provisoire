@@ -24,9 +24,16 @@ interface Props {
   page?: number;
   categoryId?: number;
   isHome?: boolean;
+  isRoot?: boolean;
 }
 
-const { lang, page: pageProp, categoryId, isHome = false } = Astro.props;
+const {
+  lang,
+  page: pageProp,
+  categoryId,
+  isHome = false,
+  isRoot = false,
+} = Astro.props;
 
 const category = categoryId
   ? questionBank.categories.find((c) => c.id === categoryId)
@@ -47,7 +54,8 @@ const seo = getListPageMetadata({
   totalPages,
   categoryId,
   site: Astro.site,
-  isHome,
+  isHome: isHome || isRoot,
+  isRoot,
 });
 
 const questionNumbers = pageQuestions.map(

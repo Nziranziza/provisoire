@@ -18,6 +18,7 @@ const labels: Record<
     trafficRules: string;
     roadSigns: string;
     about: string;
+    privacy: string;
     share: string;
     shareToast: string;
     shareTitle: string;
@@ -36,6 +37,7 @@ const labels: Record<
     trafficRules: 'Traffic rules',
     roadSigns: 'Road signs',
     about: 'About',
+    privacy: 'Privacy',
     share: 'Share',
     shareToast: 'Link copied to clipboard!',
     shareTitle: 'Provisoire - Rwanda Driving Theory Test Prep',
@@ -55,6 +57,7 @@ const labels: Record<
     trafficRules: 'Règles de circulation',
     roadSigns: 'Panneaux routiers',
     about: 'À propos',
+    privacy: 'Confidentialité',
     share: 'Partager',
     shareToast: 'Lien copié dans le presse-papiers !',
     shareTitle: 'Provisoire — Entraînement au code de la route rwandais',
@@ -74,6 +77,7 @@ const labels: Record<
     trafficRules: 'Amategeko y’umuhanda',
     roadSigns: 'Ibyapa byo ku muhanda',
     about: 'Ibyerekeye',
+    privacy: 'Ubuzima bwite',
     share: 'Sangiza',
     shareToast: 'Ihuza ryamaze gukopororwa !',
     shareTitle:
@@ -113,6 +117,11 @@ const isAboutPage =
   Astro.url.pathname.endsWith('/about/') ||
   Astro.url.pathname.includes('/about');
 
+const isPrivacyPage =
+  Astro.url.pathname.endsWith('/privacy') ||
+  Astro.url.pathname.endsWith('/privacy/') ||
+  Astro.url.pathname.includes('/privacy');
+
 const navLinks = [
   {
     href: `/${lang}/practice`,
@@ -151,6 +160,16 @@ const navLinks = [
           label: t.about,
           icon: null,
           variant: 'amber',
+        },
+      ]
+    : []),
+  ...(!isPrivacyPage
+    ? [
+        {
+          href: `/${lang}/privacy`,
+          label: t.privacy,
+          icon: null,
+          variant: 'default',
         },
       ]
     : []),

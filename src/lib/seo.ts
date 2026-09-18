@@ -322,6 +322,7 @@ export interface ListPageMetadataOptions {
   categoryId?: number | null;
   site: string | URL | undefined;
   isHome?: boolean;
+  isRoot?: boolean;
 }
 
 /**
@@ -340,12 +341,18 @@ export function getListPageMetadata(
     categoryId,
     site,
     isHome = false,
+    isRoot = false,
   } = options;
 
   let baseTitle: string;
   let baseDescription: string;
 
-  if (isHome) {
+  if (isRoot) {
+    baseTitle =
+      'Provisoire — Rwanda Provisional Driving Test Prep & Free Question Bank';
+    baseDescription =
+      'Prepare and pass your Rwanda provisional driving test with official traffic rules, road signs question bank, instant answers, and timed mock exam simulator.';
+  } else if (isHome) {
     if (lang === 'fr') {
       baseTitle =
         'Provisoire — Préparation à l’examen du permis provisoire au Rwanda';
@@ -432,22 +439,43 @@ export function getListPageMetadata(
       : truncateMeta(baseDescription);
 
   const homePath = (locale: Lang) => `/${locale}`;
-  const canonicalPath = isHome
-    ? homePath(lang)
-    : questionsListHref(lang, page, categoryId);
+  const canonicalPath = isRoot
+    ? '/'
+    : isHome
+      ? homePath(lang)
+      : questionsListHref(lang, page, categoryId);
   const canonical = absoluteUrl(canonicalPath, site);
-  const alternates = isHome
+  const alternates = isRoot
     ? [
-        ...LOCALES.map((locale) => ({
-          lang: locale,
-          href: absoluteUrl(homePath(locale), site),
-        })),
+        {
+          lang: 'en',
+          href: absoluteUrl('/', site),
+        },
+        {
+          lang: 'fr',
+          href: absoluteUrl('/fr', site),
+        },
+        {
+          lang: 'rw',
+          href: absoluteUrl('/rw', site),
+        },
         {
           lang: 'x-default',
-          href: absoluteUrl(homePath('en'), site),
+          href: absoluteUrl('/', site),
         },
       ]
-    : listPageAlternates(page, site, categoryId);
+    : isHome
+      ? [
+          ...LOCALES.map((locale) => ({
+            lang: locale,
+            href: absoluteUrl(homePath(locale), site),
+          })),
+          {
+            lang: 'x-default',
+            href: absoluteUrl(homePath('en'), site),
+          },
+        ]
+      : listPageAlternates(page, site, categoryId);
 
   const prev =
     page > 1
