@@ -10,7 +10,11 @@ export type TermsContent = {
   description: string;
   eyebrow: string;
   intro: string;
+  unofficialBadge: string;
+  lastUpdatedLabel: string;
   lastUpdated: string;
+  disclaimerTitle: string;
+  disclaimerBody: string;
   sections: TermsSection[];
   languagesTitle: string;
   languages: string[];
@@ -35,7 +39,12 @@ const content: Record<Lang, TermsContent> = {
     eyebrow: 'Legal & Disclaimer',
     intro:
       'Please read these Terms of Use carefully before using Provisoire. By accessing or using our practice quizzes, mock exams, or question bank, you agree to be bound by these terms.',
+    unofficialBadge: 'Unofficial Study Material',
+    lastUpdatedLabel: 'Last Updated',
     lastUpdated: 'September 2026',
+    disclaimerTitle: 'Important Disclaimer',
+    disclaimerBody:
+      'Provisoire is not an official test, is not published by the Rwanda National Police (RNP), and does not guarantee exam results. Always verify traffic rules against official laws and licensed driving school materials.',
     sections: [
       {
         title: '1. Unofficial Study Aid & Accuracy Disclaimer',
@@ -107,7 +116,12 @@ const content: Record<Lang, TermsContent> = {
     eyebrow: 'Mentions légales & Avertissement',
     intro:
       'Veuillez lire attentivement les présentes conditions d’utilisation avant d’utiliser Provisoire. En accédant à nos quiz, examens blancs ou questions, vous acceptez d’être lié par ces conditions.',
+    unofficialBadge: 'Contenu d’étude non officiel',
+    lastUpdatedLabel: 'Dernière mise à jour',
     lastUpdated: 'Septembre 2026',
+    disclaimerTitle: 'Avertissement important',
+    disclaimerBody:
+      'Provisoire n’est pas un examen officiel, n’est pas publié par la Police Nationale du Rwanda (RNP) et ne garantit aucun résultat d’examen. Vérifiez toujours le code de la route auprès des textes officiels et des auto-écoles agréées.',
     sections: [
       {
         title: '1. Outil non officiel et clause de non-responsabilité',
@@ -179,7 +193,12 @@ const content: Record<Lang, TermsContent> = {
     eyebrow: 'Amategeko & Inshingano',
     intro:
       'Nyamuneka soma aya mabwiriza witonze mbere yo gukoresha Provisoire. Gukoresha iyi myitozo n’ibibazo byo kwiga bishatse kuvuga ko wemeye aya mabwiriza.',
+    unofficialBadge: 'Ibyigwa bitari ibya Leta',
+    lastUpdatedLabel: 'Byavuguruwe bwa nyuma',
     lastUpdated: 'Nzeri 2026',
+    disclaimerTitle: 'Itangazo ry’ingenzi',
+    disclaimerBody:
+      'Provisoire ntabwo ari ikizamini cyemewe, ntabwo gitangwa na Polisi y’u Rwanda (RNP), kandi ntabwo gitanga ingwate yo gutsinda. Buri gihe genzura amategeko y’umuhanda ku nyandiko za Leta n’amashuri yemewe yo kwigisha gutwara.',
     sections: [
       {
         title: '1. Ubufasha bw’imyitozo butari ubwa Leta n’Inshingano',
