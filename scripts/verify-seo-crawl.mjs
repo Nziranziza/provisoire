@@ -465,6 +465,63 @@ console.log(
   `✓ Verified full 3-way reciprocity across ${clustersChecked} hreflang clusters!`,
 );
 
+// 11. Check Footer landmark, localized labels, and required links across all locales
+console.log('\n--- Checking Footer Landmark & Localized Links ---');
+const requiredFooterLinks = {
+  en: [
+    '/en/practice',
+    '/en/exam',
+    '/en/questions',
+    '/en/traffic-rules',
+    '/en/road-signs',
+    '/en/about',
+    '/en/privacy',
+    '/en/terms',
+  ],
+  fr: [
+    '/fr/practice',
+    '/fr/exam',
+    '/fr/questions',
+    '/fr/traffic-rules',
+    '/fr/road-signs',
+    '/fr/about',
+    '/fr/privacy',
+    '/fr/terms',
+  ],
+  rw: [
+    '/rw/practice',
+    '/rw/exam',
+    '/rw/questions',
+    '/rw/traffic-rules',
+    '/rw/road-signs',
+    '/rw/about',
+    '/rw/privacy',
+    '/rw/terms',
+  ],
+};
+
+for (const [locale, expectedLinks] of Object.entries(requiredFooterLinks)) {
+  const samplePath = join(DIST_DIR, `${locale}.html`);
+  assert(
+    existsSync(samplePath),
+    `Sample page ${locale}.html must exist in dist/ to test footer`,
+  );
+  const html = readFileSync(samplePath, 'utf8');
+  assert(
+    html.includes('<footer'),
+    `<footer element must exist in ${locale}.html`,
+  );
+  for (const link of expectedLinks) {
+    assert(
+      html.includes(`href="${link}"`),
+      `Footer in ${locale}.html missing expected localized link: ${link}`,
+    );
+  }
+}
+console.log(
+  '✓ Footer landmark, required links, and localized dictionaries verified across all locales!',
+);
+
 console.log('\n======================================================');
 console.log('ALL SEO & Trilingual Metadata Crawl Verifications PASSED!');
 console.log('======================================================\n');
