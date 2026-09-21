@@ -12,6 +12,7 @@ const labels: Record<
   Lang,
   {
     tagline: string;
+    home: string;
     practice: string;
     exam: string;
     questions: string;
@@ -32,6 +33,7 @@ const labels: Record<
 > = {
   en: {
     tagline: 'Study support for Rwanda driving theory',
+    home: 'Home',
     practice: 'Practice',
     exam: 'Mock Exam',
     questions: 'Questions',
@@ -53,6 +55,7 @@ const labels: Record<
   },
   fr: {
     tagline: 'Aide à l’étude pour le code de la route au Rwanda',
+    home: 'Accueil',
     practice: 'Entraînement',
     exam: 'Examen blanc',
     questions: 'Questions',
@@ -74,6 +77,7 @@ const labels: Record<
   },
   rw: {
     tagline: 'Ubufasha bwo kwiga amategeko y’umuhanda mu Rwanda',
+    home: 'Ahabanza',
     practice: 'Imyitozo',
     exam: 'Ikizamini',
     questions: 'Ibibazo',
@@ -116,6 +120,11 @@ function getLocalizedPath(targetLang: Lang, currentPath: string): string {
   return `/${targetLang}/${parts.join('/')}`;
 }
 
+const isHomePage =
+  Astro.url.pathname === `/${lang}` ||
+  Astro.url.pathname === `/${lang}/` ||
+  Astro.url.pathname === '/';
+
 const isAboutPage =
   Astro.url.pathname.endsWith('/about') ||
   Astro.url.pathname.endsWith('/about/') ||
@@ -132,6 +141,16 @@ const isTermsPage =
   Astro.url.pathname.includes('/terms');
 
 const navLinks = [
+  ...(!isHomePage
+    ? [
+        {
+          href: `/${lang}`,
+          label: t.home,
+          icon: '🏠',
+          variant: 'default',
+        },
+      ]
+    : []),
   {
     href: `/${lang}/practice`,
     label: t.practice,
