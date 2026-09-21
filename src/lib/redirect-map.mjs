@@ -92,6 +92,7 @@ export function buildRedirectMap({
 
   /** Unprefixed root aliases → default locale (en) pages */
   const rootAliases = {
+    '/terms': '/en/terms',
     '/privacy': '/en/privacy',
     '/about': '/en/about',
     '/practice': '/en/practice',
