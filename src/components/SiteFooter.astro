@@ -20,7 +20,8 @@ const locales: { code: Lang; label: string }[] = [
 ];
 
 function getLocalizedPath(targetLang: Lang, currentPath: string): string {
-  const parts = currentPath.split('/').filter(Boolean);
+  let clean = currentPath.replace(/\.html$/, '').replace(/\/index$/, '');
+  const parts = clean.split('/').filter(Boolean);
   if (parts.length === 0) return `/${targetLang}`;
   if (parts[0] === 'en' || parts[0] === 'fr' || parts[0] === 'rw') {
     parts[0] = targetLang;
@@ -29,25 +30,28 @@ function getLocalizedPath(targetLang: Lang, currentPath: string): string {
   return `/${targetLang}/${parts.join('/')}`;
 }
 
+const cleanPath = pathname.replace(/\.html$/, '').replace(/\/index$/, '');
+
 const isHomePage =
-  Astro.url.pathname === `/${lang}` ||
-  Astro.url.pathname === `/${lang}/` ||
-  Astro.url.pathname === '/';
+  cleanPath === '' ||
+  cleanPath === '/' ||
+  cleanPath === `/${lang}` ||
+  cleanPath === `/${lang}/`;
 
 const isAboutPage =
-  Astro.url.pathname.endsWith('/about') ||
-  Astro.url.pathname.endsWith('/about/') ||
-  Astro.url.pathname.includes('/about');
+  cleanPath.endsWith('/about') ||
+  cleanPath.endsWith('/about/') ||
+  cleanPath.includes('/about');
 
 const isPrivacyPage =
-  Astro.url.pathname.endsWith('/privacy') ||
-  Astro.url.pathname.endsWith('/privacy/') ||
-  Astro.url.pathname.includes('/privacy');
+  cleanPath.endsWith('/privacy') ||
+  cleanPath.endsWith('/privacy/') ||
+  cleanPath.includes('/privacy');
 
 const isTermsPage =
-  Astro.url.pathname.endsWith('/terms') ||
-  Astro.url.pathname.endsWith('/terms/') ||
-  Astro.url.pathname.includes('/terms');
+  cleanPath.endsWith('/terms') ||
+  cleanPath.endsWith('/terms/') ||
+  cleanPath.includes('/terms');
 
 const navLinks = [
   ...(!isHomePage
