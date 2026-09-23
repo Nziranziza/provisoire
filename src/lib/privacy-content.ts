@@ -365,5 +365,5 @@ const content: Record<Lang, PrivacyContent> = {
 };
 
 export function getPrivacyContent(lang: Lang): PrivacyContent {
-  return content[lang] ?? content.en;
+  return content[lang] ?? content.rw;
 }

@@ -30,6 +30,7 @@ function truncateMeta(text, max = 155) {
 function questionText(q, lang) {
   return (
     q.translations[lang]?.question ??
+    q.translations.rw?.question ??
     q.translations.en?.question ??
     'Question unavailable'
   );
@@ -43,7 +44,12 @@ function questionText(q, lang) {
  * @returns {string[]} List of options.
  */
 function questionOptions(q, lang) {
-  return q.translations[lang]?.options ?? q.translations.en?.options ?? [];
+  return (
+    q.translations[lang]?.options ??
+    q.translations.rw?.options ??
+    q.translations.en?.options ??
+    []
+  );
 }
 
 /**
@@ -54,7 +60,7 @@ function questionOptions(q, lang) {
  * @returns {string} Correct answer string.
  */
 function correctAnswerText(q, lang) {
-  const t = q.translations[lang] ?? q.translations.en;
+  const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
   if (!t) return '';
   return t.correct_answer || t.options[q.correct_index] || '';
 }
@@ -67,7 +73,7 @@ function correctAnswerText(q, lang) {
  * @returns {string} Explanation string.
  */
 function questionExplanation(q, lang) {
-  const t = q.translations[lang] ?? q.translations.en;
+  const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
   return t?.explanation ?? '';
 }
 
@@ -189,7 +195,7 @@ function webSiteJsonLd(options) {
     description:
       options?.description ??
       'Rwanda provisional driving test question bank, practice quizzes, and timed mock exam simulator in English, French, and Kinyarwanda.',
-    inLanguage: options?.inLanguage ?? ['en', 'fr', 'rw'],
+    inLanguage: options?.inLanguage ?? ['rw', 'en', 'fr'],
   };
 }
 

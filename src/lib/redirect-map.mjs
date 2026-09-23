@@ -9,7 +9,7 @@
  *    before serving an asset, so on production the 301 wins over the HTML page.
  */
 
-const DEFAULT_LOCALES = ['en', 'fr', 'rw'];
+const DEFAULT_LOCALES = ['rw', 'en', 'fr'];
 
 /**
  * @param {object} options
@@ -90,15 +90,15 @@ export function buildRedirectMap({
     ),
   );
 
-  /** Unprefixed root aliases → default locale (en) pages */
+  /** Unprefixed root aliases → default locale (rw) pages */
   const rootAliases = {
-    '/terms': '/en/terms',
-    '/privacy': '/en/privacy',
-    '/about': '/en/about',
-    '/practice': '/en/practice',
-    '/exam': '/en/exam',
-    '/traffic-rules': '/en/traffic-rules',
-    '/road-signs': '/en/road-signs',
+    '/terms': '/rw/terms',
+    '/privacy': '/rw/privacy',
+    '/about': '/rw/about',
+    '/practice': '/rw/practice',
+    '/exam': '/rw/exam',
+    '/traffic-rules': '/rw/traffic-rules',
+    '/road-signs': '/rw/road-signs',
   };
 
   return {

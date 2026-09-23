@@ -55,11 +55,11 @@ export function truncateMeta(text: string, max = 155): string {
 }
 
 /**
- * Builds hreflang alternates for the same logical page across locales (ISO 639-1: en, fr, rw).
+ * Builds hreflang alternates for the same logical page across locales (ISO 639-1: rw, en, fr).
  *
  * @param hrefForLocale - Callback mapping each locale to its relative or absolute path.
  * @param site - Base site URL or origin.
- * @returns Array of hreflang links including x-default (pointing to English).
+ * @returns Array of hreflang links including x-default (pointing to Kinyarwanda).
  */
 export function hreflangAlternates(
   hrefForLocale: (lang: Lang) => string,
@@ -71,7 +71,7 @@ export function hreflangAlternates(
   }));
   links.push({
     lang: 'x-default',
-    href: absoluteUrl(hrefForLocale('en'), site),
+    href: absoluteUrl(hrefForLocale('rw'), site),
   });
   return links;
 }
@@ -349,9 +349,9 @@ export function getListPageMetadata(
 
   if (isRoot) {
     baseTitle =
-      'Provisoire — Rwanda Provisional Driving Test Prep & Free Question Bank';
+      "Provisoire — Kwitegura Ikizamini cy'Uruhushya rw'Agateganyo mu Rwanda";
     baseDescription =
-      'Prepare and pass your Rwanda provisional driving test with official traffic rules, road signs question bank, instant answers, and timed mock exam simulator.';
+      "Kwimenyereza no gutsinda ikizamini cy'uruhushya rw'agateganyo mu Rwanda: amategeko y'umuhanda, ibyapa, ibisobanuro n'ibizamini by'ikitegererezo bifite igihe.";
   } else if (isHome) {
     if (lang === 'fr') {
       baseTitle =
@@ -360,7 +360,7 @@ export function getListPageMetadata(
         'Révisez et réussissez le permis de conduire provisoire au Rwanda : questions officielles du code de la route, panneaux routiers, explications et examens blancs.';
     } else if (lang === 'rw') {
       baseTitle =
-        "Provisoire — Kwitegura ikizamini cy'uruhushya rw'agateganyo mu Rwanda";
+        "Provisoire — Ibibazo n'Ibisobanuro by'Uruhushya rw'Agateganyo mu Rwanda";
       baseDescription =
         "Batsinda ikizamini cy'uruhushya rwo gutwara rw'agateganyo mu Rwanda: ibibazo n'ibisubizo by'amategeko n'ibyapa, ibisobanuro n'ibizamini by'ikitegererezo.";
     } else {
@@ -448,16 +448,16 @@ export function getListPageMetadata(
   const alternates = isRoot
     ? [
         {
-          lang: 'en',
+          lang: 'rw',
           href: absoluteUrl('/', site),
+        },
+        {
+          lang: 'en',
+          href: absoluteUrl('/en', site),
         },
         {
           lang: 'fr',
           href: absoluteUrl('/fr', site),
-        },
-        {
-          lang: 'rw',
-          href: absoluteUrl('/rw', site),
         },
         {
           lang: 'x-default',
@@ -472,7 +472,7 @@ export function getListPageMetadata(
           })),
           {
             lang: 'x-default',
-            href: absoluteUrl(homePath('en'), site),
+            href: absoluteUrl(homePath('rw'), site),
           },
         ]
       : listPageAlternates(page, site, categoryId);
@@ -906,7 +906,7 @@ export function webSiteJsonLd(options?: WebSiteJsonLdOptions) {
     description:
       options?.description ??
       'Rwanda provisional driving test question bank, practice quizzes, and timed mock exam simulator in English, French, and Kinyarwanda.',
-    inLanguage: options?.inLanguage ?? ['en', 'fr', 'rw'],
+    inLanguage: options?.inLanguage ?? ['rw', 'en', 'fr'],
   };
 }
 

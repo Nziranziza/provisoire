@@ -45,42 +45,48 @@ export function imageSrc(imageBase: string, imageUrl: string | null): string {
 export function questionText(q: Question, lang: Lang): string {
   return (
     q.translations[lang]?.question ??
+    q.translations.rw?.question ??
     q.translations.en?.question ??
     'Question unavailable'
   );
 }
 
 export function questionOptions(q: Question, lang: Lang): string[] {
-  return q.translations[lang]?.options ?? q.translations.en?.options ?? [];
+  return (
+    q.translations[lang]?.options ??
+    q.translations.rw?.options ??
+    q.translations.en?.options ??
+    []
+  );
 }
 
 export function correctAnswerText(q: Question, lang: Lang): string {
-  const t = q.translations[lang] ?? q.translations.en;
+  const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
   if (!t) return '';
   return t.correct_answer || t.options[q.correct_index] || '';
 }
 
 export function questionExplanation(q: Question, lang: Lang): string {
-  const t = q.translations[lang] ?? q.translations.en;
+  const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
   return t?.explanation ?? '';
 }
 
 export const ANSWER_LABEL: Record<Lang, string> = {
+  rw: 'Igisubizo cy’ukuri:',
   en: 'Correct answer:',
   fr: 'Bonne réponse :',
-  rw: 'Igisubizo cy’ukuri:',
 };
 
 export const EXPLANATION_LABEL: Record<Lang, string> = {
+  rw: 'Ibisobanuro',
   en: 'Explanation',
   fr: 'Explication',
-  rw: 'Ibisobanuro',
 };
 
-export const LOCALES: Lang[] = ['en', 'fr', 'rw'];
+export const LOCALES: Lang[] = ['rw', 'en', 'fr'];
 
 export function isLang(value: string | undefined): value is Lang {
-  return value === 'en' || value === 'fr' || value === 'rw';
+  return value === 'rw' || value === 'en' || value === 'fr';
 }
 
 export function questionNumber(index: number): number {
@@ -102,20 +108,21 @@ export const CATEGORY_SLUGS: Record<number, string> = {
 /** Localized display names for category hubs and UI badges. */
 export const CATEGORY_LABELS: Record<number, Record<Lang, string>> = {
   1: {
+    rw: 'Amategeko y’umuhanda',
     en: 'Traffic Rules',
     fr: 'Règles de circulation',
-    rw: 'Amategeko y’umuhanda',
   },
   2: {
+    rw: 'Ibyapa byo ku muhanda',
     en: 'Road Signs',
     fr: 'Panneaux de signalisation',
-    rw: 'Ibyapa byo ku muhanda',
   },
 };
 
 export function categoryLabel(categoryId: number, lang: Lang): string {
   return (
     CATEGORY_LABELS[categoryId]?.[lang] ??
+    CATEGORY_LABELS[categoryId]?.rw ??
     CATEGORY_LABELS[categoryId]?.en ??
     'Category'
   );

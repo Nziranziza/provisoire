@@ -5,18 +5,18 @@ interface Props {
   lang?: Lang;
 }
 
-const { lang = 'en' } = Astro.props;
+const { lang = 'rw' } = Astro.props;
 
 const swCopy = {
+  rw: { message: 'Verisiyo nshya irahari.', action: 'Vugurura ubu' },
   en: { message: 'A new version is ready.', action: 'Update now' },
   fr: {
     message: 'Une nouvelle version est disponible.',
     action: 'Mettre à jour',
   },
-  rw: { message: 'Verisiyo nshya irahari.', action: 'Vugurura ubu' },
 };
 
-const tSw = swCopy[lang] || swCopy.en;
+const tSw = swCopy[lang] || swCopy.rw;
 ---
 
 <!-- Global Offline Indicator -->
@@ -133,8 +133,13 @@ const tSw = swCopy[lang] || swCopy.en;
     }
   });
 
-  const locale = (document.documentElement.lang || 'en') as 'en' | 'fr' | 'rw';
+  const locale = (document.documentElement.lang || 'rw') as 'en' | 'fr' | 'rw';
   const offlineLabels = {
+    rw: {
+      offline:
+        'Uburyo budakenera interineti · Ibibazo n’ibizamini birakora neza',
+      backOnline: 'Interineti yagarutse · Muri kumwe na interineti',
+    },
     en: {
       offline:
         'Offline Mode · Full question bank & tests are available offline',
@@ -145,13 +150,8 @@ const tSw = swCopy[lang] || swCopy.en;
         'Mode Hors-ligne · Banque de questions et tests disponibles sans connexion',
       backOnline: 'En ligne · Connexion rétablie',
     },
-    rw: {
-      offline:
-        'Uburyo budakenera interineti · Ibibazo n’ibizamini birakora neza',
-      backOnline: 'Interineti yagarutse · Muri kumwe na interineti',
-    },
   };
-  const currentLabels = offlineLabels[locale] || offlineLabels.en;
+  const currentLabels = offlineLabels[locale] || offlineLabels.rw;
 
   let reconnectedTimer: ReturnType<typeof setTimeout> | null = null;
 

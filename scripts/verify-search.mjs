@@ -109,7 +109,7 @@ async function loadSearchModule() {
 }
 
 const search = await loadSearchModule();
-const locales = ['en', 'fr', 'rw'];
+const locales = ['rw', 'en', 'fr'];
 const samples = [0, 41, 83, 127, 197];
 let failed = 0;
 

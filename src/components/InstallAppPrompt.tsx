@@ -40,13 +40,13 @@ const copy = {
 };
 
 export default function InstallAppPrompt({
-  lang = 'en',
+  lang = 'rw',
   onInstalled,
 }: InstallAppPromptProps) {
   const [installable, setInstallable] = useState<boolean>(false);
   const [dismissed, setDismissed] = useState<boolean>(false);
 
-  const t = copy[lang] || copy.en;
+  const t = copy[lang] || copy.rw;
 
   useEffect(() => {
     initPwaClient();

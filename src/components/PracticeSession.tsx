@@ -38,7 +38,7 @@ import InstallAppButton from './InstallAppButton';
 import { markCompletedSession, precacheUrls } from '../lib/pwa';
 
 export default function PracticeSession({
-  lang = 'en',
+  lang = 'rw',
   imageBase = '/',
   initialCategory = null,
   initialMode = 'practice',

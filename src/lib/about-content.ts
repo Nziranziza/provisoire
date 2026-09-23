@@ -154,5 +154,5 @@ const content: Record<Lang, AboutContent> = {
 };
 
 export function getAboutContent(lang: Lang): AboutContent {
-  return content[lang];
+  return content[lang] ?? content.rw;
 }

@@ -330,8 +330,8 @@ const installGuideCopy: Record<
   },
 };
 
-export function getInstallGuide(lang: InstallGuideLang = 'en') {
-  return installGuideCopy[lang] || installGuideCopy.en;
+export function getInstallGuide(lang: InstallGuideLang = 'rw') {
+  return installGuideCopy[lang] || installGuideCopy.rw;
 }
 
 export async function promptInstall(): Promise<

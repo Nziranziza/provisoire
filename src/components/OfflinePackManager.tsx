@@ -55,7 +55,7 @@ const copy = {
 };
 
 export default function OfflinePackManager({
-  lang = 'en',
+  lang = 'rw',
 }: OfflinePackManagerProps) {
   const [cachedCount, setCachedCount] = useState<number>(0);
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
@@ -63,7 +63,7 @@ export default function OfflinePackManager({
   const [downloadedCount, setDownloadedCount] = useState<number>(0);
   const [isSupported, setIsSupported] = useState<boolean>(true);
 
-  const t = copy[lang] || copy.en;
+  const t = copy[lang] || copy.rw;
 
   // Extract all unique image URLs from questions
   const allImages = Array.from(

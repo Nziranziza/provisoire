@@ -7,16 +7,16 @@ interface Props {
   lang?: Lang;
 }
 
-const { lang = 'en' } = Astro.props;
+const { lang = 'rw' } = Astro.props;
 
 const t = getFooterContent(lang);
 
 const pathname = Astro.url.pathname;
 
 const locales: { code: Lang; label: string }[] = [
+  { code: 'rw', label: 'RW' },
   { code: 'en', label: 'EN' },
   { code: 'fr', label: 'FR' },
-  { code: 'rw', label: 'RW' },
 ];
 
 function getLocalizedPath(targetLang: Lang, currentPath: string): string {

@@ -36,7 +36,7 @@ interface Props {
 const {
   title,
   description,
-  lang = Astro.currentLocale ?? 'en',
+  lang = Astro.currentLocale ?? 'rw',
   canonical: canonicalProp,
   prev,
   next,
@@ -59,7 +59,7 @@ const imageHref = image
   ? toAbsolute(image)
   : toAbsolute('/icons/icon-512x512.png');
 const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
-const locale = (lang as Lang) || 'en';
+const locale = (lang as Lang) || 'rw';
 
 // Ownership verification tokens for Google Search Console and Bing Webmaster
 // Tools. Both are set as Cloudflare Pages environment variables; when unset the

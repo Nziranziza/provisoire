@@ -19,14 +19,14 @@ interface InstallAppButtonProps {
 }
 
 export default function InstallAppButton({
-  lang = 'en',
+  lang = 'rw',
   className = '',
   variant = 'default',
 }: InstallAppButtonProps) {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [installed, setInstalled] = useState(false);
-  const label = labels[lang] || labels.en;
+  const label = labels[lang] || labels.rw;
 
   useEffect(() => {
     initPwaClient();

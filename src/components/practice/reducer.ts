@@ -167,7 +167,7 @@ export function calculateFinishState(
 }
 
 export function createInitialState(
-  initialLang: Lang = 'en',
+  initialLang: Lang = 'rw',
   initialCategory: number | null = null,
   initialMode: ExamMode = 'practice',
 ): PracticeState {

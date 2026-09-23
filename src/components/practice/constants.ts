@@ -38,7 +38,13 @@ export const STORAGE_KEY_HISTORY = 'provisoire_practice_history_v1';
 export const STORAGE_KEY_SKIP_AUTO_RESTORE =
   'provisoire_skip_practice_autoresume_v1';
 
-export type I18nDictionary = typeof I18N.en;
+export type I18nDictionary = {
+  [K in keyof typeof I18N.rw]: (typeof I18N.rw)[K] extends (
+    ...args: infer A
+  ) => unknown
+    ? (...args: A) => string
+    : string;
+};
 
 // Complete trilingual copy for the practice engine dynamically bound to EXAM_CONFIG
 export const I18N = {
@@ -409,6 +415,6 @@ export const I18N = {
   },
 } as const;
 
-export function getTranslation(lang: Lang): (typeof I18N)['en'] {
-  return (I18N[lang] || I18N.en) as (typeof I18N)['en'];
+export function getTranslation(lang: Lang): I18nDictionary {
+  return I18N[lang] || I18N.rw;
 }

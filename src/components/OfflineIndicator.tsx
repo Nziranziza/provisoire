@@ -23,13 +23,13 @@ const copy = {
 };
 
 export default function OfflineIndicator({
-  lang = 'en',
+  lang = 'rw',
 }: OfflineIndicatorProps) {
   const [online, setOnline] = useState<boolean>(true);
   const [showReconnected, setShowReconnected] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
-  const t = copy[lang] || copy.en;
+  const t = copy[lang] || copy.rw;
 
   useEffect(() => {
     setMounted(true);

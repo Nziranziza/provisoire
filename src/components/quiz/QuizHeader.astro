@@ -19,9 +19,9 @@ interface Props {
 const { categories, categoryId, lang, page = 1, categoryCounts } = Astro.props;
 
 const locales: { code: Lang; label: string }[] = [
+  { code: 'rw', label: 'RW' },
   { code: 'en', label: 'EN' },
   { code: 'fr', label: 'FR' },
-  { code: 'rw', label: 'RW' },
 ];
 
 const allLabel: Record<Lang, string> = {
