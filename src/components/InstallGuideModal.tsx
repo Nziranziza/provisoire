@@ -96,12 +96,33 @@ export default function InstallGuideModal({
         {showFeedback && (
           <div className="mt-3 rounded-xl border-2 border-blue-600 bg-blue-50 p-3 text-xs text-blue-950">
             <p className="font-extrabold text-blue-900">
-              👉 Browser Install Action:
+              {lang === 'fr'
+                ? '👉 Action dans le navigateur :'
+                : lang === 'rw'
+                  ? '👉 Igikorwa cya mushakisha :'
+                  : '👉 Browser Install Action:'}
             </p>
             <p className="mt-1 font-medium text-slate-700">
-              In Chrome/Edge, click the <strong>Install icon (⊕ / 🖵)</strong> in
-              your address bar above, or tap{' '}
-              <strong>Menu (⋮) → &ldquo;Install app&rdquo;</strong>.
+              {lang === 'fr' ? (
+                <>
+                  Dans Chrome/Edge, cliquez sur l’icône Installer (⊕ / 🖵) dans
+                  la barre d’adresse ci-dessus, ou appuyez sur{' '}
+                  <strong>Menu (⋮) → « Installer l’application »</strong>.
+                </>
+              ) : lang === 'rw' ? (
+                <>
+                  Muri Chrome/Edge, kanda ku kimenyetso cyo gushyiramo (⊕ / 🖵)
+                  hejuru mu mwanya w’aderesi, cyangwa kanda{' '}
+                  <strong>Menu (⋮) → « Shyiramo porogaramu »</strong>.
+                </>
+              ) : (
+                <>
+                  In Chrome/Edge, click the{' '}
+                  <strong>Install icon (⊕ / 🖵)</strong> in your address bar
+                  above, or tap{' '}
+                  <strong>Menu (⋮) → &ldquo;Install app&rdquo;</strong>.
+                </>
+              )}
             </p>
           </div>
         )}
@@ -115,7 +136,17 @@ export default function InstallGuideModal({
           >
             <span>{loading ? '⏳' : '📲'}</span>
             <span>
-              {loading ? 'Opening Installer...' : 'Try Direct Install'}
+              {loading
+                ? lang === 'fr'
+                  ? 'Ouverture...'
+                  : lang === 'rw'
+                    ? 'Irimo gufunguka...'
+                    : 'Opening Installer...'
+                : lang === 'fr'
+                  ? 'Essayer l’installation directe'
+                  : lang === 'rw'
+                    ? 'Gerageza gushyiramo ako kanya'
+                    : 'Try Direct Install'}
             </span>
           </button>
           <button
