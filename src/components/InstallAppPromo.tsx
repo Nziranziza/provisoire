@@ -14,9 +14,9 @@ interface InstallAppPromoProps {
 }
 
 /** Sticky install promo shown site-wide when not already installed. */
-export default function InstallAppPromo({ lang = 'en' }: InstallAppPromoProps) {
+export default function InstallAppPromo({ lang = 'rw' }: InstallAppPromoProps) {
   const [visible, setVisible] = useState(false);
-  const text = copy[lang] || copy.en;
+  const text = copy[lang] || copy.rw;
 
   useEffect(() => {
     initPwaClient();

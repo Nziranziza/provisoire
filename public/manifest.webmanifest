@@ -11,7 +11,7 @@
   "orientation": "any",
   "background_color": "#f5f5f4",
   "theme_color": "#1d4ed8",
-  "lang": "en",
+  "lang": "rw",
   "dir": "ltr",
   "categories": ["education", "utilities"],
   "icons": [
@@ -51,21 +51,21 @@
       "name": "Practice Mode",
       "short_name": "Practice",
       "description": "Start an untimed practice session with instant feedback",
-      "url": "/en/practice",
+      "url": "/rw/practice",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Mock Exam",
       "short_name": "Exam",
       "description": "Take a 20-minute timed exam simulator",
-      "url": "/en/exam",
+      "url": "/rw/exam",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Question Bank",
       "short_name": "Questions",
       "description": "Browse and search all traffic rules and road signs",
-      "url": "/en/questions",
+      "url": "/rw/questions",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ]

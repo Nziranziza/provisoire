@@ -8,7 +8,7 @@ interface AppChromeProps {
 }
 
 /** Single React island for global PWA UI — avoids duplicate React copies in dev. */
-export default function AppChrome({ lang = 'en' }: AppChromeProps) {
+export default function AppChrome({ lang = 'rw' }: AppChromeProps) {
   return (
     <>
       <OfflineIndicator lang={lang} />

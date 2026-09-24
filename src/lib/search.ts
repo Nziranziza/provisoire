@@ -308,7 +308,7 @@ export function isQueryForeignToLocale(
  * Generates stem and morphological variants for a normalized token scoped to the active locale.
  * Enables queries like "borders" to match "border" and vice-versa.
  */
-export function getWordStems(token: string, lang: Lang = 'en'): string[] {
+export function getWordStems(token: string, lang: Lang = 'rw'): string[] {
   if (!token) return [];
   const clean = token.toLowerCase().trim();
   if (clean.length < 3) return [clean];
@@ -392,7 +392,7 @@ export function normalizeForSearch(text: string): string {
  */
 export function generateSearchVariants(
   text: string,
-  lang: Lang = 'en',
+  lang: Lang = 'rw',
 ): string {
   if (!text) return '';
   const norm = normalizeForSearch(text);
@@ -439,7 +439,7 @@ export type ClientTokenIndex = {
 export function createClientTokenIndex(
   payload: SearchPayload,
 ): ClientTokenIndex {
-  const lang: Lang = payload.lang || 'en';
+  const lang: Lang = payload.lang || 'rw';
   const items: IndexedItem[] = (payload.items || []).map((item) => {
     const catName =
       CATEGORY_NAMES[item.c]?.[lang] ??
@@ -545,7 +545,7 @@ export function searchTokenIndex(
   const query = rawQuery.trim();
   if (!query) return [];
 
-  const activeLang: Lang = tokenIndex.lang || 'en';
+  const activeLang: Lang = tokenIndex.lang || 'rw';
 
   // Check if query is directly pointing to a question number (e.g. "42", "#42", "q42", "question 42", "ikibazo 42", "no 42")
   const directNumberMatch = query.match(
@@ -883,7 +883,7 @@ export function escapeHtml(str: string): string {
 export function highlightSnippet(
   text: string,
   rawQuery: string,
-  lang: Lang = 'en',
+  lang: Lang = 'rw',
 ): string {
   if (!text || !rawQuery.trim()) return escapeHtml(text);
 

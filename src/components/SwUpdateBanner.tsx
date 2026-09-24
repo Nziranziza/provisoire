@@ -25,9 +25,9 @@ interface SwUpdateBannerProps {
   lang?: Lang;
 }
 
-export default function SwUpdateBanner({ lang = 'en' }: SwUpdateBannerProps) {
+export default function SwUpdateBanner({ lang = 'rw' }: SwUpdateBannerProps) {
   const [visible, setVisible] = useState(false);
-  const t = copy[lang] || copy.en;
+  const t = copy[lang] || copy.rw;
 
   useEffect(() => {
     if (isSwUpdateReady()) setVisible(true);

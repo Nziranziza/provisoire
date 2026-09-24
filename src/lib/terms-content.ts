@@ -266,5 +266,5 @@ const content: Record<Lang, TermsContent> = {
 };
 
 export function getTermsContent(lang: Lang): TermsContent {
-  return content[lang] ?? content.en;
+  return content[lang] ?? content.rw;
 }

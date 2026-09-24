@@ -6,7 +6,7 @@ interface Props {
   lang?: Lang;
 }
 
-const { lang = 'en' } = Astro.props;
+const { lang = 'rw' } = Astro.props;
 const content = getPrivacyContent(lang);
 const t = content.banner;
 ---

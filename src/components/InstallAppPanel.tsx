@@ -25,9 +25,9 @@ interface InstallAppPanelProps {
   lang?: Lang;
 }
 
-export default function InstallAppPanel({ lang = 'en' }: InstallAppPanelProps) {
+export default function InstallAppPanel({ lang = 'rw' }: InstallAppPanelProps) {
   const [visible, setVisible] = useState(false);
-  const t = copy[lang] || copy.en;
+  const t = copy[lang] || copy.rw;
 
   useEffect(() => {
     initPwaClient();

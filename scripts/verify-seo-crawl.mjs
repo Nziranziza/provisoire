@@ -310,11 +310,11 @@ for (const filePath of htmlFiles) {
       `Page ${relPath} must contain a complete 4-entry hreflang set (en, fr, rw, x-default). Found: ${[...langMap.keys()].join(', ')}`,
     );
 
-    // x-default must point to the en version
+    // x-default must point to the rw version
     assert.equal(
       langMap.get('x-default'),
-      langMap.get('en'),
-      `Page ${relPath} x-default must point to en version`,
+      langMap.get('rw'),
+      `Page ${relPath} x-default must point to rw version`,
     );
 
     // Validate self-reference for the current page locale
@@ -447,7 +447,7 @@ for (const [canonicalUrl, langMap] of hreflangsMap.entries()) {
     const currentLang = currentLangMatch
       ? currentLangMatch[1]
       : canonicalUrl === SITE_ORIGIN || canonicalUrl === `${SITE_ORIGIN}/`
-        ? 'en'
+        ? 'rw'
         : null;
     if (currentLang) {
       const backLink = targetLangMap.get(currentLang);

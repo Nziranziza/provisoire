@@ -139,7 +139,7 @@ function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
-function getWordStems(token: string, lang: Lang = 'en'): string[] {
+function getWordStems(token: string, lang: Lang = 'rw'): string[] {
   if (!token) return [];
   const clean = token.toLowerCase().trim();
   if (clean.length < 3) return [clean];
@@ -204,7 +204,7 @@ function getWordStems(token: string, lang: Lang = 'en'): string[] {
 function highlightSnippet(
   text: string,
   rawQuery: string,
-  lang: Lang = 'en',
+  lang: Lang = 'rw',
 ): string {
   if (!text || !rawQuery.trim()) return escapeHtml(text || '');
 
@@ -272,8 +272,8 @@ function initQuiz(root: HTMLElement) {
     '[data-question-search-error]',
   );
 
-  const lang = (root.dataset.lang as Lang) || 'en';
-  const i18n = copy[lang] || copy.en;
+  const lang = (root.dataset.lang as Lang) || 'rw';
+  const i18n = copy[lang] || copy.rw;
 
   const totalQuestions = Number(
     root.dataset.bankTotal ||

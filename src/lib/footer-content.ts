@@ -92,5 +92,5 @@ export const FOOTER_DICTIONARIES: Record<Lang, FooterDictionary> = {
 };
 
 export function getFooterContent(lang: Lang): FooterDictionary {
-  return FOOTER_DICTIONARIES[lang] ?? FOOTER_DICTIONARIES.en;
+  return FOOTER_DICTIONARIES[lang] ?? FOOTER_DICTIONARIES.rw;
 }

@@ -789,6 +789,6 @@ export function getCategoryContent(
   lang: Lang,
   categorySlug: 'traffic-rules' | 'road-signs',
 ): CategoryHubContent {
-  const langContent = CATEGORY_CONTENT[lang] || CATEGORY_CONTENT.en;
-  return langContent[categorySlug] || CATEGORY_CONTENT.en[categorySlug];
+  const langContent = CATEGORY_CONTENT[lang] || CATEGORY_CONTENT.rw;
+  return langContent[categorySlug] || CATEGORY_CONTENT.rw[categorySlug];
 }

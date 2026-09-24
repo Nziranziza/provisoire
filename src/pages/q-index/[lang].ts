@@ -8,9 +8,9 @@ export const prerender = true;
 
 export function getStaticPaths() {
   return [
+    { params: { lang: 'rw' } },
     { params: { lang: 'en' } },
     { params: { lang: 'fr' } },
-    { params: { lang: 'rw' } },
   ];
 }
 
