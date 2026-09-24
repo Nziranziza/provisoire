@@ -1,14 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import QuestionCard from './quiz/QuestionCard.astro';
+import QuizPagination from './quiz/QuizPagination.astro';
 import HeaderInstallButton from './HeaderInstallButton.astro';
 import type { Lang, Question } from '../lib/quiz';
 import {
+  PAGE_SIZE,
   categoryHubHref,
   globalQuestionIndex,
+  parsePageParam,
   questionHref,
   questionsListHref,
   questionText,
+  totalQuestionPages,
 } from '../lib/quiz';
 import {
   absoluteUrl,
@@ -25,23 +29,33 @@ import questionBank from '../../questions.json';
 interface Props {
   lang: Lang;
   categorySlug: 'traffic-rules' | 'road-signs';
+  page?: number;
 }
 
-const { lang, categorySlug } = Astro.props;
+const { lang, categorySlug, page: pageProp } = Astro.props;
 const content = getCategoryContent(lang, categorySlug);
 const categoryId = content.categoryId;
-const seo = getCategoryHubMetadata({
-  lang,
-  categorySlug,
-  site: Astro.site,
-});
 
 const bankQuestions = questionBank.questions as Question[];
 const categoryQuestions = bankQuestions.filter(
   (q) => q.category_id === categoryId,
 );
 
-const canonicalPath = categoryHubHref(lang, categorySlug);
+const pageSize = PAGE_SIZE;
+const totalPages = totalQuestionPages(categoryQuestions.length, pageSize);
+const page = parsePageParam(String(pageProp ?? 1), totalPages);
+const start = (page - 1) * pageSize;
+const pageQuestions = categoryQuestions.slice(start, start + pageSize);
+
+const seo = getCategoryHubMetadata({
+  lang,
+  categorySlug,
+  site: Astro.site,
+  page,
+  totalPages,
+});
+
+const canonicalPath = categoryHubHref(lang, categorySlug, page);
 const alternates = seo.alternates;
 
 // Curated FAQ questions for structured data & FAQ section
@@ -134,7 +148,18 @@ const jsonLd: Record<string, unknown>[] = [
     [
       { name: homeLabels[lang], path: `/${lang}` },
       { name: bankLabels[lang], path: questionsListHref(lang, 1) },
-      { name: content.categoryName, path: canonicalPath },
+      {
+        name: content.categoryName,
+        path: categoryHubHref(lang, categorySlug, 1),
+      },
+      ...(page > 1
+        ? [
+            {
+              name: lang === 'rw' ? `Paji ya ${page}` : `Page ${page}`,
+              path: canonicalPath,
+            },
+          ]
+        : []),
     ],
     Astro.site,
   ),
@@ -146,6 +171,8 @@ const jsonLd: Record<string, unknown>[] = [
   description={seo.description}
   lang={lang}
   canonical={canonicalPath}
+  prev={seo.prev}
+  next={seo.next}
   alternates={alternates}
   jsonLd={jsonLd}
 >
@@ -213,7 +240,7 @@ const jsonLd: Record<string, unknown>[] = [
                 const active = lang === code;
                 return (
                   <a
-                    href={categoryHubHref(code, categorySlug)}
+                    href={categoryHubHref(code, categorySlug, page)}
                     hreflang={code}
                     aria-current={active ? 'page' : undefined}
                     class:list={[
@@ -497,7 +524,7 @@ const jsonLd: Record<string, unknown>[] = [
 
         <ol class="m-0 flex list-none flex-col gap-4 p-0">
           {
-            categoryQuestions.map((q) => {
+            pageQuestions.map((q) => {
               const globalIdx = globalQuestionIndex(bankQuestions, q);
               return (
                 <QuestionCard
@@ -511,6 +538,14 @@ const jsonLd: Record<string, unknown>[] = [
             })
           }
         </ol>
+
+        <QuizPagination
+          lang={lang}
+          pageSize={pageSize}
+          questionCount={categoryQuestions.length}
+          currentPage={page}
+          hrefForPage={(p: number) => categoryHubHref(lang, categorySlug, p)}
+        />
       </section>
 
       <!-- Curated FAQ Section -->
