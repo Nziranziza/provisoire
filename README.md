@@ -9,7 +9,7 @@
 
 The platform provides a comprehensive question bank covering official Rwanda traffic rules and road signs, timed mock exam simulations, untimed practice quizzes with instant explanations, and full offline Progressive Web App (PWA) capabilities.
 
-**Live site:** [https://umuhanda.rw](https://umuhanda.rw) (Mirror: [https://provisoire.pages.dev](https://provisoire.pages.dev))
+**Live site:** [https://umuhanda.rw](https://umuhanda.rw)
 
 ---
 
