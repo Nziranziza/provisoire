@@ -132,8 +132,8 @@ const jsonLd: Record<string, unknown>[] = [
     },
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems: categoryQuestions.length,
-      itemListElement: categoryQuestions.map((q, i) => {
+      numberOfItems: pageQuestions.length,
+      itemListElement: pageQuestions.map((q, i) => {
         const num = globalQuestionIndex(bankQuestions, q) + 1;
         return {
           '@type': 'ListItem',
@@ -143,6 +143,7 @@ const jsonLd: Record<string, unknown>[] = [
         };
       }),
     },
+    ...(page > 1 ? { pagination: `${page}/${totalPages}` } : {}),
   },
   breadcrumbJsonLd(
     [
