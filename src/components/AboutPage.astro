@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HeaderInstallButton from './HeaderInstallButton.astro';
 import type { Lang } from '../lib/quiz';
 import { categoryHubHref, questionsListHref } from '../lib/quiz';
 import {
@@ -44,12 +43,6 @@ const jsonLd = [
       url: absoluteUrl('/', Astro.site),
     },
   },
-];
-
-const locales: { code: Lang; label: string }[] = [
-  { code: 'rw', label: 'RW' },
-  { code: 'en', label: 'EN' },
-  { code: 'fr', label: 'FR' },
 ];
 
 const statsLabels: Record<
@@ -109,84 +102,10 @@ const languageMap: Record<string, { code: Lang; name: string; flag: string }> =
   alternates={alternates}
   jsonLd={jsonLd}
 >
-  <main class="min-h-screen bg-stone-100 px-4 py-6 sm:py-10">
+  <main id="main-content" class="min-h-screen bg-stone-100 px-4 py-6 sm:py-10">
     <div class="mx-auto max-w-3xl">
-      <!-- Top Navigation Bar -->
-      <nav
-        class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-3.5 shadow-2xs sm:p-4"
-        aria-label="Breadcrumb navigation"
-      >
-        <div class="flex items-center gap-2">
-          <a
-            href={`/${lang}`}
-            class="inline-flex min-h-[40px] items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-4 py-2 text-xs font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px]"
-          >
-            <span aria-hidden="true">←</span>
-            {content.home}
-          </a>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-2.5">
-          <!-- Practice CTA -->
-          <a
-            href={`/${lang}/practice`}
-            class:list={[
-              'inline-flex min-h-[40px] items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-4 py-2 leading-none font-bold whitespace-nowrap text-slate-800 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px]',
-              lang === 'fr'
-                ? 'text-[11px] tracking-normal sm:text-xs'
-                : 'text-[11px] tracking-wide sm:text-xs',
-            ]}
-          >
-            <span aria-hidden="true">💡</span>
-            {
-              lang === 'fr' ? (
-                <>
-                  <span class="sm:hidden">Pratique</span>
-                  <span class="hidden sm:inline">Entraînement</span>
-                </>
-              ) : lang === 'rw' ? (
-                'Imyitozo'
-              ) : (
-                'Practice'
-              )
-            }
-          </a>
-
-          <!-- Install App Button -->
-          <HeaderInstallButton lang={lang} />
-
-          <!-- Language Selector -->
-          <div
-            class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
-            role="group"
-            aria-label="Language"
-          >
-            {
-              locales.map(({ code, label }) => {
-                const active = lang === code;
-                return (
-                  <a
-                    href={`/${code}/about`}
-                    hreflang={code}
-                    aria-current={active ? 'page' : undefined}
-                    class:list={[
-                      'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
-                      active
-                        ? 'bg-blue-700 text-white'
-                        : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
-                    ]}
-                  >
-                    {label}
-                  </a>
-                );
-              })
-            }
-          </div>
-        </div>
-      </nav>
-
       <!-- Main About Hero Card -->
-      <header
+      <section
         class="relative mb-6 overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50/80 via-white to-amber-50/40 p-5 text-slate-900 shadow-2xs sm:p-8"
       >
         <div class="relative z-10">
@@ -279,7 +198,7 @@ const languageMap: Record<string, { code: Lang; name: string; flag: string }> =
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
       <!-- Content Grid: Sections + Sidebar -->
       <div class="grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">

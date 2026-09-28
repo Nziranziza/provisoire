@@ -1,0 +1,472 @@
+---
+import type { Lang } from '../lib/quiz';
+import { categoryHubHref } from '../lib/quiz';
+import { getHeaderContent, getLocalizedPath } from '../lib/header-content';
+import HeaderInstallButton from './HeaderInstallButton.astro';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'rw' } = Astro.props;
+const t = getHeaderContent(lang);
+const pathname = Astro.url.pathname;
+
+const cleanPath = pathname
+  .replace(/\.html$/, '')
+  .replace(/\/index$/, '')
+  .replace(/\/$/, '');
+
+const isHome = cleanPath === '' || cleanPath === `/${lang}`;
+const isTrafficRules =
+  cleanPath === `/${lang}/traffic-rules` ||
+  cleanPath.startsWith(`/${lang}/traffic-rules/`) ||
+  cleanPath.startsWith(`/${lang}/questions/category/traffic-rules`);
+const isRoadSigns =
+  cleanPath === `/${lang}/road-signs` ||
+  cleanPath.startsWith(`/${lang}/road-signs/`) ||
+  cleanPath.startsWith(`/${lang}/questions/category/road-signs`);
+const isPractice =
+  cleanPath === `/${lang}/practice` ||
+  cleanPath.startsWith(`/${lang}/practice/`);
+const isExam =
+  cleanPath === `/${lang}/exam` || cleanPath.startsWith(`/${lang}/exam/`);
+
+const navItems = [
+  {
+    href: `/${lang}`,
+    label: t.home,
+    desc: t.homeDesc,
+    icon: '🏠',
+    active: isHome,
+  },
+  {
+    href: categoryHubHref(lang, 'traffic-rules'),
+    label: t.trafficRules,
+    desc: t.trafficRulesDesc,
+    icon: '🚦',
+    active: isTrafficRules,
+  },
+  {
+    href: categoryHubHref(lang, 'road-signs'),
+    label: t.roadSigns,
+    desc: t.roadSignsDesc,
+    icon: '🛑',
+    active: isRoadSigns,
+  },
+  {
+    href: `/${lang}/practice`,
+    label: t.practice,
+    desc: t.practiceDesc,
+    icon: '💡',
+    active: isPractice,
+  },
+  {
+    href: `/${lang}/exam`,
+    label: t.exam,
+    desc: t.examDesc,
+    icon: '⏱️',
+    active: isExam,
+  },
+];
+
+const locales: { code: Lang; label: string }[] = [
+  { code: 'rw', label: 'RW' },
+  { code: 'en', label: 'EN' },
+  { code: 'fr', label: 'FR' },
+];
+---
+
+<a
+  href="#main-content"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:border-2 focus:border-slate-900 focus:bg-amber-300 focus:px-4 focus:py-2 focus:text-xs focus:font-extrabold focus:text-slate-950 focus:shadow-lg focus:outline-hidden"
+>
+  {t.skipToContent}
+</a>
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 w-full border-b border-stone-200/90 bg-white/95 backdrop-blur-md transition-all duration-200"
+>
+  <div
+    class="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-2.5 sm:px-6 md:gap-3"
+  >
+    <!-- Brand logo & name -->
+    <a
+      href={`/${lang}`}
+      aria-label={t.homeAriaLabel}
+      class="group flex shrink-0 items-center gap-2.5 transition active:scale-95"
+    >
+      <div class="relative shrink-0 transition-transform duration-200 group-hover:scale-105">
+        <img
+          src="/icons/icon.svg"
+          alt="Provisoire logo"
+          width="34"
+          height="34"
+          class="h-8.5 w-8.5 rounded-xl object-contain shadow-2xs"
+          loading="eager"
+        />
+        <span
+          class="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white"
+          aria-hidden="true"></span>
+      </div>
+      <div class="flex flex-col">
+        <span
+          class="text-base font-black tracking-tight text-slate-900 sm:text-lg leading-tight"
+        >
+          Provisoire
+        </span>
+      </div>
+    </a>
+
+    <!-- Primary Desktop Navigation (Visible on Laptop & Desktop) -->
+    <nav aria-label={t.nav} class="hidden items-center gap-1 md:gap-1 lg:gap-1.5 xl:gap-2 md:flex">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            aria-current={item.active ? 'page' : undefined}
+            class:list={[
+              'inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full px-2.5 py-1.5 md:px-2.5 lg:px-3.5 text-xs xl:text-[13px] font-bold whitespace-nowrap transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-95',
+              item.active
+                ? 'border-2 border-slate-900 bg-blue-700 text-white shadow-2xs font-extrabold'
+                : 'border-2 border-transparent text-slate-700 hover:border-slate-900 hover:bg-stone-100 hover:text-slate-950 font-bold',
+            ]}
+          >
+            {item.icon && <span aria-hidden="true">{item.icon}</span>}
+            <span>{item.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Right Controls: Install Button, Language Switcher, Mobile Toggle -->
+    <div class="flex items-center gap-1.5 sm:gap-2.5">
+      <!-- Install App button (compact on header on laptop/desktop) -->
+      <HeaderInstallButton lang={lang} compact={true} />
+
+      <!-- Language selector (Desktop & Mobile header) -->
+      <div
+        class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
+        role="group"
+        aria-label={t.languageSelector}
+      >
+        {
+          locales.map(({ code, label }) => {
+            const active = lang === code;
+            const targetHref = getLocalizedPath(code, pathname);
+
+            return (
+              <a
+                href={targetHref}
+                hreflang={code}
+                aria-current={active ? 'page' : undefined}
+                class:list={[
+                  'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 sm:px-2.5 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden',
+                  active
+                    ? 'bg-blue-700 font-extrabold text-white'
+                    : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
+                ]}
+              >
+                {label}
+              </a>
+            );
+          })
+        }
+      </div>
+
+      <!-- Mobile Hamburger Toggle Button (Mobile Phone Only, No Circle Border) -->
+      <button
+        type="button"
+        id="site-mobile-menu-btn"
+        class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 active:scale-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 md:hidden"
+        aria-expanded="false"
+        aria-controls="site-mobile-nav"
+        aria-label={t.openMenu}
+      >
+        <!-- Hamburger Icon (visible when closed) -->
+        <svg
+          id="site-menu-icon-open"
+          class="block h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2.5"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+        </svg>
+        <!-- Close (X) Icon (hidden when closed) -->
+        <svg
+          id="site-menu-icon-close"
+          class="hidden h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2.5"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Collapsible Mobile Navigation Dropdown Menu (Mobile Only, Aligned to Footer container) -->
+  <div
+    id="site-mobile-nav"
+    class="hidden border-t border-stone-200/90 bg-white/98 backdrop-blur-xl shadow-2xl transition-all duration-200 origin-top overflow-y-auto max-h-[calc(100dvh-4.25rem)] md:hidden"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-4 sm:px-6">
+      <!-- Section header -->
+      <div class="mb-3 flex items-center justify-between px-1">
+        <span class="text-[11px] font-black uppercase tracking-wider text-slate-500">
+          {t.nav}
+        </span>
+        <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-700">
+          Provisoire
+        </span>
+      </div>
+
+      <!-- Nav item cards -->
+      <nav aria-label={t.mobileNav} class="flex flex-col gap-2">
+        {
+          navItems.map((item) => (
+            <a
+              href={item.href}
+              aria-current={item.active ? 'page' : undefined}
+              class:list={[
+                'group flex min-h-[52px] items-center justify-between gap-3 rounded-2xl p-2.5 transition duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-[0.99]',
+                item.active
+                  ? 'border-2 border-slate-900 bg-blue-700 text-white shadow-2xs'
+                  : 'border-2 border-stone-200 bg-stone-50/80 text-slate-800 hover:border-slate-900 hover:bg-white',
+              ]}
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class:list={[
+                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg shadow-2xs transition-transform group-hover:scale-105',
+                    item.active
+                      ? 'bg-white/20 text-white'
+                      : 'border border-stone-200 bg-white',
+                  ]}
+                >
+                  <span aria-hidden="true">{item.icon}</span>
+                </div>
+                <div class="flex flex-col">
+                  <span
+                    class:list={[
+                      'text-sm font-extrabold leading-snug',
+                      item.active ? 'text-white' : 'text-slate-900',
+                    ]}
+                  >
+                    {item.label}
+                  </span>
+                  {item.desc && (
+                    <span
+                      class:list={[
+                        'text-[11px] font-medium leading-tight',
+                        item.active ? 'text-blue-100' : 'text-slate-500',
+                      ]}
+                    >
+                      {item.desc}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div class="shrink-0 pl-1">
+                {item.active ? (
+                  <span class="inline-flex items-center rounded-full bg-white/25 px-2 py-0.5 text-[10px] font-black text-white uppercase tracking-wider">
+                    {t.activeBadge || 'Active'}
+                  </span>
+                ) : (
+                  <svg
+                    class="h-4 w-4 text-slate-400 group-hover:text-slate-900 transition-colors"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                )}
+              </div>
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- Divider -->
+      <hr class="my-3.5 border-stone-200" />
+
+      <!-- Mobile Actions Section -->
+      <div class="flex flex-col gap-2.5">
+        <!-- Install App Card in Mobile Dropdown -->
+        <HeaderInstallButton lang={lang} variant="mobile-card" />
+
+        <!-- Language Switcher in Mobile Dropdown -->
+        <div class="rounded-2xl border-2 border-stone-200 bg-stone-50 p-2.5">
+          <div class="mb-2 px-1 text-[11px] font-bold text-slate-600">
+            {t.languageSelector}
+          </div>
+          <div class="grid grid-cols-3 gap-1.5">
+            {
+              locales.map(({ code, label }) => {
+                const active = lang === code;
+                const targetHref = getLocalizedPath(code, pathname);
+                const fullLabels: Record<Lang, string> = {
+                  rw: 'Kinyarwanda',
+                  en: 'English',
+                  fr: 'Français',
+                };
+
+                return (
+                  <a
+                    href={targetHref}
+                    hreflang={code}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'flex min-h-[38px] flex-col items-center justify-center rounded-xl px-2 py-1 text-center transition active:scale-95',
+                      active
+                        ? 'border-2 border-slate-900 bg-blue-700 font-black text-white shadow-2xs'
+                        : 'border border-stone-200 bg-white font-bold text-slate-800 hover:border-slate-900 hover:bg-stone-100',
+                    ]}
+                  >
+                    <span class="text-xs font-black">{label}</span>
+                    <span class="text-[9px] opacity-80">{fullLabels[code]}</span>
+                  </a>
+                );
+              })
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Backdrop Overlay -->
+<div
+  id="site-mobile-backdrop"
+  class="fixed inset-0 top-[60px] sm:top-[64px] z-40 bg-slate-950/40 backdrop-blur-xs transition-opacity duration-200 hidden md:hidden"
+  aria-hidden="true"
+></div>
+
+<!-- Natural Flow Spacer for Fixed Header -->
+<div class="h-[60px] sm:h-[64px] w-full shrink-0" aria-hidden="true"></div>
+
+<script
+  is:inline
+  define:vars={{
+    openMenuMsg: t.openMenu,
+    closeMenuMsg: t.closeMenu,
+  }}
+>
+  (function initSiteHeader() {
+    const header = document.getElementById('site-header');
+    const menuBtn = document.getElementById('site-mobile-menu-btn');
+    const mobileNav = document.getElementById('site-mobile-nav');
+    const backdrop = document.getElementById('site-mobile-backdrop');
+    const iconOpen = document.getElementById('site-menu-icon-open');
+    const iconClose = document.getElementById('site-menu-icon-close');
+
+    if (!menuBtn || !mobileNav) return;
+
+    function setOpen(isOpen) {
+      menuBtn.setAttribute('aria-expanded', String(isOpen));
+      menuBtn.setAttribute('aria-label', isOpen ? closeMenuMsg : openMenuMsg);
+
+      if (isOpen) {
+        mobileNav.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (iconOpen) iconOpen.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileNav.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconOpen) iconOpen.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isCurrentlyOpen = menuBtn.getAttribute('aria-expanded') === 'true';
+      setOpen(!isCurrentlyOpen);
+    });
+
+    if (backdrop) {
+      backdrop.addEventListener('click', () => {
+        setOpen(false);
+      });
+    }
+
+    // Close on link click inside mobile nav
+    mobileNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        setOpen(false);
+      });
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (
+        !menuBtn.contains(e.target) &&
+        !mobileNav.contains(e.target) &&
+        menuBtn.getAttribute('aria-expanded') === 'true'
+      ) {
+        setOpen(false);
+      }
+    });
+
+    // Close on Escape key and return focus
+    document.addEventListener('keydown', (e) => {
+      if (
+        e.key === 'Escape' &&
+        menuBtn.getAttribute('aria-expanded') === 'true'
+      ) {
+        setOpen(false);
+        menuBtn.focus();
+      }
+    });
+
+    // Reset when resizing to desktop/laptop
+    window.addEventListener('resize', () => {
+      if (
+        window.innerWidth >= 768 &&
+        menuBtn.getAttribute('aria-expanded') === 'true'
+      ) {
+        setOpen(false);
+      }
+    });
+
+    // Scroll elevation effect
+    function updateScrollElevation() {
+      if (!header) return;
+      if (window.scrollY > 8) {
+        header.classList.add('shadow-md', 'border-stone-300');
+        header.classList.remove('border-stone-200/90');
+      } else {
+        header.classList.remove('shadow-md', 'border-stone-300');
+        header.classList.add('border-stone-200/90');
+      }
+    }
+
+    window.addEventListener('scroll', updateScrollElevation, { passive: true });
+    updateScrollElevation();
+  })();
+</script>

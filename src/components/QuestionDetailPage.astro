@@ -1,10 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import QuestionCard from './quiz/QuestionCard.astro';
-import HeaderInstallButton from './HeaderInstallButton.astro';
 import type { Category, Lang, Question } from '../lib/quiz';
 import {
-  LOCALES,
   categoryHubHref,
   categoryLabel,
   questionHref,
@@ -83,7 +81,7 @@ const seo = getQuestionPageMetadata({
   type="article"
   jsonLd={seo.jsonLd}
 >
-  <main class="m-0 bg-stone-100 px-4 py-10">
+  <main id="main-content" class="min-h-screen bg-stone-100 px-4 py-6 sm:py-8">
     <div class="mx-auto max-w-3xl">
       <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
         <a
@@ -92,36 +90,9 @@ const seo = getQuestionPageMetadata({
         >
           ← {labels.back}
         </a>
-        <div class="flex items-center gap-2.5">
-          <HeaderInstallButton lang={lang} />
-          <div
-            class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
-            role="group"
-            aria-label="Language"
-          >
-            {
-              LOCALES.map((code) => {
-                const active = lang === code;
-                return (
-                  <a
-                    href={questionHref(code, number)}
-                    hreflang={code}
-                    aria-current={active ? 'page' : undefined}
-                    class:list={[
-                      'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
-                      active
-                        ? 'bg-blue-700 text-white'
-                        : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
-                    ]}
-                  >
-                    {code.toUpperCase()}
-                  </a>
-                );
-              })
-            }
-          </div>
+        <div class="flex items-center gap-2">
           <select
-            class="max-w-full rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-xs font-bold text-slate-900"
+            class="max-w-full rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-1.5 text-xs font-bold text-slate-900"
             aria-label="Category filter"
             onchange="if (this.value) window.location.assign(this.value);"
           >
