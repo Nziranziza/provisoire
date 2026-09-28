@@ -18,7 +18,11 @@ const cleanPath = pathname
   .replace(/\/index$/, '')
   .replace(/\/$/, '');
 
-const isHome = cleanPath === '' || cleanPath === `/${lang}`;
+const isHome =
+  cleanPath === '' ||
+  cleanPath === `/${lang}` ||
+  cleanPath === `/${lang}/questions` ||
+  /^\/(en|fr|rw)\/questions\/page\/\d+$/.test(cleanPath);
 const isTrafficRules =
   cleanPath === `/${lang}/traffic-rules` ||
   cleanPath.startsWith(`/${lang}/traffic-rules/`) ||
@@ -34,10 +38,6 @@ const isExam =
   cleanPath === `/${lang}/exam` || cleanPath.startsWith(`/${lang}/exam/`);
 const isAbout =
   cleanPath === `/${lang}/about` || cleanPath.startsWith(`/${lang}/about/`);
-
-// Practice/Exam mode is chosen on those pages themselves — omit header
-// links there so they don’t duplicate the on-page mode cards.
-const isPracticeOrExam = isPractice || isExam;
 
 const navItems = [
   {
@@ -61,24 +61,20 @@ const navItems = [
     icon: '🛑',
     active: isRoadSigns,
   },
-  ...(!isPracticeOrExam
-    ? [
-        {
-          href: `/${lang}/practice`,
-          label: t.practice,
-          desc: t.practiceDesc,
-          icon: '💡',
-          active: isPractice,
-        },
-        {
-          href: `/${lang}/exam`,
-          label: t.exam,
-          desc: t.examDesc,
-          icon: '⏱️',
-          active: isExam,
-        },
-      ]
-    : []),
+  {
+    href: `/${lang}/practice`,
+    label: t.practice,
+    desc: t.practiceDesc,
+    icon: '💡',
+    active: isPractice,
+  },
+  {
+    href: `/${lang}/exam`,
+    label: t.exam,
+    desc: t.examDesc,
+    icon: '⏱️',
+    active: isExam,
+  },
   {
     href: `/${lang}/about`,
     label: t.about,
