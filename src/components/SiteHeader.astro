@@ -70,10 +70,10 @@ const navItems = [
   },
 ];
 
-const locales: { code: Lang; label: string }[] = [
-  { code: 'rw', label: 'RW' },
-  { code: 'en', label: 'EN' },
-  { code: 'fr', label: 'FR' },
+const locales: { code: Lang; label: string; name: string }[] = [
+  { code: 'rw', label: 'RW', name: 'Kinyarwanda' },
+  { code: 'en', label: 'EN', name: 'English' },
+  { code: 'fr', label: 'FR', name: 'Français' },
 ];
 ---
 
@@ -97,7 +97,9 @@ const locales: { code: Lang; label: string }[] = [
       aria-label={t.homeAriaLabel}
       class="group flex shrink-0 items-center gap-2.5 transition active:scale-95"
     >
-      <div class="relative shrink-0 transition-transform duration-200 group-hover:scale-105">
+      <div
+        class="relative shrink-0 transition-transform duration-200 group-hover:scale-105"
+      >
         <img
           src="/icons/icon.svg"
           alt="Provisoire logo"
@@ -112,7 +114,7 @@ const locales: { code: Lang; label: string }[] = [
       </div>
       <div class="flex flex-col">
         <span
-          class="text-base font-black tracking-tight text-slate-900 sm:text-lg leading-tight"
+          class="text-base leading-tight font-black tracking-tight text-slate-900 sm:text-lg"
         >
           Provisoire
         </span>
@@ -120,17 +122,20 @@ const locales: { code: Lang; label: string }[] = [
     </a>
 
     <!-- Primary Desktop Navigation (Visible on Laptop & Desktop) -->
-    <nav aria-label={t.nav} class="hidden items-center gap-1 md:gap-1 lg:gap-1.5 xl:gap-2 md:flex">
+    <nav
+      aria-label={t.nav}
+      class="hidden items-center gap-1 md:flex md:gap-1 lg:gap-1.5 xl:gap-2"
+    >
       {
         navItems.map((item) => (
           <a
             href={item.href}
             aria-current={item.active ? 'page' : undefined}
             class:list={[
-              'inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full px-2.5 py-1.5 md:px-2.5 lg:px-3.5 text-xs xl:text-[13px] font-bold whitespace-nowrap transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-95',
+              'inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-bold whitespace-nowrap transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-95 md:px-2.5 lg:px-3.5 xl:text-[13px]',
               item.active
-                ? 'border-2 border-slate-900 bg-blue-700 text-white shadow-2xs font-extrabold'
-                : 'border-2 border-transparent text-slate-700 hover:border-slate-900 hover:bg-stone-100 hover:text-slate-950 font-bold',
+                ? 'border-2 border-slate-900 bg-blue-700 font-extrabold text-white shadow-2xs'
+                : 'border-2 border-transparent font-bold text-slate-700 hover:border-slate-900 hover:bg-stone-100 hover:text-slate-950',
             ]}
           >
             {item.icon && <span aria-hidden="true">{item.icon}</span>}
@@ -162,7 +167,7 @@ const locales: { code: Lang; label: string }[] = [
                 hreflang={code}
                 aria-current={active ? 'page' : undefined}
                 class:list={[
-                  'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 sm:px-2.5 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden',
+                  'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
                   active
                     ? 'bg-blue-700 font-extrabold text-white'
                     : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
@@ -179,7 +184,7 @@ const locales: { code: Lang; label: string }[] = [
       <button
         type="button"
         id="site-mobile-menu-btn"
-        class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 active:scale-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 md:hidden"
+        class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-90 md:hidden"
         aria-expanded="false"
         aria-controls="site-mobile-nav"
         aria-label={t.openMenu}
@@ -221,15 +226,19 @@ const locales: { code: Lang; label: string }[] = [
   <!-- Collapsible Mobile Navigation Dropdown Menu (Mobile Only, Aligned to Footer container) -->
   <div
     id="site-mobile-nav"
-    class="hidden border-t border-stone-200/90 bg-white/98 backdrop-blur-xl shadow-2xl transition-all duration-200 origin-top overflow-y-auto max-h-[calc(100dvh-4.25rem)] md:hidden"
+    class="hidden max-h-[calc(100dvh-4.25rem)] origin-top overflow-y-auto border-t border-stone-200/90 bg-white/98 shadow-2xl backdrop-blur-xl transition-all duration-200 md:hidden"
   >
     <div class="mx-auto max-w-6xl px-4 py-4 sm:px-6">
       <!-- Section header -->
       <div class="mb-3 flex items-center justify-between px-1">
-        <span class="text-[11px] font-black uppercase tracking-wider text-slate-500">
+        <span
+          class="text-[11px] font-black tracking-wider text-slate-500 uppercase"
+        >
           {t.nav}
         </span>
-        <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-700">
+        <span
+          class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-700"
+        >
           Provisoire
         </span>
       </div>
@@ -262,7 +271,7 @@ const locales: { code: Lang; label: string }[] = [
                 <div class="flex flex-col">
                   <span
                     class:list={[
-                      'text-sm font-extrabold leading-snug',
+                      'text-sm leading-snug font-extrabold',
                       item.active ? 'text-white' : 'text-slate-900',
                     ]}
                   >
@@ -271,7 +280,7 @@ const locales: { code: Lang; label: string }[] = [
                   {item.desc && (
                     <span
                       class:list={[
-                        'text-[11px] font-medium leading-tight',
+                        'text-[11px] leading-tight font-medium',
                         item.active ? 'text-blue-100' : 'text-slate-500',
                       ]}
                     >
@@ -283,12 +292,12 @@ const locales: { code: Lang; label: string }[] = [
 
               <div class="shrink-0 pl-1">
                 {item.active ? (
-                  <span class="inline-flex items-center rounded-full bg-white/25 px-2 py-0.5 text-[10px] font-black text-white uppercase tracking-wider">
+                  <span class="inline-flex items-center rounded-full bg-white/25 px-2 py-0.5 text-[10px] font-black tracking-wider text-white uppercase">
                     {t.activeBadge || 'Active'}
                   </span>
                 ) : (
                   <svg
-                    class="h-4 w-4 text-slate-400 group-hover:text-slate-900 transition-colors"
+                    class="h-4 w-4 text-slate-400 transition-colors group-hover:text-slate-900"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -323,14 +332,9 @@ const locales: { code: Lang; label: string }[] = [
           </div>
           <div class="grid grid-cols-3 gap-1.5">
             {
-              locales.map(({ code, label }) => {
+              locales.map(({ code, label, name }) => {
                 const active = lang === code;
                 const targetHref = getLocalizedPath(code, pathname);
-                const fullLabels: Record<Lang, string> = {
-                  rw: 'Kinyarwanda',
-                  en: 'English',
-                  fr: 'Français',
-                };
 
                 return (
                   <a
@@ -345,7 +349,7 @@ const locales: { code: Lang; label: string }[] = [
                     ]}
                   >
                     <span class="text-xs font-black">{label}</span>
-                    <span class="text-[9px] opacity-80">{fullLabels[code]}</span>
+                    <span class="text-[9px] opacity-80">{name}</span>
                   </a>
                 );
               })
@@ -360,12 +364,13 @@ const locales: { code: Lang; label: string }[] = [
 <!-- Mobile Backdrop Overlay -->
 <div
   id="site-mobile-backdrop"
-  class="fixed inset-0 top-[60px] sm:top-[64px] z-40 bg-slate-950/40 backdrop-blur-xs transition-opacity duration-200 hidden md:hidden"
+  class="fixed inset-0 top-[60px] z-40 hidden bg-slate-950/40 backdrop-blur-xs transition-opacity duration-200 sm:top-[64px] md:hidden"
   aria-hidden="true"
-></div>
+>
+</div>
 
 <!-- Natural Flow Spacer for Fixed Header -->
-<div class="h-[60px] sm:h-[64px] w-full shrink-0" aria-hidden="true"></div>
+<div class="h-[60px] w-full shrink-0 sm:h-[64px]" aria-hidden="true"></div>
 
 <script
   is:inline

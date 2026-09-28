@@ -41,7 +41,7 @@ const label = labels[lang] || labels.rw;
     <button
       type="button"
       class:list={[
-        'header-install-btn flex w-full min-h-[48px] cursor-pointer touch-manipulation items-center justify-between gap-3 rounded-2xl border-2 border-emerald-600 bg-emerald-50/80 px-4 py-3 text-left shadow-2xs transition hover:bg-emerald-100/80 active:scale-[0.99]',
+        'header-install-btn flex min-h-[48px] w-full cursor-pointer touch-manipulation items-center justify-between gap-3 rounded-2xl border-2 border-emerald-600 bg-emerald-50/80 px-4 py-3 text-left shadow-2xs transition hover:bg-emerald-100/80 active:scale-[0.99]',
         extraClass,
       ]}
       title={label.full}
@@ -52,7 +52,9 @@ const label = labels[lang] || labels.rw;
           <span aria-hidden="true">📲</span>
         </div>
         <div>
-          <div class="text-sm font-extrabold text-emerald-950">{label.full}</div>
+          <div class="text-sm font-extrabold text-emerald-950">
+            {label.full}
+          </div>
           <div class="text-xs font-medium text-emerald-700">{label.desc}</div>
         </div>
       </div>
@@ -64,13 +66,15 @@ const label = labels[lang] || labels.rw;
     <button
       type="button"
       class:list={[
-        'header-install-btn inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3 py-1.5 text-xs font-extrabold whitespace-nowrap text-slate-900 shadow-2xs transition hover:bg-stone-100 hover:border-slate-950 active:scale-95',
+        'header-install-btn inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3 py-1.5 text-xs font-extrabold whitespace-nowrap text-slate-900 shadow-2xs transition hover:border-slate-950 hover:bg-stone-100 active:scale-95',
         extraClass,
       ]}
       title={label.full}
       aria-label={label.full}
     >
-      <span aria-hidden="true" class="text-sm">📲</span>
+      <span aria-hidden="true" class="text-sm">
+        📲
+      </span>
       <span>{compact ? label.short : label.full}</span>
     </button>
   )
