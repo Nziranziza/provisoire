@@ -531,6 +531,7 @@ const requiredHeaderLinks = {
     '/en/road-signs',
     '/en/practice',
     '/en/exam',
+    '/en/about',
   ],
   fr: [
     '/fr',
@@ -538,6 +539,7 @@ const requiredHeaderLinks = {
     '/fr/road-signs',
     '/fr/practice',
     '/fr/exam',
+    '/fr/about',
   ],
   rw: [
     '/rw',
@@ -545,6 +547,7 @@ const requiredHeaderLinks = {
     '/rw/road-signs',
     '/rw/practice',
     '/rw/exam',
+    '/rw/about',
   ],
 };
 

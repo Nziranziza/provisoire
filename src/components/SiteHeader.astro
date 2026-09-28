@@ -32,6 +32,12 @@ const isPractice =
   cleanPath.startsWith(`/${lang}/practice/`);
 const isExam =
   cleanPath === `/${lang}/exam` || cleanPath.startsWith(`/${lang}/exam/`);
+const isAbout =
+  cleanPath === `/${lang}/about` || cleanPath.startsWith(`/${lang}/about/`);
+
+// Practice/Exam mode is chosen on those pages themselves — omit header
+// links there so they don’t duplicate the on-page mode cards.
+const isPracticeOrExam = isPractice || isExam;
 
 const navItems = [
   {
@@ -55,19 +61,30 @@ const navItems = [
     icon: '🛑',
     active: isRoadSigns,
   },
+  ...(!isPracticeOrExam
+    ? [
+        {
+          href: `/${lang}/practice`,
+          label: t.practice,
+          desc: t.practiceDesc,
+          icon: '💡',
+          active: isPractice,
+        },
+        {
+          href: `/${lang}/exam`,
+          label: t.exam,
+          desc: t.examDesc,
+          icon: '⏱️',
+          active: isExam,
+        },
+      ]
+    : []),
   {
-    href: `/${lang}/practice`,
-    label: t.practice,
-    desc: t.practiceDesc,
-    icon: '💡',
-    active: isPractice,
-  },
-  {
-    href: `/${lang}/exam`,
-    label: t.exam,
-    desc: t.examDesc,
-    icon: '⏱️',
-    active: isExam,
+    href: `/${lang}/about`,
+    label: t.about,
+    desc: t.aboutDesc,
+    icon: 'ℹ️',
+    active: isAbout,
   },
 ];
 

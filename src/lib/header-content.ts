@@ -21,6 +21,7 @@ export type HeaderDictionary = {
   roadSignsDesc?: string;
   practiceDesc?: string;
   examDesc?: string;
+  aboutDesc?: string;
   installAppText?: string;
   installAppDesc?: string;
   activeBadge?: string;
@@ -48,6 +49,7 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     roadSignsDesc: 'Warning, mandatory & info signs',
     practiceDesc: 'Interactive quiz without timer',
     examDesc: '20-question timed mock exam',
+    aboutDesc: 'About our platform & study aid',
     installAppText: 'Install App',
     installAppDesc: 'Practice offline on your device',
     activeBadge: 'Current',
@@ -73,6 +75,7 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     roadSignsDesc: 'Signaux de danger, d’obligation & d’indication',
     practiceDesc: 'Quiz interactif sans chronomètre',
     examDesc: 'Examen blanc chronométré 20 questions',
+    aboutDesc: 'À propos de notre plateforme d’étude',
     installAppText: 'Installer l’app',
     installAppDesc: 'Révisez hors-ligne sur votre appareil',
     activeBadge: 'Actuel',
@@ -98,6 +101,7 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     roadSignsDesc: 'Ibyapa by’integuza, ibitegeka n’ibimenyesha',
     practiceDesc: 'Kwimenyereza ibibazo nta gitutu',
     examDesc: 'Ikizamini cy’ikitegererezo cy’iminota 20',
+    aboutDesc: 'Ibyerekeye urubuga n’ubufasha bwo kwiga',
     installAppText: 'Shyiramo App',
     installAppDesc: 'Wige nta interineti muri telefone yawe',
     activeBadge: 'Iriho',
