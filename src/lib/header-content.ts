@@ -109,18 +109,20 @@ export function getHeaderContent(lang: Lang): HeaderDictionary {
 }
 
 /**
- * Computes the equivalent URL for the target locale while preserving the current route structure.
+ * Computes the equivalent URL for the target locale while preserving the current route structure and query parameters.
  */
 export function getLocalizedPath(
   targetLang: Lang,
   currentPath: string,
+  search: string = '',
 ): string {
   const clean = currentPath.replace(/\.html$/, '').replace(/\/index$/, '');
   const parts = clean.split('/').filter(Boolean);
-  if (parts.length === 0) return `/${targetLang}`;
+  const query = search && !search.startsWith('?') ? `?${search}` : search;
+  if (parts.length === 0) return `/${targetLang}${query}`;
   if (parts[0] === 'en' || parts[0] === 'fr' || parts[0] === 'rw') {
     parts[0] = targetLang;
-    return '/' + parts.join('/');
+    return '/' + parts.join('/') + query;
   }
-  return `/${targetLang}/${parts.join('/')}`;
+  return `/${targetLang}/${parts.join('/')}${query}`;
 }

@@ -11,6 +11,7 @@ interface Props {
 const { lang = 'rw' } = Astro.props;
 const t = getHeaderContent(lang);
 const pathname = Astro.url.pathname;
+const search = Astro.url.search;
 
 const cleanPath = pathname
   .replace(/\.html$/, '')
@@ -159,7 +160,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
         {
           locales.map(({ code, label }) => {
             const active = lang === code;
-            const targetHref = getLocalizedPath(code, pathname);
+            const targetHref = getLocalizedPath(code, pathname, search);
 
             return (
               <a
@@ -334,7 +335,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
             {
               locales.map(({ code, label, name }) => {
                 const active = lang === code;
-                const targetHref = getLocalizedPath(code, pathname);
+                const targetHref = getLocalizedPath(code, pathname, search);
 
                 return (
                   <a
