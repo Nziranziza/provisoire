@@ -139,13 +139,18 @@ export function categoryIdFromSlug(slug: string): number | undefined {
 
 /**
  * Category Hub URL:
- * - /[lang]/traffic-rules
- * - /[lang]/road-signs
+ * - /[lang]/traffic-rules[/page/N]
+ * - /[lang]/road-signs[/page/N]
  */
-export function categoryHubHref(lang: Lang, slugOrId: string | number): string {
+export function categoryHubHref(
+  lang: Lang,
+  slugOrId: string | number,
+  page = 1,
+): string {
   const slug =
     typeof slugOrId === 'number' ? CATEGORY_SLUGS[slugOrId] : slugOrId;
-  return `/${lang}/${slug}`;
+  if (page <= 1) return `/${lang}/${slug}`;
+  return `/${lang}/${slug}/page/${page}`;
 }
 
 /**

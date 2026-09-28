@@ -114,13 +114,18 @@ export function questionPageAlternates(
  *
  * @param slugOrId - Category slug or numerical identifier.
  * @param site - Base site URL or origin.
+ * @param page - Optional page number (default 1).
  * @returns Array of hreflang links.
  */
 export function categoryHubAlternates(
   slugOrId: string | number,
   site: string | URL | undefined,
+  page = 1,
 ): HreflangLink[] {
-  return hreflangAlternates((lang) => categoryHubHref(lang, slugOrId), site);
+  return hreflangAlternates(
+    (lang) => categoryHubHref(lang, slugOrId, page),
+    site,
+  );
 }
 
 /**
@@ -520,6 +525,8 @@ export interface CategoryHubMetadataOptions {
   lang: Lang;
   categorySlug: 'traffic-rules' | 'road-signs';
   site: string | URL | undefined;
+  page?: number;
+  totalPages?: number;
 }
 
 /**
@@ -531,25 +538,58 @@ export interface CategoryHubMetadataOptions {
 export function getCategoryHubMetadata(
   options: CategoryHubMetadataOptions,
 ): PageMetadataResult {
-  const { lang, categorySlug, site } = options;
+  const { lang, categorySlug, site, page = 1, totalPages = 1 } = options;
   const content = getCategoryContent(lang, categorySlug);
-  const canonical = absoluteUrl(categoryHubHref(lang, categorySlug), site);
-  const alternates = categoryHubAlternates(categorySlug, site);
+  const canonical = absoluteUrl(
+    categoryHubHref(lang, categorySlug, page),
+    site,
+  );
+  const alternates = categoryHubAlternates(categorySlug, site, page);
+
+  const title =
+    page > 1
+      ? lang === 'fr'
+        ? `${content.title} · Page ${page} — Provisoire`
+        : lang === 'rw'
+          ? `${content.title} · Paji ya ${page} — Provisoire`
+          : `${content.title} · Page ${page} — Provisoire`
+      : content.metaTitle;
+
+  const pageSuffix =
+    lang === 'fr'
+      ? ` Page ${page} sur ${totalPages}.`
+      : lang === 'rw'
+        ? ` Paji ya ${page} kuri ${totalPages}.`
+        : ` Page ${page} of ${totalPages}.`;
+
+  const description =
+    page > 1
+      ? `${truncateMeta(content.metaDescription, 155 - pageSuffix.length)}${pageSuffix}`
+      : content.metaDescription;
+
+  const prev =
+    page > 1
+      ? absoluteUrl(categoryHubHref(lang, categorySlug, page - 1), site)
+      : null;
+  const next =
+    page < totalPages
+      ? absoluteUrl(categoryHubHref(lang, categorySlug, page + 1), site)
+      : null;
 
   return {
-    title: content.metaTitle,
-    description: content.metaDescription,
+    title,
+    description,
     lang,
     canonical,
     alternates,
     image: null,
-    prev: null,
-    next: null,
+    prev,
+    next,
     robots: 'index,follow',
     jsonLd: [],
     openGraph: {
-      title: content.metaTitle,
-      description: content.metaDescription,
+      title,
+      description,
       url: canonical,
       type: 'website',
       siteName: 'Provisoire',
@@ -559,8 +599,8 @@ export function getCategoryHubMetadata(
     },
     twitter: {
       card: 'summary',
-      title: content.metaTitle,
-      description: content.metaDescription,
+      title,
+      description,
       image: null,
     },
   };

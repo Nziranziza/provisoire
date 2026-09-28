@@ -18,5 +18,10 @@ export function getStaticPaths() {
   });
 }
 
-return Astro.redirect(`/en/${Astro.params.category ?? 'traffic-rules'}`, 301);
+return Astro.redirect(
+  Number(Astro.params.page) > 1
+    ? `/en/${Astro.params.category ?? 'traffic-rules'}/page/${Astro.params.page}`
+    : `/en/${Astro.params.category ?? 'traffic-rules'}`,
+  301,
+);
 ---

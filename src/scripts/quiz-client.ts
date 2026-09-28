@@ -635,33 +635,52 @@ function initQuiz(root: HTMLElement) {
 
   const path = window.location.pathname;
 
-  // /questions/page/1 is not a real route; page 1 is /questions.
+  // /questions/page/1 or /[category]/page/1 is not a real route; page 1 is the canonical root.
   if (/^\/(en|fr|rw)\/questions\/page\/1\/?$/.test(path)) {
     window.location.replace(`/${lang}/questions`);
     return;
   }
+  const pageOneCategoryMatch = path.match(
+    /^\/(en|fr|rw)\/(traffic-rules|road-signs)\/page\/1\/?$/,
+  );
+  if (pageOneCategoryMatch) {
+    const targetLang = pageOneCategoryMatch[1];
+    const slug = pageOneCategoryMatch[2];
+    window.location.replace(`/${targetLang}/${slug}`);
+    return;
+  }
 
-  // Legacy: /questions/page/N/category/slug → /[lang]/[category-hub]
+  // Legacy: /questions/page/N/category/slug → /[lang]/[category-hub][/page/N]
   const legacyPageCategory = path.match(
     /^\/(en|fr|rw)\/questions\/page\/(\d+)\/category\/([^/]+)\/?$/,
   );
   if (legacyPageCategory) {
     const targetLang = legacyPageCategory[1];
+    const pageNum = Number(legacyPageCategory[2]);
     const slug = legacyPageCategory[3];
     if (!targetLang || !slug) return;
-    window.location.replace(`/${targetLang}/${slug}`);
+    const dest =
+      pageNum > 1
+        ? `/${targetLang}/${slug}/page/${pageNum}`
+        : `/${targetLang}/${slug}`;
+    window.location.replace(dest);
     return;
   }
 
-  // Legacy: /questions/category/slug[/page/N] → /[lang]/[category-hub]
+  // Legacy: /questions/category/slug[/page/N] → /[lang]/[category-hub][/page/N]
   const legacyCategoryList = path.match(
-    /^\/(en|fr|rw)\/questions\/category\/([^/]+)(?:\/page\/\d+)?\/?$/,
+    /^\/(en|fr|rw)\/questions\/category\/([^/]+)(?:\/page\/(\d+))?\/?$/,
   );
   if (legacyCategoryList) {
     const targetLang = legacyCategoryList[1];
     const slug = legacyCategoryList[2];
+    const pageNum = legacyCategoryList[3] ? Number(legacyCategoryList[3]) : 1;
     if (!targetLang || !slug) return;
-    window.location.replace(`/${targetLang}/${slug}`);
+    const dest =
+      pageNum > 1
+        ? `/${targetLang}/${slug}/page/${pageNum}`
+        : `/${targetLang}/${slug}`;
+    window.location.replace(dest);
     return;
   }
 

@@ -2,12 +2,13 @@
 import type { Lang } from '../../lib/quiz';
 import { questionsListHref } from '../../lib/quiz';
 
-interface Props {
+export interface Props {
   lang: string;
   pageSize: number;
   questionCount: number;
   currentPage?: number;
   categoryId?: number;
+  hrefForPage?: (page: number) => string;
 }
 
 const {
@@ -16,14 +17,19 @@ const {
   questionCount,
   currentPage = 1,
   categoryId,
+  hrefForPage,
 } = Astro.props;
 const totalPages = Math.max(1, Math.ceil(questionCount / pageSize));
 const page = Math.min(Math.max(1, currentPage), totalPages);
 const locale = lang as Lang;
-const prevHref =
-  page > 1 ? questionsListHref(locale, page - 1, categoryId) : null;
-const nextHref =
-  page < totalPages ? questionsListHref(locale, page + 1, categoryId) : null;
+
+const getHref = (p: number) => {
+  if (hrefForPage) return hrefForPage(p);
+  return questionsListHref(locale, p, categoryId);
+};
+
+const prevHref = page > 1 ? getHref(page - 1) : null;
+const nextHref = page < totalPages ? getHref(page + 1) : null;
 ---
 
 <nav
