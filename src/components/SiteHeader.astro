@@ -109,8 +109,8 @@ const locales: { code: Lang; label: string; name: string }[] = [
   class="fixed inset-x-0 top-0 z-50 w-full border-b border-stone-200/90 bg-white/95 backdrop-blur-md transition-all duration-200"
 >
   {
-    /* EN: logo | nav centered between logo & Install | Install+lang
-       FR/RW: logo+nav left | Install+lang right (unchanged) */
+    /* EN/RW: logo | nav centered between logo & Install | Install+lang
+       FR: logo+nav left | Install+lang right (unchanged) */
   }
   {
     lang === 'en' ? (
@@ -165,31 +165,174 @@ const locales: { code: Lang; label: string; name: string }[] = [
         </nav>
 
         <div class="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-          <HeaderInstallButton lang={lang} compact={true} />
           <div
-            class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
-            role="group"
-            aria-label={t.languageSelector}
+            class="site-header-desktop-actions hidden items-center gap-1.5 sm:gap-2.5 md:flex"
+            data-desktop-only
           >
-            {locales.map(({ code, label }) => {
-              const active = lang === code;
-              const targetHref = getLocalizedPath(code, pathname, search);
-              return (
-                <a
-                  href={targetHref}
-                  hreflang={code}
-                  aria-current={active ? 'page' : undefined}
-                  class:list={[
-                    'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
-                    active
-                      ? 'bg-blue-700 font-extrabold text-white'
-                      : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
-                  ]}
-                >
-                  {label}
-                </a>
-              );
-            })}
+            <HeaderInstallButton lang={lang} compact={true} />
+            <div
+              class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
+              role="group"
+              aria-label={t.languageSelector}
+            >
+              {locales.map(({ code, label }) => {
+                const active = lang === code;
+                const targetHref = getLocalizedPath(code, pathname, search);
+                return (
+                  <a
+                    href={targetHref}
+                    hreflang={code}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
+                      active
+                        ? 'bg-blue-700 font-extrabold text-white'
+                        : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
+                    ]}
+                  >
+                    {label}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+          <button
+            type="button"
+            id="site-mobile-menu-btn"
+            class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-90 md:hidden"
+            aria-expanded="false"
+            aria-controls="site-mobile-nav"
+            aria-label={t.openMenu}
+          >
+            <svg
+              id="site-menu-icon-open"
+              class="block h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+            <svg
+              id="site-menu-icon-close"
+              class="hidden h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    ) : lang === 'rw' ? (
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-1 px-1.5 py-2.5 sm:gap-1.5 sm:px-2 lg:px-3">
+        <a
+          href={`/${lang}`}
+          aria-label={t.homeAriaLabel}
+          class="group flex shrink-0 items-center gap-2.5 transition active:scale-95"
+        >
+          <div class="relative shrink-0 transition-transform duration-200 group-hover:scale-105">
+            <img
+              src="/icons/icon.svg"
+              alt="Provisoire logo"
+              width="34"
+              height="34"
+              class="h-8.5 w-8.5 rounded-xl object-contain shadow-2xs"
+              loading="eager"
+            />
+            <span
+              class="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white"
+              aria-hidden="true"
+            />
+          </div>
+          <div class="flex flex-col">
+            <span class="text-base leading-tight font-black tracking-tight text-slate-900 sm:text-lg">
+              Provisoire
+            </span>
+          </div>
+        </a>
+
+        <nav
+          aria-label={t.nav}
+          class="hidden min-w-0 flex-1 items-center justify-center gap-0.5 md:flex lg:gap-1 xl:gap-1.5"
+        >
+          {navItems.map((item) => {
+            const stacked = item.lines.length > 1;
+            return (
+              <a
+                href={item.href}
+                title={item.label}
+                aria-label={item.label}
+                aria-current={item.active ? 'page' : undefined}
+                class:list={[
+                  'inline-flex items-center justify-center gap-1 rounded-full font-bold transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-95',
+                  stacked
+                    ? 'min-h-[40px] px-1.5 py-1 text-[11px] lg:px-2 lg:text-xs xl:px-2.5 xl:text-[13px]'
+                    : 'min-h-[36px] px-2 py-1.5 text-xs whitespace-nowrap md:px-2 lg:px-3 xl:text-[13px]',
+                  item.active
+                    ? 'border-2 border-slate-900 bg-blue-700 font-extrabold text-white shadow-2xs'
+                    : 'border-2 border-transparent text-slate-700 hover:border-slate-900 hover:bg-stone-100 hover:text-slate-950',
+                ]}
+              >
+                {item.icon && <span aria-hidden="true">{item.icon}</span>}
+                {stacked ? (
+                  <span class="flex flex-col items-center text-center leading-tight">
+                    {item.lines.map((line) => (
+                      <span class="whitespace-nowrap">{line}</span>
+                    ))}
+                  </span>
+                ) : (
+                  <span>{item.lines[0]}</span>
+                )}
+              </a>
+            );
+          })}
+        </nav>
+
+        <div class="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
+          <div
+            class="site-header-desktop-actions hidden items-center gap-1.5 sm:gap-2.5 md:flex"
+            data-desktop-only
+          >
+            <HeaderInstallButton lang={lang} compact={true} />
+            <div
+              class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
+              role="group"
+              aria-label={t.languageSelector}
+            >
+              {locales.map(({ code, label }) => {
+                const active = lang === code;
+                const targetHref = getLocalizedPath(code, pathname, search);
+                return (
+                  <a
+                    href={targetHref}
+                    hreflang={code}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
+                      active
+                        ? 'bg-blue-700 font-extrabold text-white'
+                        : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
+                    ]}
+                  >
+                    {label}
+                  </a>
+                );
+              })}
+            </div>
           </div>
           <button
             type="button"
@@ -300,31 +443,36 @@ const locales: { code: Lang; label: string; name: string }[] = [
         </div>
 
         <div class="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-          <HeaderInstallButton lang={lang} compact={true} />
           <div
-            class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
-            role="group"
-            aria-label={t.languageSelector}
+            class="site-header-desktop-actions hidden items-center gap-1.5 sm:gap-2.5 md:flex"
+            data-desktop-only
           >
-            {locales.map(({ code, label }) => {
-              const active = lang === code;
-              const targetHref = getLocalizedPath(code, pathname, search);
-              return (
-                <a
-                  href={targetHref}
-                  hreflang={code}
-                  aria-current={active ? 'page' : undefined}
-                  class:list={[
-                    'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
-                    active
-                      ? 'bg-blue-700 font-extrabold text-white'
-                      : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
-                  ]}
-                >
-                  {label}
-                </a>
-              );
-            })}
+            <HeaderInstallButton lang={lang} compact={true} />
+            <div
+              class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
+              role="group"
+              aria-label={t.languageSelector}
+            >
+              {locales.map(({ code, label }) => {
+                const active = lang === code;
+                const targetHref = getLocalizedPath(code, pathname, search);
+                return (
+                  <a
+                    href={targetHref}
+                    hreflang={code}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
+                      active
+                        ? 'bg-blue-700 font-extrabold text-white'
+                        : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
+                    ]}
+                  >
+                    {label}
+                  </a>
+                );
+              })}
+            </div>
           </div>
           <button
             type="button"
@@ -622,3 +770,13 @@ const locales: { code: Lang; label: string; name: string }[] = [
     updateScrollElevation();
   })();
 </script>
+
+<style is:global>
+  /* Desktop Install + language: never show in the top bar on small screens.
+     They live only in the mobile menu dropdown below md. */
+  @media (max-width: 767px) {
+    .site-header-desktop-actions {
+      display: none !important;
+    }
+  }
+</style>

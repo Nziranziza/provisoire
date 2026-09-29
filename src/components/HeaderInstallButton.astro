@@ -92,11 +92,9 @@ const label = labels[lang] || labels.rw;
   function updateVisibility() {
     const isInstalled = isStandalone();
     buttons.forEach((btn) => {
-      if (isInstalled) {
-        btn.classList.add('hidden');
-      } else {
-        btn.classList.remove('hidden');
-      }
+      // Use a dedicated class — never toggle Tailwind `hidden`, which breaks
+      // responsive visibility (e.g. desktop-only header controls on mobile).
+      btn.classList.toggle('is-pwa-installed', isInstalled);
     });
   }
 
@@ -104,7 +102,7 @@ const label = labels[lang] || labels.rw;
     btn.addEventListener('click', async () => {
       const outcome = await promptInstall();
       if (outcome === 'accepted') {
-        buttons.forEach((b) => b.classList.add('hidden'));
+        buttons.forEach((b) => b.classList.add('is-pwa-installed'));
         window.dispatchEvent(new CustomEvent('pwa-installed'));
       } else if (outcome === 'unavailable') {
         window.dispatchEvent(new CustomEvent('pwa-install-instruction'));
@@ -115,6 +113,12 @@ const label = labels[lang] || labels.rw;
   updateVisibility();
   window.addEventListener('pwa-installable', updateVisibility);
   window.addEventListener('pwa-installed', () => {
-    buttons.forEach((btn) => btn.classList.add('hidden'));
+    buttons.forEach((btn) => btn.classList.add('is-pwa-installed'));
   });
 </script>
+
+<style>
+  .header-install-btn.is-pwa-installed {
+    display: none !important;
+  }
+</style>
