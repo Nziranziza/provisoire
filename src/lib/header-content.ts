@@ -8,6 +8,18 @@ export type HeaderDictionary = {
   exam: string;
   questions: string;
   about: string;
+  /**
+   * Optional stacked desktop lines for long FR/RW labels only.
+   * EN leaves these undefined so the bar stays single-line as-is.
+   */
+  navLines?: {
+    home?: string[];
+    trafficRules?: string[];
+    roadSigns?: string[];
+    practice?: string[];
+    exam?: string[];
+    about?: string[];
+  };
   languageSelector: string;
   openMenu: string;
   closeMenu: string;
@@ -62,6 +74,10 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     exam: 'Examen',
     questions: 'Questions',
     about: 'À propos',
+    navLines: {
+      trafficRules: ['Règles de', 'circulation'],
+      roadSigns: ['Panneaux', 'routiers'],
+    },
     languageSelector: 'Sélecteur de langue',
     openMenu: 'Ouvrir le menu de navigation',
     closeMenu: 'Fermer le menu de navigation',
@@ -88,6 +104,10 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     exam: 'Ikizamini',
     questions: 'Ibibazo',
     about: 'Ibyerekeye',
+    navLines: {
+      trafficRules: ['Amategeko', 'y’umuhanda'],
+      roadSigns: ['Ibyapa byo', 'ku muhanda'],
+    },
     languageSelector: 'Guhitamo ururimi',
     openMenu: 'Fungura menu y’urubuga',
     closeMenu: 'Funga menu y’urubuga',
