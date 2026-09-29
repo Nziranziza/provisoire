@@ -18,11 +18,8 @@ const cleanPath = pathname
   .replace(/\/index$/, '')
   .replace(/\/$/, '');
 
-const isHome =
-  cleanPath === '' ||
-  cleanPath === `/${lang}` ||
-  cleanPath === `/${lang}/questions` ||
-  /^\/(en|fr|rw)\/questions\/page\/\d+$/.test(cleanPath);
+const isHome = cleanPath === '' || cleanPath === `/${lang}`;
+const desktopNavMinPx = lang === 'en' ? 768 : 1024;
 const isTrafficRules =
   cleanPath === `/${lang}/traffic-rules` ||
   cleanPath.startsWith(`/${lang}/traffic-rules/`) ||
@@ -166,7 +163,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
 
         <div class="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
           <div
-            class="site-header-desktop-actions hidden items-center gap-1.5 sm:gap-2.5 md:flex"
+            class="site-header-desktop-actions site-header-desktop-actions--md hidden items-center gap-1.5 sm:gap-2.5 md:flex"
             data-desktop-only
           >
             <HeaderInstallButton lang={lang} compact={true} />
@@ -267,7 +264,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
 
         <nav
           aria-label={t.nav}
-          class="hidden min-w-0 flex-1 items-center justify-center gap-0.5 md:flex lg:gap-1 xl:gap-1.5"
+          class="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex xl:gap-1.5"
         >
           {navItems.map((item) => {
             const stacked = item.lines.length > 1;
@@ -304,7 +301,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
 
         <div class="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
           <div
-            class="site-header-desktop-actions hidden items-center gap-1.5 sm:gap-2.5 md:flex"
+            class="site-header-desktop-actions site-header-desktop-actions--lg hidden items-center gap-1.5 sm:gap-2.5 lg:flex"
             data-desktop-only
           >
             <HeaderInstallButton lang={lang} compact={true} />
@@ -337,7 +334,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
           <button
             type="button"
             id="site-mobile-menu-btn"
-            class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-90 md:hidden"
+            class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-90 lg:hidden"
             aria-expanded="false"
             aria-controls="site-mobile-nav"
             aria-label={t.openMenu}
@@ -406,7 +403,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
 
           <nav
             aria-label={t.nav}
-            class="hidden min-w-0 items-center gap-1 md:flex lg:gap-1.5 xl:gap-2"
+            class="hidden min-w-0 items-center gap-1 lg:flex lg:gap-1.5 xl:gap-2"
           >
             {navItems.map((item) => {
               const stacked = item.lines.length > 1;
@@ -444,7 +441,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
 
         <div class="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
           <div
-            class="site-header-desktop-actions hidden items-center gap-1.5 sm:gap-2.5 md:flex"
+            class="site-header-desktop-actions site-header-desktop-actions--lg hidden items-center gap-1.5 sm:gap-2.5 lg:flex"
             data-desktop-only
           >
             <HeaderInstallButton lang={lang} compact={true} />
@@ -477,7 +474,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
           <button
             type="button"
             id="site-mobile-menu-btn"
-            class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-90 md:hidden"
+            class="inline-flex min-h-[38px] min-w-[38px] cursor-pointer touch-manipulation items-center justify-center p-1.5 text-slate-900 transition hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 active:scale-90 lg:hidden"
             aria-expanded="false"
             aria-controls="site-mobile-nav"
             aria-label={t.openMenu}
@@ -521,7 +518,10 @@ const locales: { code: Lang; label: string; name: string }[] = [
   <!-- Collapsible Mobile Navigation Dropdown Menu (Mobile Only, Aligned to Footer container) -->
   <div
     id="site-mobile-nav"
-    class="hidden max-h-[calc(100dvh-4.25rem)] origin-top overflow-y-auto border-t border-stone-200/90 bg-white/98 shadow-2xl backdrop-blur-xl transition-all duration-200 md:hidden"
+    class:list={[
+      'hidden max-h-[calc(100dvh-4.25rem)] origin-top overflow-y-auto border-t border-stone-200/90 bg-white/98 shadow-2xl backdrop-blur-xl transition-all duration-200',
+      lang === 'en' ? 'md:hidden' : 'lg:hidden',
+    ]}
   >
     <div class="mx-auto max-w-6xl px-4 py-4 sm:px-6">
       <!-- Section header -->
@@ -659,7 +659,10 @@ const locales: { code: Lang; label: string; name: string }[] = [
 <!-- Mobile Backdrop Overlay -->
 <div
   id="site-mobile-backdrop"
-  class="fixed inset-0 top-[60px] z-40 hidden bg-slate-950/40 backdrop-blur-xs transition-opacity duration-200 sm:top-[64px] md:hidden"
+  class:list={[
+    'fixed inset-0 top-[60px] z-40 hidden bg-slate-950/40 backdrop-blur-xs transition-opacity duration-200 sm:top-[64px]',
+    lang === 'en' ? 'md:hidden' : 'lg:hidden',
+  ]}
   aria-hidden="true"
 >
 </div>
@@ -672,6 +675,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
   define:vars={{
     openMenuMsg: t.openMenu,
     closeMenuMsg: t.closeMenu,
+    desktopNavMinPx,
   }}
 >
   (function initSiteHeader() {
@@ -747,7 +751,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
     // Reset when resizing to desktop/laptop
     window.addEventListener('resize', () => {
       if (
-        window.innerWidth >= 768 &&
+        window.innerWidth >= desktopNavMinPx &&
         menuBtn.getAttribute('aria-expanded') === 'true'
       ) {
         setOpen(false);
@@ -772,10 +776,15 @@ const locales: { code: Lang; label: string; name: string }[] = [
 </script>
 
 <style is:global>
-  /* Desktop Install + language: never show in the top bar on small screens.
-     They live only in the mobile menu dropdown below md. */
+  /* Desktop Install + language: only in the top bar at/above the locale breakpoint.
+     Below that they live in the mobile menu dropdown. */
   @media (max-width: 767px) {
-    .site-header-desktop-actions {
+    .site-header-desktop-actions--md {
+      display: none !important;
+    }
+  }
+  @media (max-width: 1023px) {
+    .site-header-desktop-actions--lg {
       display: none !important;
     }
   }
