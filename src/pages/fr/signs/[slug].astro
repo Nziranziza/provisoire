@@ -1,0 +1,19 @@
+---
+import SignDetailPage from '../../../components/SignDetailPage.astro';
+import { getAllSigns, getSignBySlug } from '../../../lib/signs';
+
+export function getStaticPaths() {
+  return getAllSigns().map((sign) => ({
+    params: { slug: sign.slug },
+    props: { sign },
+  }));
+}
+
+const { slug } = Astro.params;
+const sign = Astro.props.sign ?? getSignBySlug(slug!);
+if (!sign) {
+  return Astro.redirect('/fr/signs');
+}
+---
+
+<SignDetailPage lang="fr" sign={sign} />

@@ -3,6 +3,7 @@ import type { Lang } from '../lib/quiz';
 import { categoryHubHref, questionsListHref } from '../lib/quiz';
 import { getFooterContent } from '../lib/footer-content';
 import { getLocalizedPath } from '../lib/header-content';
+import { signsIndexHref } from '../lib/signs';
 
 interface Props {
   lang?: Lang;
@@ -82,6 +83,17 @@ const navLinks = [
   {
     href: categoryHubHref(lang, 'road-signs'),
     label: t.roadSigns,
+    icon: null,
+    variant: 'default',
+  },
+  {
+    href: signsIndexHref(lang),
+    label:
+      lang === 'en'
+        ? 'Sign glossary'
+        : lang === 'fr'
+          ? 'Glossaire panneaux'
+          : 'Incamake y’ibyapa',
     icon: null,
     variant: 'default',
   },

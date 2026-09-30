@@ -98,6 +98,7 @@ export function buildRedirectMap({
     '/exam': '/rw/exam',
     '/traffic-rules': '/rw/traffic-rules',
     '/road-signs': '/rw/road-signs',
+    '/signs': '/rw/signs',
   };
 
   return {
