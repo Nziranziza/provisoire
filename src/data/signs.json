@@ -1,31 +1,7 @@
 {
-  "generatedAt": "2026-09-30T13:44:32.749Z",
+  "generatedAt": "2026-09-30T14:54:30.963Z",
   "note": "Seeded from category_id=2 questions. Review names/types; dedupe key is EN name slug.",
   "signs": [
-    {
-      "id": "a-driver-may-not-cross-the-white-lines-to-overtake",
-      "slug": "a-driver-may-not-cross-the-white-lines-to-overtake",
-      "type": "marking",
-      "image_url": "images/f181f64b-8658-41bf-8df0-5592b27909f7.png",
-      "source_question_id": "f181f64b-8658-41bf-8df0-5592b27909f7",
-      "names": {
-        "en": "A driver may not cross the white lines to overtake.",
-        "fr": "Un conducteur ne peut pas franchir les lignes blanche pour dépasser.",
-        "rw": "Umuyobozi w’ikinyabiziga abujijwe kunyuranaho arenze imirongo yera"
-      },
-      "meaning": {
-        "en": "A driver may not cross the white lines to overtake.",
-        "fr": "Un conducteur ne peut pas franchir les lignes blanche pour dépasser.",
-        "rw": "Umuyobozi w’ikinyabiziga abujijwe kunyuranaho arenze imirongo yera"
-      },
-      "action": {
-        "en": "Stay within the rules shown by the road marking — do not cross solid lines and give way where markings require it.",
-        "fr": "Respectez le marquage au sol : ne franchissez pas les lignes continues et cédez le passage lorsque le marquage l’exige.",
-        "rw": "Kurikiza amabwiriza y’ibimenyetso ku muhanda — ntukambuke imirongo ihamye kandi uha uburenganzira aho bisabwa."
-      },
-      "questionIds": ["f181f64b-8658-41bf-8df0-5592b27909f7"],
-      "questionNumbers": [190]
-    },
     {
       "id": "a-driver-must-not-cross-the-broken-white-line-unless-it-is-safe-to-do-so",
       "slug": "a-driver-must-not-cross-the-broken-white-line-unless-it-is-safe-to-do-so",
@@ -86,9 +62,9 @@
         "rw": "Ibitaro"
       },
       "meaning": {
-        "en": "This signal indicates :",
-        "fr": "Ce signal indique :",
-        "rw": "ki cyapa gisobanura iki?"
+        "en": "A hospital",
+        "fr": "Un établissement sanitaire",
+        "rw": "Ibitaro"
       },
       "action": {
         "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
@@ -123,78 +99,6 @@
       "questionNumbers": [116]
     },
     {
-      "id": "authorization-to-pass-the-signal",
-      "slug": "authorization-to-pass-the-signal",
-      "type": "information",
-      "image_url": "images/9a902bdd-3a1c-4d0a-93da-71c64ff2fe92.png",
-      "source_question_id": "9a902bdd-3a1c-4d0a-93da-71c64ff2fe92",
-      "names": {
-        "en": "Authorization to pass the signal",
-        "fr": "Autorisation de franchir le signal",
-        "rw": "Uburenganzira bwo kurenga icyo kimenyetso"
-      },
-      "meaning": {
-        "en": "Authorization to pass the signal",
-        "fr": "Autorisation de franchir le signal",
-        "rw": "Uburenganzira bwo kurenga icyo kimenyetso"
-      },
-      "action": {
-        "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
-        "fr": "Utilisez cette information pour anticiper votre trajet, sans la traiter comme une interdiction sauf mention contraire.",
-        "rw": "Koresha aya makuru mu gutegura urugendo, ntuyafate nk’igabu keretse byavuze."
-      },
-      "questionIds": ["9a902bdd-3a1c-4d0a-93da-71c64ff2fe92"],
-      "questionNumbers": [153]
-    },
-    {
-      "id": "before-each-turn",
-      "slug": "before-each-turn",
-      "type": "information",
-      "image_url": "images/e2a4dbf8-a80a-413a-a491-dd2911606f92.png",
-      "source_question_id": "e2a4dbf8-a80a-413a-a491-dd2911606f92",
-      "names": {
-        "en": "Before each turn",
-        "fr": "Avant chaque virage",
-        "rw": "Mbere ya buri koni"
-      },
-      "meaning": {
-        "en": "On a winding road, when do I brake?",
-        "fr": "Sur une route sinueuse, quand est-ce que je freine ?",
-        "rw": "Mu muhanda ufite uruhererekane rw’amakoni, feri y’urugendo ikoreshwa ryari?"
-      },
-      "action": {
-        "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
-        "fr": "Utilisez cette information pour anticiper votre trajet, sans la traiter comme une interdiction sauf mention contraire.",
-        "rw": "Koresha aya makuru mu gutegura urugendo, ntuyafate nk’igabu keretse byavuze."
-      },
-      "questionIds": ["e2a4dbf8-a80a-413a-a491-dd2911606f92"],
-      "questionNumbers": [182]
-    },
-    {
-      "id": "by-crossing-the-broken-white-line",
-      "slug": "by-crossing-the-broken-white-line",
-      "type": "marking",
-      "image_url": "images/919b5a1d-e326-4f35-93bf-cbdd42d6ee3f.png",
-      "source_question_id": "919b5a1d-e326-4f35-93bf-cbdd42d6ee3f",
-      "names": {
-        "en": "By crossing the broken white line",
-        "fr": "En franchissant la ligne blanche brisée.",
-        "rw": "Arenze umurongo wera ucagaguye"
-      },
-      "meaning": {
-        "en": "How should a driver overtake the cyclist in this situation?",
-        "fr": "Comment un conducteur devrait-il dépasser le cycliste dans cette situation ?",
-        "rw": "Ni gute umuyobozi w’ikinyabiziga yanyura ku munyegare hano?"
-      },
-      "action": {
-        "en": "Stay within the rules shown by the road marking — do not cross solid lines and give way where markings require it.",
-        "fr": "Respectez le marquage au sol : ne franchissez pas les lignes continues et cédez le passage lorsque le marquage l’exige.",
-        "rw": "Kurikiza amabwiriza y’ibimenyetso ku muhanda — ntukambuke imirongo ihamye kandi uha uburenganzira aho bisabwa."
-      },
-      "questionIds": ["919b5a1d-e326-4f35-93bf-cbdd42d6ee3f"],
-      "questionNumbers": [151]
-    },
-    {
       "id": "corner-to-the-right-approaching-a-dangerous-corner-to-the-right",
       "slug": "corner-to-the-right-approaching-a-dangerous-corner-to-the-right",
       "type": "warning",
@@ -217,54 +121,6 @@
       },
       "questionIds": ["97404516-a84f-489c-9893-b85ae1e5f417"],
       "questionNumbers": [152]
-    },
-    {
-      "id": "cycle-track",
-      "slug": "cycle-track",
-      "type": "information",
-      "image_url": "images/82ba8262-cc55-42b2-9c4d-461844d79bf9.png",
-      "source_question_id": "82ba8262-cc55-42b2-9c4d-461844d79bf9",
-      "names": {
-        "en": "Cycle track",
-        "fr": "Une piste cyclable",
-        "rw": "Ahagenewe inzira y’ibinyamitende"
-      },
-      "meaning": {
-        "en": "The two parallel discontinuous lines of white color at the edges of the road delimit:",
-        "fr": "Les deux lignes discontinues parallèles de couleur blanche aux bords de la chaussée délimitent :",
-        "rw": "igice kinzira nyabagendwa gikikijwe n’imirongo ibiri y’umweru iciyemo uduce kandi iteganye :"
-      },
-      "action": {
-        "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
-        "fr": "Utilisez cette information pour anticiper votre trajet, sans la traiter comme une interdiction sauf mention contraire.",
-        "rw": "Koresha aya makuru mu gutegura urugendo, ntuyafate nk’igabu keretse byavuze."
-      },
-      "questionIds": ["82ba8262-cc55-42b2-9c4d-461844d79bf9"],
-      "questionNumbers": [144]
-    },
-    {
-      "id": "danger",
-      "slug": "danger",
-      "type": "warning",
-      "image_url": "images/3c7183ea-2019-4f9f-b0f2-1d0babfcb6ed.png",
-      "source_question_id": "3c7183ea-2019-4f9f-b0f2-1d0babfcb6ed",
-      "names": {
-        "en": "Danger",
-        "fr": "Un danger",
-        "rw": "Ibyago"
-      },
-      "meaning": {
-        "en": "Triangular Shape road signs announce:",
-        "fr": "Les panneaux de forme triangulaire annoncent :",
-        "rw": "Icyapa gikoze mw’ishusho ya mpandeshatu kimenyesha:"
-      },
-      "action": {
-        "en": "Slow down, scan for the hazard, and be ready to adjust speed or position.",
-        "fr": "Ralentissez, guettez le danger et préparez-vous à adapter votre vitesse ou votre trajectoire.",
-        "rw": "Gabanya umuvuduko, reba icyago, kandi witegure guhindura umuvuduko cyangwa inzira."
-      },
-      "questionIds": ["3c7183ea-2019-4f9f-b0f2-1d0babfcb6ed"],
-      "questionNumbers": [123]
     },
     {
       "id": "dangerous-slope",
@@ -313,30 +169,6 @@
       },
       "questionIds": ["447e9afb-f969-4557-aead-98ba43533617"],
       "questionNumbers": [125]
-    },
-    {
-      "id": "i-must-stop-below-the-flashing-red-lights",
-      "slug": "i-must-stop-below-the-flashing-red-lights",
-      "type": "information",
-      "image_url": "images/c9ccaef0-12f9-4b9c-a3d6-9059cc77f061.png",
-      "source_question_id": "c9ccaef0-12f9-4b9c-a3d6-9059cc77f061",
-      "names": {
-        "en": "I must stop below the flashing red lights.",
-        "fr": "Je dois m’immobiliser en deçà des feux rouges clignotants.",
-        "rw": "Ngomba guhagarara munsi yitara ry’umutuku rimyatsa"
-      },
-      "meaning": {
-        "en": "Railroad Crossing.",
-        "fr": "Passage à niveau.",
-        "rw": "umuhanda wambukiranya inzira ya gariyamoshi"
-      },
-      "action": {
-        "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
-        "fr": "Utilisez cette information pour anticiper votre trajet, sans la traiter comme une interdiction sauf mention contraire.",
-        "rw": "Koresha aya makuru mu gutegura urugendo, ntuyafate nk’igabu keretse byavuze."
-      },
-      "questionIds": ["c9ccaef0-12f9-4b9c-a3d6-9059cc77f061"],
-      "questionNumbers": [172]
     },
     {
       "id": "it-is-prohibited-to-every-driver-to-cross-it",
@@ -411,30 +243,6 @@
       "questionNumbers": [113]
     },
     {
-      "id": "just-right-of-the-center-of-the-road",
-      "slug": "just-right-of-the-center-of-the-road",
-      "type": "information",
-      "image_url": "images/a0c3b038-5e08-4d4b-9930-327d5ac1822d.png",
-      "source_question_id": "a0c3b038-5e08-4d4b-9930-327d5ac1822d",
-      "names": {
-        "en": "Just right of the center of the road",
-        "fr": "Juste à droite du centre de la route",
-        "rw": "Gusa iburyo bwo hagati y’inzira nyabagendwa"
-      },
-      "meaning": {
-        "en": "Where a vehicle should be positioned before turning left?",
-        "fr": "Où placer un véhicule avant de tourner à gauche ?",
-        "rw": "Mbere yuko umuyobozi w’ikinyabiziga akata ibumoso mu nzira nyabagendwa, nihe ikinyabiziga kigomba kuba kiri ?"
-      },
-      "action": {
-        "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
-        "fr": "Utilisez cette information pour anticiper votre trajet, sans la traiter comme une interdiction sauf mention contraire.",
-        "rw": "Koresha aya makuru mu gutegura urugendo, ntuyafate nk’igabu keretse byavuze."
-      },
-      "questionIds": ["a0c3b038-5e08-4d4b-9930-327d5ac1822d"],
-      "questionNumbers": [158]
-    },
-    {
       "id": "level-crossing-without-gate-or-barrier",
       "slug": "level-crossing-without-gate-or-barrier",
       "type": "warning",
@@ -485,7 +293,7 @@
     {
       "id": "minimum-speed-30-km-h",
       "slug": "minimum-speed-30-km-h",
-      "type": "prohibitory",
+      "type": "mandatory",
       "image_url": "images/e21785fa-eea5-45e2-b19c-5a68e87dac83.png",
       "source_question_id": "e21785fa-eea5-45e2-b19c-5a68e87dac83",
       "names": {
@@ -499,9 +307,9 @@
         "rw": "Umuvuduko muto ntarengwa utegetswe ni 30 km/h."
       },
       "action": {
-        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
-        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
-        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
+        "en": "Follow the required direction or behaviour shown by the sign.",
+        "fr": "Suivez la direction ou le comportement imposé par le panneau.",
+        "rw": "Kurikiza icyerekezo cyangwa imyitwarire icyapa gitegeka."
       },
       "questionIds": ["e21785fa-eea5-45e2-b19c-5a68e87dac83"],
       "questionNumbers": [180]
@@ -529,6 +337,174 @@
       },
       "questionIds": ["7539d4b7-f009-4fe6-bbbd-2635133c733a"],
       "questionNumbers": [140]
+    },
+    {
+      "id": "no-entry",
+      "slug": "no-entry",
+      "type": "prohibitory",
+      "image_url": "images/a666ee49-b06f-43e6-a1f4-ddf9479fe5c4.png",
+      "source_question_id": "a666ee49-b06f-43e6-a1f4-ddf9479fe5c4",
+      "names": {
+        "en": "No entry",
+        "fr": "Accés interdit",
+        "rw": "Ntihanyurwa"
+      },
+      "meaning": {
+        "en": "No entry",
+        "fr": "Accés interdit",
+        "rw": "Ntihanyurwa"
+      },
+      "action": {
+        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
+        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
+        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
+      },
+      "questionIds": ["a666ee49-b06f-43e6-a1f4-ddf9479fe5c4"],
+      "questionNumbers": [161]
+    },
+    {
+      "id": "no-entry-for-pedestrians",
+      "slug": "no-entry-for-pedestrians",
+      "type": "prohibitory",
+      "image_url": "images/bf0a743f-d988-42db-b11e-8b5b227e47cd.png",
+      "source_question_id": "bf0a743f-d988-42db-b11e-8b5b227e47cd",
+      "names": {
+        "en": "No entry for pedestrians",
+        "fr": "Interdit l’accès aux piétons",
+        "rw": "Ntihanyurwa n’abanyamaguru"
+      },
+      "meaning": {
+        "en": "No entry for pedestrians",
+        "fr": "Interdit l’accès aux piétons",
+        "rw": "Ntihanyurwa n’abanyamaguru"
+      },
+      "action": {
+        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
+        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
+        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
+      },
+      "questionIds": ["bf0a743f-d988-42db-b11e-8b5b227e47cd"],
+      "questionNumbers": [166]
+    },
+    {
+      "id": "no-entry-for-vehicles-carrying-goods",
+      "slug": "no-entry-for-vehicles-carrying-goods",
+      "type": "prohibitory",
+      "image_url": "images/cfc5a3f6-2be0-4a47-96f1-2177bc052e5d.png",
+      "source_question_id": "cfc5a3f6-2be0-4a47-96f1-2177bc052e5d",
+      "names": {
+        "en": "No entry for vehicles carrying goods.",
+        "fr": "Aucune inscription pour les véhicules transportant des marchandises.",
+        "rw": "Ntihanyurwa n’ikinyabiziga bigenewe gutwara ibicuruzwa"
+      },
+      "meaning": {
+        "en": "No entry for vehicles carrying goods.",
+        "fr": "Aucune inscription pour les véhicules transportant des marchandises.",
+        "rw": "Ntihanyurwa n’ikinyabiziga bigenewe gutwara ibicuruzwa"
+      },
+      "action": {
+        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
+        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
+        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
+      },
+      "questionIds": ["cfc5a3f6-2be0-4a47-96f1-2177bc052e5d"],
+      "questionNumbers": [176]
+    },
+    {
+      "id": "no-left-turn",
+      "slug": "no-left-turn",
+      "type": "prohibitory",
+      "image_url": "images/c8fcbdd5-8ef8-48b4-a877-5817459c5bfe.png",
+      "source_question_id": "c8fcbdd5-8ef8-48b4-a877-5817459c5bfe",
+      "names": {
+        "en": "No left turn.",
+        "fr": "Interdiction de tourner à gauche.",
+        "rw": "Birabujijwe gukata ibumoso"
+      },
+      "meaning": {
+        "en": "No left turn.",
+        "fr": "Interdiction de tourner à gauche.",
+        "rw": "Birabujijwe gukata ibumoso"
+      },
+      "action": {
+        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
+        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
+        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
+      },
+      "questionIds": ["c8fcbdd5-8ef8-48b4-a877-5817459c5bfe"],
+      "questionNumbers": [171]
+    },
+    {
+      "id": "no-right-turn",
+      "slug": "no-right-turn",
+      "type": "prohibitory",
+      "image_url": "images/88e03e31-dfa9-4cc7-9819-0d68bb56416f.png",
+      "source_question_id": "88e03e31-dfa9-4cc7-9819-0d68bb56416f",
+      "names": {
+        "en": "No right turn.",
+        "fr": "Interdiction de tourner à droite.",
+        "rw": "Birabujijwe gukata i buryo"
+      },
+      "meaning": {
+        "en": "No right turn.",
+        "fr": "Interdiction de tourner à droite.",
+        "rw": "Birabujijwe gukata i buryo"
+      },
+      "action": {
+        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
+        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
+        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
+      },
+      "questionIds": ["88e03e31-dfa9-4cc7-9819-0d68bb56416f"],
+      "questionNumbers": [145]
+    },
+    {
+      "id": "no-through-road",
+      "slug": "no-through-road",
+      "type": "prohibitory",
+      "image_url": "images/f67d4ce2-9f91-460e-a2cc-30b4298048c1.png",
+      "source_question_id": "f67d4ce2-9f91-460e-a2cc-30b4298048c1",
+      "names": {
+        "en": "No through road",
+        "fr": "Route sans issue",
+        "rw": "Umuhanda udakomeza"
+      },
+      "meaning": {
+        "en": "No through road",
+        "fr": "Route sans issue",
+        "rw": "Umuhanda udakomeza"
+      },
+      "action": {
+        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
+        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
+        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
+      },
+      "questionIds": ["f67d4ce2-9f91-460e-a2cc-30b4298048c1"],
+      "questionNumbers": [195]
+    },
+    {
+      "id": "no-vehicular-traffic-in-both-direction",
+      "slug": "no-vehicular-traffic-in-both-direction",
+      "type": "information",
+      "image_url": "images/e55f57b4-1db4-471b-9e06-28144ec6a9b7.png",
+      "source_question_id": "e55f57b4-1db4-471b-9e06-28144ec6a9b7",
+      "names": {
+        "en": "No vehicular traffic in both direction",
+        "fr": "La circulation interdite dans les deux sens",
+        "rw": "Ntihanyurwa mu byerekezo byombi"
+      },
+      "meaning": {
+        "en": "No vehicular traffic in both direction",
+        "fr": "La circulation interdite dans les deux sens",
+        "rw": "Ntihanyurwa mu byerekezo byombi"
+      },
+      "action": {
+        "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
+        "fr": "Utilisez cette information pour anticiper votre trajet, sans la traiter comme une interdiction sauf mention contraire.",
+        "rw": "Koresha aya makuru mu gutegura urugendo, ntuyafate nk’igabu keretse byavuze."
+      },
+      "questionIds": ["e55f57b4-1db4-471b-9e06-28144ec6a9b7"],
+      "questionNumbers": [183]
     },
     {
       "id": "parking-prohibited",
@@ -747,30 +723,6 @@
       "questionNumbers": [188]
     },
     {
-      "id": "stop-and-give-way-to-100-meters-beyond-this-road-sign",
-      "slug": "stop-and-give-way-to-100-meters-beyond-this-road-sign",
-      "type": "prohibitory",
-      "image_url": "images/8dec4bbe-839b-411a-b6bf-be5bf9da055a.png",
-      "source_question_id": "8dec4bbe-839b-411a-b6bf-be5bf9da055a",
-      "names": {
-        "en": "Stop and give way to 100 meters beyond this road sign.",
-        "fr": "M'immobiliser et céder le passage à 100 mètres au-delà de ce signal routier.",
-        "rw": "Guhagarara ngatanga inzira kuri metero 100 ntaragera kuri icyi cyapa"
-      },
-      "meaning": {
-        "en": "I must:",
-        "fr": "Je dois:",
-        "rw": "Ngomba :"
-      },
-      "action": {
-        "en": "Do not do what the sign forbids. Obey it until an end-of-restriction sign or the restriction clearly ends.",
-        "fr": "N’effectuez pas ce que le panneau interdit. Respectez-le jusqu’à un panneau de fin d’interdiction ou la fin claire de la restriction.",
-        "rw": "Ntukore icyo icyapa gibuza. Komeza ukurikize kugeza ku cyapa gisoza cyangwa igabu rirangiye."
-      },
-      "questionIds": ["8dec4bbe-839b-411a-b6bf-be5bf9da055a"],
-      "questionNumbers": [150]
-    },
-    {
       "id": "stop-your-vehicle",
       "slug": "stop-your-vehicle",
       "type": "prohibitory",
@@ -830,9 +782,9 @@
         "rw": "Icyapa B3"
       },
       "meaning": {
-        "en": "What signal gives you priority at future intersections:",
-        "fr": "Quel signal vous accorde la priorité aux prochains carrefours :",
-        "rw": "Ni ikihe cyapa cy’inyemerera gutambuka mbere mu masangano y’umuhanda?"
+        "en": "The signal B3",
+        "fr": "Le signal B3",
+        "rw": "Icyapa B3"
       },
       "action": {
         "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
@@ -854,9 +806,9 @@
         "rw": "Icyapa B5"
       },
       "meaning": {
-        "en": "What signal obliges me to give way:",
-        "fr": "Quel signal m’oblige à céder le passage :",
-        "rw": "Ni ikihe cyapa muri ibi kintegeka gutanga inzira:"
+        "en": "The signal B5",
+        "fr": "Le signal B5",
+        "rw": "Icyapa B5"
       },
       "action": {
         "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
@@ -878,9 +830,9 @@
         "rw": "Icyapa B6"
       },
       "meaning": {
-        "en": "Which sign shows the driver who is about to enter a narrow road that he has the right of way before vehicles moving in the opposite direction:",
-        "fr": "Quel signal d’indication donnée à un conducteur qui s’engager dans un passage étroit qu’il bénéficie de la priorité par rapport aux véhicules venant en sens inverse :",
-        "rw": "Muri ibi byapa bikurikira ni ikihe cyerekana ko umuyobozi ukibonye yemerewe gutambuka mbere y'abaturutse aho agana mu nzira ifunganye:"
+        "en": "The Signal B6",
+        "fr": "Le Signal B6",
+        "rw": "Icyapa B6"
       },
       "action": {
         "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
@@ -902,9 +854,9 @@
         "rw": "Icyapa E13a"
       },
       "meaning": {
-        "en": "Which sign means a one-way road?",
-        "fr": "Quel signal signifie une voie à sens unique?",
-        "rw": "Ni ikihe icyapa gisobanura umuhanda w'icyerekezo kimwe:"
+        "en": "The signal E13a",
+        "fr": "Le signal E13a",
+        "rw": "Icyapa E13a"
       },
       "action": {
         "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
@@ -926,9 +878,9 @@
         "rw": "Icyapa E14"
       },
       "meaning": {
-        "en": "Which sign shows no through road:",
-        "fr": "Quel signal signifie une voie sans issue?",
-        "rw": "Mu byapa bikurikira , ni ikihe cyerekana muhanda udakomeza:"
+        "en": "The Signal E14",
+        "fr": "Le Signal E14",
+        "rw": "Icyapa E14"
       },
       "action": {
         "en": "Use the information to plan your route and driving, without treating it as a prohibition unless stated.",
@@ -1033,30 +985,6 @@
       },
       "questionIds": ["785cb56f-d460-413b-8171-c23f03168092"],
       "questionNumbers": [143]
-    },
-    {
-      "id": "visibility-along-the-major-road-way-is-limited",
-      "slug": "visibility-along-the-major-road-way-is-limited",
-      "type": "marking",
-      "image_url": "images/fbaa4792-58ca-4ab0-ad3d-de52f3bf4847.png",
-      "source_question_id": "fbaa4792-58ca-4ab0-ad3d-de52f3bf4847",
-      "names": {
-        "en": "Visibility along the major road-way is limited",
-        "fr": "La visibilité sur la route principale est limitée",
-        "rw": "Biragoye kubona neza mu muhanda munini"
-      },
-      "meaning": {
-        "en": "At this junction, there’s a ‘stop‘sign and a solid white line on the road surface. Why is there a ‘stop’ sign here?",
-        "fr": "À cette intersection, il y a un panneau \"Stop\" et une ligne blanche continue à la surface de la route. Pourquoi y a-t-il un panneau \"stop\" ici ?",
-        "rw": "Muri iri sangano ry’umuhanda hari icyapa gisobanura “guhagarara” n’umurongo wera urombereje munzira . Niyihe mpamvu hari iki cyapa cyo “guhagarara” hano?"
-      },
-      "action": {
-        "en": "Stay within the rules shown by the road marking — do not cross solid lines and give way where markings require it.",
-        "fr": "Respectez le marquage au sol : ne franchissez pas les lignes continues et cédez le passage lorsque le marquage l’exige.",
-        "rw": "Kurikiza amabwiriza y’ibimenyetso ku muhanda — ntukambuke imirongo ihamye kandi uha uburenganzira aho bisabwa."
-      },
-      "questionIds": ["fbaa4792-58ca-4ab0-ad3d-de52f3bf4847"],
-      "questionNumbers": [197]
     },
     {
       "id": "yield",

@@ -36,14 +36,15 @@ function isMeaning(x) {
 function isJunkName(name) {
   const n = name.trim().toLowerCase();
   if (!n) return true;
+  // Standalone "No" / "Yes" only — keep "No entry", "No left turn", etc.
   if (/^(no|yes|b|a|c|d|driver)$/i.test(n)) return true;
-  if (/^(yes|no)\b/i.test(n)) return true;
+  if (/^yes\b/i.test(n)) return true;
   if (/none of the answers/i.test(n)) return true;
   if (/^\d+(\.\d+)?\s*(km\/h|m|meters|metres)?$/i.test(n)) return true;
   if (n.length > 90) return true;
   if (n.length < 4) return true;
   if (
-    /correct position|may overtake|should you|cannot see|proceed, as|does not concern|allow the cyclist|allow the pedestrian|both cars|be prepared|be ready to stop|driver field|you.ve broken|silver car|harnessed|it is allowed|then, i can|then i can|mark a timeout|slow down and beckon|stop if your exit|i can overtake|i cannot continue|in every turn/i.test(
+    /correct position|may overtake|should you|cannot see|proceed, as|does not concern|allow the cyclist|allow the pedestrian|both cars|be prepared|be ready to stop|driver field|you.ve broken|silver car|harnessed|it is allowed|then, i can|then i can|mark a timeout|slow down and beckon|stop if your exit|i can overtake|i cannot continue|in every turn|before each turn|just right of the center/i.test(
       n,
     )
   ) {
@@ -73,7 +74,7 @@ function classify(name, question) {
     return 'marking';
   }
   if (
-    /no entry|no left|no right|no parking|prohibited|prohibition|forbidden|stop your|stop line|yield|give way|maximum speed|minimum speed|must not cross|parking prohibited|no through|end of a highway/i.test(
+    /no entry|no left|no right|no parking|prohibited|prohibition|forbidden|stop your|stop line|yield|give way|maximum speed|must not cross|parking prohibited|no through|end of a highway/i.test(
       n,
     )
   ) {
@@ -87,7 +88,7 @@ function classify(name, question) {
     return 'mandatory';
   }
   if (
-    /two[- ]way|danger|slippery|steep|slope|corner|narrowing|level crossing|undefined danger|junction with|climb/i.test(
+    /two[- ]way|danger|slippery|steep|slope|corner|narrowing|level crossing|undefined danger|junction with|climb|climp/i.test(
       n,
     )
   ) {
@@ -96,23 +97,17 @@ function classify(name, question) {
   return 'information';
 }
 
+/**
+ * Explicit allowlist of identified road-sign name patterns.
+ * Scenario / action answers are rejected unless they match these.
+ */
 function looksLikeSignName(name) {
   const n = name.trim();
   if (isJunkName(n)) return false;
   if (/^the signal [a-z0-9]+/i.test(n)) return true;
-  if (
-    /^(no |yield|stop|maximum|minimum|end of|two[- ]way|parking|roundabout|slippery|steep|dangerous|level crossing|shared |junction|narrowing|right of way|turn |straight ahead|give way|approaching a danger|prohibition|it’s forbidden|it is prohibited|a driver must not|a hospital)/i.test(
-      n,
-    )
-  ) {
-    return true;
-  }
-  if (n.length <= 55 && !/\?$/.test(n) && !/^(the |a |an )/i.test(n)) {
-    return /sign|way|road|entry|turn|speed|traffic|track|slope|corner|line|marking|roundabout|yield|stop|parking|highway|danger|climb|climp/i.test(
-      n,
-    );
-  }
-  return false;
+  return /^(no entry|no left turn|no right turn|no parking|no through|no vehicular|yield|stop your vehicle|stop line|maximum speed|minimum speed|end of a highway|end of|two[- ]way traffic|parking prohibited|roundabout|slippery road|steep (climb|climp)|dangerous slope|level crossing|shared cycle|junction with|narrowing road|right of way|turn (left|right) only|straight ahead only|give way|approaching a danger|prohibition to|it[’']s forbidden|it is prohibited|a driver must not|a hospital|corner to the (left|right))/i.test(
+    n,
+  );
 }
 
 function titleCaseName(name) {
@@ -171,11 +166,7 @@ for (const x of cat2) {
   let nameRw = ans(x, 'rw');
   const meaningQ = isMeaning(x);
 
-  if (isJunkName(nameEn)) continue;
-  // Prefer meaning-style questions; other imaged questions only if the answer
-  // clearly names a sign (avoids scenario/diagram MCQ distractors).
-  if (!meaningQ && !looksLikeSignName(nameEn)) continue;
-  if (meaningQ && nameEn.length > 85) continue;
+  if (isJunkName(nameEn) || !looksLikeSignName(nameEn)) continue;
 
   nameEn = titleCaseName(nameEn);
   nameFr = titleCaseName(nameFr);
@@ -183,6 +174,7 @@ for (const x of cat2) {
 
   const dedupeKey = slugify(nameEn);
   const questionNumber = idToNumber.get(x.id);
+  const localizedNames = { en: nameEn, fr: nameFr, rw: nameRw };
 
   if (byDedupe.has(dedupeKey)) {
     const existing = byDedupe.get(dedupeKey);
@@ -194,8 +186,8 @@ for (const x of cat2) {
       existing.image_url = x.image_url;
       existing.source_question_id = x.id;
       existing._primaryIsMeaning = true;
-      existing.names = { en: nameEn, fr: nameFr, rw: nameRw };
-      existing.meaning = { en: nameEn, fr: nameFr, rw: nameRw };
+      existing.names = localizedNames;
+      existing.meaning = { ...localizedNames };
     }
     continue;
   }
@@ -208,12 +200,9 @@ for (const x of cat2) {
     image_url: x.image_url,
     source_question_id: x.id,
     _primaryIsMeaning: meaningQ,
-    names: { en: nameEn, fr: nameFr, rw: nameRw },
-    meaning: {
-      en: meaningQ ? nameEn : x.translations.en.question || nameEn,
-      fr: meaningQ ? nameFr : x.translations.fr.question || nameFr,
-      rw: meaningQ ? nameRw : x.translations.rw.question || nameRw,
-    },
+    names: localizedNames,
+    // Always use localized answer names (never the question prompt).
+    meaning: { ...localizedNames },
     action: ACTIONS.information,
     questionIds: [x.id],
     questionNumbers: [questionNumber],
@@ -224,9 +213,8 @@ const signs = [...byDedupe.values()]
   .map((entry) => {
     const action = ACTIONS[entry.type] || ACTIONS.information;
     const { _primaryIsMeaning, ...rest } = entry;
-    if (_primaryIsMeaning) {
-      rest.meaning = { ...rest.names };
-    }
+    void _primaryIsMeaning;
+    rest.meaning = { ...rest.names };
     rest.action = action;
     rest.questionNumbers = [...rest.questionNumbers].sort((a, b) => a - b);
     return rest;
@@ -252,3 +240,9 @@ const byType = Object.create(null);
 for (const s of signs) byType[s.type] = (byType[s.type] || 0) + 1;
 console.log(`Wrote ${signs.length} signs → ${outPath}`);
 console.log(byType);
+console.log(
+  'minimum-speed:',
+  signs
+    .filter((s) => /minimum speed/i.test(s.names.en))
+    .map((s) => `${s.slug} → ${s.type}`),
+);
