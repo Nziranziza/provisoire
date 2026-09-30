@@ -1,207 +1,192 @@
 ---
 import type { Lang } from '../lib/quiz';
 import { categoryHubHref, questionsListHref } from '../lib/quiz';
-import { getFooterContent } from '../lib/footer-content';
-import { getLocalizedPath } from '../lib/header-content';
-import { signsIndexHref } from '../lib/signs';
 
 interface Props {
   lang?: Lang;
 }
 
-const { lang = 'rw' } = Astro.props;
+const { lang = 'en' } = Astro.props;
 
-const t = getFooterContent(lang);
+const labels: Record<
+  Lang,
+  {
+    tagline: string;
+    questions: string;
+    exam: string;
+    practice: string;
+    trafficRules: string;
+    roadSigns: string;
+    about: string;
+    share: string;
+    shareToast: string;
+    backToTop: string;
+    disclaimer: string;
+    nav: string;
+  }
+> = {
+  en: {
+    tagline: 'Rwanda Driving Theory Test Prep',
+    questions: 'Questions (500+)',
+    exam: 'Mock Exam',
+    practice: 'Practice',
+    trafficRules: 'Traffic Rules',
+    roadSigns: 'Road Signs',
+    about: 'About',
+    share: 'Share',
+    shareToast: 'Link copied to clipboard!',
+    backToTop: 'Top',
+    disclaimer:
+      'Independent study aid for Rwanda National Police (RNP) provisional driving test preparation.',
+    nav: 'Footer Navigation',
+  },
+  fr: {
+    tagline: 'Permis Provisoire au Rwanda',
+    questions: 'Questions (500+)',
+    exam: 'Examen Blanc',
+    practice: 'Entraînement',
+    trafficRules: 'Règles',
+    roadSigns: 'Panneaux',
+    about: 'À propos',
+    share: 'Partager',
+    shareToast: 'Lien copié dans le presse-papiers !',
+    backToTop: 'Haut',
+    disclaimer:
+      'Aide pédagogique indépendante pour la préparation au permis de conduire provisoire (RNP).',
+    nav: 'Navigation du pied de page',
+  },
+  rw: {
+    tagline: 'Uruhushya rw’Agateganyo mu Rwanda',
+    questions: 'Ibibazo (500+)',
+    exam: 'Ikizamini',
+    practice: 'Kwimenyereza',
+    trafficRules: 'Amategeko',
+    roadSigns: 'Ibyapa',
+    about: 'Ibyerekeye',
+    share: 'Sangiza',
+    shareToast: 'Ihuza ryamaze gukopororwa !',
+    backToTop: 'Hejuru',
+    disclaimer:
+      'Umfashanyigisho yigenga ifasha kwitegura ikizamini cy’uruhushya rw’agateganyo (Polisi y’u Rwanda).',
+    nav: 'Kugenda kuri footer',
+  },
+};
 
-const pathname = Astro.url.pathname;
-const search = Astro.url.search;
+const t = labels[lang] ?? labels.en;
 
 const locales: { code: Lang; label: string }[] = [
-  { code: 'rw', label: 'RW' },
   { code: 'en', label: 'EN' },
   { code: 'fr', label: 'FR' },
+  { code: 'rw', label: 'RW' },
 ];
 
-const cleanPath = pathname.replace(/\.html$/, '').replace(/\/index$/, '');
-
-const isHomePage =
-  cleanPath === '' ||
-  cleanPath === '/' ||
-  cleanPath === `/${lang}` ||
-  cleanPath === `/${lang}/`;
-
-const isAboutPage =
-  cleanPath.endsWith('/about') ||
-  cleanPath.endsWith('/about/') ||
-  cleanPath.includes('/about');
-
-const isPrivacyPage =
-  cleanPath.endsWith('/privacy') ||
-  cleanPath.endsWith('/privacy/') ||
-  cleanPath.includes('/privacy');
-
-const isTermsPage =
-  cleanPath.endsWith('/terms') ||
-  cleanPath.endsWith('/terms/') ||
-  cleanPath.includes('/terms');
-
-const navLinks = [
-  ...(!isHomePage
-    ? [
-        {
-          href: `/${lang}`,
-          label: t.home,
-          icon: '🏠',
-          variant: 'default',
-        },
-      ]
-    : []),
-  {
-    href: `/${lang}/practice`,
-    label: t.practice,
-    icon: '💡',
-    variant: 'default',
-  },
-  {
-    href: `/${lang}/exam`,
-    label: t.exam,
-    icon: '⏱️',
-    variant: 'default',
-  },
-  {
-    href: questionsListHref(lang, 1),
-    label: t.questions,
-    icon: null,
-    variant: 'default',
-  },
+const quickLinks = [
+  { href: `/${lang}/practice`, label: t.practice, icon: '💡' },
+  { href: `/${lang}/exam`, label: t.exam, icon: '⏱️' },
+  { href: questionsListHref(lang, 1), label: t.questions, icon: '📚' },
   {
     href: categoryHubHref(lang, 'traffic-rules'),
     label: t.trafficRules,
-    icon: null,
-    variant: 'default',
+    icon: '🚗',
   },
-  {
-    href: categoryHubHref(lang, 'road-signs'),
-    label: t.roadSigns,
-    icon: null,
-    variant: 'default',
-  },
-  {
-    href: signsIndexHref(lang),
-    label:
-      lang === 'en'
-        ? 'Sign glossary'
-        : lang === 'fr'
-          ? 'Glossaire panneaux'
-          : 'Incamake y’ibyapa',
-    icon: null,
-    variant: 'default',
-  },
-  ...(!isAboutPage
-    ? [
-        {
-          href: `/${lang}/about`,
-          label: t.about,
-          icon: null,
-          variant: 'amber',
-        },
-      ]
-    : []),
-  ...(!isPrivacyPage
-    ? [
-        {
-          href: `/${lang}/privacy`,
-          label: t.privacy,
-          icon: null,
-          variant: 'default',
-        },
-      ]
-    : []),
-  ...(!isTermsPage
-    ? [
-        {
-          href: `/${lang}/terms`,
-          label: t.terms,
-          icon: null,
-          variant: 'default',
-        },
-      ]
-    : []),
+  { href: categoryHubHref(lang, 'road-signs'), label: t.roadSigns, icon: '🛑' },
+  { href: `/${lang}/about`, label: t.about, icon: 'ℹ️' },
 ];
 ---
 
-<footer class="border-t border-slate-800 bg-[#14181F] text-[#F2F4F7]">
-  <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-    <!-- Top Row: Brand & Utility Actions -->
-    <div
-      class="flex flex-col items-start justify-between gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-center"
-    >
-      <!-- Brand & Tagline -->
-      <a
-        href={`/${lang}`}
-        class="flex items-center gap-3 transition hover:opacity-90"
-      >
-        <div class="relative shrink-0">
-          <img
-            src="/icons/icon.svg"
-            alt="Provisoire logo"
-            width="40"
-            height="40"
-            class="h-10 w-10 rounded-xl object-contain shadow-xs"
-            loading="lazy"
-          />
-          <span
-            class="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]"
-            aria-hidden="true"></span>
-        </div>
-        <div>
-          <div
-            class="text-base font-black tracking-tight text-[#F2F4F7] sm:text-lg"
-          >
-            Provisoire
-          </div>
-          <p
-            class="mt-0.5 text-[11px] leading-snug text-[#F2F4F7]/70 sm:text-xs"
-          >
-            {t.tagline}
-          </p>
-        </div>
-      </a>
+<footer class="relative border-t border-slate-800 bg-[#0E131F] text-slate-300">
+  <!-- Subtle Rwanda Tricolor Accent Line -->
+  <div
+    class="h-[2px] w-full bg-gradient-to-r from-sky-400 via-amber-400 to-emerald-400 opacity-80"
+    aria-hidden="true"
+  >
+  </div>
 
-      <!-- Right Utility Actions: Share, Language Switcher, Back to Top -->
-      <div class="flex flex-wrap items-center gap-2">
-        <!-- Share button -->
+  <div class="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
+    <!-- Main Compact Row -->
+    <div
+      class="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-6"
+    >
+      <!-- Brand & Offline Status -->
+      <div class="flex items-center gap-3">
+        <a
+          href={`/${lang}`}
+          class="flex items-center gap-2.5 transition hover:opacity-90"
+        >
+          <div
+            class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-500/30 bg-blue-600/20 text-sm font-black text-blue-400 shadow-xs"
+          >
+            P
+            <span
+              class="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-400"
+              aria-hidden="true"></span>
+          </div>
+          <div>
+            <span class="text-sm font-black tracking-tight text-white"
+              >Provisoire</span
+            >
+            <span
+              class="ml-1.5 hidden text-[11px] font-medium text-slate-400 sm:inline"
+            >
+              • {t.tagline}
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Interactive Navigation Pills -->
+      <nav aria-label={t.nav} class="w-full lg:w-auto">
+        <ul class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+          {
+            quickLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-[34px] items-center gap-1.5 rounded-full border border-slate-700/80 bg-slate-800/70 px-3 py-1 text-xs font-bold text-slate-200 shadow-xs transition hover:border-blue-400/60 hover:bg-slate-700 hover:text-white active:scale-95"
+                >
+                  <span class="text-xs" aria-hidden="true">
+                    {link.icon}
+                  </span>
+                  <span>{link.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- Utility Actions: Share, Language Switcher, Back to Top -->
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <!-- Interactive Share Button -->
         <button
           type="button"
           id="footer-share-btn"
-          class="inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3.5 py-1.5 text-xs font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95"
+          class="inline-flex min-h-[32px] cursor-pointer items-center gap-1 rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-[11px] font-extrabold text-slate-300 transition hover:border-slate-500 hover:text-white active:scale-95"
           title={t.share}
         >
-          <span aria-hidden="true">🔗</span>
+          <span>🔗</span>
           <span>{t.share}</span>
         </button>
 
-        <!-- Language selector -->
+        <!-- Compact Language Switcher -->
         <div
-          class="inline-flex min-h-[36px] overflow-hidden rounded-full border-2 border-slate-900 shadow-2xs"
+          class="inline-flex overflow-hidden rounded-full border border-slate-700 bg-slate-800/90 text-[11px] font-bold"
           role="group"
-          aria-label={t.languageSelector}
+          aria-label="Language selection"
         >
           {
             locales.map(({ code, label }) => {
               const active = lang === code;
-              const targetHref = getLocalizedPath(code, pathname, search);
-
               return (
                 <a
-                  href={targetHref}
+                  href={`/${code}`}
                   hreflang={code}
                   aria-current={active ? 'page' : undefined}
                   class:list={[
-                    'inline-flex items-center justify-center border-r-2 border-slate-900 px-3 py-1.5 text-xs font-bold tracking-wide transition last:border-r-0',
+                    'px-2.5 py-1 transition',
                     active
-                      ? 'bg-blue-700 font-extrabold text-white'
-                      : 'bg-stone-50 font-bold text-slate-900 hover:bg-stone-200',
+                      ? 'bg-blue-600 font-extrabold text-white'
+                      : 'text-slate-400 hover:bg-slate-700 hover:text-white',
                   ]}
                 >
                   {label}
@@ -211,52 +196,28 @@ const navLinks = [
           }
         </div>
 
-        <!-- Back to Top button -->
+        <!-- Smooth Back to Top Button -->
         <button
           type="button"
           id="footer-back-to-top"
-          class="inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3.5 py-1.5 text-xs font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95"
+          class="inline-flex min-h-[32px] cursor-pointer items-center gap-1 rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-[11px] font-extrabold text-slate-300 transition hover:border-slate-500 hover:text-white active:scale-95"
           aria-label={t.backToTop}
           title={t.backToTop}
         >
-          <span aria-hidden="true">↑</span>
-          <span>{t.backToTop}</span>
+          <span>↑</span>
+          <span class="hidden sm:inline">{t.backToTop}</span>
         </button>
       </div>
     </div>
 
-    <!-- Navigation Links aligned left to right -->
-    <nav class="py-4" aria-label={t.nav}>
-      <ul class="flex flex-wrap items-center justify-start gap-2">
-        {
-          navLinks.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class:list={[
-                  'inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 px-4 py-1.5 text-xs font-extrabold shadow-2xs transition active:scale-95',
-                  link.variant === 'amber'
-                    ? 'bg-amber-300 text-slate-950 hover:bg-amber-400'
-                    : 'bg-white text-slate-900 hover:bg-stone-100',
-                ]}
-              >
-                {link.icon && <span aria-hidden="true">{link.icon}</span>}
-                <span>{link.label}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <!-- Bottom Disclaimer & Copyright Row -->
+    <!-- Bottom Mini Strip: Disclaimer & Copyright -->
     <div
-      class="flex flex-col items-start justify-between gap-2 border-t border-white/10 pt-4 text-[11px] text-[#F2F4F7]/60 sm:flex-row sm:items-center sm:text-left"
+      class="mt-4 flex flex-col items-center justify-between gap-2 border-t border-slate-800/60 pt-3.5 text-center text-[11px] text-slate-500 sm:flex-row sm:text-left"
     >
-      <p class="max-w-xl leading-relaxed">
+      <p class="max-w-xl leading-tight">
         {t.disclaimer}
       </p>
-      <p class="shrink-0 font-semibold text-[#F2F4F7]/80">© 2026 Provisoire.</p>
+      <p class="shrink-0 font-medium text-slate-400">© 2026 Provisoire.</p>
     </div>
   </div>
 
@@ -265,22 +226,15 @@ const navLinks = [
     id="footer-toast"
     role="status"
     aria-live="polite"
-    class="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 items-center gap-2 rounded-full border-2 border-slate-900 bg-white px-4 py-2 text-xs font-extrabold text-slate-900 shadow-lg transition-all duration-300"
+    class="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 items-center gap-2 rounded-xl border border-emerald-500/40 bg-slate-900/95 px-3.5 py-2 text-xs font-bold text-emerald-300 shadow-xl backdrop-blur-md transition-all duration-300"
   >
     <span>✅</span>
     <span id="footer-toast-message">{t.shareToast}</span>
   </div>
 </footer>
 
-<script
-  is:inline
-  define:vars={{
-    shareToastMsg: t.shareToast,
-    shareTitleMsg: t.shareTitle,
-    shareTextMsg: t.shareText,
-  }}
->
-  (function initFooter() {
+<script is:inline define:vars={{ shareToastMsg: t.shareToast }}>
+  (function initCompactFooter() {
     // Smooth Back to Top
     const backToTopBtn = document.getElementById('footer-back-to-top');
     if (backToTopBtn) {
@@ -289,7 +243,7 @@ const navLinks = [
       });
     }
 
-    // Interactive Share & Toast Notification
+    // Share action & Toast
     const shareBtn = document.getElementById('footer-share-btn');
     const toast = document.getElementById('footer-toast');
     const toastMsg = document.getElementById('footer-toast-message');
@@ -299,19 +253,19 @@ const navLinks = [
       if (!toast) return;
       if (toastMsg && msg) toastMsg.textContent = msg;
       toast.classList.remove('hidden');
-      toast.classList.add('inline-flex');
+      toast.classList.add('flex');
       if (toastTimeout) clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => {
         toast.classList.add('hidden');
-        toast.classList.remove('inline-flex');
+        toast.classList.remove('flex');
       }, 3000);
     }
 
     if (shareBtn) {
       shareBtn.addEventListener('click', async () => {
         const shareData = {
-          title: shareTitleMsg,
-          text: shareTextMsg,
+          title: 'Provisoire - Rwanda Driving Theory Test Prep',
+          text: 'Practice 500+ official Rwanda driving questions and mock exams offline for free!',
           url: window.location.href,
         };
 

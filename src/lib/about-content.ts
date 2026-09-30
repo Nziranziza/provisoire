@@ -20,6 +20,7 @@ export type AboutContent = {
   questions: string;
   trafficRules: string;
   roadSigns: string;
+  signs: string;
   about: string;
   reportHref: string;
 };
@@ -64,6 +65,7 @@ const content: Record<Lang, AboutContent> = {
     questions: 'Questions',
     trafficRules: 'Traffic rules',
     roadSigns: 'Road signs',
+    signs: 'Sign guide',
     about: 'About',
     reportHref: 'https://github.com/Nziranziza/provisoire/issues',
   },
@@ -106,6 +108,7 @@ const content: Record<Lang, AboutContent> = {
     questions: 'Questions',
     trafficRules: 'Règles de circulation',
     roadSigns: 'Panneaux routiers',
+    signs: 'Guide des panneaux',
     about: 'À propos',
     reportHref: 'https://github.com/Nziranziza/provisoire/issues',
   },
@@ -148,6 +151,7 @@ const content: Record<Lang, AboutContent> = {
     questions: 'Ibibazo',
     trafficRules: 'Amategeko y’umuhanda',
     roadSigns: 'Ibyapa byo ku muhanda',
+    signs: 'Ubuyobozi bw’ibyapa',
     about: 'Ibyerekeye',
     reportHref: 'https://github.com/Nziranziza/provisoire/issues',
   },

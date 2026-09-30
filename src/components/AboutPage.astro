@@ -309,7 +309,7 @@ const languageMap: Record<string, { code: Lang; name: string; flag: string }> =
 
       <!-- Quick Navigation Footer Links -->
       <nav
-        class="mt-6 grid gap-3 sm:grid-cols-3"
+        class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
         aria-label={content.questions}
       >
         <a
@@ -332,6 +332,13 @@ const languageMap: Record<string, { code: Lang; name: string; flag: string }> =
         >
           <span>🚦</span>
           <span>{content.roadSigns}</span>
+        </a>
+        <a
+          href={`/${lang}/signs`}
+          class="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-4 py-2.5 text-xs font-extrabold text-slate-900 shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95"
+        >
+          <span>🛑</span>
+          <span>{content.signs}</span>
         </a>
       </nav>
     </div>

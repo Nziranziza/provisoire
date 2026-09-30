@@ -4,6 +4,7 @@ export type HeaderDictionary = {
   home: string;
   trafficRules: string;
   roadSigns: string;
+  signsGlossary: string;
   practice: string;
   exam: string;
   questions: string;
@@ -16,6 +17,7 @@ export type HeaderDictionary = {
     home?: string[];
     trafficRules?: string[];
     roadSigns?: string[];
+    signsGlossary?: string[];
     practice?: string[];
     exam?: string[];
     about?: string[];
@@ -31,6 +33,7 @@ export type HeaderDictionary = {
   homeDesc?: string;
   trafficRulesDesc?: string;
   roadSignsDesc?: string;
+  signsGlossaryDesc?: string;
   practiceDesc?: string;
   examDesc?: string;
   aboutDesc?: string;
@@ -44,6 +47,7 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     home: 'Home',
     trafficRules: 'Traffic Rules',
     roadSigns: 'Road Signs',
+    signsGlossary: 'Sign Guide',
     practice: 'Practice',
     exam: 'Exam',
     questions: 'Questions',
@@ -70,6 +74,7 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     home: 'Accueil',
     trafficRules: 'Règles de circulation',
     roadSigns: 'Panneaux routiers',
+    signsGlossary: 'Guide des panneaux',
     practice: 'Entraînement',
     exam: 'Examen',
     questions: 'Questions',
@@ -100,6 +105,7 @@ export const HEADER_DICTIONARIES: Record<Lang, HeaderDictionary> = {
     home: 'Ahabanza',
     trafficRules: 'Amategeko y’umuhanda',
     roadSigns: 'Ibyapa byo ku muhanda',
+    signsGlossary: 'Ubuyobozi bw’ibyapa',
     practice: 'Imyitozo',
     exam: 'Ikizamini',
     questions: 'Ibibazo',
