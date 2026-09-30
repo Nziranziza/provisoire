@@ -6,6 +6,7 @@ import type { Lang } from '../lib/quiz';
 import AppChrome from '../components/AppChrome.astro';
 import Analytics from '../components/Analytics.astro';
 import CookieConsent from '../components/CookieConsent.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
 interface Props {
@@ -175,6 +176,7 @@ const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
     </script>
   </head>
   <body class="bg-white text-slate-900">
+    <SiteHeader lang={locale} />
     <slot />
     <SiteFooter lang={locale} />
     <CookieConsent lang={locale} />

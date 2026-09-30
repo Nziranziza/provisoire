@@ -4,28 +4,81 @@ import type { Lang } from '../lib/quiz';
 interface Props {
   lang?: Lang;
   compact?: boolean;
+  class?: string;
+  variant?: 'header' | 'mobile-card';
 }
 
-const { lang = 'rw', compact = false } = Astro.props;
+const {
+  lang = 'rw',
+  compact = false,
+  class: extraClass = '',
+  variant = 'header',
+} = Astro.props;
 
-const labels: Record<Lang, { full: string; short: string }> = {
-  rw: { full: 'Shyiramo App', short: 'Shyiramo' },
-  en: { full: 'Install App', short: 'Install' },
-  fr: { full: 'Installer l’app', short: 'Installer' },
+const labels: Record<Lang, { full: string; short: string; desc: string }> = {
+  rw: {
+    full: 'Shyiramo App',
+    short: 'Shyiramo',
+    desc: 'Wige nta interineti muri telefone yawe',
+  },
+  en: {
+    full: 'Install App',
+    short: 'Install',
+    desc: 'Practice offline anytime without internet',
+  },
+  fr: {
+    full: 'Installer l’app',
+    short: 'Installer',
+    desc: 'Révisez hors-ligne sans connexion',
+  },
 };
 
 const label = labels[lang] || labels.rw;
 ---
 
-<button
-  type="button"
-  class="header-install-btn hidden inline-flex min-h-[40px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3.5 py-2 text-[11px] font-bold whitespace-nowrap text-slate-900 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px] sm:text-xs"
-  title={label.full}
-  aria-label={label.full}
->
-  <span aria-hidden="true">📲</span>
-  <span>{compact ? label.short : label.full}</span>
-</button>
+{
+  variant === 'mobile-card' ? (
+    <button
+      type="button"
+      class:list={[
+        'header-install-btn flex min-h-[48px] w-full cursor-pointer touch-manipulation items-center justify-between gap-3 rounded-2xl border-2 border-emerald-600 bg-emerald-50/80 px-4 py-3 text-left shadow-2xs transition hover:bg-emerald-100/80 active:scale-[0.99]',
+        extraClass,
+      ]}
+      title={label.full}
+      aria-label={label.full}
+    >
+      <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-lg text-white shadow-2xs">
+          <span aria-hidden="true">📲</span>
+        </div>
+        <div>
+          <div class="text-sm font-extrabold text-emerald-950">
+            {label.full}
+          </div>
+          <div class="text-xs font-medium text-emerald-700">{label.desc}</div>
+        </div>
+      </div>
+      <span class="inline-flex shrink-0 items-center justify-center rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-extrabold text-white">
+        + PWA
+      </span>
+    </button>
+  ) : (
+    <button
+      type="button"
+      class:list={[
+        'header-install-btn inline-flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-full border-2 border-slate-900 bg-white px-3 py-1.5 text-xs font-extrabold whitespace-nowrap text-slate-900 shadow-2xs transition hover:border-slate-950 hover:bg-stone-100 active:scale-95',
+        extraClass,
+      ]}
+      title={label.full}
+      aria-label={label.full}
+    >
+      <span aria-hidden="true" class="text-sm">
+        📲
+      </span>
+      <span>{compact ? label.short : label.full}</span>
+    </button>
+  )
+}
 
 <script>
   import { initPwaClient, promptInstall, isStandalone } from '../lib/pwa';
@@ -37,13 +90,11 @@ const label = labels[lang] || labels.rw;
   );
 
   function updateVisibility() {
-    const shouldShow = !isStandalone();
+    const isInstalled = isStandalone();
     buttons.forEach((btn) => {
-      if (shouldShow) {
-        btn.classList.remove('hidden');
-      } else {
-        btn.classList.add('hidden');
-      }
+      // Use a dedicated class — never toggle Tailwind `hidden`, which breaks
+      // responsive visibility (e.g. desktop-only header controls on mobile).
+      btn.classList.toggle('is-pwa-installed', isInstalled);
     });
   }
 
@@ -51,7 +102,7 @@ const label = labels[lang] || labels.rw;
     btn.addEventListener('click', async () => {
       const outcome = await promptInstall();
       if (outcome === 'accepted') {
-        buttons.forEach((b) => b.classList.add('hidden'));
+        buttons.forEach((b) => b.classList.add('is-pwa-installed'));
         window.dispatchEvent(new CustomEvent('pwa-installed'));
       } else if (outcome === 'unavailable') {
         window.dispatchEvent(new CustomEvent('pwa-install-instruction'));
@@ -62,6 +113,12 @@ const label = labels[lang] || labels.rw;
   updateVisibility();
   window.addEventListener('pwa-installable', updateVisibility);
   window.addEventListener('pwa-installed', () => {
-    buttons.forEach((btn) => btn.classList.add('hidden'));
+    buttons.forEach((btn) => btn.classList.add('is-pwa-installed'));
   });
 </script>
+
+<style>
+  .header-install-btn.is-pwa-installed {
+    display: none !important;
+  }
+</style>

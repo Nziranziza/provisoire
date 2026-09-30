@@ -522,6 +522,61 @@ console.log(
   '✓ Footer landmark, required links, and localized dictionaries verified across all locales!',
 );
 
+// 12. Check Header landmark, localized labels, navigation, and mobile menu across all locales
+console.log('\n--- Checking Header Landmark & Localized Navigation ---');
+const requiredHeaderLinks = {
+  en: [
+    '/en',
+    '/en/traffic-rules',
+    '/en/road-signs',
+    '/en/practice',
+    '/en/exam',
+    '/en/about',
+  ],
+  fr: [
+    '/fr',
+    '/fr/traffic-rules',
+    '/fr/road-signs',
+    '/fr/practice',
+    '/fr/exam',
+    '/fr/about',
+  ],
+  rw: [
+    '/rw',
+    '/rw/traffic-rules',
+    '/rw/road-signs',
+    '/rw/practice',
+    '/rw/exam',
+    '/rw/about',
+  ],
+};
+
+for (const [locale, expectedLinks] of Object.entries(requiredHeaderLinks)) {
+  const samplePath = join(DIST_DIR, `${locale}.html`);
+  assert(
+    existsSync(samplePath),
+    `Sample page ${locale}.html must exist in dist/ to test header`,
+  );
+  const html = readFileSync(samplePath, 'utf8');
+  assert(
+    html.includes('<header'),
+    `<header element must exist in ${locale}.html`,
+  );
+  assert(
+    html.includes('id="site-mobile-menu-btn"'),
+    `Mobile menu button must exist in ${locale}.html`,
+  );
+  for (const link of expectedLinks) {
+    assert(
+      html.includes(`href="${link}"`),
+      `Header in ${locale}.html missing expected localized link: ${link}`,
+    );
+  }
+}
+console.log(
+  '✓ Header landmark, mobile menu, and localized navigation verified across all locales!',
+);
+
 console.log('\n======================================================');
 console.log('ALL SEO & Trilingual Metadata Crawl Verifications PASSED!');
 console.log('======================================================\n');
