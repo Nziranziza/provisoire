@@ -11,6 +11,12 @@ import {
 } from '../lib/quiz';
 import { getQuestionPageMetadata } from '../lib/seo';
 import questionBank from '../../questions.json';
+import {
+  getSignForQuestionId,
+  signHref,
+  signName,
+  signsIndexHref,
+} from '../lib/signs';
 
 interface Props {
   lang: Lang;
@@ -49,6 +55,21 @@ const copy: Record<
 };
 
 const labels = copy[lang];
+const relatedSign = getSignForQuestionId(question.id);
+const signLinkCopy: Record<Lang, { label: string; glossary: string }> = {
+  en: {
+    label: 'Sign glossary',
+    glossary: 'Browse all road signs',
+  },
+  fr: {
+    label: 'Fiche panneau',
+    glossary: 'Voir tous les panneaux',
+  },
+  rw: {
+    label: 'Incamake y’icyapa',
+    glossary: 'Reba ibyapa byose',
+  },
+};
 const allCategoriesLabel: Record<Lang, string> = {
   en: 'All categories',
   fr: 'Toutes les catégories',
@@ -128,6 +149,28 @@ const seo = getQuestionPageMetadata({
           />
         </ul>
       </article>
+
+      {
+        relatedSign && (
+          <aside class="mt-4 rounded-2xl border-2 border-blue-200 bg-blue-50/70 p-4">
+            <p class="text-[11px] font-black tracking-wider text-blue-800 uppercase">
+              {signLinkCopy[lang].label}
+            </p>
+            <a
+              href={signHref(lang, relatedSign.slug)}
+              class="mt-1 block text-sm font-extrabold text-slate-900 underline-offset-2 hover:text-blue-700 hover:underline"
+            >
+              {signName(relatedSign, lang)} →
+            </a>
+            <a
+              href={signsIndexHref(lang)}
+              class="mt-2 inline-block text-xs font-bold text-blue-700 underline-offset-2 hover:underline"
+            >
+              {signLinkCopy[lang].glossary}
+            </a>
+          </aside>
+        )
+      }
 
       <nav
         class="mt-6 flex flex-wrap items-center justify-between gap-3"

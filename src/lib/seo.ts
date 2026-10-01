@@ -14,6 +14,14 @@ import {
   totalQuestionPages,
 } from './quiz';
 import { getCategoryContent } from './category-content';
+import type { SignEntry, SignType } from './signs';
+import {
+  signHref,
+  signName,
+  signMeaning,
+  signsIndexHref,
+  signTypeLabel,
+} from './signs';
 
 export type HreflangLink = {
   lang: string;
@@ -1014,4 +1022,149 @@ export function breadcrumbJsonLd(
  */
 export function siteListPageCount(questionCount: number) {
   return totalQuestionPages(questionCount, PAGE_SIZE);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Signs glossary SEO                                                         */
+/* -------------------------------------------------------------------------- */
+
+const SIGNS_INDEX_COPY: Record<
+  Lang,
+  { title: string; description: string; heading: string }
+> = {
+  en: {
+    title: 'Rwanda Road Signs Glossary — Meanings & Driver Actions',
+    description:
+      'Browse Rwanda road signs by type: warning, prohibitory, mandatory, information, and markings. Official meanings and what drivers must do.',
+    heading: 'Rwanda road signs',
+  },
+  fr: {
+    title: 'Glossaire des panneaux routiers du Rwanda — Significations',
+    description:
+      'Parcourez les panneaux routiers du Rwanda par type : danger, interdiction, obligation, indication et marquage. Significations et conduite à tenir.',
+    heading: 'Panneaux routiers du Rwanda',
+  },
+  rw: {
+    title: 'Ibyapa byo ku muhanda mu Rwanda — Ibisobanuro',
+    description:
+      'Reba ibyapa byo ku muhanda mu Rwanda hakurikijwe ubwoko: integuza, kubuza, gutegeka, amakuru n’ibimenyetso. Ibisobanuro n’icyo umushoferi agomba gukora.',
+    heading: 'Ibyapa byo ku muhanda mu Rwanda',
+  },
+};
+
+export function getSignsIndexMetadata(options: {
+  lang: Lang;
+  site: string | URL | undefined;
+  signCount: number;
+}) {
+  const { lang, site, signCount } = options;
+  const copy = SIGNS_INDEX_COPY[lang];
+  const path = signsIndexHref(lang);
+  const canonical = absoluteUrl(path, site);
+  const title = `${copy.title} — Provisoire`;
+  const description = truncateMeta(`${copy.description} ${signCount} signs.`);
+
+  return {
+    title,
+    description,
+    lang,
+    canonical,
+    alternates: hreflangAlternates((locale) => signsIndexHref(locale), site),
+    image: null as string | null,
+    imageAlt: undefined as string | undefined,
+    jsonLd: [
+      breadcrumbJsonLd(
+        [
+          { name: 'Provisoire', path: `/${lang}` },
+          { name: copy.heading, path },
+        ],
+        site,
+      ),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: copy.heading,
+        description,
+        inLanguage: lang,
+        url: canonical,
+        numberOfItems: signCount,
+      },
+    ],
+  };
+}
+
+export function getSignDetailMetadata(options: {
+  lang: Lang;
+  sign: SignEntry;
+  site: string | URL | undefined;
+  imageBase?: string;
+}) {
+  const { lang, sign, site, imageBase = '/' } = options;
+  const name = signName(sign, lang);
+  const meaning = signMeaning(sign, lang);
+  const typeLabel = signTypeLabel(sign.type as SignType, lang);
+  const path = signHref(lang, sign.slug);
+  const canonical = absoluteUrl(path, site);
+  const image = absoluteUrl(imageSrc(imageBase, sign.image_url), site);
+
+  const titles: Record<Lang, string> = {
+    en: `${name} — Rwanda Road Sign Meaning`,
+    fr: `${name} — Signification du panneau routier (Rwanda)`,
+    rw: `${name} — Ibisobanuro by’icyapa cyo ku muhanda`,
+  };
+  const descriptions: Record<Lang, string> = {
+    en: `What the ${name} road sign means in Rwanda (${typeLabel}). ${meaning}. What drivers must do, with practice questions.`,
+    fr: `Signification du panneau « ${name} » au Rwanda (${typeLabel}). ${meaning}. Conduite à tenir et questions d’entraînement.`,
+    rw: `Icyapa « ${name} » bisobanura iki mu Rwanda (${typeLabel}). ${meaning}. Icyo umushoferi agomba gukora n’ibibazo byo kwimenyereza.`,
+  };
+
+  const title = `${titles[lang]} — Provisoire`;
+  const description = truncateMeta(descriptions[lang]);
+  const indexCopy = SIGNS_INDEX_COPY[lang];
+
+  return {
+    title,
+    description,
+    lang,
+    canonical,
+    alternates: hreflangAlternates(
+      (locale) => signHref(locale, sign.slug),
+      site,
+    ),
+    image,
+    imageAlt: name,
+    jsonLd: [
+      breadcrumbJsonLd(
+        [
+          { name: 'Provisoire', path: `/${lang}` },
+          { name: indexCopy.heading, path: signsIndexHref(lang) },
+          { name, path },
+        ],
+        site,
+      ),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'DefinedTerm',
+        name,
+        description: meaning,
+        inLanguage: lang,
+        url: canonical,
+        image,
+        termCode: sign.slug,
+        inDefinedTermSet: {
+          '@type': 'DefinedTermSet',
+          name: indexCopy.heading,
+          url: absoluteUrl(signsIndexHref(lang), site),
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ImageObject',
+        contentUrl: image,
+        name,
+        description: meaning,
+        inLanguage: lang,
+      },
+    ],
+  };
 }
