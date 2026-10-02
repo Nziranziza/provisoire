@@ -3,6 +3,7 @@ import type { Lang } from '../../lib/quiz';
 import type { ResultCardData } from '../../lib/share-card';
 import {
   drawResultCardCanvas,
+  generateResultCardBlob,
   shareResultCard,
   downloadResultCardImage,
   copyResultToClipboard,
@@ -29,6 +30,7 @@ const UI_COPY: Record<
     toastLinkCopied: string;
     toastImageCopied: string;
     toastDownloaded: string;
+    toastCopyFailed: string;
     sharePrompt: string;
   }
 > = {
@@ -46,6 +48,7 @@ const UI_COPY: Record<
     toastLinkCopied: '✓ Link yakopewe neza!',
     toastImageCopied: '✓ Ifoto yakopewe neza mu bubiko!',
     toastDownloaded: '✓ Ifoto y’amanota yabitswe neza!',
+    toastCopyFailed: '✗ Ntibyabashije gukoperwa mu bubiko!',
     sharePrompt: 'Kanda hano uhitemo uburyo usangizamo:',
   },
   en: {
@@ -62,6 +65,7 @@ const UI_COPY: Record<
     toastLinkCopied: '✓ Link copied to clipboard!',
     toastImageCopied: '✓ Result card image copied!',
     toastDownloaded: '✓ Result card image downloaded!',
+    toastCopyFailed: '✗ Failed to copy to clipboard!',
     sharePrompt: 'Choose how to share your result:',
   },
   fr: {
@@ -78,6 +82,7 @@ const UI_COPY: Record<
     toastLinkCopied: '✓ Lien copié dans le presse-papiers !',
     toastImageCopied: '✓ Image de résultat copiée !',
     toastDownloaded: '✓ Image téléchargée avec succès !',
+    toastCopyFailed: '✗ Échec de la copie dans le presse-papiers !',
     sharePrompt: 'Choisissez comment partager votre résultat :',
   },
 };
@@ -87,30 +92,50 @@ export default function ShareResultCard({
   locale,
 }: ShareResultCardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const cachedBlobRef = useRef<Blob | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
 
   const t = UI_COPY[locale] || UI_COPY.rw;
 
-  // Redraw canvas whenever data changes
+  // Clear pending timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Redraw canvas and pre-cache blob whenever data changes
   useEffect(() => {
     if (canvasRef.current) {
       drawResultCardCanvas(canvasRef.current, data);
     }
+    generateResultCardBlob(data)
+      .then((blob) => {
+        cachedBlobRef.current = blob;
+      })
+      .catch(() => {});
   }, [data, showPreview]);
 
   const showToast = (msg: string) => {
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
     setToastMessage(msg);
-    setTimeout(() => {
+    toastTimerRef.current = setTimeout(() => {
       setToastMessage(null);
+      toastTimerRef.current = null;
     }, 3500);
   };
 
   const handleShare = async () => {
     setIsSharing(true);
     try {
-      const res = await shareResultCard(data);
+      const res = await shareResultCard(data, cachedBlobRef.current);
       if (res.status === 'downloaded') {
         showToast(t.toastDownloaded);
       } else if (res.status === 'copied') {
@@ -122,16 +147,22 @@ export default function ShareResultCard({
   };
 
   const handleDownload = () => {
-    downloadResultCardImage(data);
+    downloadResultCardImage(data, cachedBlobRef.current);
     showToast(t.toastDownloaded);
   };
 
   const handleCopy = async () => {
-    const res = await copyResultToClipboard(data);
-    if (res === 'image') {
-      showToast(t.toastImageCopied);
-    } else {
-      showToast(t.toastLinkCopied);
+    try {
+      const res = await copyResultToClipboard(data, cachedBlobRef.current);
+      if (res === 'image') {
+        showToast(t.toastImageCopied);
+      } else if (res === 'text') {
+        showToast(t.toastLinkCopied);
+      } else {
+        showToast(t.toastCopyFailed);
+      }
+    } catch {
+      showToast(t.toastCopyFailed);
     }
   };
 

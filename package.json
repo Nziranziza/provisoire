@@ -22,7 +22,7 @@
     "verify:structured-data": "node scripts/verify-structured-data.mjs",
     "verify:crawl": "node scripts/verify-seo-crawl.mjs",
     "verify:seo": "node scripts/verify-structured-data.mjs && node scripts/verify-seo-crawl.mjs",
-    "verify:share-og": "node scripts/verify-share-and-og.mjs",
+    "verify:share-og": "node --experimental-strip-types scripts/verify-share-and-og.mjs",
     "verify:deploy": "node scripts/verify-deployment.mjs"
   },
   "dependencies": {
@@ -32,6 +32,7 @@
     "astro": "^7.1.6",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "sharp": "^0.33.5",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {

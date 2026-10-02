@@ -1,4 +1,4 @@
-import type { Dispatch } from 'react';
+import { useMemo, type Dispatch } from 'react';
 import type { I18nDictionary } from './constants';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
@@ -46,6 +46,33 @@ export default function PracticeReview({
   const isPassed = totalScore >= PASSING_SCORE;
   const scorePercent = Math.round(
     (totalScore / Math.max(1, state.sessionQuestions.length)) * 100,
+  );
+
+  const resultCardData = useMemo(
+    () => ({
+      score: totalScore,
+      total: state.sessionQuestions.length,
+      isPassed,
+      rulesScore,
+      rulesTotal,
+      signsScore,
+      signsTotal,
+      timeSpent: state.timeSpent,
+      mode: state.mode,
+      locale: state.currentLocale,
+    }),
+    [
+      totalScore,
+      state.sessionQuestions.length,
+      isPassed,
+      rulesScore,
+      rulesTotal,
+      signsScore,
+      signsTotal,
+      state.timeSpent,
+      state.mode,
+      state.currentLocale,
+    ],
   );
 
   // Filtered list for review mode
@@ -179,21 +206,7 @@ export default function PracticeReview({
       </div>
 
       {/* Shareable Viral Result Card for WhatsApp & Social */}
-      <ShareResultCard
-        data={{
-          score: totalScore,
-          total: state.sessionQuestions.length,
-          isPassed,
-          rulesScore,
-          rulesTotal,
-          signsScore,
-          signsTotal,
-          timeSpent: state.timeSpent,
-          mode: state.mode,
-          locale: state.currentLocale,
-        }}
-        locale={state.currentLocale}
-      />
+      <ShareResultCard data={resultCardData} locale={state.currentLocale} />
 
       {/* Sensible Add to Home Screen Prompt after completed session */}
       <InstallAppPrompt lang={state.currentLocale} />

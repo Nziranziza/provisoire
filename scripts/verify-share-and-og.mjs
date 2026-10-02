@@ -181,9 +181,14 @@ for (const sample of samplePages) {
     /<meta\s+property="og:image"\s+content="([^"]*)"/i,
   );
   assert.ok(ogImgMatch, `Page ${sample.path} missing property="og:image"`);
-  assert.ok(
+  const isQuestionSample = /\/(rw|en|fr)\/questions\/\d+\.html/.test(
+    sample.path,
+  );
+  const matchesOg =
     ogImgMatch[1].includes(sample.expectedOg) ||
-      ogImgMatch[1].includes('images/'),
+    (isQuestionSample && ogImgMatch[1].includes('images/'));
+  assert.ok(
+    matchesOg,
     `Page ${sample.path} expected og:image to contain ${sample.expectedOg}, got ${ogImgMatch[1]}`,
   );
 
@@ -203,9 +208,11 @@ for (const sample of samplePages) {
     /<meta\s+name="twitter:image"\s+content="([^"]*)"/i,
   );
   assert.ok(twImgMatch, `Page ${sample.path} missing name="twitter:image"`);
-  assert.ok(
+  const matchesTw =
     twImgMatch[1].includes(sample.expectedOg) ||
-      twImgMatch[1].includes('images/'),
+    (isQuestionSample && twImgMatch[1].includes('images/'));
+  assert.ok(
+    matchesTw,
     `Page ${sample.path} expected twitter:image to contain ${sample.expectedOg}, got ${twImgMatch[1]}`,
   );
 

@@ -557,7 +557,10 @@ export function getWhatsAppShareUrl(data: ResultCardData): string {
 /**
  * Primary Web Share API handler with fallbacks.
  */
-export async function shareResultCard(data: ResultCardData): Promise<{
+export async function shareResultCard(
+  data: ResultCardData,
+  cachedBlob?: Blob | null,
+): Promise<{
   status: 'shared' | 'downloaded' | 'copied' | 'error';
   message?: string;
 }> {
@@ -570,7 +573,7 @@ export async function shareResultCard(data: ResultCardData): Promise<{
   const shareUrl = `https://umuhanda.rw/${data.locale}/exam`;
 
   try {
-    const blob = await generateResultCardBlob(data);
+    const blob = cachedBlob || (await generateResultCardBlob(data));
     const fileName = `provisoire-result-${data.score}outOf${data.total}.png`;
     const file = new File([blob], fileName, { type: 'image/png' });
 
@@ -611,32 +614,51 @@ export async function shareResultCard(data: ResultCardData): Promise<{
     }
 
     // 3. Fallback: Trigger instant download of the image file
-    downloadResultCardImage(data);
+    downloadResultCardImage(data, blob);
 
-    // 4. Also copy text link to clipboard
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(`${shareText}`);
+    // 4. Also copy text link to clipboard (best-effort; rejection does not fail download)
+    if (
+      typeof navigator !== 'undefined' &&
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === 'function'
+    ) {
+      navigator.clipboard.writeText(shareText).catch(() => {});
     }
 
     return { status: 'downloaded' };
-  } catch {
-    // Ultimate fallback: open WhatsApp directly
-    window.open(getWhatsAppShareUrl(data), '_blank', 'noopener,noreferrer');
-    return { status: 'copied' };
+  } catch (err) {
+    return {
+      status: 'error',
+      message: (err as Error)?.message || 'Failed to share result card',
+    };
   }
 }
 
 /**
  * Downloads the card as a PNG image file.
  */
-export function downloadResultCardImage(data: ResultCardData): void {
-  const dataUrl = generateResultCardDataUrl(data);
+export function downloadResultCardImage(
+  data: ResultCardData,
+  cachedBlob?: Blob | null,
+): void {
+  const fileName = `provisoire-result-${data.score}outOf${data.total}.png`;
   const a = document.createElement('a');
-  a.href = dataUrl;
-  a.download = `provisoire-result-${data.score}outOf${data.total}.png`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.download = fileName;
+
+  if (cachedBlob) {
+    const url = URL.createObjectURL(cachedBlob);
+    a.href = url;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } else {
+    const dataUrl = generateResultCardDataUrl(data);
+    a.href = dataUrl;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 }
 
 /**
@@ -644,13 +666,14 @@ export function downloadResultCardImage(data: ResultCardData): void {
  */
 export async function copyResultToClipboard(
   data: ResultCardData,
-): Promise<'image' | 'text'> {
+  cachedBlob?: Blob | null,
+): Promise<'image' | 'text' | 'failure'> {
   try {
-    const blob = await generateResultCardBlob(data);
+    const blob = cachedBlob || (await generateResultCardBlob(data));
     if (
       typeof ClipboardItem !== 'undefined' &&
       navigator.clipboard &&
-      navigator.clipboard.write
+      typeof navigator.clipboard.write === 'function'
     ) {
       const item = new ClipboardItem({ 'image/png': blob });
       await navigator.clipboard.write([item]);
@@ -661,8 +684,17 @@ export async function copyResultToClipboard(
   }
 
   const text = getShareMessage(data);
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text);
+  if (
+    typeof navigator !== 'undefined' &&
+    navigator.clipboard &&
+    typeof navigator.clipboard.writeText === 'function'
+  ) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return 'text';
+    } catch {
+      return 'failure';
+    }
   }
-  return 'text';
+  return 'failure';
 }
