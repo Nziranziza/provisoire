@@ -5,6 +5,7 @@ import type { PracticeAction, PracticeState, ReviewFilter } from './types';
 import { PASSING_SCORE } from './constants';
 import { clearSessionFromStorage } from './storage';
 import InstallAppPrompt from '../InstallAppPrompt';
+import ShareResultCard from './ShareResultCard';
 import { categoryLabel } from '../../lib/quiz';
 import { questionImageAlt } from '../../lib/seo';
 
@@ -176,6 +177,23 @@ export default function PracticeReview({
           </a>
         </div>
       </div>
+
+      {/* Shareable Viral Result Card for WhatsApp & Social */}
+      <ShareResultCard
+        data={{
+          score: totalScore,
+          total: state.sessionQuestions.length,
+          isPassed,
+          rulesScore,
+          rulesTotal,
+          signsScore,
+          signsTotal,
+          timeSpent: state.timeSpent,
+          mode: state.mode,
+          locale: state.currentLocale,
+        }}
+        locale={state.currentLocale}
+      />
 
       {/* Sensible Add to Home Screen Prompt after completed session */}
       <InstallAppPrompt lang={state.currentLocale} />

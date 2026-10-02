@@ -56,11 +56,10 @@ function toAbsolute(url: string): string {
 const canonical = toAbsolute(canonicalProp ?? Astro.url.pathname);
 const prevHref = prev ? toAbsolute(prev) : null;
 const nextHref = next ? toAbsolute(next) : null;
-const imageHref = image
-  ? toAbsolute(image)
-  : toAbsolute('/icons/icon-512x512.png');
-const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const locale = (lang as Lang) || 'rw';
+const defaultOgImage = `/og/og-${locale}-home.png`;
+const imageHref = image ? toAbsolute(image) : toAbsolute(defaultOgImage);
+const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
 // Ownership verification tokens for Google Search Console and Bing Webmaster
 // Tools. Both are set as Cloudflare Pages environment variables; when unset the
@@ -142,10 +141,7 @@ const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
         ))
     }
 
-    <meta
-      name="twitter:card"
-      content={image ? 'summary_large_image' : 'summary'}
-    />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageHref} />

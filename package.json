@@ -8,8 +8,9 @@
   },
   "scripts": {
     "dev": "astro dev --host",
-    "predev": "node scripts/prepare-pwa.mjs",
-    "prebuild": "node scripts/prepare-pwa.mjs",
+    "generate:og": "node scripts/generate-og-images.mjs",
+    "predev": "node scripts/prepare-pwa.mjs && node scripts/generate-og-images.mjs",
+    "prebuild": "node scripts/prepare-pwa.mjs && node scripts/generate-og-images.mjs",
     "build": "astro build",
     "preview": "astro preview --host",
     "check": "astro check",
@@ -21,6 +22,7 @@
     "verify:structured-data": "node scripts/verify-structured-data.mjs",
     "verify:crawl": "node scripts/verify-seo-crawl.mjs",
     "verify:seo": "node scripts/verify-structured-data.mjs && node scripts/verify-seo-crawl.mjs",
+    "verify:share-og": "node scripts/verify-share-and-og.mjs",
     "verify:deploy": "node scripts/verify-deployment.mjs"
   },
   "dependencies": {
