@@ -101,29 +101,29 @@ export default function PracticeExam({
       <div className="flex items-center justify-between">
         <a
           href={`/${state.currentLocale}/questions`}
-          className="inline-flex min-h-[32px] items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-xs font-bold text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95"
+          className="inline-flex min-h-[38px] items-center gap-2 rounded-full border border-stone-300 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95"
           title={t.bankBtn}
           onClick={() => {
             clearSessionFromStorage();
           }}
         >
-          <span>←</span>
+          <span className="text-sm">←</span>
           <span>{t.bankBtn}</span>
         </a>
       </div>
 
       {/* 1. Header Bar (Progress, Category, Timer, Language & Grid) */}
-      <header className="rounded-xl border border-stone-200 bg-white p-2.5 shadow-xs sm:p-3">
-        <div className="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
+      <header className="rounded-2xl border border-stone-200 bg-white p-3 shadow-xs sm:p-3.5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           {/* Left: Progress badge & Category */}
-          <div className="flex flex-1 items-center gap-1.5 sm:gap-2">
-            <span className="flex h-7.5 flex-none items-center justify-center rounded-lg bg-blue-700 px-2.5 font-mono text-xs font-black text-white shadow-2xs sm:h-8 sm:text-sm">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex min-h-[36px] items-center justify-center rounded-xl bg-blue-700 px-3 font-mono text-xs font-black text-white shadow-2xs sm:text-sm">
               {String(state.currentIndex + 1).padStart(2, '0')} /{' '}
               {totalQuestions}
             </span>
 
             <span
-              className={`rounded-md px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white uppercase shadow-2xs ${
+              className={`inline-flex min-h-[36px] items-center rounded-xl px-2.5 py-1 text-[11px] font-black tracking-wide text-white uppercase shadow-2xs ${
                 isRoadSigns ? 'bg-sky-700' : 'bg-amber-700'
               }`}
             >
@@ -132,11 +132,11 @@ export default function PracticeExam({
           </div>
 
           {/* Right: Timer, Language, Grid trigger & Finish */}
-          <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             {/* Timer */}
             {isMockMode ? (
               <div
-                className={`flex h-7.5 flex-none items-center gap-1 rounded-full px-2.5 font-mono text-xs font-bold transition sm:h-8 ${
+                className={`flex min-h-[36px] items-center gap-1.5 rounded-full px-3 font-mono text-xs font-bold transition sm:text-sm ${
                   isTimeCritical
                     ? 'animate-pulse bg-rose-600 text-white shadow-xs'
                     : isTimeLow
@@ -151,7 +151,7 @@ export default function PracticeExam({
               </div>
             ) : (
               <div
-                className="flex h-7.5 flex-none items-center gap-1 rounded-full bg-stone-100 px-2.5 font-mono text-xs font-bold text-slate-700 sm:h-8"
+                className="flex min-h-[36px] items-center gap-1.5 rounded-full bg-stone-100 px-3 font-mono text-xs font-bold text-slate-700 sm:text-sm"
                 title={t.timeSpent}
               >
                 <span>⏱</span>
@@ -161,7 +161,7 @@ export default function PracticeExam({
 
             {/* Locked Language Badge */}
             <span
-              className="hidden flex-none items-center rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 uppercase sm:inline-flex"
+              className="hidden min-h-[36px] items-center rounded-full bg-stone-100 px-2.5 py-1 text-[11px] font-black text-slate-500 uppercase sm:inline-flex"
               title="Test language is locked"
             >
               {state.currentLocale.toUpperCase()}
@@ -171,7 +171,7 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => setShowGridModal(true)}
-              className="flex h-7.5 flex-none cursor-pointer touch-manipulation items-center gap-1 rounded-full border border-stone-300 bg-white px-2.5 text-xs font-bold text-slate-800 hover:bg-stone-100 active:scale-95 sm:h-8"
+              className="flex min-h-[36px] cursor-pointer touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 py-1 text-xs font-bold text-slate-800 shadow-2xs hover:border-slate-400 hover:bg-stone-100 active:scale-95 sm:text-sm"
               title={t.questionGrid}
             >
               <span>⊞</span>
@@ -182,7 +182,7 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="flex h-7.5 flex-none cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-xs font-bold whitespace-nowrap text-white transition hover:bg-slate-700 active:scale-95 sm:h-8"
+              className="flex min-h-[36px] cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-4 py-1 text-xs font-extrabold whitespace-nowrap text-white shadow-2xs transition hover:bg-slate-800 active:scale-95 sm:text-sm"
             >
               {t.finishBtn}
             </button>
@@ -190,7 +190,7 @@ export default function PracticeExam({
         </div>
 
         {/* 20-Segment Interactive Multi-Track Bar */}
-        <div className="mt-2">
+        <div className="mt-2.5">
           <div className="flex w-full gap-1">
             {state.sessionQuestions.map((q, dotIdx) => {
               const isDotCurrent = dotIdx === state.currentIndex;
@@ -219,7 +219,7 @@ export default function PracticeExam({
                     })
                   }
                   title={`Q${dotIdx + 1}${isDotAnswered ? ' (Answered)' : ' (Unanswered)'}`}
-                  className={`h-2 flex-1 cursor-pointer touch-manipulation rounded-xs transition-all duration-150 ${segmentColor}`}
+                  className={`h-2.5 flex-1 cursor-pointer touch-manipulation rounded-xs transition-all duration-150 sm:h-3 ${segmentColor}`}
                   aria-label={`Jump to question ${dotIdx + 1}`}
                 />
               );
@@ -228,21 +228,21 @@ export default function PracticeExam({
         </div>
       </header>
 
-      {/* 2. Main Question Card Area — identical structure for practice & exam, fitting cleanly */}
+      {/* 2. Main Question Card Area — generous vertical room and clear typography */}
       <article
-        className={`quiz-item rounded-xl border border-l-4 bg-white px-4 pt-3.5 pb-4 transition sm:px-5 sm:pt-4 sm:pb-5 ${
+        className={`quiz-item rounded-2xl border-2 border-l-[6px] bg-white p-5 shadow-sm transition sm:p-6 ${
           isRoadSigns
             ? 'border-stone-200 border-l-sky-600'
             : 'border-stone-200 border-l-amber-500'
         }`}
       >
         {/* Header inside Card */}
-        <div className="mb-1.5 flex items-center justify-between">
-          <span className="text-xs font-semibold tracking-widest text-slate-400 uppercase">
-            {String(state.currentIndex + 1).padStart(2, '0')}
+        <div className="mb-2.5 flex items-center justify-between">
+          <span className="text-xs font-black tracking-widest text-slate-400 uppercase">
+            {String(state.currentIndex + 1).padStart(2, '0')} / {totalQuestions}
           </span>
           <span
-            className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase ${
+            className={`rounded-full px-2.5 py-0.5 text-[10px] font-black tracking-wide text-white uppercase shadow-2xs ${
               isRoadSigns ? 'bg-sky-700' : 'bg-amber-700'
             }`}
           >
@@ -252,7 +252,7 @@ export default function PracticeExam({
 
         {/* Question Image if present */}
         {currentQ.image_url && (
-          <div className="quiz-image-wrap my-1.5 flex justify-center">
+          <div className="quiz-image-wrap my-3 flex justify-center">
             <img
               src={`${imageBase}${currentQ.image_url.replace(/^\//, '')}`}
               alt={questionImageAlt(
@@ -265,19 +265,19 @@ export default function PracticeExam({
                 const target = e.currentTarget;
                 target.style.display = 'none';
               }}
-              className="block max-h-32 max-w-full rounded-lg border border-stone-200 object-contain sm:max-h-40"
+              className="block max-h-36 max-w-full rounded-xl border border-stone-200 object-contain shadow-2xs sm:max-h-48"
             />
           </div>
         )}
 
         {/* Question Title */}
-        <p className="mb-2.5 text-sm leading-relaxed font-semibold text-slate-900 sm:text-base">
+        <p className="mb-4 text-base leading-relaxed font-bold break-words text-slate-900 sm:text-lg">
           {questionTitle}
         </p>
 
-        {/* Options List */}
+        {/* Options List — designed large with spacious vertical padding and multi-line fitting */}
         <ul
-          className="m-0 flex list-none flex-col gap-1.5 p-0 sm:gap-2"
+          className="m-0 flex list-none flex-col gap-2.5 p-0 sm:gap-3"
           role="radiogroup"
           aria-label={questionTitle}
         >
@@ -289,15 +289,20 @@ export default function PracticeExam({
               const isCorrectOption = optIdx === currentQ.correct_index;
               const isUserWrongChoice = isSelected && !isCorrect;
 
-              let optionStyle = 'border-stone-200 bg-stone-50 text-slate-700';
-              let badgeStyle = 'border-slate-400 text-slate-600';
+              let optionStyle =
+                'border-stone-200 bg-stone-50/60 text-slate-700';
+              let badgeStyle = 'border-slate-400 bg-stone-100 text-slate-600';
 
               if (isCorrectOption) {
-                optionStyle = 'border-emerald-600 bg-emerald-50 text-slate-900';
-                badgeStyle = 'border-emerald-600 bg-emerald-600 text-white';
+                optionStyle =
+                  'border-emerald-600 bg-emerald-50 text-slate-900 shadow-xs ring-2 ring-emerald-600/20';
+                badgeStyle =
+                  'border-emerald-600 bg-emerald-600 text-white shadow-2xs';
               } else if (isUserWrongChoice) {
-                optionStyle = 'border-rose-400 bg-rose-50 text-slate-900';
-                badgeStyle = 'border-rose-600 bg-rose-600 text-white';
+                optionStyle =
+                  'border-rose-500 bg-rose-50 text-slate-900 shadow-xs ring-2 ring-rose-500/20';
+                badgeStyle =
+                  'border-rose-600 bg-rose-600 text-white shadow-2xs';
               }
 
               return (
@@ -315,24 +320,28 @@ export default function PracticeExam({
                         },
                       })
                     }
-                    className={`flex w-full cursor-pointer touch-manipulation items-center gap-2.5 rounded-lg border-[1.5px] px-3 py-2 text-left text-xs transition active:scale-[0.985] sm:gap-3 sm:py-2.5 sm:text-sm ${optionStyle}`}
+                    className={`group flex min-h-[58px] w-full cursor-pointer touch-manipulation items-start gap-3.5 rounded-2xl border-2 px-4 py-3.5 text-left transition-all duration-150 active:scale-[0.99] sm:min-h-[62px] ${optionStyle}`}
                   >
                     <span
-                      className={`flex h-5.5 w-5.5 flex-none items-center justify-center rounded-full border-[1.5px] text-[11px] font-bold sm:h-6 sm:w-6 sm:text-xs ${badgeStyle}`}
+                      className={`mt-0.5 flex h-6.5 w-6.5 flex-none shrink-0 items-center justify-center rounded-full border-2 text-xs font-black sm:h-7 sm:w-7 sm:text-sm ${badgeStyle}`}
                     >
                       {isCorrectOption ? '✓' : isUserWrongChoice ? '✗' : letter}
                     </span>
-                    <span className="flex-1 leading-snug">{opt}</span>
-                    {isCorrectOption && (
-                      <span className="flex-none text-[11px] font-bold text-emerald-700 sm:text-xs">
-                        {t.correctAnswer}
+                    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                      <span className="text-sm leading-relaxed font-semibold break-words sm:text-base">
+                        {opt}
                       </span>
-                    )}
-                    {isUserWrongChoice && (
-                      <span className="flex-none text-[11px] font-bold text-rose-700 sm:text-xs">
-                        {t.yourAnswer}
-                      </span>
-                    )}
+                      {isCorrectOption && (
+                        <span className="inline-flex items-center self-start rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-black tracking-wide text-emerald-800 uppercase sm:text-xs">
+                          ✓ {t.correctAnswer}
+                        </span>
+                      )}
+                      {isUserWrongChoice && (
+                        <span className="inline-flex items-center self-start rounded-md bg-rose-100 px-2 py-0.5 text-[11px] font-black tracking-wide text-rose-800 uppercase sm:text-xs">
+                          ✗ {t.yourAnswer}
+                        </span>
+                      )}
+                    </div>
                   </button>
                 </li>
               );
@@ -353,22 +362,26 @@ export default function PracticeExam({
                       },
                     })
                   }
-                  className={`flex w-full cursor-pointer touch-manipulation items-center gap-2.5 rounded-lg border-[1.5px] px-3 py-2 text-left text-xs transition active:scale-[0.985] sm:gap-3 sm:py-2.5 sm:text-sm ${
+                  className={`group flex min-h-[58px] w-full cursor-pointer touch-manipulation items-start gap-3.5 rounded-2xl border-2 px-4 py-3.5 text-left transition-all duration-150 active:scale-[0.99] sm:min-h-[62px] ${
                     isSelected
-                      ? 'border-blue-700 bg-blue-50 text-slate-900 ring-1 ring-blue-700'
-                      : 'border-stone-200 bg-stone-50 text-slate-700 hover:border-slate-400 hover:bg-white'
+                      ? 'border-blue-700 bg-blue-50/90 text-slate-950 shadow-sm ring-2 ring-blue-700/20'
+                      : 'border-stone-200 bg-stone-50/50 text-slate-800 hover:border-slate-400 hover:bg-white'
                   }`}
                 >
                   <span
-                    className={`flex h-5.5 w-5.5 flex-none items-center justify-center rounded-full border-[1.5px] text-[11px] font-bold sm:h-6 sm:w-6 sm:text-xs ${
+                    className={`mt-0.5 flex h-6.5 w-6.5 flex-none shrink-0 items-center justify-center rounded-full border-2 text-xs font-black sm:h-7 sm:w-7 sm:text-sm ${
                       isSelected
-                        ? 'border-blue-700 bg-blue-700 text-white'
-                        : 'border-slate-400 text-slate-600'
+                        ? 'border-blue-700 bg-blue-700 text-white shadow-2xs'
+                        : 'border-slate-400 bg-white text-slate-700'
                     }`}
                   >
                     {letter}
                   </span>
-                  <span className="flex-1 leading-snug">{opt}</span>
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <span className="text-sm leading-relaxed font-semibold break-words sm:text-base">
+                      {opt}
+                    </span>
+                  </div>
                 </button>
               </li>
             );
@@ -378,16 +391,16 @@ export default function PracticeExam({
         {/* Compact Immediate Feedback in Practice Mode */}
         {!isMockMode && isAnswered && (
           <div
-            className={`mt-2.5 rounded-lg border p-2.5 sm:mt-3 sm:p-3 ${
+            className={`mt-4 rounded-2xl border-2 p-4 sm:p-4.5 ${
               isCorrect
-                ? 'border-emerald-600 bg-emerald-50 text-emerald-950'
-                : 'border-rose-400 bg-rose-50 text-rose-950'
+                ? 'border-emerald-600 bg-emerald-50/90 text-emerald-950 shadow-xs'
+                : 'border-rose-400 bg-rose-50/90 text-rose-950 shadow-xs'
             }`}
           >
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <span
-                className={`text-[11px] font-bold tracking-wider uppercase sm:text-xs ${
-                  isCorrect ? 'text-emerald-700' : 'text-rose-700'
+                className={`text-xs font-black tracking-wider uppercase ${
+                  isCorrect ? 'text-emerald-800' : 'text-rose-800'
                 }`}
               >
                 {isCorrect
@@ -396,8 +409,10 @@ export default function PracticeExam({
               </span>
             </div>
             {qTrans?.explanation && (
-              <p className="mt-1 text-xs leading-relaxed text-slate-800 sm:text-sm">
-                <strong className="font-semibold">{t.explanation}:</strong>{' '}
+              <p className="mt-2 text-xs leading-relaxed font-medium break-words text-slate-800 sm:text-sm">
+                <strong className="font-bold text-slate-900">
+                  {t.explanation}:
+                </strong>{' '}
                 {qTrans.explanation}
               </p>
             )}
@@ -405,30 +420,30 @@ export default function PracticeExam({
         )}
       </article>
 
-      {/* 3. Fixed Bottom Navigation Bar — strictly aligned with exam/practice card edges */}
+      {/* 3. Fixed Bottom Navigation Bar — spacious buttons with vertical line fitting */}
       <nav
-        className="fixed right-0 bottom-0 left-0 z-40 border-t border-stone-200/80 bg-stone-100/90 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur-md"
+        className="fixed right-0 bottom-0 left-0 z-40 border-t border-stone-200/90 bg-stone-100/95 py-3.5 pb-[calc(0.85rem+env(safe-area-inset-bottom))] shadow-lg backdrop-blur-md"
         aria-label="Question navigation"
       >
-        <div className="mx-auto flex w-full max-w-3xl items-center justify-between px-4 sm:px-0">
+        <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-4 sm:px-0">
           {/* Previous */}
           {state.currentIndex > 0 ? (
             <button
               type="button"
               onClick={() => dispatch({ type: 'PREV_QUESTION' })}
-              className="rounded-full border border-slate-900 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 shadow-xs transition hover:bg-stone-100 active:scale-95"
+              className="flex min-h-[48px] min-w-[100px] cursor-pointer touch-manipulation items-center justify-center rounded-2xl border-2 border-slate-900 bg-white px-5 py-2.5 text-xs font-extrabold text-slate-900 shadow-xs transition hover:bg-stone-100 active:scale-95 sm:min-w-[125px] sm:rounded-full sm:text-sm"
             >
               ← {t.prevBtn}
             </button>
           ) : (
-            <span className="rounded-full border border-stone-200 bg-white/60 px-5 py-2.5 text-sm font-bold text-stone-300">
+            <span className="flex min-h-[48px] min-w-[100px] items-center justify-center rounded-2xl border border-stone-200 bg-white/60 px-5 py-2.5 text-xs font-bold text-stone-300 select-none sm:min-w-[125px] sm:rounded-full sm:text-sm">
               ← {t.prevBtn}
             </span>
           )}
 
           {/* Counter */}
-          <span className="text-sm font-semibold text-slate-600">
-            {state.currentIndex + 1} / {totalQuestions}
+          <span className="shrink-0 px-2 font-mono text-sm font-black text-slate-800 sm:text-base">
+            {String(state.currentIndex + 1).padStart(2, '0')} / {totalQuestions}
           </span>
 
           {/* Next or Finish */}
@@ -436,7 +451,7 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'NEXT_QUESTION' })}
-              className="rounded-full border border-slate-900 bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-xs transition hover:bg-slate-700 active:scale-95"
+              className="flex min-h-[48px] min-w-[100px] cursor-pointer touch-manipulation items-center justify-center rounded-2xl border-2 border-slate-900 bg-slate-900 px-5 py-2.5 text-xs font-extrabold text-white shadow-xs transition hover:bg-slate-800 active:scale-95 sm:min-w-[125px] sm:rounded-full sm:text-sm"
             >
               {t.nextBtn} →
             </button>
@@ -444,9 +459,10 @@ export default function PracticeExam({
             <button
               type="button"
               onClick={() => dispatch({ type: 'OPEN_SUBMIT_MODAL' })}
-              className="rounded-full border border-emerald-600 bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-95"
+              className="flex min-h-[48px] min-w-[120px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-emerald-600 bg-emerald-600 px-5 py-2.5 text-xs font-black text-white shadow-md transition hover:bg-emerald-700 active:scale-95 sm:min-w-[150px] sm:rounded-full sm:text-sm"
             >
-              {t.finishBtn} ✓
+              <span>{t.finishBtn}</span>
+              <span>✓</span>
             </button>
           )}
         </div>
@@ -459,7 +475,7 @@ export default function PracticeExam({
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
               <div>
-                <h3 className="text-base font-extrabold text-slate-900">
+                <h3 className="text-base font-black text-slate-900">
                   {t.questionGrid}
                 </h3>
                 <span className="text-xs font-semibold text-slate-500">
@@ -470,7 +486,7 @@ export default function PracticeExam({
               <button
                 type="button"
                 onClick={() => setShowGridModal(false)}
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-stone-100 text-sm font-bold text-slate-600 hover:bg-stone-200"
+                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-stone-100 text-sm font-bold text-slate-600 transition hover:bg-stone-200"
                 aria-label="Close"
               >
                 ✕
@@ -479,14 +495,14 @@ export default function PracticeExam({
 
             {/* Quick Filter Jump Helpers */}
             {unansweredCount > 0 && (
-              <div className="my-3 flex items-center justify-between gap-2">
+              <div className="my-3.5 flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     dispatch({ type: 'JUMP_TO_NEXT_UNANSWERED' });
                     setShowGridModal(false);
                   }}
-                  className="flex min-h-[34px] cursor-pointer touch-manipulation items-center rounded-full border border-stone-300 bg-stone-50 px-3 text-xs font-bold text-slate-700 hover:bg-stone-100"
+                  className="flex min-h-[42px] cursor-pointer touch-manipulation items-center rounded-2xl border-2 border-blue-200 bg-blue-50/90 px-4 py-2 text-xs leading-snug font-bold text-blue-950 transition hover:bg-blue-100 active:scale-95 sm:rounded-full sm:text-sm"
                 >
                   ○ {t.nextUnanswered}
                 </button>
@@ -494,7 +510,7 @@ export default function PracticeExam({
             )}
 
             {/* 20 Questions Matrix */}
-            <div className="my-3 grid grid-cols-5 gap-2 sm:grid-cols-10">
+            <div className="my-4 grid grid-cols-5 gap-2 sm:grid-cols-10">
               {state.sessionQuestions.map((q, idx) => {
                 const isCurrent = idx === state.currentIndex;
                 const userAns = state.answers[idx];
@@ -502,18 +518,18 @@ export default function PracticeExam({
                 const isQCorrect = isQAnswered && userAns === q.correct_index;
 
                 let btnColor =
-                  'border border-dashed border-stone-300 bg-white text-slate-600 hover:border-slate-500 hover:bg-stone-100';
+                  'border-2 border-stone-200 bg-white text-slate-700 hover:border-slate-400 hover:bg-stone-50';
 
                 if (isCurrent) {
                   btnColor =
                     'border-2 border-blue-700 bg-blue-700 text-white font-black shadow-sm ring-2 ring-blue-300';
                 } else if (!isMockMode && isQAnswered) {
                   btnColor = isQCorrect
-                    ? 'border border-emerald-600 bg-emerald-600 text-white font-bold'
-                    : 'border border-rose-600 bg-rose-600 text-white font-bold';
+                    ? 'border-2 border-emerald-600 bg-emerald-600 text-white font-black'
+                    : 'border-2 border-rose-600 bg-rose-600 text-white font-black';
                 } else if (isQAnswered) {
                   btnColor =
-                    'border border-slate-900 bg-slate-900 text-white font-bold';
+                    'border-2 border-slate-900 bg-slate-900 text-white font-black';
                 }
 
                 return (
@@ -528,7 +544,7 @@ export default function PracticeExam({
                       setShowGridModal(false);
                     }}
                     title={`Question ${idx + 1}`}
-                    className={`relative flex h-11 min-w-[40px] cursor-pointer touch-manipulation flex-col items-center justify-center rounded-xl font-mono text-xs font-bold transition active:scale-95 ${btnColor}`}
+                    className={`relative flex min-h-[46px] min-w-[44px] cursor-pointer touch-manipulation flex-col items-center justify-center rounded-xl font-mono text-xs font-bold transition active:scale-95 sm:text-sm ${btnColor}`}
                   >
                     <span>{idx + 1}</span>
                   </button>
@@ -560,7 +576,7 @@ export default function PracticeExam({
                 </span>
               )}
               <span className="flex items-center gap-1.5">
-                <span className="inline-block h-3 w-3 rounded-md border border-dashed border-stone-400 bg-white" />
+                <span className="inline-block h-3 w-3 rounded-md border border-stone-300 bg-white" />
                 {t.legendSkipped}
               </span>
             </div>
