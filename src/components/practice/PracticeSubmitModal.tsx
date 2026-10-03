@@ -102,17 +102,17 @@ export default function PracticeSubmitModal({
 
         {/* Flagged questions quick jump chips with accessible touch targets */}
         {flaggedIndices.length > 0 && (
-          <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50/70 p-3.5">
-            <span className="block text-xs font-bold text-amber-900">
+          <div className="mb-4 rounded-2xl border-2 border-amber-200 bg-amber-50/80 p-4">
+            <span className="block text-xs font-black tracking-wide text-amber-900 uppercase">
               ⚑ {t.modalReviewFlagged} ({flaggedIndices.length}):
             </span>
-            <div className="mt-2.5 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {flaggedIndices.map((idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => handleJumpToQuestion(idx)}
-                  className="flex min-h-[38px] min-w-[44px] touch-manipulation items-center justify-center rounded-xl border border-amber-300 bg-white px-3 text-xs font-bold text-amber-950 transition hover:bg-amber-100 active:scale-95"
+                  className="flex min-h-[42px] min-w-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-xl border-2 border-amber-300 bg-white px-3.5 py-1.5 text-xs font-black text-amber-950 shadow-2xs transition hover:bg-amber-100 active:scale-95 sm:text-sm"
                   title={`${t.modalJumpToFlagged} Q${idx + 1}`}
                 >
                   Q{idx + 1}
@@ -128,26 +128,29 @@ export default function PracticeSubmitModal({
             <button
               type="button"
               onClick={handleReviewSkipped}
-              className="flex min-h-[46px] w-full touch-manipulation items-center justify-center rounded-2xl border border-blue-200 bg-blue-50/90 px-4 text-xs font-bold text-blue-900 transition hover:bg-blue-100 active:scale-95 sm:text-sm"
+              className="flex min-h-[52px] w-full cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl border-2 border-blue-200 bg-blue-50/95 px-5 py-3 text-center text-xs leading-snug font-extrabold text-blue-950 shadow-xs transition hover:bg-blue-100 active:scale-98 sm:text-sm"
             >
-              ↷ {t.modalReviewSkipped} ({unansweredCount})
+              <span>↷</span>
+              <span>
+                {t.modalReviewSkipped} ({unansweredCount})
+              </span>
             </button>
           </div>
         )}
 
-        {/* Keep Practicing (left) / View Results (right) — always side by side, never stacked, so the two actions stay clearly separated by position at any screen size */}
-        <div className="flex gap-2.5">
+        {/* Keep Practicing / View Results action buttons — large touch targets and multiline vertical text support */}
+        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <button
             type="button"
             onClick={() => dispatch({ type: 'CLOSE_SUBMIT_MODAL' })}
-            className="flex min-h-[48px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-stone-300 bg-white px-3 text-xs font-bold whitespace-nowrap text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:px-6 sm:text-sm"
+            className="flex min-h-[54px] w-full cursor-pointer touch-manipulation items-center justify-center rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-800 shadow-xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[58px] sm:text-sm"
           >
             {t.modalContinue}
           </button>
           <button
             type="button"
             onClick={() => dispatch({ type: 'FINISH_EXAM' })}
-            className="flex min-h-[48px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-3 text-xs font-bold whitespace-nowrap text-white shadow-sm transition hover:bg-slate-700 active:scale-95 sm:px-6 sm:text-sm"
+            className="flex min-h-[54px] w-full cursor-pointer touch-manipulation items-center justify-center rounded-2xl bg-slate-900 px-4 py-3 text-center text-xs leading-snug font-black text-white shadow-md transition hover:bg-slate-800 hover:shadow-lg active:scale-95 sm:min-h-[58px] sm:text-sm"
           >
             {t.modalConfirmSubmit}
           </button>

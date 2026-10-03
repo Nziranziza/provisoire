@@ -193,7 +193,7 @@ export default function ShareResultCard({
         <button
           type="button"
           onClick={() => setShowPreview((p) => !p)}
-          className="mt-1 flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:bg-slate-700 active:scale-95 sm:mt-0"
+          className="mt-2 flex min-h-[38px] shrink-0 items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800/90 px-3.5 py-1.5 text-xs font-bold text-slate-200 transition hover:bg-slate-700 hover:text-white active:scale-95 sm:mt-0"
         >
           {showPreview ? t.hidePreviewBtn : t.previewBtn}
         </button>
@@ -201,24 +201,24 @@ export default function ShareResultCard({
 
       {/* Hidden or visible canvas for rendering */}
       <div
-        className={`mt-4 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 transition-all ${
+        className={`mt-4 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 transition-all ${
           showPreview ? 'block' : 'hidden'
         }`}
       >
         <canvas
           ref={canvasRef}
-          className="h-auto w-full max-w-full rounded-xl object-contain shadow-inner"
+          className="h-auto w-full max-w-full rounded-2xl object-contain shadow-inner"
         />
       </div>
 
-      {/* Main Action Buttons Grid */}
-      <div className="relative z-10 mt-5 flex flex-wrap items-center gap-2.5 sm:gap-3">
+      {/* Main Action Buttons Grid — Large touch targets and multiline vertical line fitting */}
+      <div className="relative z-10 mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
         {/* Primary Web Share API button */}
         <button
           type="button"
           onClick={handleShare}
           disabled={isSharing}
-          className="flex min-h-[46px] flex-1 cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-5 text-sm font-black text-slate-950 shadow-sm transition hover:from-emerald-400 hover:to-teal-400 active:scale-95 disabled:opacity-50"
+          className="flex min-h-[50px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 text-center text-xs leading-snug font-black text-slate-950 shadow-sm transition hover:from-emerald-400 hover:to-teal-400 active:scale-95 disabled:opacity-50 sm:text-sm"
         >
           <span>{t.shareBtn}</span>
         </button>
@@ -228,7 +228,7 @@ export default function ShareResultCard({
           href={whatsAppUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex min-h-[46px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 text-sm font-black text-slate-950 no-underline shadow-sm transition hover:bg-[#20bd5a] active:scale-95"
+          className="flex min-h-[50px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-4 py-3 text-center text-xs leading-snug font-black text-slate-950 no-underline shadow-sm transition hover:bg-[#20bd5a] active:scale-95 sm:text-sm"
         >
           <span>{t.whatsAppBtn}</span>
         </a>
@@ -237,7 +237,7 @@ export default function ShareResultCard({
         <button
           type="button"
           onClick={handleDownload}
-          className="flex min-h-[46px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800/90 px-4 text-xs font-bold text-slate-200 transition hover:bg-slate-700 hover:text-white active:scale-95 sm:text-sm"
+          className="flex min-h-[50px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl border-2 border-slate-700 bg-slate-800/90 px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-200 transition hover:bg-slate-700 hover:text-white active:scale-95 sm:text-sm"
         >
           <span>{t.downloadBtn}</span>
         </button>
@@ -246,7 +246,7 @@ export default function ShareResultCard({
         <button
           type="button"
           onClick={handleCopy}
-          className="flex min-h-[46px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-800/90 px-4 text-xs font-bold text-slate-200 transition hover:bg-slate-700 hover:text-white active:scale-95 sm:text-sm"
+          className="flex min-h-[50px] cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl border-2 border-slate-700 bg-slate-800/90 px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-200 transition hover:bg-slate-700 hover:text-white active:scale-95 sm:text-sm"
         >
           <span>{t.copyImageBtn}</span>
         </button>
