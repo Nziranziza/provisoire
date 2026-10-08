@@ -1,10 +1,11 @@
-import type { Dispatch } from 'react';
+import { useMemo, type Dispatch } from 'react';
 import type { I18nDictionary } from './constants';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
 import { PASSING_SCORE } from './constants';
 import { clearSessionFromStorage } from './storage';
 import InstallAppPrompt from '../InstallAppPrompt';
+import ShareResultCard from './ShareResultCard';
 import { categoryLabel } from '../../lib/quiz';
 import { questionImageAlt } from '../../lib/seo';
 
@@ -45,6 +46,33 @@ export default function PracticeReview({
   const isPassed = totalScore >= PASSING_SCORE;
   const scorePercent = Math.round(
     (totalScore / Math.max(1, state.sessionQuestions.length)) * 100,
+  );
+
+  const resultCardData = useMemo(
+    () => ({
+      score: totalScore,
+      total: state.sessionQuestions.length,
+      isPassed,
+      rulesScore,
+      rulesTotal,
+      signsScore,
+      signsTotal,
+      timeSpent: state.timeSpent,
+      mode: state.mode,
+      locale: state.currentLocale,
+    }),
+    [
+      totalScore,
+      state.sessionQuestions.length,
+      isPassed,
+      rulesScore,
+      rulesTotal,
+      signsScore,
+      signsTotal,
+      state.timeSpent,
+      state.mode,
+      state.currentLocale,
+    ],
   );
 
   // Filtered list for review mode
@@ -135,55 +163,62 @@ export default function PracticeReview({
           </div>
         </div>
 
-        {/* Action Buttons on Top */}
-        <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3">
+        {/* Action Buttons on Top — Structured for large text with vertical multiline support */}
+        <div className="mt-6 w-full space-y-3">
           <button
             type="button"
             onClick={onRetake}
-            className="flex min-h-[48px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95"
+            className="flex min-h-[56px] w-full cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-slate-900 px-6 py-4 text-center text-sm leading-snug font-black text-white shadow-md transition hover:bg-slate-800 hover:shadow-lg active:scale-[0.98] sm:min-h-[60px] sm:text-base"
           >
-            {t.retakeBtn}
+            <span>↺</span>
+            <span>{t.retakeBtn}</span>
           </button>
 
-          {!isPassed && totalScore < state.sessionQuestions.length && (
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3">
+            {!isPassed && totalScore < state.sessionQuestions.length && (
+              <button
+                type="button"
+                onClick={() => dispatch({ type: 'RETAKE_MISSED' })}
+                className="flex min-h-[52px] w-full cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-slate-900 bg-white px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-900 shadow-xs transition hover:bg-stone-100 active:scale-95 sm:text-sm"
+              >
+                <span>⚡</span>
+                <span>{t.retakeMissedBtn}</span>
+              </button>
+            )}
+
             <button
               type="button"
-              onClick={() => dispatch({ type: 'RETAKE_MISSED' })}
-              className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95"
+              onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
+              className="flex min-h-[52px] w-full cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-700 shadow-xs transition hover:bg-stone-100 active:scale-95 sm:text-sm"
             >
-              {t.retakeMissedBtn}
+              <span>↺</span>
+              <span>{t.discardBtn}</span>
             </button>
-          )}
 
-          <button
-            type="button"
-            onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
-            className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:text-sm"
-          >
-            ↺ {t.discardBtn}
-          </button>
-
-          <a
-            href={`/${state.currentLocale}/questions`}
-            className="inline-flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-bold text-slate-700 no-underline transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:text-sm"
-            onClick={() => {
-              // Leaving Practice/Exam -> don't keep the in-progress session around.
-              // This avoids the "Saved Session" card showing up next time.
-              clearSessionFromStorage();
-            }}
-          >
-            ← {t.bankBtn}
-          </a>
+            <a
+              href={`/${state.currentLocale}/questions`}
+              className="flex min-h-[52px] w-full touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-700 no-underline shadow-xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:text-sm"
+              onClick={() => {
+                clearSessionFromStorage();
+              }}
+            >
+              <span>←</span>
+              <span>{t.bankBtn}</span>
+            </a>
+          </div>
         </div>
       </div>
+
+      {/* Shareable Viral Result Card for WhatsApp & Social */}
+      <ShareResultCard data={resultCardData} locale={state.currentLocale} />
 
       {/* Sensible Add to Home Screen Prompt after completed session */}
       <InstallAppPrompt lang={state.currentLocale} />
 
       {/* Detailed Question Review List */}
       <div className="rounded-3xl border border-stone-200 bg-stone-50 p-4 sm:p-7">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-base font-black tracking-wide text-slate-900 uppercase">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-base font-black tracking-wide text-slate-900 uppercase sm:text-lg">
             {t.reviewHeader}
           </h2>
 
@@ -211,10 +246,10 @@ export default function PracticeReview({
                         payload: { filter: f },
                       })
                     }
-                    className={`flex min-h-[38px] touch-manipulation items-center rounded-full px-4 text-xs font-bold transition active:scale-95 ${
+                    className={`flex min-h-[42px] cursor-pointer touch-manipulation items-center justify-center rounded-2xl px-4.5 py-2 text-xs font-extrabold transition active:scale-95 sm:rounded-full sm:text-sm ${
                       active
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-200'
+                        ? 'bg-slate-900 text-white shadow-sm'
+                        : 'border-2 border-stone-300 bg-white text-slate-700 hover:bg-stone-200'
                     }`}
                   >
                     {label}
@@ -307,7 +342,7 @@ export default function PracticeReview({
                   </p>
 
                   {/* Options list */}
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     {opts.map((opt, oIdx) => {
                       const isCorrectOption = oIdx === q.correct_index;
                       const isUserSelected = uAns === oIdx;
@@ -315,36 +350,40 @@ export default function PracticeReview({
                       return (
                         <div
                           key={oIdx}
-                          className={`flex items-start gap-2.5 rounded-lg border px-3 py-2 text-xs sm:text-sm ${
+                          className={`flex items-start gap-3 rounded-xl border-2 p-3 text-xs sm:p-3.5 sm:text-sm ${
                             isCorrectOption
-                              ? 'border-emerald-600 bg-emerald-50 font-medium text-slate-900'
+                              ? 'border-emerald-600 bg-emerald-50/90 font-semibold text-slate-900 shadow-2xs'
                               : isUserSelected && !isAnsCorrect
-                                ? 'border-rose-400 bg-rose-50 text-rose-900'
-                                : 'border-stone-200 bg-stone-50/50 text-slate-600'
+                                ? 'border-rose-400 bg-rose-50/90 text-rose-950 shadow-2xs'
+                                : 'border-stone-200 bg-stone-50/60 text-slate-700'
                           }`}
                         >
                           <span
-                            className={`flex h-5 w-5 flex-none items-center justify-center rounded-full text-[10px] font-extrabold ${
+                            className={`mt-0.5 flex h-6 w-6 flex-none shrink-0 items-center justify-center rounded-full text-xs font-black sm:h-6.5 sm:w-6.5 ${
                               isCorrectOption
                                 ? 'bg-emerald-600 text-white'
                                 : isUserSelected && !isAnsCorrect
                                   ? 'bg-rose-600 text-white'
-                                  : 'border border-slate-300 bg-white text-slate-600'
+                                  : 'border border-slate-300 bg-white text-slate-700'
                             }`}
                           >
                             {String.fromCharCode(65 + oIdx)}
                           </span>
-                          <span className="flex-1">{opt}</span>
-                          {isCorrectOption && (
-                            <span className="flex-none font-bold text-emerald-700">
-                              {t.correctAnswer}
+                          <div className="flex min-w-0 flex-1 flex-col gap-1">
+                            <span className="leading-relaxed break-words">
+                              {opt}
                             </span>
-                          )}
-                          {isUserSelected && !isCorrectOption && (
-                            <span className="flex-none font-bold text-rose-700">
-                              {t.yourAnswer}
-                            </span>
-                          )}
+                            {isCorrectOption && (
+                              <span className="inline-flex items-center self-start rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-black tracking-wide text-emerald-800 uppercase sm:text-xs">
+                                ✓ {t.correctAnswer}
+                              </span>
+                            )}
+                            {isUserSelected && !isCorrectOption && (
+                              <span className="inline-flex items-center self-start rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-black tracking-wide text-rose-800 uppercase sm:text-xs">
+                                ✗ {t.yourAnswer}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       );
                     })}
@@ -352,20 +391,22 @@ export default function PracticeReview({
 
                   {/* Explanation if present */}
                   {explanation && (
-                    <div className="mt-3 rounded-lg bg-blue-50/70 p-3 text-xs text-blue-900">
-                      <strong className="block font-bold">
+                    <div className="mt-3.5 rounded-2xl border border-blue-200/80 bg-blue-50/80 p-3.5 text-xs text-blue-950 sm:p-4 sm:text-sm">
+                      <strong className="mb-1 block font-black text-blue-900">
                         {t.explanation}:
                       </strong>
-                      <p className="mt-0.5">{explanation}</p>
+                      <p className="leading-relaxed break-words">
+                        {explanation}
+                      </p>
                     </div>
                   )}
 
-                  <div className="mt-3 flex justify-end">
+                  <div className="mt-3.5 flex justify-end">
                     <a
                       href={`/${state.currentLocale}/questions/${q.bankIndex + 1}`}
-                      className="text-xs font-semibold text-blue-700 hover:underline"
+                      className="inline-flex min-h-[36px] items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50/50 px-3.5 py-1.5 text-xs font-bold text-blue-700 no-underline transition hover:bg-blue-100 hover:text-blue-900"
                     >
-                      {t.bankLink}
+                      <span>{t.bankLink}</span>
                     </a>
                   </div>
                 </div>

@@ -292,16 +292,15 @@ export default function PracticeSession({
           <div className="flex items-center gap-3">
             <a
               href={`/${state.currentLocale}/questions`}
-              className="inline-flex min-h-[40px] touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-[11px] font-bold whitespace-nowrap text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:px-3.5 sm:text-xs"
+              className="inline-flex min-h-[42px] touch-manipulation items-center gap-2 rounded-2xl border-2 border-stone-300 bg-white px-4 py-2 text-xs font-extrabold text-slate-800 no-underline shadow-2xs transition hover:border-slate-400 hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:rounded-full sm:text-sm"
               title={t.bankBtn}
               onClick={() => {
                 // User left Practice/Exam to browse questions: clear in-progress session.
                 clearSessionFromStorage();
               }}
             >
-              <span>←</span>
-              <span className="hidden sm:inline">{t.bankBtn}</span>
-              <span className="sm:hidden">Bank</span>
+              <span className="text-sm">←</span>
+              <span>{t.bankBtn}</span>
             </a>
           </div>
         </div>

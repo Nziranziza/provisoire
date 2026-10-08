@@ -264,9 +264,16 @@ export function getQuestionPageMetadata(
     ? absoluteUrl(questionHref(lang, number + 1), site)
     : null;
 
+  const categoryFallbackOg =
+    question.category_id === 1
+      ? `/og/og-${lang}-traffic-rules.png`
+      : question.category_id === 2
+        ? `/og/og-${lang}-road-signs.png`
+        : `/og/og-${lang}-questions.png`;
+
   const image = question.image_url
     ? absoluteUrl(imageSrc(imageBase, question.image_url), site)
-    : null;
+    : absoluteUrl(categoryFallbackOg, site);
   const imageAlt = questionImageAlt(question, lang, number);
 
   const breadcrumbLabels: Record<
@@ -320,7 +327,7 @@ export function getQuestionPageMetadata(
       image,
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
       image,
@@ -498,6 +505,16 @@ export function getListPageMetadata(
     page < totalPages
       ? absoluteUrl(questionsListHref(lang, page + 1, categoryId), site)
       : null;
+  const ogImageRel = isRoot
+    ? '/og/og-default.png'
+    : isHome
+      ? `/og/og-${lang}-home.png`
+      : categoryId === 1
+        ? `/og/og-${lang}-traffic-rules.png`
+        : categoryId === 2
+          ? `/og/og-${lang}-road-signs.png`
+          : `/og/og-${lang}-questions.png`;
+  const image = absoluteUrl(ogImageRel, site);
 
   return {
     title,
@@ -505,7 +522,7 @@ export function getListPageMetadata(
     lang,
     canonical,
     alternates,
-    image: null,
+    image,
     prev,
     next,
     robots: 'index,follow',
@@ -518,13 +535,13 @@ export function getListPageMetadata(
       siteName: 'Provisoire',
       locale: ogLocale(lang),
       alternateLocales: LOCALES.filter((l) => l !== lang).map(ogLocale),
-      image: null,
+      image,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      image: null,
+      image,
     },
   };
 }
@@ -583,6 +600,11 @@ export function getCategoryHubMetadata(
     page < totalPages
       ? absoluteUrl(categoryHubHref(lang, categorySlug, page + 1), site)
       : null;
+  const ogImageRel =
+    categorySlug === 'traffic-rules'
+      ? `/og/og-${lang}-traffic-rules.png`
+      : `/og/og-${lang}-road-signs.png`;
+  const image = absoluteUrl(ogImageRel, site);
 
   return {
     title,
@@ -590,7 +612,7 @@ export function getCategoryHubMetadata(
     lang,
     canonical,
     alternates,
-    image: null,
+    image,
     prev,
     next,
     robots: 'index,follow',
@@ -603,13 +625,13 @@ export function getCategoryHubMetadata(
       siteName: 'Provisoire',
       locale: ogLocale(lang),
       alternateLocales: LOCALES.filter((l) => l !== lang).map(ogLocale),
-      image: null,
+      image,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      image: null,
+      image,
     },
   };
 }
@@ -663,6 +685,10 @@ export function getPracticePageMetadata(
   const { title, description } = meta[lang];
   const canonical = absoluteUrl(`/${lang}/${routeSlug}`, site);
   const alternates = hreflangAlternates((l) => `/${l}/${routeSlug}`, site);
+  const ogImageRel = isExam
+    ? `/og/og-${lang}-exam.png`
+    : `/og/og-${lang}-practice.png`;
+  const image = absoluteUrl(ogImageRel, site);
 
   return {
     title,
@@ -670,7 +696,7 @@ export function getPracticePageMetadata(
     lang,
     canonical,
     alternates,
-    image: null,
+    image,
     prev: null,
     next: null,
     robots: 'noindex,nofollow',
@@ -683,13 +709,13 @@ export function getPracticePageMetadata(
       siteName: 'Provisoire',
       locale: ogLocale(lang),
       alternateLocales: LOCALES.filter((l) => l !== lang).map(ogLocale),
-      image: null,
+      image,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      image: null,
+      image,
     },
   };
 }
@@ -1070,8 +1096,8 @@ export function getSignsIndexMetadata(options: {
     lang,
     canonical,
     alternates: hreflangAlternates((locale) => signsIndexHref(locale), site),
-    image: null as string | null,
-    imageAlt: undefined as string | undefined,
+    image: absoluteUrl(`/og/og-${lang}-signs.png`, site),
+    imageAlt: copy.heading,
     jsonLd: [
       breadcrumbJsonLd(
         [

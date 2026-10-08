@@ -110,18 +110,18 @@ export default function InstallAppPrompt({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 sm:flex-nowrap">
+        <div className="flex shrink-0 flex-col items-stretch gap-2.5 sm:flex-row sm:items-center">
           <button
             type="button"
             onClick={handleInstallClick}
-            className="flex min-h-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-full bg-blue-700 px-5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-800 active:scale-95 sm:text-sm"
+            className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-2xl bg-blue-700 px-5 py-2.5 text-center text-xs leading-snug font-black text-white shadow-sm transition hover:bg-blue-800 active:scale-95 sm:rounded-full sm:text-sm"
           >
             {t.installBtn}
           </button>
           <button
             type="button"
             onClick={handleDismiss}
-            className="flex min-h-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-bold text-slate-600 transition hover:bg-stone-100 active:scale-95 sm:text-sm"
+            className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-2xl border-2 border-stone-300 bg-white px-5 py-2.5 text-center text-xs leading-snug font-extrabold text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:rounded-full sm:text-sm"
           >
             {t.notNowBtn}
           </button>
