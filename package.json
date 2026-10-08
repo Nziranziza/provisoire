@@ -23,6 +23,7 @@
     "verify:crawl": "node scripts/verify-seo-crawl.mjs",
     "verify:seo": "node scripts/verify-structured-data.mjs && node scripts/verify-seo-crawl.mjs",
     "verify:share-og": "node --experimental-strip-types scripts/verify-share-and-og.mjs",
+    "verify:study": "node scripts/verify-study-progress.mjs",
     "verify:deploy": "node scripts/verify-deployment.mjs"
   },
   "dependencies": {

@@ -167,6 +167,67 @@ export const I18N = {
       'Shortcuts: [1-4]/[A-D] Select · [←/→] Navigate · [S] Skip · [F] Flag · [U] Next Unanswered',
     swipeHint: 'Swipe ← / → to navigate questions',
     tapHint: 'Tap an option to select answer',
+    // Study Habit, Dashboard & Drills
+    studyStreakBadge: (streak: number) =>
+      `${streak} Day${streak === 1 ? '' : 's'} Streak`,
+    streakActiveToday: 'Practiced today! 🔥',
+    streakKeepGoing: 'Practice today to keep your streak alive! ⚡',
+    streakLongest: (longest: number) => `Best: ${longest} days`,
+    overallCoverage: '198-Question Bank Coverage',
+    coverageOfTotal: (seen: number, total: number, pct: number) =>
+      `${seen} of ${total} questions studied (${pct}%)`,
+    mastered: 'Mastered',
+    learning: 'Learning',
+    weak: 'Needs Practice (Weak)',
+    unseen: 'Unseen',
+    accuracy: 'Accuracy',
+    dashboardTitle: 'Study Habit & Mastery Dashboard',
+    dashboardDesc:
+      'Track your real progress across all 198 official questions. Everything is stored locally on your device.',
+    weakDrillTitle: 'Weak-Question Drill',
+    weakDrillDesc:
+      'Targeted drill built specifically from the questions you miss most frequently. The highest-yield way to pass.',
+    weakDrillAction: (count: number) =>
+      `Drill ${count} Missed Question${count === 1 ? '' : 's'}`,
+    weakDrillEmpty:
+      'No weak questions yet! Practice questions to automatically surface tricky ones here.',
+    weakDrillAllGood:
+      'Great work! You currently have 0 weak questions. All attempted questions are mastered or in progress.',
+    bookmarksTitle: 'Bookmarked Questions',
+    bookmarksDesc:
+      'Your saved question list for targeted review anytime. Bookmark any tricky road sign or rule.',
+    bookmarksAction: (count: number) =>
+      `Practice ${count} Bookmarked Question${count === 1 ? '' : 's'}`,
+    bookmarksEmpty:
+      'No bookmarked questions yet. Click 🔖 on any question to save it here for later review.',
+    bookmarkBtn: 'Bookmark',
+    bookmarkedBtn: 'Bookmarked',
+    savedBookmarksList: 'Saved Bookmarks List',
+    manageBookmarks: 'View & Manage Bookmarks',
+    hideBookmarks: 'Hide Bookmarks',
+    removeBookmark: 'Remove',
+    resumeStudy: 'Resume where you left off',
+    resumeStudyBtn: (label: string) => `Resume: ${label}`,
+    exportProgress: 'Export Progress (JSON)',
+    importProgress: 'Import Progress (JSON)',
+    resetProgress: 'Reset Progress',
+    resetConfirm:
+      'Are you sure you want to reset all question mastery, streak, and bookmarks? This cannot be undone unless exported.',
+    exportSuccess: 'Progress copied to clipboard and downloaded!',
+    importSuccess: (qCount: number) =>
+      `Successfully restored progress for ${qCount} questions!`,
+    importModalTitle: 'Import Study Progress',
+    importModalDesc:
+      'Upload a JSON backup file or paste your exported progress JSON to restore all data.',
+    uploadFileBtn: 'Upload JSON File',
+    pasteJsonLabel: 'Or paste raw JSON:',
+    confirmImportBtn: 'Restore Progress',
+    cancelBtn: 'Cancel',
+    privateBrowsingNotice:
+      'Private Browsing Mode: Your storage is temporary in-memory. Export your progress as JSON before closing the browser so you don’t lose it.',
+    copyJsonBtn: 'Copy JSON',
+    downloadJsonBtn: 'Download JSON File',
+    allTopics: 'All Topics',
   },
   fr: {
     pageTitle: 'Simulateur d’examen du permis provisoire',
@@ -290,6 +351,67 @@ export const I18N = {
       'Raccourcis : [1-4]/[A-D] Choisir · [←/→] Naviguer · [S] Passer · [F] Marquer · [U] Non répondue',
     swipeHint: 'Balayez ← / → pour changer de question',
     tapHint: 'Touchez une option pour répondre',
+    // Study Habit, Dashboard & Drills
+    studyStreakBadge: (streak: number) =>
+      `Série de ${streak} jour${streak === 1 ? '' : 's'}`,
+    streakActiveToday: 'Validé aujourd’hui ! 🔥',
+    streakKeepGoing: 'Entraînez-vous aujourd’hui pour maintenir la série ! ⚡',
+    streakLongest: (longest: number) => `Record : ${longest} jours`,
+    overallCoverage: 'Couverture des 198 questions',
+    coverageOfTotal: (seen: number, total: number, pct: number) =>
+      `${seen} sur ${total} questions abordées (${pct} %)`,
+    mastered: 'Maîtrisées',
+    learning: 'En apprentissage',
+    weak: 'À revoir (Faibles)',
+    unseen: 'Non vues',
+    accuracy: 'Précision',
+    dashboardTitle: 'Tableau de bord d’apprentissage et progression',
+    dashboardDesc:
+      'Suivez votre maîtrise des 198 questions officielles du code rwandais. Stockage 100 % local sur votre appareil.',
+    weakDrillTitle: 'Entraînement Questions Faibles',
+    weakDrillDesc:
+      'Session ciblée construite à partir des questions que vous ratez le plus souvent. La méthode la plus efficace pour réussir.',
+    weakDrillAction: (count: number) =>
+      `Réviser ${count} question${count === 1 ? '' : 's'} manquée${count === 1 ? '' : 's'}`,
+    weakDrillEmpty:
+      'Aucune question faible pour le moment ! Continuez à vous entraîner pour identifier vos lacunes.',
+    weakDrillAllGood:
+      'Excellent travail ! Vous avez 0 question faible. Toutes vos questions abordées sont maîtrisées ou en cours.',
+    bookmarksTitle: 'Questions Enregistrées (Favoris)',
+    bookmarksDesc:
+      'Votre sélection personnelle de questions à revoir. Marquez n’importe quel panneau ou règle délicate.',
+    bookmarksAction: (count: number) =>
+      `Réviser ${count} question${count === 1 ? '' : 's'} enregistrée${count === 1 ? '' : 's'}`,
+    bookmarksEmpty:
+      'Aucune question enregistrée. Cliquez sur 🔖 sur n’importe quelle question pour l’ajouter ici.',
+    bookmarkBtn: 'Enregistrer',
+    bookmarkedBtn: 'Enregistré',
+    savedBookmarksList: 'Liste des questions enregistrées',
+    manageBookmarks: 'Gérer les questions enregistrées',
+    hideBookmarks: 'Masquer la liste',
+    removeBookmark: 'Supprimer',
+    resumeStudy: 'Reprendre là où vous vous êtes arrêté',
+    resumeStudyBtn: (label: string) => `Reprendre : ${label}`,
+    exportProgress: 'Exporter la progression (JSON)',
+    importProgress: 'Importer la progression (JSON)',
+    resetProgress: 'Réinitialiser la progression',
+    resetConfirm:
+      'Êtes-vous sûr de vouloir réinitialiser votre progression, série et favoris ? Cette action est irréversible sauf si exportée.',
+    exportSuccess: 'Progression copiée dans le presse-papier et téléchargée !',
+    importSuccess: (qCount: number) =>
+      `Progression restaurée avec succès pour ${qCount} questions !`,
+    importModalTitle: 'Importer la progression d’étude',
+    importModalDesc:
+      'Chargez un fichier JSON ou collez le code JSON pour restaurer votre progression.',
+    uploadFileBtn: 'Choisir un fichier JSON',
+    pasteJsonLabel: 'Ou collez le texte JSON :',
+    confirmImportBtn: 'Restaurer la progression',
+    cancelBtn: 'Annuler',
+    privateBrowsingNotice:
+      'Navigation privée : Les données sont stockées en mémoire temporaire. Exportez votre progression avant de fermer l’onglet.',
+    copyJsonBtn: 'Copier JSON',
+    downloadJsonBtn: 'Télécharger fichier JSON',
+    allTopics: 'Tous les thèmes',
   },
   rw: {
     pageTitle: 'Ikizamini cy’imyitozo cy’uruhushya rw’agateganyo',
@@ -412,6 +534,64 @@ export const I18N = {
       'Uburyo bworoshye: [1-4]/[A-D] Guhitamo · [←/→] Kugenda · [S] Gusimbuka · [F] Gushyiraho ikimenyetso · [U] Ikitasubizwa',
     swipeHint: 'Kanyuza ← / → guhindura ibibazo',
     tapHint: 'Kanda ku gisubizo kugira ngo uhitemo',
+    // Study Habit, Dashboard & Drills
+    studyStreakBadge: (streak: number) => `Iminsi ${streak} ikurikiranye`,
+    streakActiveToday: 'Wize uyu munsi! 🔥',
+    streakKeepGoing: 'Itoze uyu munsi kugira ngo streak ikomeze! ⚡',
+    streakLongest: (longest: number) => `Agahigo: iminsi ${longest}`,
+    overallCoverage: 'Ibyo wagezeho mu bibazo 198 byose',
+    coverageOfTotal: (seen: number, total: number, pct: number) =>
+      `Ibibazo ${seen} kuri ${total} bimaze kwigwa (${pct}%)`,
+    mastered: 'Ibyatsinzwe neza',
+    learning: 'Ibyo ukiga',
+    weak: 'Ibyo ugomba kwitoza (Ibigoye)',
+    unseen: 'Ibitarakorwa',
+    accuracy: 'Imitsindire',
+    dashboardTitle: 'Imbonerahamwe y’imyigire n’aho ugeze',
+    dashboardDesc:
+      'Gukurikirana aho ugeze mu bibazo 198 byose by’amategeko n’ibyapa by’u Rwanda. Amakuru yose abikwa muri telefoni/mudasobwa yawe gusa.',
+    weakDrillTitle: 'Kwitoza Ibibazo Wagize Amakosa',
+    weakDrillDesc:
+      'Imyitozo yihariye igizwe n’ibibazo wagize amakosa kenshi kurusha ibindi. Uburyo bwihuse bwo gutsinda ikizamini.',
+    weakDrillAction: (count: number) => `Kora ibibazo ${count} wagize amakosa`,
+    weakDrillEmpty:
+      'Nta bibazo birimo amakosa ufite kugeza ubu! Komeza witoze kugira ngo ugaragaze ibigoye.',
+    weakDrillAllGood:
+      'Wakoze neza cyane! Nta bibazo bitoroshye ufite ubu. Ibibazo byose wakoze warabitsinze cyangwa uri kubyiga neza.',
+    bookmarksTitle: 'Ibibazo Wifashishije (Bookmarks)',
+    bookmarksDesc:
+      'Urutonde rw’ibibazo wabitse kugira ngo uzabyitoze ukwabyo igihe cyose ubishakiye.',
+    bookmarksAction: (count: number) => `Itoze ibibazo ${count} wabitse`,
+    bookmarksEmpty:
+      'Nta bibazo urabika kugeza ubu. Kanda 🔖 kuri buri kibazo ushaka kubika kugira ngo kize hano.',
+    bookmarkBtn: 'Kubika',
+    bookmarkedBtn: 'Byabitswe',
+    savedBookmarksList: 'Urutonde rw’ibibazo byabitswe',
+    manageBookmarks: 'Reba no gucunga ibyabitswe',
+    hideBookmarks: 'Hisha urutonde',
+    removeBookmark: 'Gukuraho',
+    resumeStudy: 'Komeza aho wari ugeze',
+    resumeStudyBtn: (label: string) => `Komeza: ${label}`,
+    exportProgress: 'Koporora amakuru (JSON)',
+    importProgress: 'Kwinjiza amakuru (JSON)',
+    resetProgress: 'Gusiba amakuru yose',
+    resetConfirm:
+      'Uzi neza ko ushaka gusiba amakuru yose y’aho wari ugeze, streak n’ibyo wabitse? Ibi ntibishobora kugarurwa keretse wabikoporoye mbere.',
+    exportSuccess: 'Amakuru yakoporowe neza kandi yabitswe muri dosiye!',
+    importSuccess: (qCount: number) =>
+      `Amakuru y’ibibazo ${qCount} yagaruwe neza!`,
+    importModalTitle: 'Kwinjiza amakuru y’imyigire',
+    importModalDesc:
+      'Shyiramo dosiye ya JSON cyangwa komekamo inyandiko ya JSON kugira ngo ugarure aho wari ugeze.',
+    uploadFileBtn: 'Hitamo dosiye ya JSON',
+    pasteJsonLabel: 'Cyangwa komekamo inyandiko ya JSON:',
+    confirmImportBtn: 'Garura amakuru',
+    cancelBtn: 'Kureka',
+    privateBrowsingNotice:
+      'Uburyo bw’ibanga (Private Browsing): Amakuru abikwa by’agateganyo gusa. Koporora amakuru yawe mbere yo gufunga porogaramu.',
+    copyJsonBtn: 'Koporora JSON',
+    downloadJsonBtn: 'Bika dosiye ya JSON',
+    allTopics: 'Ibyiciro byose',
   },
 } as const;
 

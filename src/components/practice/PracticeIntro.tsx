@@ -6,6 +6,8 @@ import type { ExamMode, PracticeAction, PracticeState } from './types';
 import { DEFAULT_TOTAL_QUESTIONS, PASSING_SCORE } from './constants';
 import OfflinePackManager from '../OfflinePackManager';
 import InstallAppPanel from '../InstallAppPanel';
+import StudyDashboard from './StudyDashboard';
+import { recordLastStudiedSession } from '../../lib/study-progress';
 
 interface PracticeIntroProps {
   state: PracticeState;
@@ -39,6 +41,17 @@ export default function PracticeIntro({
       DEFAULT_TOTAL_QUESTIONS,
       chosenCat,
     );
+    recordLastStudiedSession({
+      mode: chosenMode,
+      categoryId: chosenCat,
+      label:
+        chosenCat === 1
+          ? t.rulesCategory
+          : chosenCat === 2
+            ? t.signsCategory
+            : t.allTopics,
+      timestamp: Date.now(),
+    });
     dispatch({
       type: 'START_EXAM',
       payload: {
@@ -93,6 +106,15 @@ export default function PracticeIntro({
 
   return (
     <div className="space-y-6">
+      {/* 1. Study Habit, Streak & Coverage Dashboard */}
+      <StudyDashboard
+        allQuestions={allQuestions}
+        t={t}
+        currentLocale={state.currentLocale}
+        dispatch={dispatch}
+        onStartExam={handleStartExam}
+      />
+
       <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
         {/* Saved Session Alert Banner at Top */}
         {state.hasSavedSession && (

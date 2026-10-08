@@ -19,6 +19,7 @@ import {
   saveHistoryToStorage,
   saveSessionToStorage,
 } from './storage';
+import { recordQuestionAttempt } from '../../lib/study-progress';
 
 /** Randomly samples 20 questions, optionally restricted to a specific category */
 export function sampleQuestions(
@@ -101,6 +102,18 @@ export function calculateFinishState(
   const passed = score >= PASSING_SCORE;
   const isMock =
     state.mode === 'mock_exam' || (state.mode as string) === 'timed';
+
+  // In mock exams, record results for all answered questions upon exam completion
+  if (isMock) {
+    state.sessionQuestions.forEach((q, idx) => {
+      const userAns = state.answers[idx];
+      if (typeof userAns === 'number') {
+        const isCorrect = userAns === q.correct_index;
+        recordQuestionAttempt(q.id, isCorrect);
+      }
+    });
+  }
+
   const finalTime = isMock
     ? EXAM_DURATION_SECONDS - state.timeRemaining
     : state.timeSpent;
