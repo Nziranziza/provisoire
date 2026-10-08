@@ -102,6 +102,9 @@ export function isPersistentStorageSupported(): boolean {
 }
 
 export function getSafeItem(key: string): string | null {
+  if (inMemoryStore[key] !== undefined) {
+    return inMemoryStore[key];
+  }
   if (isPersistentStorageSupported()) {
     try {
       const val = window.localStorage.getItem(key);
@@ -110,13 +113,14 @@ export function getSafeItem(key: string): string | null {
       // Fallback below
     }
   }
-  return inMemoryStore[key] ?? null;
+  return null;
 }
 
 export function setSafeItem(key: string, value: string): void {
   if (isPersistentStorageSupported()) {
     try {
       window.localStorage.setItem(key, value);
+      delete inMemoryStore[key];
       return;
     } catch {
       // Storage quota or restriction, keep in memory
@@ -126,6 +130,7 @@ export function setSafeItem(key: string, value: string): void {
 }
 
 export function removeSafeItem(key: string): void {
+  delete inMemoryStore[key];
   if (isPersistentStorageSupported()) {
     try {
       window.localStorage.removeItem(key);
@@ -133,7 +138,6 @@ export function removeSafeItem(key: string): void {
       // ignore
     }
   }
-  delete inMemoryStore[key];
 }
 
 // -------------------------------------------------------------
@@ -720,9 +724,19 @@ export function importStudyProgressJson(rawJson: string): ImportResult {
       for (const [id, val] of Object.entries(parsed.questions)) {
         if (val && typeof val === 'object') {
           const p = val as Record<string, unknown>;
+          const rawSeen = Number(p.timesSeen);
+          const rawCorrect = Number(p.timesCorrect);
+          if (rawSeen < 0 || rawCorrect < 0) {
+            return {
+              success: false,
+              error:
+                'Invalid question progress: attempt counters cannot be negative.',
+            };
+          }
           questions[id] = {
-            timesSeen: Number(p.timesSeen) || 0,
-            timesCorrect: Number(p.timesCorrect) || 0,
+            timesSeen: Number.isFinite(rawSeen) && rawSeen >= 0 ? rawSeen : 0,
+            timesCorrect:
+              Number.isFinite(rawCorrect) && rawCorrect >= 0 ? rawCorrect : 0,
             lastAttempted: Number(p.lastAttempted) || Date.now(),
             lastResult:
               p.lastResult === 'correct' || p.lastResult === 'incorrect'

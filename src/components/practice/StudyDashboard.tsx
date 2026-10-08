@@ -462,9 +462,15 @@ export default function StudyDashboard({
           </div>
           <button
             type="button"
-            onClick={() =>
-              onStartExam(lastStudied.mode, lastStudied.categoryId)
-            }
+            onClick={() => {
+              if (lastStudied.mode === 'weak_drill') {
+                handleStartWeakDrill();
+              } else if (lastStudied.mode === 'bookmarked_drill') {
+                handleStartBookmarkedDrill();
+              } else {
+                onStartExam(lastStudied.mode, lastStudied.categoryId);
+              }
+            }}
             className="inline-flex min-h-[42px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-xl border-2 border-slate-900 bg-white px-4 py-2 text-xs font-extrabold text-slate-900 shadow-2xs transition hover:bg-slate-900 hover:text-white active:scale-95 sm:text-sm"
           >
             <span>▶</span>

@@ -236,8 +236,31 @@ const postImportP1 = getQuestionProgress(testQ1.id);
 assert.equal(postImportP1.timesSeen, 3);
 assert.equal(postImportP1.timesCorrect, 0);
 assert.equal(getWeakQuestions(allQuestions)[0].question.id, testQ1.id);
+
+// Verify rejection of negative timesSeen or timesCorrect
+const badImportSeen = importStudyProgressJson(
+  JSON.stringify({
+    version: 1,
+    app: 'provisoire',
+    questions: {
+      [testQ1.id]: { timesSeen: -1, timesCorrect: 0 },
+    },
+  }),
+);
+assert.equal(badImportSeen.success, false);
+
+const badImportCorrect = importStudyProgressJson(
+  JSON.stringify({
+    version: 1,
+    app: 'provisoire',
+    questions: {
+      [testQ1.id]: { timesSeen: 2, timesCorrect: -3 },
+    },
+  }),
+);
+assert.equal(badImportCorrect.success, false);
 console.log(
-  '✔ Export and Import JSON perfectly preserved and restored study progress.',
+  '✔ Export and Import JSON perfectly preserved and restored study progress, rejecting negative counters.',
 );
 
 // 10. Test Graceful Degradation (Private Browsing / Blocked Storage)

@@ -75,6 +75,9 @@ export default function PracticeExam({
 
   const handleSelectAnswer = (optIdx: number) => {
     if (!currentQ) return;
+    const isAlreadyAnswered =
+      typeof state.answers[state.currentIndex] === 'number';
+
     dispatch({
       type: 'SELECT_ANSWER',
       payload: {
@@ -83,8 +86,8 @@ export default function PracticeExam({
       },
     });
 
-    // In immediate modes (practice, weak drill, bookmarked drill), record progress immediately
-    if (state.mode !== 'mock_exam') {
+    // In immediate modes (practice, weak drill, bookmarked drill), record progress immediately on first attempt only
+    if (state.mode !== 'mock_exam' && !isAlreadyAnswered) {
       const isCorrectChoice = optIdx === currentQ.correct_index;
       recordQuestionAttempt(currentQ.id, isCorrectChoice);
     }
