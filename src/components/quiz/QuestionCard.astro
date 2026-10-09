@@ -59,40 +59,44 @@ const categoryName = categoryLabel(q.category_id, lang);
   data-category-id={q.category_id}
   data-payload={questionPayload(q)}
 >
-  {
-    linked ? (
-      <a
-        href={href}
-        class="mb-2 flex items-center justify-between text-inherit no-underline"
+  <div class="mb-2 flex items-center justify-between">
+    {
+      linked ? (
+        <a
+          href={href}
+          class="text-xs font-semibold tracking-widest text-slate-400 uppercase no-underline hover:text-slate-600"
+        >
+          {String(number).padStart(2, '0')}
+        </a>
+      ) : (
+        <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
+          {String(number).padStart(2, '0')}
+        </span>
+      )
+    }
+
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="bookmark-toggle-btn inline-flex cursor-pointer items-center gap-1 rounded-full border border-stone-200 bg-stone-50 px-2 py-0.5 text-[10px] font-extrabold text-slate-600 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700"
+        data-bookmark-id={q.id}
+        title="Bookmark question"
+        aria-label="Bookmark question"
       >
-        <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
-          {String(number).padStart(2, '0')}
-        </span>
-        <span
-          class:list={[
-            'rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase',
-            isRoadSigns ? 'bg-sky-700' : 'bg-amber-700',
-          ]}
-        >
-          {categoryName}
-        </span>
-      </a>
-    ) : (
-      <div class="mb-2 flex items-center justify-between">
-        <span class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
-          {String(number).padStart(2, '0')}
-        </span>
-        <span
-          class:list={[
-            'rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase',
-            isRoadSigns ? 'bg-sky-700' : 'bg-amber-700',
-          ]}
-        >
-          {categoryName}
-        </span>
-      </div>
-    )
-  }
+        <span class="bookmark-icon">🔖</span>
+        <span class="bookmark-label hidden sm:inline">Save</span>
+      </button>
+
+      <span
+        class:list={[
+          'rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase',
+          isRoadSigns ? 'bg-sky-700' : 'bg-amber-700',
+        ]}
+      >
+        {categoryName}
+      </span>
+    </div>
+  </div>
 
   {
     q.image_url && (
@@ -184,3 +188,58 @@ const categoryName = categoryLabel(q.category_id, lang);
     lang={lang}
   />
 </li>
+
+<script>
+  import {
+    isQuestionBookmarked,
+    toggleQuestionBookmark,
+    EVENT_BOOKMARKS_CHANGED,
+  } from '../../lib/study-progress';
+
+  function syncBookmarkButtons() {
+    const buttons =
+      document.querySelectorAll<HTMLButtonElement>('[data-bookmark-id]');
+    buttons.forEach((btn) => {
+      const id = btn.getAttribute('data-bookmark-id');
+      if (!id) return;
+      const isBookmarked = isQuestionBookmarked(id);
+      btn.setAttribute('aria-pressed', isBookmarked ? 'true' : 'false');
+      const label = btn.querySelector('.bookmark-label');
+      if (isBookmarked) {
+        btn.classList.add('bg-sky-700', 'text-white', 'border-sky-700');
+        btn.classList.remove(
+          'bg-stone-50',
+          'text-slate-600',
+          'border-stone-200',
+        );
+        if (label) label.textContent = 'Saved';
+      } else {
+        btn.classList.remove('bg-sky-700', 'text-white', 'border-sky-700');
+        btn.classList.add('bg-stone-50', 'text-slate-600', 'border-stone-200');
+        if (label) label.textContent = 'Save';
+      }
+    });
+  }
+
+  function setupBookmarkListeners() {
+    document.addEventListener('click', (e) => {
+      const target = (e.target as HTMLElement).closest<HTMLButtonElement>(
+        '[data-bookmark-id]',
+      );
+      if (!target) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const id = target.getAttribute('data-bookmark-id');
+      if (!id) return;
+      toggleQuestionBookmark(id);
+      syncBookmarkButtons();
+    });
+
+    window.addEventListener(EVENT_BOOKMARKS_CHANGED, syncBookmarkButtons);
+  }
+
+  // Setup on initial run and page swaps
+  syncBookmarkButtons();
+  setupBookmarkListeners();
+  document.addEventListener('astro:page-load', syncBookmarkButtons);
+</script>

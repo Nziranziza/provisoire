@@ -1,4 +1,10 @@
-import { useState, useRef, type Dispatch, type TouchEvent } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  type Dispatch,
+  type TouchEvent,
+} from 'react';
 import type { I18nDictionary } from './constants';
 import { EXAM_CONFIG } from './constants';
 import { clearSessionFromStorage } from './storage';
@@ -6,6 +12,12 @@ import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState } from './types';
 import { categoryLabel } from '../../lib/quiz';
 import { questionImageAlt } from '../../lib/seo';
+import {
+  isQuestionBookmarked,
+  toggleQuestionBookmark,
+  recordQuestionAttempt,
+  EVENT_BOOKMARKS_CHANGED,
+} from '../../lib/study-progress';
 
 interface PracticeExamProps {
   state: PracticeState;
@@ -26,6 +38,61 @@ export default function PracticeExam({
   );
 
   const currentQ = state.sessionQuestions[state.currentIndex];
+  const [isBookmarked, setIsBookmarked] = useState(() =>
+    currentQ ? isQuestionBookmarked(currentQ.id) : false,
+  );
+
+  useEffect(() => {
+    if (currentQ) {
+      setIsBookmarked(isQuestionBookmarked(currentQ.id));
+    }
+  }, [currentQ]);
+
+  useEffect(() => {
+    const handleBookmarkEvent = () => {
+      if (currentQ) {
+        setIsBookmarked(isQuestionBookmarked(currentQ.id));
+      }
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener(EVENT_BOOKMARKS_CHANGED, handleBookmarkEvent);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener(
+          EVENT_BOOKMARKS_CHANGED,
+          handleBookmarkEvent,
+        );
+      }
+    };
+  }, [currentQ]);
+
+  const handleToggleBookmark = () => {
+    if (!currentQ) return;
+    const next = toggleQuestionBookmark(currentQ.id);
+    setIsBookmarked(next);
+  };
+
+  const handleSelectAnswer = (optIdx: number) => {
+    if (!currentQ) return;
+    const isAlreadyAnswered =
+      typeof state.answers[state.currentIndex] === 'number';
+
+    dispatch({
+      type: 'SELECT_ANSWER',
+      payload: {
+        questionIndex: state.currentIndex,
+        optionIndex: optIdx,
+      },
+    });
+
+    // In immediate modes (practice, weak drill, bookmarked drill), record progress immediately on first attempt only
+    if (state.mode !== 'mock_exam' && !isAlreadyAnswered) {
+      const isCorrectChoice = optIdx === currentQ.correct_index;
+      recordQuestionAttempt(currentQ.id, isCorrectChoice);
+    }
+  };
+
   if (!currentQ) return null;
 
   const totalQuestions = state.sessionQuestions.length;
@@ -111,6 +178,20 @@ export default function PracticeExam({
           <span>{t.bankBtn}</span>
         </a>
       </div>
+
+      {/* Mode Special Drill Banner */}
+      {state.mode === 'weak_drill' && (
+        <div className="flex items-center gap-2 rounded-2xl border-2 border-rose-400 bg-rose-50/90 px-4 py-2.5 text-xs font-extrabold text-rose-950 shadow-2xs">
+          <span className="text-base">🎯</span>
+          <span>{t.weakDrillTitle} — Focused revision of missed questions</span>
+        </div>
+      )}
+      {state.mode === 'bookmarked_drill' && (
+        <div className="flex items-center gap-2 rounded-2xl border-2 border-sky-400 bg-sky-50/90 px-4 py-2.5 text-xs font-extrabold text-sky-950 shadow-2xs">
+          <span className="text-base">🔖</span>
+          <span>{t.bookmarksTitle} — Practicing saved questions</span>
+        </div>
+      )}
 
       {/* 1. Header Bar (Progress, Category, Timer, Language & Grid) */}
       <header className="rounded-2xl border border-stone-200 bg-white p-3 shadow-xs sm:p-3.5">
@@ -241,13 +322,31 @@ export default function PracticeExam({
           <span className="text-xs font-black tracking-widest text-slate-400 uppercase">
             {String(state.currentIndex + 1).padStart(2, '0')} / {totalQuestions}
           </span>
-          <span
-            className={`rounded-full px-2.5 py-0.5 text-[10px] font-black tracking-wide text-white uppercase shadow-2xs ${
-              isRoadSigns ? 'bg-sky-700' : 'bg-amber-700'
-            }`}
-          >
-            {categoryLabel(currentQ.category_id, state.currentLocale)}
-          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleToggleBookmark}
+              className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold shadow-2xs transition ${
+                isBookmarked
+                  ? 'bg-sky-700 text-white hover:bg-sky-800'
+                  : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-100'
+              }`}
+              title={isBookmarked ? t.bookmarkedBtn : t.bookmarkBtn}
+              aria-pressed={isBookmarked}
+            >
+              <span>{isBookmarked ? '🔖' : '🏷️'}</span>
+              <span className="hidden sm:inline">
+                {isBookmarked ? t.bookmarkedBtn : t.bookmarkBtn}
+              </span>
+            </button>
+            <span
+              className={`rounded-full px-2.5 py-0.5 text-[10px] font-black tracking-wide text-white uppercase shadow-2xs ${
+                isRoadSigns ? 'bg-sky-700' : 'bg-amber-700'
+              }`}
+            >
+              {categoryLabel(currentQ.category_id, state.currentLocale)}
+            </span>
+          </div>
         </div>
 
         {/* Question Image if present */}
@@ -311,15 +410,7 @@ export default function PracticeExam({
                     type="button"
                     role="radio"
                     aria-checked={isSelected}
-                    onClick={() =>
-                      dispatch({
-                        type: 'SELECT_ANSWER',
-                        payload: {
-                          questionIndex: state.currentIndex,
-                          optionIndex: optIdx,
-                        },
-                      })
-                    }
+                    onClick={() => handleSelectAnswer(optIdx)}
                     className={`group flex min-h-[58px] w-full cursor-pointer touch-manipulation items-start gap-3.5 rounded-2xl border-2 px-4 py-3.5 text-left transition-all duration-150 active:scale-[0.99] sm:min-h-[62px] ${optionStyle}`}
                   >
                     <span
@@ -353,15 +444,7 @@ export default function PracticeExam({
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  onClick={() =>
-                    dispatch({
-                      type: 'SELECT_ANSWER',
-                      payload: {
-                        questionIndex: state.currentIndex,
-                        optionIndex: optIdx,
-                      },
-                    })
-                  }
+                  onClick={() => handleSelectAnswer(optIdx)}
                   className={`group flex min-h-[58px] w-full cursor-pointer touch-manipulation items-start gap-3.5 rounded-2xl border-2 px-4 py-3.5 text-left transition-all duration-150 active:scale-[0.99] sm:min-h-[62px] ${
                     isSelected
                       ? 'border-blue-700 bg-blue-50/90 text-slate-950 shadow-sm ring-2 ring-blue-700/20'

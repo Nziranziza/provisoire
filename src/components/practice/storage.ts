@@ -1,11 +1,15 @@
 import type { PastResult, SavedSession } from './types';
 import { STORAGE_KEY_HISTORY, STORAGE_KEY_SESSION } from './constants';
 import { enqueueOfflineAction, isOnline } from '../../lib/pwa';
+import {
+  getSafeItem,
+  setSafeItem,
+  removeSafeItem,
+} from '../../lib/study-progress';
 
 export function loadHistoryFromStorage(): PastResult[] {
   try {
-    if (typeof window === 'undefined') return [];
-    const saved = localStorage.getItem(STORAGE_KEY_HISTORY);
+    const saved = getSafeItem(STORAGE_KEY_HISTORY);
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed)) {
@@ -20,8 +24,7 @@ export function loadHistoryFromStorage(): PastResult[] {
 
 export function loadSessionFromStorage(): SavedSession | null {
   try {
-    if (typeof window === 'undefined') return null;
-    const saved = localStorage.getItem(STORAGE_KEY_SESSION);
+    const saved = getSafeItem(STORAGE_KEY_SESSION);
     if (saved) {
       const parsed = JSON.parse(saved) as SavedSession;
       if (
@@ -40,9 +43,8 @@ export function loadSessionFromStorage(): SavedSession | null {
 
 export function saveSessionToStorage(session: SavedSession): void {
   try {
-    if (typeof window === 'undefined') return;
     const serialized = JSON.stringify(session);
-    localStorage.setItem(STORAGE_KEY_SESSION, serialized);
+    setSafeItem(STORAGE_KEY_SESSION, serialized);
     if (!isOnline()) {
       enqueueOfflineAction('SAVE_SESSION', serialized);
     }
@@ -55,8 +57,7 @@ export function saveSessionToStorage(session: SavedSession): void {
 
 export function clearSessionFromStorage(): void {
   try {
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem(STORAGE_KEY_SESSION);
+    removeSafeItem(STORAGE_KEY_SESSION);
     if (!isOnline()) {
       enqueueOfflineAction('CLEAR_SESSION');
     }
@@ -69,9 +70,8 @@ export function clearSessionFromStorage(): void {
 
 export function saveHistoryToStorage(history: PastResult[]): void {
   try {
-    if (typeof window === 'undefined') return;
     const serialized = JSON.stringify(history);
-    localStorage.setItem(STORAGE_KEY_HISTORY, serialized);
+    setSafeItem(STORAGE_KEY_HISTORY, serialized);
     if (!isOnline()) {
       enqueueOfflineAction('SAVE_HISTORY', serialized);
     }
@@ -84,8 +84,7 @@ export function saveHistoryToStorage(history: PastResult[]): void {
 
 export function clearHistoryFromStorage(): void {
   try {
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem(STORAGE_KEY_HISTORY);
+    removeSafeItem(STORAGE_KEY_HISTORY);
   } catch {
     // ignore
   }

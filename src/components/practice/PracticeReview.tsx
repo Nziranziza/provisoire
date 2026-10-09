@@ -1,4 +1,4 @@
-import { useMemo, type Dispatch } from 'react';
+import { useMemo, useState, useEffect, type Dispatch } from 'react';
 import type { I18nDictionary } from './constants';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
@@ -8,6 +8,13 @@ import InstallAppPrompt from '../InstallAppPrompt';
 import ShareResultCard from './ShareResultCard';
 import { categoryLabel } from '../../lib/quiz';
 import { questionImageAlt } from '../../lib/seo';
+import {
+  isQuestionBookmarked,
+  toggleQuestionBookmark,
+  getQuestionProgress,
+  deriveMasteryStatus,
+  EVENT_BOOKMARKS_CHANGED,
+} from '../../lib/study-progress';
 
 interface PracticeReviewProps {
   state: PracticeState;
@@ -24,6 +31,46 @@ export default function PracticeReview({
   imageBase,
   onRetake,
 }: PracticeReviewProps) {
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(() => {
+    return new Set(
+      state.sessionQuestions
+        .map((q) => q.id)
+        .filter((id) => isQuestionBookmarked(id)),
+    );
+  });
+
+  useEffect(() => {
+    const handleBookmarkEvent = () => {
+      setBookmarkedIds(
+        new Set(
+          state.sessionQuestions
+            .map((q) => q.id)
+            .filter((id) => isQuestionBookmarked(id)),
+        ),
+      );
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener(EVENT_BOOKMARKS_CHANGED, handleBookmarkEvent);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener(
+          EVENT_BOOKMARKS_CHANGED,
+          handleBookmarkEvent,
+        );
+      }
+    };
+  }, [state.sessionQuestions]);
+
+  const handleToggleBookmark = (questionId: string) => {
+    const next = toggleQuestionBookmark(questionId);
+    setBookmarkedIds((prev) => {
+      const copy = new Set(prev);
+      if (next) copy.add(questionId);
+      else copy.delete(questionId);
+      return copy;
+    });
+  };
   let totalScore = 0;
   let rulesScore = 0;
   let rulesTotal = 0;
@@ -58,7 +105,10 @@ export default function PracticeReview({
       signsScore,
       signsTotal,
       timeSpent: state.timeSpent,
-      mode: state.mode,
+      mode:
+        state.mode === 'mock_exam'
+          ? ('mock_exam' as const)
+          : ('practice' as const),
       locale: state.currentLocale,
     }),
     [
@@ -276,6 +326,9 @@ export default function PracticeReview({
               const title = tr?.question || 'Question';
               const opts = tr?.options || [];
               const explanation = tr?.explanation;
+              const isBookmarked = bookmarkedIds.has(q.id);
+              const p = getQuestionProgress(q.id);
+              const status = deriveMasteryStatus(p);
 
               return (
                 <div
@@ -286,8 +339,8 @@ export default function PracticeReview({
                       : 'border-stone-200 border-l-rose-600'
                   }`}
                 >
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs font-bold text-slate-400 uppercase">
                         Q{idx + 1}
                       </span>
@@ -307,15 +360,48 @@ export default function PracticeReview({
                           ⚑ {t.flaggedDuringTest}
                         </span>
                       )}
+                      {status === 'mastered' && (
+                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-black text-emerald-800 uppercase">
+                          🟢 {t.mastered}
+                        </span>
+                      )}
+                      {status === 'weak' && (
+                        <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-black text-rose-800 uppercase">
+                          🔴 {t.weak}
+                        </span>
+                      )}
+                      {status === 'learning' && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black text-amber-800 uppercase">
+                          🟡 {t.learning}
+                        </span>
+                      )}
                     </div>
 
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase ${
-                        q.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
-                      }`}
-                    >
-                      {categoryLabel(q.category_id, state.currentLocale)}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleBookmark(q.id)}
+                        className={`inline-flex cursor-pointer items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-extrabold shadow-2xs transition ${
+                          isBookmarked
+                            ? 'bg-sky-700 text-white hover:bg-sky-800'
+                            : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-100'
+                        }`}
+                        title={isBookmarked ? t.bookmarkedBtn : t.bookmarkBtn}
+                      >
+                        <span>{isBookmarked ? '🔖' : '🏷️'}</span>
+                        <span className="hidden sm:inline">
+                          {isBookmarked ? t.bookmarkedBtn : t.bookmarkBtn}
+                        </span>
+                      </button>
+
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase ${
+                          q.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
+                        }`}
+                      >
+                        {categoryLabel(q.category_id, state.currentLocale)}
+                      </span>
+                    </div>
                   </div>
 
                   {q.image_url && (
