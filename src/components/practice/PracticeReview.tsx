@@ -411,7 +411,7 @@ export default function PracticeReview({
                 return (
                   <div
                     key={q.id}
-                    className={`group rounded-2xl border border-stone-200 border-l-4 bg-white p-3.5 shadow-2xs transition sm:p-4 ${
+                    className={`group rounded-2xl border border-l-4 border-stone-200 bg-white p-3.5 shadow-2xs transition sm:p-4 ${
                       isAnsCorrect
                         ? 'border-l-emerald-600 hover:bg-emerald-50/30'
                         : 'border-l-rose-600 hover:bg-rose-50/30'
