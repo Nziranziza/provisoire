@@ -162,6 +162,13 @@ export const I18N = {
     bankLink: 'View in question bank →',
     retakeBtn: `Take New ${EXAM_CONFIG.TOTAL_QUESTIONS}-Question Session`,
     retakeMissedBtn: 'Practice Missed Questions Only',
+    retryWrongOnly: 'Retry Wrong Only',
+    showDetails: 'Show details',
+    hideDetails: 'Hide details',
+    expandAll: 'Expand all',
+    collapseAll: 'Collapse all',
+    collapsedNotice:
+      'Correct answers are collapsed by default to focus on mistakes.',
     bankBtn: 'Back to Questions Bank',
     keyboardTips:
       'Shortcuts: [1-4]/[A-D] Select · [←/→] Navigate · [S] Skip · [F] Flag · [U] Next Unanswered',
@@ -346,6 +353,13 @@ export const I18N = {
     bankLink: 'Voir dans la banque de questions →',
     retakeBtn: `Nouvelle session de ${EXAM_CONFIG.TOTAL_QUESTIONS} questions`,
     retakeMissedBtn: 'Revoir uniquement les erreurs',
+    retryWrongOnly: 'Revoir uniquement les erreurs',
+    showDetails: 'Afficher les détails',
+    hideDetails: 'Masquer les détails',
+    expandAll: 'Tout développer',
+    collapseAll: 'Tout réduire',
+    collapsedNotice:
+      'Les bonnes réponses sont réduites par défaut pour vous concentrer sur vos erreurs.',
     bankBtn: 'Retour aux questions',
     keyboardTips:
       'Raccourcis : [1-4]/[A-D] Choisir · [←/→] Naviguer · [S] Passer · [F] Marquer · [U] Non répondue',
@@ -529,6 +543,13 @@ export const I18N = {
     bankLink: 'Reba mu bubiko bw’ibibazo byose →',
     retakeBtn: `Kora indi myitozo y’ibibazo ${EXAM_CONFIG.TOTAL_QUESTIONS}`,
     retakeMissedBtn: 'Subiramo ibyo wishe gusa',
+    retryWrongOnly: 'Subiramo ibyo wishe gusa',
+    showDetails: 'Kugaragaza ibisobanuro',
+    hideDetails: 'Guhisha ibisobanuro',
+    expandAll: 'Kugaragaza byose',
+    collapseAll: 'Guhisha byose',
+    collapsedNotice:
+      'Ibisubizo by’ukuri bihishwe by’agateganyo kugira ngo wibande ku makosa yonyine.',
     bankBtn: 'Subira ku bibazo byose',
     keyboardTips:
       'Uburyo bworoshye: [1-4]/[A-D] Guhitamo · [←/→] Kugenda · [S] Gusimbuka · [F] Gushyiraho ikimenyetso · [U] Ikitasubizwa',
