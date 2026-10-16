@@ -6,7 +6,7 @@ import { PASSING_SCORE, EXAM_CONFIG } from './constants';
 import { clearSessionFromStorage } from './storage';
 import InstallAppPrompt from '../InstallAppPrompt';
 import ShareResultCard from './ShareResultCard';
-import { categoryLabel } from '../../lib/quiz';
+import { categoryLabel, questionExplanation } from '../../lib/quiz';
 import { questionImageAlt } from '../../lib/seo';
 import {
   isQuestionBookmarked,
@@ -214,8 +214,8 @@ export default function PracticeReview({
                 ? t.resultPassedDesc
                 : t.resultFailedDesc
               : isPassed
-                ? `${t.historyPassed}: ${totalScore}/${totalQuestions} (${scorePercent}%)`
-                : `${t.historyFailed}: ${totalScore}/${totalQuestions} (${scorePercent}%). Pass mark: ${passThreshold}/${totalQuestions} (${EXAM_CONFIG.PASSING_PERCENTAGE}%).`}
+                ? `${t.historyPassed}: ${totalScore}/${totalQuestions} (${scorePercent}%). ${t.passMarkLabel}: ${passThreshold}/${totalQuestions} (${EXAM_CONFIG.PASSING_PERCENTAGE}%).`
+                : `${t.historyFailed}: ${totalScore}/${totalQuestions} (${scorePercent}%). ${t.passMarkLabel}: ${passThreshold}/${totalQuestions} (${EXAM_CONFIG.PASSING_PERCENTAGE}%).`}
           </p>
 
           {/* Big Score Display */}
@@ -399,30 +399,41 @@ export default function PracticeReview({
                 q.translations.en;
               const title = tr?.question || 'Question';
               const opts = tr?.options || [];
-              const explanation =
-                tr?.explanation ||
-                q.translations.rw?.explanation ||
-                q.translations.en?.explanation;
+              const explanation = questionExplanation(q, state.currentLocale);
               const isBookmarked = bookmarkedIds.has(q.id);
               const p = getQuestionProgress(q.id);
               const status = deriveMasteryStatus(p);
               const isExpanded = expandedIds.has(q.id);
               const questionUrl = `/${state.currentLocale}/questions/${q.bankIndex + 1}`;
 
-              // 1. Collapsed State for Correct Answers (focused on what needs work)
-              if (isAnsCorrect && !isExpanded) {
+              // 1. Collapsed State (when question ID is absent from expandedIds)
+              if (!isExpanded) {
                 return (
                   <div
                     key={q.id}
-                    className="group rounded-2xl border border-l-4 border-stone-200 border-l-emerald-600 bg-white p-3.5 shadow-2xs transition hover:bg-emerald-50/30 sm:p-4"
+                    className={`group rounded-2xl border border-stone-200 border-l-4 bg-white p-3.5 shadow-2xs transition sm:p-4 ${
+                      isAnsCorrect
+                        ? 'border-l-emerald-600 hover:bg-emerald-50/30'
+                        : 'border-l-rose-600 hover:bg-rose-50/30'
+                    }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2.5">
                       <div className="flex min-w-0 flex-1 items-center gap-2.5">
                         <span className="text-xs font-bold text-slate-400 uppercase">
                           Q{idx + 1}
                         </span>
-                        <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-black text-emerald-800 uppercase">
-                          ✓ {t.historyPassed}
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-black uppercase ${
+                            isAnsCorrect
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-rose-100 text-rose-800'
+                          }`}
+                        >
+                          {isAnsCorrect
+                            ? `✓ ${t.historyPassed}`
+                            : isAns
+                              ? `✗ ${t.historyFailed}`
+                              : `○ ${t.noAnswer}`}
                         </span>
                         <a
                           href={questionUrl}
@@ -530,17 +541,15 @@ export default function PracticeReview({
                         {categoryLabel(q.category_id, state.currentLocale)}
                       </span>
 
-                      {isAnsCorrect && (
-                        <button
-                          type="button"
-                          onClick={() => handleToggleExpand(q.id)}
-                          aria-expanded={true}
-                          className="inline-flex min-h-[30px] cursor-pointer touch-manipulation items-center gap-1 rounded-lg border border-stone-300 bg-stone-50 px-2 py-0.5 text-[11px] font-bold text-slate-700 transition hover:bg-stone-200 active:scale-95"
-                        >
-                          <span>{t.hideDetails}</span>
-                          <span>▴</span>
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleExpand(q.id)}
+                        aria-expanded={true}
+                        className="inline-flex min-h-[30px] cursor-pointer touch-manipulation items-center gap-1 rounded-lg border border-stone-300 bg-stone-50 px-2 py-0.5 text-[11px] font-bold text-slate-700 transition hover:bg-stone-200 active:scale-95"
+                      >
+                        <span>{t.hideDetails}</span>
+                        <span>▴</span>
+                      </button>
                     </div>
                   </div>
 
