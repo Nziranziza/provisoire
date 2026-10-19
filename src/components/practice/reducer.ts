@@ -1,25 +1,25 @@
-import type { Lang, Question } from '../../lib/quiz';
+import type { Lang, Question } from '../../lib/quiz.ts';
 import type {
   ExamMode,
   PastResult,
   PracticeAction,
   PracticeState,
   SessionQuestion,
-} from './types';
+} from './types.ts';
 import {
   DEFAULT_TOTAL_QUESTIONS,
   EXAM_CONFIG,
   EXAM_DURATION_SECONDS,
   STORAGE_KEY_SKIP_AUTO_RESTORE,
   PASSING_SCORE,
-} from './constants';
+} from './constants.ts';
 import {
   clearHistoryFromStorage,
   clearSessionFromStorage,
   saveHistoryToStorage,
   saveSessionToStorage,
-} from './storage';
-import { recordQuestionAttempt } from '../../lib/study-progress';
+} from './storage.ts';
+import { recordQuestionAttempt } from '../../lib/study-progress.ts';
 
 /** Randomly samples 20 questions, optionally restricted to a specific category */
 export function sampleQuestions(
@@ -99,7 +99,14 @@ export function calculateFinishState(
     }
   });
 
-  const passed = score >= PASSING_SCORE;
+  const passThreshold =
+    state.sessionQuestions.length >= EXAM_CONFIG.TOTAL_QUESTIONS
+      ? PASSING_SCORE
+      : Math.ceil(
+          state.sessionQuestions.length *
+            (EXAM_CONFIG.PASSING_PERCENTAGE / 100),
+        );
+  const passed = score >= passThreshold;
   const isMock =
     state.mode === 'mock_exam' || (state.mode as string) === 'timed';
 

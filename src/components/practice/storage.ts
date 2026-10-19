@@ -1,11 +1,11 @@
-import type { PastResult, SavedSession } from './types';
-import { STORAGE_KEY_HISTORY, STORAGE_KEY_SESSION } from './constants';
-import { enqueueOfflineAction, isOnline } from '../../lib/pwa';
+import type { PastResult, SavedSession } from './types.ts';
+import { STORAGE_KEY_HISTORY, STORAGE_KEY_SESSION } from './constants.ts';
+import { enqueueOfflineAction, isOnline } from '../../lib/pwa.ts';
 import {
   getSafeItem,
   setSafeItem,
   removeSafeItem,
-} from '../../lib/study-progress';
+} from '../../lib/study-progress.ts';
 
 export function loadHistoryFromStorage(): PastResult[] {
   try {

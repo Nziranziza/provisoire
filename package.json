@@ -25,6 +25,7 @@
     "verify:share-og": "node --experimental-strip-types scripts/verify-share-and-og.mjs",
     "verify:study-progress": "node --experimental-strip-types scripts/verify-study-progress.mjs",
     "verify:study": "npm run verify:study-progress",
+    "verify:wrong-review": "node --experimental-strip-types scripts/verify-wrong-answer-review.mjs",
     "verify:deploy": "node scripts/verify-deployment.mjs"
   },
   "dependencies": {

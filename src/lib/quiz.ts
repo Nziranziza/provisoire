@@ -68,7 +68,17 @@ export function correctAnswerText(q: Question, lang: Lang): string {
 
 export function questionExplanation(q: Question, lang: Lang): string {
   const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
-  return t?.explanation ?? '';
+  if (t?.explanation && t.explanation.trim()) {
+    return t.explanation.trim();
+  }
+  const ans = correctAnswerText(q, lang);
+  if (lang === 'rw') {
+    return `Igisubizo cy’ukuri ni "${ans}". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda, iri tegeko rishyirwaho kugira ngo umutekano n’ituze mu muhanda byubahirizwe.`;
+  }
+  if (lang === 'fr') {
+    return `La réponse légale correcte est « ${ans} ». Conformément au code de la route rwandais, cette prescription garantit la sécurité et la fluidité de la circulation.`;
+  }
+  return `The legally correct answer is "${ans}". Under Rwandan traffic regulations, this standard applies to ensure safety, order, and predictable vehicle operation.`;
 }
 
 export const ANSWER_LABEL: Record<Lang, string> = {
