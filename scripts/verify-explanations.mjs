@@ -10,6 +10,7 @@
  */
 
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,14 +31,15 @@ console.log(
 const rootQuestionsTs = path.join(root, 'lib', 'questions.ts');
 const srcQuestionsTs = path.join(root, 'src', 'lib', 'questions.ts');
 
-assert(fs.existsSync(rootQuestionsTs), 'lib/questions.ts must exist');
-assert(fs.existsSync(srcQuestionsTs), 'src/lib/questions.ts must exist');
-
-const srcQuestionsContent = fs.readFileSync(srcQuestionsTs, 'utf8');
-assert(
-  /explanation\?:\s*string\s*\|\s*null/.test(srcQuestionsContent),
-  'src/lib/questions.ts must define explanation as optional and nullable (explanation?: string | null)',
-);
+for (const file of [rootQuestionsTs, srcQuestionsTs]) {
+  const relPath = path.relative(root, file);
+  assert(fs.existsSync(file), `${relPath} must exist`);
+  const content = fs.readFileSync(file, 'utf8');
+  assert(
+    /explanation\?:\s*string\s*\|\s*null/.test(content),
+    `${relPath} must define explanation as optional and nullable (explanation?: string | null)`,
+  );
+}
 console.log(
   '✔ Types in lib/questions.ts & src/lib/questions.ts support explanation?: string | null.',
 );
@@ -239,9 +241,11 @@ console.log(
 console.log(
   '\n4. Verifying draft-explanations.mjs generator & review outputs...',
 );
-const questionsJsonMtimeBefore = fs.statSync(
-  path.join(root, 'questions.json'),
-).mtimeMs;
+const questionsJsonPath = path.join(root, 'questions.json');
+const questionsJsonMtimeBefore = fs.statSync(questionsJsonPath).mtimeMs;
+
+const questionBankData = JSON.parse(fs.readFileSync(questionsJsonPath, 'utf8'));
+const expectedQuestionCount = questionBankData.questions.length;
 
 const { generateDraftExplanation } = await import('./draft-explanations.mjs');
 const sampleQ = validWithExpl.questions[0];
@@ -260,51 +264,86 @@ assert(
   'Draft RW must be substantial 2-4 sentences',
 );
 
-// Verify review files exist
-const jsonReviewFile = path.join(root, 'draft-explanations-review.json');
-const mdReviewFile = path.join(root, 'draft-explanations-review.md');
+// 4a. Verify drafting CLI invocation using temporary paths
+const draftingScriptPath = path.join(root, 'scripts', 'draft-explanations.mjs');
+const tempJsonPath = path.join(
+  root,
+  `draft-explanations-temp-${Date.now()}.json`,
+);
+const tempMdPath = path.join(root, `draft-explanations-temp-${Date.now()}.md`);
 
-assert(
-  fs.existsSync(jsonReviewFile),
-  'draft-explanations-review.json must exist',
-);
-assert(fs.existsSync(mdReviewFile), 'draft-explanations-review.md must exist');
+try {
+  execFileSync(
+    process.execPath,
+    [draftingScriptPath, '--output', tempJsonPath, '--md-output', tempMdPath],
+    { stdio: 'pipe' },
+  );
 
-const jsonReview = JSON.parse(fs.readFileSync(jsonReviewFile, 'utf8'));
-assert(jsonReview.metadata, 'JSON review must have metadata');
-assert(
-  jsonReview.metadata.warning,
-  'JSON review must include human review warning',
-);
-assert(
-  Array.isArray(jsonReview.drafts),
-  'JSON review must contain drafts array',
-);
-assert.equal(
-  jsonReview.drafts.length,
-  198,
-  'Drafts array must contain 198 items',
-);
+  assert(fs.existsSync(tempJsonPath), 'Temporary JSON review file must exist');
+  assert(
+    fs.existsSync(tempMdPath),
+    'Temporary Markdown review file must exist',
+  );
 
-const mdReview = fs.readFileSync(mdReviewFile, 'utf8');
-assert(
-  mdReview.includes('Human Review Required Before Merge'),
-  'Markdown review must have prominent warning',
-);
-assert(
-  mdReview.includes('Question #1'),
-  'Markdown review must include Question #1',
-);
+  const jsonReview = JSON.parse(fs.readFileSync(tempJsonPath, 'utf8'));
+  assert(jsonReview.metadata, 'JSON review must have metadata');
+  assert(
+    jsonReview.metadata.warning,
+    'JSON review must include human review warning',
+  );
+  assert(
+    Array.isArray(jsonReview.drafts),
+    'JSON review must contain drafts array',
+  );
+  assert.equal(
+    jsonReview.drafts.length,
+    expectedQuestionCount,
+    `Drafts array must contain ${expectedQuestionCount} items`,
+  );
 
-// Verify questions.json was NOT modified by drafting
-const questionsJsonMtimeAfter = fs.statSync(
-  path.join(root, 'questions.json'),
-).mtimeMs;
+  const mdReview = fs.readFileSync(tempMdPath, 'utf8');
+  assert(
+    mdReview.includes('Human Review Required Before Merge'),
+    'Markdown review must have prominent warning',
+  );
+  assert(
+    mdReview.includes('Question #1'),
+    'Markdown review must include Question #1',
+  );
+} finally {
+  if (fs.existsSync(tempJsonPath)) fs.unlinkSync(tempJsonPath);
+  if (fs.existsSync(tempMdPath)) fs.unlinkSync(tempMdPath);
+}
+
+// 4b. Verify safety check: drafting CLI must reject questions.json as output path
+assert.throws(() => {
+  execFileSync(
+    process.execPath,
+    [draftingScriptPath, '--output', questionsJsonPath],
+    { stdio: 'pipe' },
+  );
+}, 'draft-explanations.mjs must reject overwriting questions.json');
+
+// 4c. Verify questions.json was NOT modified by drafting
+const questionsJsonMtimeAfter = fs.statSync(questionsJsonPath).mtimeMs;
 assert.equal(
   questionsJsonMtimeBefore,
   questionsJsonMtimeAfter,
   'questions.json must not be modified by the drafting script',
 );
+
+// 4d. Verify default review files exist
+const defaultJsonReviewFile = path.join(root, 'draft-explanations-review.json');
+const defaultMdReviewFile = path.join(root, 'draft-explanations-review.md');
+assert(
+  fs.existsSync(defaultJsonReviewFile),
+  'draft-explanations-review.json must exist',
+);
+assert(
+  fs.existsSync(defaultMdReviewFile),
+  'draft-explanations-review.md must exist',
+);
+
 console.log(
   '✔ draft-explanations.mjs produces reviewable output in JSON and Markdown without modifying questions.json.',
 );

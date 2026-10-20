@@ -115,7 +115,29 @@ export function generateDraftExplanation(q, signLookup = new Map()) {
     };
   }
 
-  // 3. Category 1: Traffic Rules & Regulations
+  const isNoneAnswer =
+    /none of the answers/i.test(enAns) ||
+    /aucune des réponses/i.test(frAns) ||
+    /nta gisubizo/i.test(rwAns);
+
+  // 3. Special handling for "None of the answers is correct"
+  if (isNoneAnswer) {
+    if (catId === 2) {
+      return {
+        en: `Regarding the road sign question "${enQ}", none of the provided choices accurately represent the official signal rule under the Rwandan Highway Code. Therefore, "${enAns}" is the correct option, as the legal signage standard designates a different regulatory meaning or required driver action.`,
+        fr: `Concernant la question de signalisation « ${frQ} », aucun des choix proposés ne correspond à la signification officielle selon le code de la route rwandais. La bonne réponse est donc « ${frAns} », la réglementation fixant une prescription ou un comportement différent.`,
+        rw: `Ku kibazo kirebana n’icyapa cyangwa ikimenyetso kigira giti "${rwQ}", nta na kimwe mu mahitamo yatanzwe gisobanura neza icyo icyapa gitegeka hakurikijwe amategeko y’umuhanda mu Rwanda. Bityo, igisubizo cy’ukuri ni "${rwAns}", kuko amategeko ateganya ibindi bimenyetso cyangwa amabwiriza atandukanye n’ibyo byavuzwe.`,
+      };
+    }
+
+    return {
+      en: `Regarding the legal requirement for "${enQ}", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "${enAns}" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.`,
+      fr: `Concernant la prescription légale relative à « ${frQ} », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « ${frAns} », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.`,
+      rw: `Kuri iri tegeko rigenga "${rwQ}", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "${rwAns}", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.`,
+    };
+  }
+
+  // 4. Category 1: Traffic Rules & Regulations standard
   return {
     en: `Regarding the legal requirement for "${enQ}", the official traffic rule mandates "${enAns}". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.`,
     fr: `Concernant la prescription légale relative à « ${frQ} », la règle de circulation officielle prescrit « ${frAns} ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.`,
@@ -192,6 +214,17 @@ Options:
     mdOutIndex !== -1 && args[mdOutIndex + 1]
       ? path.resolve(root, args[mdOutIndex + 1])
       : DEFAULT_MD_OUTPUT;
+
+  const resolvedQuestionsPath = path.resolve(questionsPath).toLowerCase();
+  if (
+    path.resolve(jsonOutputPath).toLowerCase() === resolvedQuestionsPath ||
+    path.resolve(mdOutputPath).toLowerCase() === resolvedQuestionsPath
+  ) {
+    console.error(
+      `[ERROR] Refusing to overwrite questions bank file: review output path cannot be ${questionsPath}`,
+    );
+    process.exit(1);
+  }
 
   const limitIndex = args.indexOf('--limit');
   const limit =

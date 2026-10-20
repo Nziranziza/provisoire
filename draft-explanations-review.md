@@ -23,7 +23,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "Borders of the public highway or the roadway must be signaled by reflectors. These devices must be so set up to let users see them in the following manner:", the official traffic rule mandates "None of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "Borders of the public highway or the roadway must be signaled by reflectors. These devices must be so set up to let users see them in the following manner:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -33,7 +33,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Les bords de la voie publique ou de la chaussée peuvent être signalés par des dispositifs réfléchissants. Ces dispositifs doivent être placés de manière que les usagers les voient de façon suivante: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Les bords de la voie publique ou de la chaussée peuvent être signalés par des dispositifs réfléchissants. Ces dispositifs doivent être placés de manière que les usagers les voient de façon suivante: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -43,7 +43,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Inkombe z’inzira nyabagendwa cyangwa z’umuhanda zishobora kugaragazwa n’ibikoresho ngarurarumuri. Ibyo bikoresho bigomba gushyirwaho ku buryo abagenzi babibona :", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Inkombe z’inzira nyabagendwa cyangwa z’umuhanda zishobora kugaragazwa n’ibikoresho ngarurarumuri. Ibyo bikoresho bigomba gushyirwaho ku buryo abagenzi babibona :", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -175,7 +175,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "When lighting of the vehicle is required if the loading projects beyond the back edge of the vehicle by more than one meter, the most accented protrusion must be signaled by:", the official traffic rule mandates "none of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "When lighting of the vehicle is required if the loading projects beyond the back edge of the vehicle by more than one meter, the most accented protrusion must be signaled by:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "none of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -185,7 +185,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Lorsque le chargement dépasse de plus d’un metre l’extremité arrière du véhicule et qu’eclairage de véhicules est requis la plus forte soillie doit être signalée par: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Lorsque le chargement dépasse de plus d’un metre l’extremité arrière du véhicule et qu’eclairage de véhicules est requis la plus forte soillie doit être signalée par: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -195,7 +195,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Iyo amatara y’ikinyabiziga agomba gucanwa kandi igihe imizigo isumba impera y’ikinyabizigaho metero irenga igice gihera cy’imizigo kigaragazwa ku buryo bukurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Iyo amatara y’ikinyabiziga agomba gucanwa kandi igihe imizigo isumba impera y’ikinyabizigaho metero irenga igice gihera cy’imizigo kigaragazwa ku buryo bukurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -593,7 +593,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "In places where there are traffic lights, vehicles cannot move:", the official traffic rule mandates "None". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "In places where there are traffic lights, vehicles cannot move:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -603,7 +603,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Aux endroits oú la circulation est réglée par des signaux lumineux, les véhicules ne peuvent y circuler: », la règle de circulation officielle prescrit « Toutes les réponses sont fausses ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Aux endroits oú la circulation est réglée par des signaux lumineux, les véhicules ne peuvent y circuler: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Toutes les réponses sont fausses », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -613,7 +613,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Ahantu ho kugendera mu muhanda herekanwa n’ibimenyetso bimurika ibinyabiziga ntibishobora kuhagenda :", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Ahantu ho kugendera mu muhanda herekanwa n’ibimenyetso bimurika ibinyabiziga ntibishobora kuhagenda :", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -669,7 +669,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "The length for the following vehicles must not exceed 11meters :", the official traffic rule mandates "No correct answer". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "The length for the following vehicles must not exceed 11meters :", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "No correct answer" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -679,7 +679,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « La longueur du véhicule est limitée à 11 mètres pour les véhicules suivants: », la règle de circulation officielle prescrit « toutes les réponses sont fausses ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « La longueur du véhicule est limitée à 11 mètres pour les véhicules suivants: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « toutes les réponses sont fausses », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -689,7 +689,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Uburebure bw’ibinyabiziga bikurikira ntibugomba kurenga metero 11 :", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Uburebure bw’ibinyabiziga bikurikira ntibugomba kurenga metero 11 :", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -745,7 +745,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "The width of trailer when it is trailed by a bicycle or scooter is limited to:", the official traffic rule mandates "No correct answer". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "The width of trailer when it is trailed by a bicycle or scooter is limited to:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "No correct answer" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -755,7 +755,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « La largeur d’une remorque rée par une bicycle e ou cyclomoteur est limitée à: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « La largeur d’une remorque rée par une bicycle e ou cyclomoteur est limitée à: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -765,7 +765,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Ubugari bwa remoriki ikuruwe n’igare cyangwa velomoteri ntiburenza ibipimo bikurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Ubugari bwa remoriki ikuruwe n’igare cyangwa velomoteri ntiburenza ibipimo bikurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -821,7 +821,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "Luminous signs for warning a driver that he is going to be overtaken are used in the following areas:", the official traffic rule mandates "None of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "Luminous signs for warning a driver that he is going to be overtaken are used in the following areas:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -831,7 +831,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Les avertissements lumineux pour avertir un conducteur qu’il va être dépassé, est utilisé dans les endroits suivants : », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Les avertissements lumineux pour avertir un conducteur qu’il va être dépassé, est utilisé dans les endroits suivants : », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -841,7 +841,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Imburira zimurika zemerewe gukoreshwa kugirango bamenyeshe umuyobozi ko bagiye kumunyuraho aha hakurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Imburira zimurika zemerewe gukoreshwa kugirango bamenyeshe umuyobozi ko bagiye kumunyuraho aha hakurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -1011,7 +1011,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "A width of trailer pulled by a tricycle cannot exceed:", the official traffic rule mandates "No correct answer". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "A width of trailer pulled by a tricycle cannot exceed:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "No correct answer" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -1021,7 +1021,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « La largeur d’une remorque tirée par unetricycle ne peut excéder les limites suivantes: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte réponse ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « La largeur d’une remorque tirée par unetricycle ne peut excéder les limites suivantes: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte réponse », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -1031,7 +1031,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Ubugari bwa romoruki ikuruwe n’ikinyamitende itatu ntibugomba kurenza ibipimo bikurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Ubugari bwa romoruki ikuruwe n’ikinyamitende itatu ntibugomba kurenza ibipimo bikurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -1049,7 +1049,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "Road lights, of white or yellow color, must at night, by fine weather, permit the illumination of the roadway at a distance of at least 100m in front of the vehicle but for motor vehicles with engine capacity not exceeding 125cm3 this distance is reduced to:", the official traffic rule mandates "none of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "Road lights, of white or yellow color, must at night, by fine weather, permit the illumination of the roadway at a distance of at least 100m in front of the vehicle but for motor vehicles with engine capacity not exceeding 125cm3 this distance is reduced to:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "none of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -1059,7 +1059,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Les feux de route de couleur blanche ou jaune doivent, la nuit par atmosphere limpide, permettre un éclairage de la chaussée sur une distance d’au moins 100m en avant du véhicule, mais pour les véhicules à moteur dont le cylindrée n’excede pas 125cm3 cette distance est », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Les feux de route de couleur blanche ou jaune doivent, la nuit par atmosphere limpide, permettre un éclairage de la chaussée sur une distance d’au moins 100m en avant du véhicule, mais pour les véhicules à moteur dont le cylindrée n’excede pas 125cm3 cette distance est », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -1069,7 +1069,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Amatara maremare y’ibara ryera cyangwa ry’umuhondo agomba, nijoro igihe ijuru rikeye, kumurika mu muhanda mu ntera ya m 100 nibura imbere y’ikinyabiziga, ariko ku binyabiziga bifite moteri itarengeje za sen metero kibe 125 iyo ntera igira ibipimo bikurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Amatara maremare y’ibara ryera cyangwa ry’umuhondo agomba, nijoro igihe ijuru rikeye, kumurika mu muhanda mu ntera ya m 100 nibura imbere y’ikinyabiziga, ariko ku binyabiziga bifite moteri itarengeje za sen metero kibe 125 iyo ntera igira ibipimo bikurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -1543,7 +1543,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "A plate indicating the maximum speed is put only on the vehicles whose authorized weight are :", the official traffic rule mandates "No correct answer". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "A plate indicating the maximum speed is put only on the vehicles whose authorized weight are :", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "No correct answer" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -1553,7 +1553,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Une plaque indiquant la vitesse maximum que le véhicule ne peut dépasser est mise sur les véhicules dont es poids autorisés sont : », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Une plaque indiquant la vitesse maximum que le véhicule ne peut dépasser est mise sur les véhicules dont es poids autorisés sont : », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -1563,7 +1563,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Icyapa cyerekana umuvuduko ntarengwa ikinyabiziga kitagomba kurenza gishyirwa gusa ku binyabiziga bifite uburemere ntarengwa", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Icyapa cyerekana umuvuduko ntarengwa ikinyabiziga kitagomba kurenza gishyirwa gusa ku binyabiziga bifite uburemere ntarengwa", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -1695,7 +1695,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "A fastening can only be used in cases of circumstances outside one’s control and exclusively for pulling a vehicle all the way to the place of repair at a speed which in any case cannot exceed 20km per hour. These fastenings must be shown by the following manner:", the official traffic rule mandates "None of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "A fastening can only be used in cases of circumstances outside one’s control and exclusively for pulling a vehicle all the way to the place of repair at a speed which in any case cannot exceed 20km per hour. These fastenings must be shown by the following manner:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -1705,7 +1705,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Les attaches constituées de chaines ou de câbles de fortune ne peuvent être utilisées qu’en cas de force majeure et exclusivement pour amener un véhicule jusqu’au lieu de réparation à une vitesse ne pouvant en aucun cas dépasser 20km à l’heure. Par quoi doivent être signalées ces attaches », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte de ces réponses ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Les attaches constituées de chaines ou de câbles de fortune ne peuvent être utilisées qu’en cas de force majeure et exclusivement pour amener un véhicule jusqu’au lieu de réparation à une vitesse ne pouvant en aucun cas dépasser 20km à l’heure. Par quoi doivent être signalées ces attaches », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte de ces réponses », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -1715,7 +1715,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Ibizirikisho by’iminyururu cyangwa by’insinga kimwe n’ibindi by’ingoboka bikoreshwa gusa igihe nta kundi umuntu yabigenza kandi nta kindi bigiriwe uretse gusa kugirango ikinyabiziga kigere aho kigomba gukorerwa kandi nturenze na rimwe km 20 mu isaha, ibyo bizirikisho bigaragazwa ku buryo bukurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Ibizirikisho by’iminyururu cyangwa by’insinga kimwe n’ibindi by’ingoboka bikoreshwa gusa igihe nta kundi umuntu yabigenza kandi nta kindi bigiriwe uretse gusa kugirango ikinyabiziga kigere aho kigomba gukorerwa kandi nturenze na rimwe km 20 mu isaha, ibyo bizirikisho bigaragazwa ku buryo bukurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -1771,7 +1771,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "This signal indicates", the official traffic rule mandates "None of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "This signal indicates", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -1781,7 +1781,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Ce signal indique : », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Ce signal indique : », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -1791,7 +1791,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Iki cyapa cyerekana :", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Iki cyapa cyerekana :", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -2037,7 +2037,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "The sign which indicates the right of way before vehicles coming in the opposite direction has the following colors:", the official traffic rule mandates "None of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "The sign which indicates the right of way before vehicles coming in the opposite direction has the following colors:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -2047,7 +2047,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Le signal qui donne la priorité par rapport aux véhicules venant en sens inverse est coloré de façon suivante: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Le signal qui donne la priorité par rapport aux véhicules venant en sens inverse est coloré de façon suivante: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -2057,7 +2057,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Icyapa kivuga gutambuka mbere y’ibinyabiziga biturutse imbere gifite amabara akurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Icyapa kivuga gutambuka mbere y’ibinyabiziga biturutse imbere gifite amabara akurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -2151,7 +2151,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "Between twilight and day break or because of circumstances such as fog or heavy rain where it is not possible to see distinctly up to distance of 200m, the presence on the public way of groups of pedestrians such as processions or school children groups in line under the supervision of a school master, when they move on the road way with more than one front person, must be signaled in the following way:", the official traffic rule mandates "None of the answer is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "Between twilight and day break or because of circumstances such as fog or heavy rain where it is not possible to see distinctly up to distance of 200m, the presence on the public way of groups of pedestrians such as processions or school children groups in line under the supervision of a school master, when they move on the road way with more than one front person, must be signaled in the following way:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of the answer is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -2161,7 +2161,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Entre la tombée et le lever du jour ou en raison de circonstances telles que le brouillard ou une forte pluie, il n’est pas possible de voir distinctement jusqu’à une distance de 200m, tous les groupements de piétons tels que cortèges ou groupe d’écoliers en rangs sous la conduite d’un moniteur lorsqu’ils circulent sur la chaussée à plus d’une personne de haut ils doivent être signalés par : », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Entre la tombée et le lever du jour ou en raison de circonstances telles que le brouillard ou une forte pluie, il n’est pas possible de voir distinctement jusqu’à une distance de 200m, tous les groupements de piétons tels que cortèges ou groupe d’écoliers en rangs sous la conduite d’un moniteur lorsqu’ils circulent sur la chaussée à plus d’une personne de haut ils doivent être signalés par : », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -2171,7 +2171,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Iyo bwije kugeza bukeye cyangwa bitewe n’uko ibihe bimeze nk’igihe cy’ibihu cyangwa cy’imvura bitagishoboka kubona neza muri m 200, udutsiko twose tw’abanyamaguru nk’imperekerane cyangwa udutsiko tw’abanyeshuri bari ku murongo bayobowe n’umwarimu, iyo bagenda mu muhanda ku isonga hakaba hari abantu barenze umwe bagomba kugaragazwa kuburyo bukurikira :", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Iyo bwije kugeza bukeye cyangwa bitewe n’uko ibihe bimeze nk’igihe cy’ibihu cyangwa cy’imvura bitagishoboka kubona neza muri m 200, udutsiko twose tw’abanyamaguru nk’imperekerane cyangwa udutsiko tw’abanyeshuri bari ku murongo bayobowe n’umwarimu, iyo bagenda mu muhanda ku isonga hakaba hari abantu barenze umwe bagomba kugaragazwa kuburyo bukurikira :", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -2683,7 +2683,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "The following vehicles must be inspected for road worthiness every year", the official traffic rule mandates "None". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "The following vehicles must be inspected for road worthiness every year", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -2693,7 +2693,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Les véhicules cités doivent être contrôlés une fois par an: », la règle de circulation officielle prescrit « Pas de bonne réponse ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Les véhicules cités doivent être contrôlés une fois par an: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Pas de bonne réponse », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -2703,7 +2703,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Ibinyabiziga bikurikira bigomba gukorerwa isuzumwa buri mwaka:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Ibinyabiziga bikurikira bigomba gukorerwa isuzumwa buri mwaka:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3025,7 +3025,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "The person who drives on a roadway when the width of the road does not permit to perform easily the overtaking, drives to the verges but must respect:", the official traffic rule mandates "No correct answer". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "The person who drives on a roadway when the width of the road does not permit to perform easily the overtaking, drives to the verges but must respect:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "No correct answer" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3035,7 +3035,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Le conducteur qui circule sur la chaussée peut, lorsque la largeur de celle-ci ne permet pas d’effectuer aisément un dépassement peut emprunter l’accotement de plain-pied mais il doit tenir compte sur: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Le conducteur qui circule sur la chaussée peut, lorsque la largeur de celle-ci ne permet pas d’effectuer aisément un dépassement peut emprunter l’accotement de plain-pied mais il doit tenir compte sur: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3045,7 +3045,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Umuyobozi ugenda mu muhanda igihe ubugari bwawo budatuma anyuranaho nta nkomyi ashobora kunyura mu kayira k’abanyamaguru ariko amaze kureba ibi bikurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Umuyobozi ugenda mu muhanda igihe ubugari bwawo budatuma anyuranaho nta nkomyi ashobora kunyura mu kayira k’abanyamaguru ariko amaze kureba ibi bikurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3063,7 +3063,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "Every motor vehicle or trailer pulled by such a vehicle shall be provided with a green light permitting the driver to signal that he has noticed the warning of the person who is ready to overtake him, this light must be placed as following manner:", the official traffic rule mandates "none of the answer is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "Every motor vehicle or trailer pulled by such a vehicle shall be provided with a green light permitting the driver to signal that he has noticed the warning of the person who is ready to overtake him, this light must be placed as following manner:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "none of the answer is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3073,7 +3073,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Tout véhicule automobile ou toute remorque tirée par un tel véhicule peut être muni d’un feu vert permettant au conducteur de signaler qu’il a perçu l’aver ssement de celui qui s’apprête à le dépasser. Ce feu est placé : », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Tout véhicule automobile ou toute remorque tirée par un tel véhicule peut être muni d’un feu vert permettant au conducteur de signaler qu’il a perçu l’aver ssement de celui qui s’apprête à le dépasser. Ce feu est placé : », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3083,7 +3083,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Buri modoka cyangwa buri romoruki ikuruwe n’iyo modoka bishobora kugira itara risa n’icyatsi kibisi bituma umuyobozi yerekana ko yabonye ikimenyetso cy’uwitegura kumunyuraho. Iryo tara rigomba gushyirwa aha hakurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Buri modoka cyangwa buri romoruki ikuruwe n’iyo modoka bishobora kugira itara risa n’icyatsi kibisi bituma umuyobozi yerekana ko yabonye ikimenyetso cy’uwitegura kumunyuraho. Iryo tara rigomba gushyirwa aha hakurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3329,7 +3329,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "For the lack of more restrictive regulations, maximum speed of motorcycles is:", the official traffic rule mandates "No correct answer". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "For the lack of more restrictive regulations, maximum speed of motorcycles is:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "No correct answer" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3339,7 +3339,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « A défaut de réglementation plus restrictive la vitesse maximale de motocyclette est: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « A défaut de réglementation plus restrictive la vitesse maximale de motocyclette est: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3349,7 +3349,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Iyo nta mategeko awugabanya by’umwihariko umuvuduko ntarengwa w’amapikipiki mu isaha ni:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Iyo nta mategeko awugabanya by’umwihariko umuvuduko ntarengwa w’amapikipiki mu isaha ni:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3367,7 +3367,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "When passing near an obstacle which pedestrians must avoid by moving to the roadway, drivers must leave beside that obstacle, a free space of at least one meter wide, where this condition cannot be met and a pedestrians walk near the obstacle, the driver can only pass beside the pedestrian at the following maximum speed:", the official traffic rule mandates "none of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "When passing near an obstacle which pedestrians must avoid by moving to the roadway, drivers must leave beside that obstacle, a free space of at least one meter wide, where this condition cannot be met and a pedestrians walk near the obstacle, the driver can only pass beside the pedestrian at the following maximum speed:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "none of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3377,7 +3377,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « En passant près d’obstacle que les piètons doivent contourner en empruntant la chaussée, les conducteurs doivent laisser, le long de cet obstacle, un espace libre d’ou moins un metre. Si ceci est impossible et que le pièton passe tant près d’un obstacle le conducteur doit contourner avec une vitesse maximale de : », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « En passant près d’obstacle que les piètons doivent contourner en empruntant la chaussée, les conducteurs doivent laisser, le long de cet obstacle, un espace libre d’ou moins un metre. Si ceci est impossible et que le pièton passe tant près d’un obstacle le conducteur doit contourner avec une vitesse maximale de : », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3387,7 +3387,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Iyo banyuze iruhande rw’inkomyi abanyamaguru bagomba gukikira banyuze mu muhanda, abayobozi bagomba gusiga umwanya ufite ubugari bwa m 1 nibura hagati yabo nayo. Iyo ibyo bidashobora kubahirizwa kandi umunyamaguru akaba anyura hafi yiyo nkomyi,umuyobozi agomba kuyikikira afite umuvuduko utarengeje ibipimo bikurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Iyo banyuze iruhande rw’inkomyi abanyamaguru bagomba gukikira banyuze mu muhanda, abayobozi bagomba gusiga umwanya ufite ubugari bwa m 1 nibura hagati yabo nayo. Iyo ibyo bidashobora kubahirizwa kandi umunyamaguru akaba anyura hafi yiyo nkomyi,umuyobozi agomba kuyikikira afite umuvuduko utarengeje ibipimo bikurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3557,7 +3557,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "Overtaking is performed on", the official traffic rule mandates "No correct answer". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "Overtaking is performed on", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "No correct answer" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3567,7 +3567,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Les dépassements s’effectuent », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Les dépassements s’effectuent », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3577,7 +3577,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Kunyuranaho bikorerwa:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Kunyuranaho bikorerwa:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3595,7 +3595,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "The circulation of self-propelling vehicles and trailers pulled by these vehicles is forbidden when their wheels are provided with either rigid bandages or elastic bandages of less than 0.04 meter thick. But this provision does not apply on :", the official traffic rule mandates "None of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "The circulation of self-propelling vehicles and trailers pulled by these vehicles is forbidden when their wheels are provided with either rigid bandages or elastic bandages of less than 0.04 meter thick. But this provision does not apply on :", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3605,7 +3605,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Est interdite la circulation de véhicules automoteurs et des remorques rées par ces véhicules, lorsque les roués sont munis soit de bandages rigides, soit debandages élastiques de moins de 0.04 metre d’épaisseur. Mais ceci n’est pas appliqué aux véhicules suivants: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Est interdite la circulation de véhicules automoteurs et des remorques rées par ces véhicules, lorsque les roués sont munis soit de bandages rigides, soit debandages élastiques de moins de 0.04 metre d’épaisseur. Mais ceci n’est pas appliqué aux véhicules suivants: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3615,7 +3615,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Birabujijwe kugenza ibinyabiziga bigendeshwana moteri naza romoruki zikururwa nabyo, iyo ibiziga byambaye inziga zidahagwa cyangwa inziga zikururuka zifite umubyimba uri hasi ya cm 4. Ariko ibyo n bikurikizwa kubinyabiziga bikurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Birabujijwe kugenza ibinyabiziga bigendeshwana moteri naza romoruki zikururwa nabyo, iyo ibiziga byambaye inziga zidahagwa cyangwa inziga zikururuka zifite umubyimba uri hasi ya cm 4. Ariko ibyo n bikurikizwa kubinyabiziga bikurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3633,7 +3633,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "The brake light of red color must be visible in clear weather at a minimum distance of:", the official traffic rule mandates "None of them are correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "The brake light of red color must be visible in clear weather at a minimum distance of:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "None of them are correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3643,7 +3643,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Le feu de stop, de couleur rouge, doit être visible par atmosphère limpide à une distance minimum de : », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Le feu de stop, de couleur rouge, doit être visible par atmosphère limpide à une distance minimum de : », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3653,7 +3653,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Itara ryo guhagarara ry’ibara ritukura rigomba kugaragara igihe ijuru rikeye nibura mu ntera ikurikira:", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "Nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Itara ryo guhagarara ry’ibara ritukura rigomba kugaragara igihe ijuru rikeye nibura mu ntera ikurikira:", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "Nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
@@ -3747,7 +3747,7 @@
 
 **Draft Explanation:**
 
-> Regarding the legal requirement for "Prohibition and obligation signs only have effect:", the official traffic rule mandates "none of the answers is correct". Under Rwandan traffic regulations (Presidential Decree No. 85/01 governing road circulation), this statutory standard establishes specific driver obligations, speed controls, lighting, or lane positioning. Compliance is mandatory for all road users to maintain traffic safety.
+> Regarding the legal requirement for "Prohibition and obligation signs only have effect:", none of the provided choices accurately state the statutory traffic regulation under Rwandan law (Presidential Decree No. 85/01). Therefore, "none of the answers is correct" is the correct option, as official road circulation rules mandate different specific obligations or technical conditions for this driving scenario.
 
 ### Français (fr)
 
@@ -3757,7 +3757,7 @@
 
 **Projet d'explication :**
 
-> Concernant la prescription légale relative à « Les signaux d’interdiction et d’obligation n’ont d’effet que: », la règle de circulation officielle prescrit « Aucune des réponses n'est correcte ». Conformément au code de la route rwandais (décret présidentiel n° 85/01 portant réglementation générale de la police du roulage), cette norme statutaire fixe les obligations spécifiques de conduite, limitation de vitesse, éclairage ou position sur chaussée. Son respect est obligatoire pour assurer la sécurité routière.
+> Concernant la prescription légale relative à « Les signaux d’interdiction et d’obligation n’ont d’effet que: », aucun des choix proposés ne correspond à la norme statutaire fixée par le code de la route rwandais (décret présidentiel n° 85/01). La bonne réponse est donc « Aucune des réponses n'est correcte », la réglementation prévoyant des obligations ou conditions techniques différentes pour cette situation de conduite.
 
 ### Kinyarwanda (rw)
 
@@ -3767,7 +3767,7 @@
 
 **Incamake y'ibisobanuro :**
 
-> Kuri iri tegeko rigenga "Ibyapa bibuza n’ibitegeka bikurikizwa gusa :", amabwiriza nyakuri y’umuhanda ategeka ko hakurikizwa "nta gisubizo cy’ukuri kirimo". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01), iri tegeko rishyiraho ibisabwa by’umwihariko ku mikoreshereze y’umuhanda, umuvuduko, amatara cyangwa igice cy’umuhanda kigenderwamo. Abakoresha umuhanda bose bategetswe kubahiriza aya mabwiriza.
+> Kuri iri tegeko rigenga "Ibyapa bibuza n’ibitegeka bikurikizwa gusa :", nta na kimwe mu mahitamo yatanzwe gihuye n’amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda (Iteka rya Perezida No 85/01). Bityo, igisubizo cy’ukuri ni "nta gisubizo cy’ukuri kirimo", kuko amategeko ashyiraho ibisabwa by’umwihariko bitandukanye n’ibyo bisobanuro byatanzwe mu mahitamo.
 
 ---
 
