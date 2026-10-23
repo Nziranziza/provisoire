@@ -1,31 +1,17 @@
-export type Lang = 'en' | 'fr' | 'rw';
-
-export type QuestionTranslation = {
-  question: string;
-  options: string[];
-  correct_answer?: string;
-  explanation?: string;
-};
-
-export type Question = {
-  id: string;
-  category_id: number;
-  category_name: string;
-  image_url: string | null;
-  correct_index: number;
-  translations: Record<string, QuestionTranslation>;
-};
-
-export type Category = {
-  id: number;
-  name: string;
-};
+export type {
+  Lang,
+  QuestionTranslation,
+  Question,
+  Category,
+  QuestionBank,
+} from './questions';
+import type { Lang, Question } from './questions';
 
 export type QuestionPayload = {
   id: string;
   correctIndex: number;
   image: string | null;
-  t: Record<string, QuestionTranslation>;
+  t: Record<string, import('./questions').QuestionTranslation>;
 };
 
 export function questionPayload(q: Question): string {
@@ -66,19 +52,19 @@ export function correctAnswerText(q: Question, lang: Lang): string {
   return t.correct_answer || t.options[q.correct_index] || '';
 }
 
-export function questionExplanation(q: Question, lang: Lang): string {
+export function questionExplanation(
+  q: Question,
+  lang: Lang,
+): string | undefined {
   const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
-  if (t?.explanation && t.explanation.trim()) {
+  if (
+    t?.explanation &&
+    typeof t.explanation === 'string' &&
+    t.explanation.trim().length > 0
+  ) {
     return t.explanation.trim();
   }
-  const ans = correctAnswerText(q, lang);
-  if (lang === 'rw') {
-    return `Igisubizo cy’ukuri ni "${ans}". Hakurikijwe amategeko agenga uburyo bwo kugenda mu muhanda mu Rwanda, iri tegeko rishyirwaho kugira ngo umutekano n’ituze mu muhanda byubahirizwe.`;
-  }
-  if (lang === 'fr') {
-    return `La réponse légale correcte est « ${ans} ». Conformément au code de la route rwandais, cette prescription garantit la sécurité et la fluidité de la circulation.`;
-  }
-  return `The legally correct answer is "${ans}". Under Rwandan traffic regulations, this standard applies to ensure safety, order, and predictable vehicle operation.`;
+  return undefined;
 }
 
 export const ANSWER_LABEL: Record<Lang, string> = {
