@@ -172,7 +172,9 @@ const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
       });
     </script>
   </head>
-  <body class="bg-white pb-16 text-slate-900 md:pb-0">
+  <body
+    class="bg-white pb-[calc(4rem+env(safe-area-inset-bottom))] text-slate-900 md:pb-0"
+  >
     <SiteHeader lang={locale} />
     <slot />
     <SiteFooter lang={locale} />
