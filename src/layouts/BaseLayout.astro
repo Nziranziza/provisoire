@@ -8,6 +8,7 @@ import Analytics from '../components/Analytics.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import BottomNav from '../components/BottomNav.astro';
 
 interface Props {
   title: string;
@@ -37,7 +38,7 @@ interface Props {
 const {
   title,
   description,
-  lang = Astro.currentLocale ?? 'rw',
+  lang = Astro.currentLocale ?? 'en',
   canonical: canonicalProp,
   prev,
   next,
@@ -56,7 +57,7 @@ function toAbsolute(url: string): string {
 const canonical = toAbsolute(canonicalProp ?? Astro.url.pathname);
 const prevHref = prev ? toAbsolute(prev) : null;
 const nextHref = next ? toAbsolute(next) : null;
-const locale = (lang as Lang) || 'rw';
+const locale = (lang as Lang) || 'en';
 const defaultOgImage = `/og/og-${locale}-home.png`;
 const imageHref = image ? toAbsolute(image) : toAbsolute(defaultOgImage);
 const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -171,10 +172,11 @@ const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
       });
     </script>
   </head>
-  <body class="bg-white text-slate-900">
+  <body class="bg-white pb-16 text-slate-900 md:pb-0">
     <SiteHeader lang={locale} />
     <slot />
     <SiteFooter lang={locale} />
+    <BottomNav lang={locale} />
     <CookieConsent lang={locale} />
     <AppChrome lang={locale} />
     <Analytics />

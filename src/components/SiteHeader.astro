@@ -179,6 +179,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
                   <a
                     href={targetHref}
                     hreflang={code}
+                    data-lang-switch={code}
                     aria-current={active ? 'page' : undefined}
                     class:list={[
                       'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
@@ -317,6 +318,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
                   <a
                     href={targetHref}
                     hreflang={code}
+                    data-lang-switch={code}
                     aria-current={active ? 'page' : undefined}
                     class:list={[
                       'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
@@ -457,6 +459,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
                   <a
                     href={targetHref}
                     hreflang={code}
+                    data-lang-switch={code}
                     aria-current={active ? 'page' : undefined}
                     class:list={[
                       'inline-flex items-center justify-center border-r-2 border-slate-900 px-2 py-1 text-xs font-bold tracking-wide transition last:border-r-0 focus-visible:outline-hidden sm:px-2.5',
@@ -635,6 +638,7 @@ const locales: { code: Lang; label: string; name: string }[] = [
                   <a
                     href={targetHref}
                     hreflang={code}
+                    data-lang-switch={code}
                     aria-current={active ? 'page' : undefined}
                     class:list={[
                       'flex min-h-[38px] flex-col items-center justify-center rounded-xl px-2 py-1 text-center transition active:scale-95',
@@ -772,6 +776,21 @@ const locales: { code: Lang; label: string; name: string }[] = [
 
     window.addEventListener('scroll', updateScrollElevation, { passive: true });
     updateScrollElevation();
+
+    // Persist language choice in localStorage
+    document.querySelectorAll('[data-lang-switch]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const selectedLocale = el.getAttribute('data-lang-switch');
+        if (selectedLocale) {
+          try {
+            localStorage.setItem('preferred_locale', selectedLocale);
+            localStorage.setItem('provisoire_locale', selectedLocale);
+          } catch {
+            // localStorage not available
+          }
+        }
+      });
+    });
   })();
 </script>
 
