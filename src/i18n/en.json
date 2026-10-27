@@ -1,0 +1,61 @@
+{
+  "header": {
+    "home": "Home",
+    "trafficRules": "Traffic Rules",
+    "roadSigns": "Road Signs",
+    "signsGlossary": "Sign Guide",
+    "practice": "Practice",
+    "exam": "Exam",
+    "questions": "Questions",
+    "about": "About",
+    "languageSelector": "Language selector",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "nav": "Main navigation",
+    "mobileNav": "Mobile navigation",
+    "brandTagline": "Rwanda Driving Theory",
+    "skipToContent": "Skip to main content",
+    "homeAriaLabel": "Provisoire home",
+    "homeDesc": "Home & question bank overview",
+    "trafficRulesDesc": "Official regulations & priority rules",
+    "roadSignsDesc": "Warning, mandatory & info signs",
+    "practiceDesc": "Interactive quiz without timer",
+    "examDesc": "20-question timed mock exam",
+    "aboutDesc": "About our platform & study aid",
+    "installAppText": "Install App",
+    "installAppDesc": "Practice offline on your device",
+    "activeBadge": "Current"
+  },
+  "bottomNav": {
+    "home": "Home",
+    "questions": "Questions",
+    "practice": "Practice",
+    "signs": "Signs",
+    "exam": "Exam"
+  },
+  "footer": {
+    "tagline": "Study support for Rwanda driving theory",
+    "home": "Home",
+    "practice": "Practice",
+    "exam": "Mock Exam",
+    "questions": "Questions",
+    "trafficRules": "Traffic rules",
+    "roadSigns": "Road signs",
+    "about": "About",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "share": "Share",
+    "shareToast": "Link copied to clipboard!",
+    "shareTitle": "Provisoire - Rwanda Driving Theory Test Prep",
+    "shareText": "Practice official Rwanda driving questions and mock exams offline for free!",
+    "languageSelector": "Language selector",
+    "backToTop": "Top",
+    "disclaimer": "Provisoire is an unofficial, independent study aid not affiliated with or endorsed by the Rwanda National Police (RNP) or any government body.",
+    "nav": "Footer navigation"
+  },
+  "locales": {
+    "en": "English",
+    "fr": "Français",
+    "rw": "Kinyarwanda"
+  }
+}
