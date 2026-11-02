@@ -1,0 +1,245 @@
+﻿---
+/**
+ * THROWAWAY — delete before merging.
+ * Dev route: http://localhost:4321/_swatches
+ * Confirms every design-token utility (bg-*, text-*, border-*) is generated.
+ */
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Design-token swatches — DELETE BEFORE MERGE</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 2rem;
+        background: #fff;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      h2 {
+        font-size: 1rem;
+        margin: 2rem 0 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.75rem;
+      }
+      .swatch {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+      }
+      .swatch-color {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .swatch-label {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+        background: white;
+      }
+      .swatch-label strong {
+        display: block;
+        font-size: 0.8rem;
+      }
+      .border-swatch {
+        height: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Design-token swatches — <em>THROWAWAY, delete before merge</em></h1>
+
+    <h2>Surfaces</h2>
+    <div class="grid">
+      <div class="swatch">
+        <div
+          class="swatch-color bg-surface"
+          style="border-bottom:1px solid #e2e8f0"
+        >
+        </div>
+        <div class="swatch-label">
+          <strong>bg-surface</strong>#f8fafc · slate-50
+        </div>
+      </div>
+      <div class="swatch">
+        <div
+          class="swatch-color bg-surface-raised"
+          style="border-bottom:1px solid #e2e8f0"
+        >
+        </div>
+        <div class="swatch-label">
+          <strong>bg-surface-raised</strong>#ffffff · white
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-surface-sunken"></div>
+        <div class="swatch-label">
+          <strong>bg-surface-sunken</strong>#f1f5f9 · slate-100
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-surface-inverse"></div>
+        <div class="swatch-label">
+          <strong>bg-surface-inverse</strong>#0f172a · slate-900
+        </div>
+      </div>
+    </div>
+
+    <h2>Foreground</h2>
+    <div class="grid">
+      <div class="swatch">
+        <div class="swatch-color bg-surface-raised">
+          <span class="text-fg text-xl font-bold">Aa</span>
+        </div>
+        <div class="swatch-label">
+          <strong>text-fg</strong>#0f172a · slate-900
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-surface-raised">
+          <span class="text-fg-muted text-xl font-bold">Aa</span>
+        </div>
+        <div class="swatch-label">
+          <strong>text-fg-muted</strong>#475569 · slate-600
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-surface-raised">
+          <span class="text-fg-subtle text-xl font-bold">Aa</span>
+        </div>
+        <div class="swatch-label">
+          <strong>text-fg-subtle</strong>#64748b · slate-500
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-surface-inverse">
+          <span class="text-fg-inverse text-xl font-bold">Aa</span>
+        </div>
+        <div class="swatch-label">
+          <strong>text-fg-inverse</strong>#f8fafc · slate-50
+        </div>
+      </div>
+    </div>
+
+    <h2>Borders</h2>
+    <div class="grid">
+      <div class="swatch">
+        <div class="border-swatch border-border-subtle border-t-4"></div>
+        <div class="swatch-label">
+          <strong>border-border-subtle</strong>#e2e8f0 · slate-200
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="border-swatch border-border-strong border-t-4"></div>
+        <div class="swatch-label">
+          <strong>border-border-strong</strong>#94a3b8 · slate-400
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="border-swatch border-border-control border-t-4"></div>
+        <div class="swatch-label">
+          <strong>border-border-control</strong>#64748b · slate-500
+        </div>
+      </div>
+    </div>
+
+    <h2>Brand</h2>
+    <div class="grid">
+      <div class="swatch">
+        <div class="swatch-color bg-brand">
+          <span class="text-brand-fg font-bold">Btn</span>
+        </div>
+        <div class="swatch-label">
+          <strong>bg-brand</strong>#1d4ed8 · blue-700
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-brand-hover">
+          <span class="text-brand-fg font-bold">Hover</span>
+        </div>
+        <div class="swatch-label">
+          <strong>bg-brand-hover</strong>#1e40af · blue-800
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-brand-subtle">
+          <span class="text-brand font-bold">Selected</span>
+        </div>
+        <div class="swatch-label">
+          <strong>bg-brand-subtle</strong>#eff6ff · blue-50
+        </div>
+      </div>
+    </div>
+
+    <h2>Status</h2>
+    <div class="grid">
+      <div class="swatch">
+        <div class="swatch-color bg-success-subtle">
+          <span class="text-success font-bold">Success</span>
+        </div>
+        <div class="swatch-label">
+          <strong>success</strong>#15803d / #f0fdf4
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-warning-subtle">
+          <span class="text-warning font-bold">Warning</span>
+        </div>
+        <div class="swatch-label">
+          <strong>warning</strong>#b45309 / #fffbeb
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-danger-subtle">
+          <span class="text-danger font-bold">Danger</span>
+        </div>
+        <div class="swatch-label"><strong>danger</strong>#b91c1c / #fef2f2</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-brand-subtle">
+          <span class="text-brand font-bold">Info</span>
+        </div>
+        <div class="swatch-label">
+          <strong>info</strong>brand / brand-subtle
+        </div>
+      </div>
+    </div>
+
+    <h2>Categories</h2>
+    <div class="grid">
+      <div class="swatch">
+        <div class="swatch-color bg-cat-traffic-subtle">
+          <span class="text-cat-traffic font-bold">Traffic Rules</span>
+        </div>
+        <div class="swatch-label">
+          <strong>cat-traffic</strong>#0369a1 · sky-700<br /><strong
+            >cat-traffic-subtle</strong
+          >#e0f2fe · sky-100
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color bg-cat-signs-subtle">
+          <span class="text-cat-signs font-bold">Road Signs</span>
+        </div>
+        <div class="swatch-label">
+          <strong>cat-signs</strong>#92400e · amber-800<br /><strong
+            >cat-signs-subtle</strong
+          >#fef3c7 · amber-100
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

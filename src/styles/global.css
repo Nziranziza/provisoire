@@ -1,5 +1,94 @@
 @import 'tailwindcss';
 
+/*
+ * Design tokens — neutral scale is slate. stone must NOT be used.
+ * Light values live here. Issue #86 overrides these variables for dark mode.
+ */
+:root {
+  /* Surfaces */
+  --surface: #f8fafc;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f1f5f9;
+  --surface-inverse: #0f172a;
+
+  /* Foreground / text */
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --fg-subtle: #64748b; /* decorative / disabled only — do NOT use on surface-sunken */
+  --fg-inverse: #f8fafc;
+
+  /* Borders */
+  --border-subtle: #e2e8f0;
+  --border-strong: #94a3b8;
+  --border-control: #64748b;
+
+  /* Brand (blue-700 — matches theme-color, PWA icons, OG images) */
+  --brand: #1d4ed8;
+  --brand-hover: #1e40af;
+  --brand-subtle: #eff6ff;
+  --brand-fg: #ffffff;
+
+  /* Status */
+  --success: #15803d;
+  --success-subtle: #f0fdf4;
+  --warning: #b45309;
+  --warning-subtle: #fffbeb;
+  --danger: #b91c1c;
+  --danger-subtle: #fef2f2;
+  /* info uses --brand / --brand-subtle */
+
+  /* Categories */
+  --cat-traffic: #0369a1;
+  --cat-traffic-subtle: #e0f2fe;
+  --cat-signs: #92400e;
+  --cat-signs-subtle: #fef3c7;
+}
+
+/*
+ * @theme inline wires each CSS variable to a Tailwind color utility so that
+ * utilities such as bg-surface, text-fg-muted, border-border-control, etc.
+ * are generated and read the variables at runtime (dark mode only needs to
+ * swap the :root values).
+ */
+@theme inline {
+  /* Surfaces */
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-inverse: var(--surface-inverse);
+
+  /* Foreground */
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-inverse: var(--fg-inverse);
+
+  /* Borders */
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-border-control: var(--border-control);
+
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-fg: var(--brand-fg);
+
+  /* Status */
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-danger: var(--danger);
+  --color-danger-subtle: var(--danger-subtle);
+
+  /* Categories */
+  --color-cat-traffic: var(--cat-traffic);
+  --color-cat-traffic-subtle: var(--cat-traffic-subtle);
+  --color-cat-signs: var(--cat-signs);
+  --color-cat-signs-subtle: var(--cat-signs-subtle);
+}
+
 /* Mobile-first: the base styles target a 360px viewport and scale up. */
 @theme {
   --font-sans:
