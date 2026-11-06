@@ -14,7 +14,8 @@
   /* Foreground / text */
   --fg: #0f172a;
   --fg-muted: #475569;
-  --fg-subtle: #64748b; /* decorative / disabled only — do NOT use on surface-sunken */
+  --fg-subtle: #64748b;
+  /* decorative / disabled only — do NOT use on surface-sunken */
   --fg-inverse: #f8fafc;
 
   /* Borders */
@@ -59,12 +60,20 @@
   --elevation-lg-b: 0 4px 8px -4px rgb(15 23 42 / 0.08);
 
   /* Containers */
-  --container-content: 48rem; /* 768px  — reading pages (About, Privacy, question detail…) */
-  --container-wide: 72rem; /* 1152px — listing pages (question list, signs index, home) */
+  --container-content: 48rem;
+  /* 768px  — reading pages (About, Privacy, question detail…) */
+  --container-wide: 72rem;
+  /* 1152px — listing pages (question list, signs index, home) */
 
   /* Bottom nav — 64px below lg, 0 from lg (BottomNav hidden at lg+).
    * Used by Toast (#68), install promo, and page bottom padding. */
   --bottom-nav-height: 64px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --bottom-nav-height: 0px;
+  }
 }
 
 /*
@@ -170,11 +179,12 @@ body {
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
-  border-radius: inherit;
 }
 
 @utility ring-focus {
+  /* Inset ring stays visible even when the element has overflow:hidden.
+   * Layers (inside out): 2px surface-raised gap, then 4px brand ring. */
   box-shadow:
-    0 0 0 2px var(--color-surface-raised),
-    0 0 0 4px var(--color-brand);
+    inset 0 0 0 4px var(--color-brand),
+    inset 0 0 0 2px var(--color-surface-raised);
 }
