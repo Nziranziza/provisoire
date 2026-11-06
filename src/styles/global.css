@@ -14,7 +14,8 @@
   /* Foreground / text */
   --fg: #0f172a;
   --fg-muted: #475569;
-  --fg-subtle: #64748b; /* decorative / disabled only — do NOT use on surface-sunken */
+  --fg-subtle: #64748b;
+  /* decorative / disabled only — do NOT use on surface-sunken */
   --fg-inverse: #f8fafc;
 
   /* Borders */
@@ -42,6 +43,37 @@
   --cat-traffic-subtle: #e0f2fe;
   --cat-signs: #92400e;
   --cat-signs-subtle: #fef3c7;
+
+  /* Radius — rounded-full is reserved for avatars, dots, progress bars, icon-only round buttons */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Elevation — shadow color is slate-900 at low opacity, never colored.
+   * --elevation-* vars are the overridable primitives; #86 swaps them for dark mode. */
+  --elevation-sm-a: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --elevation-sm-b: 0 1px 3px 0 rgb(15 23 42 / 0.06);
+  --elevation-md-a: 0 4px 8px -2px rgb(15 23 42 / 0.08);
+  --elevation-md-b: 0 2px 4px -2px rgb(15 23 42 / 0.05);
+  --elevation-lg-a: 0 16px 32px -8px rgb(15 23 42 / 0.16);
+  --elevation-lg-b: 0 4px 8px -4px rgb(15 23 42 / 0.08);
+
+  /* Containers */
+  --container-content: 48rem;
+  /* 768px  — reading pages (About, Privacy, question detail…) */
+  --container-wide: 72rem;
+  /* 1152px — listing pages (question list, signs index, home) */
+
+  /* Bottom nav — 64px below lg, 0 from lg (BottomNav hidden at lg+).
+   * Used by Toast (#68), install promo, and page bottom padding. */
+  --bottom-nav-height: 64px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --bottom-nav-height: 0px;
+  }
 }
 
 /*
@@ -89,8 +121,28 @@
   --color-cat-signs-subtle: var(--cat-signs-subtle);
 }
 
-/* Mobile-first: the base styles target a 360px viewport and scale up. */
+/*
+ * @theme (non-inline) for radius, shadow and container tokens — these are
+ * static values that don't need runtime CSS-variable indirection, so they go
+ * in the regular @theme block alongside font-sans.
+ */
 @theme {
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Shadow — reads elevation primitives so dark mode (#86) can swap them */
+  --shadow-sm: var(--elevation-sm-a), var(--elevation-sm-b);
+  --shadow-md: var(--elevation-md-a), var(--elevation-md-b);
+  --shadow-lg: var(--elevation-lg-a), var(--elevation-lg-b);
+
+  /* Containers */
+  --container-content: 48rem;
+  --container-wide: 72rem;
+
+  /* Font */
   --font-sans:
     system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
@@ -103,4 +155,36 @@ html {
 
 body {
   font-family: var(--font-sans);
+}
+
+/*
+ * Spacing rhythm — convention only, not new tokens.
+ * Any other padding or gap value in a PR must include a reason.
+ *
+ * Context                        Mobile          sm (≥640px) and up
+ * ─────────────────────────────  ──────────────  ──────────────────
+ * Card padding (padding="md")    p-4   (16px)    sm:p-5  (20px)
+ * Card padding (padding="lg")    p-5   (20px)    sm:p-8  (32px)
+ * Gap between items in list/grid gap-3 (12px)    sm:gap-4 (16px)
+ * Gap between blocks in section  gap-6 (24px)    sm:gap-8 (32px)
+ * Gap between page sections      gap-10 (40px)   sm:gap-16 (64px)
+ * Inline gap (icon + label)      gap-2  (8px)    —
+ */
+
+/*
+ * Global focus ring — brand-coloured outline on every interactive element.
+ * Use the ring-focus utility (box-shadow) inside overflow:hidden containers
+ * where the outline would be clipped.
+ */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@utility ring-focus {
+  /* Inset ring stays visible even when the element has overflow:hidden.
+   * Layers (inside out): 2px surface-raised gap, then 4px brand ring. */
+  box-shadow:
+    inset 0 0 0 4px var(--color-brand),
+    inset 0 0 0 2px var(--color-surface-raised);
 }
