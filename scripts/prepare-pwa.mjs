@@ -63,6 +63,11 @@ const fontsToCopy = [
 for (const file of fontsToCopy) {
   fs.copyFileSync(path.join(interFiles, file), path.join(fontsDir, file));
 }
+// Copy the OFL license — required when distributing font files
+fs.copyFileSync(
+  path.join(root, 'node_modules', '@fontsource-variable', 'inter', 'LICENSE'),
+  path.join(fontsDir, 'inter-LICENSE'),
+);
 console.log(
   `Copied Inter Variable fonts → public/fonts/ (${fontsToCopy.join(', ')})`,
 );
