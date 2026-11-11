@@ -63,5 +63,6 @@ const fontsToCopy = [
 for (const file of fontsToCopy) {
   fs.copyFileSync(path.join(interFiles, file), path.join(fontsDir, file));
 }
-console.log(`Copied Inter Variable fonts → public/fonts/ (${fontsToCopy.join(', ')})`);
-
+console.log(
+  `Copied Inter Variable fonts → public/fonts/ (${fontsToCopy.join(', ')})`,
+);

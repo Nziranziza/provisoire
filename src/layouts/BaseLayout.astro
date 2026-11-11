@@ -107,9 +107,11 @@ const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Provisoire" />
-    {/* Preload Inter Variable (latin) so the font is fetched before CSS is parsed.
+    {
+      /* Preload Inter Variable (latin) so the font is fetched before CSS is parsed.
         The woff2 is copied to public/fonts/ by prepare-pwa.mjs for a stable,
-        precacheable URL. */}
+        precacheable URL. */
+    }
     <link
       rel="preload"
       as="font"
