@@ -39,6 +39,9 @@ const SHELL_ASSETS = [
   '/icons/icon-maskable-512x512.png',
   '/icons/apple-touch-icon.png',
   '/icons/icon.svg',
+  // Inter Variable — self-hosted, precached for offline use
+  '/fonts/inter-latin-wght-normal.woff2',
+  '/fonts/inter-latin-ext-wght-normal.woff2',
 ];
 
 // Question text + search indexes (precached on install)
