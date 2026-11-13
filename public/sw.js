@@ -1,5 +1,5 @@
 // Provisoire Service Worker — bump CACHE_VERSION on deploy to bust caches
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 const SHELL_CACHE = `provisoire-shell-${CACHE_VERSION}`;
 const DATA_CACHE = `provisoire-data-${CACHE_VERSION}`;
 const IMAGE_CACHE = `provisoire-images-${CACHE_VERSION}`;
@@ -39,6 +39,9 @@ const SHELL_ASSETS = [
   '/icons/icon-maskable-512x512.png',
   '/icons/apple-touch-icon.png',
   '/icons/icon.svg',
+  // Inter Variable — self-hosted, precached for offline use
+  '/fonts/inter-latin-wght-normal.woff2',
+  '/fonts/inter-latin-ext-wght-normal.woff2',
 ];
 
 // Question text + search indexes (precached on install)

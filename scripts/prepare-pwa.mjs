@@ -42,3 +42,32 @@ const sizeKb = Math.round(fs.statSync(questionsDest).size / 1024);
 console.log(
   `Copied questions.json → public/data/questions.json (${sizeKb} KB)`,
 );
+
+// Copy Inter Variable latin + latin-ext woff2 files to public/fonts/
+// so they are served from the site origin (required for offline PWA and
+// for a stable preload URL in BaseLayout.astro).
+const fontsDir = path.join(root, 'public', 'fonts');
+fs.mkdirSync(fontsDir, { recursive: true });
+
+const interFiles = path.join(
+  root,
+  'node_modules',
+  '@fontsource-variable',
+  'inter',
+  'files',
+);
+const fontsToCopy = [
+  'inter-latin-wght-normal.woff2',
+  'inter-latin-ext-wght-normal.woff2',
+];
+for (const file of fontsToCopy) {
+  fs.copyFileSync(path.join(interFiles, file), path.join(fontsDir, file));
+}
+// Copy the OFL license — required when distributing font files
+fs.copyFileSync(
+  path.join(root, 'node_modules', '@fontsource-variable', 'inter', 'LICENSE'),
+  path.join(fontsDir, 'inter-LICENSE'),
+);
+console.log(
+  `Copied Inter Variable fonts → public/fonts/ (${fontsToCopy.join(', ')})`,
+);
