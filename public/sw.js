@@ -367,7 +367,7 @@ self.addEventListener('fetch', (event) => {
                 dataCache.put(request, response);
               }
             })
-            .catch(() => {});
+            .catch(() => { });
           return cachedData;
         }
 
