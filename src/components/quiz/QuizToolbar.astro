@@ -1,5 +1,6 @@
 ---
 import type { Lang } from '../../lib/quiz';
+import Icon from '../ui/Icon.astro';
 
 interface Props {
   pageSize: number;
@@ -66,20 +67,7 @@ const clearLabels: Record<Lang, string> = {
       class="relative flex max-w-lg items-stretch overflow-hidden rounded-full border-2 border-slate-900 bg-white transition-shadow focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-1"
     >
       <span class="pointer-events-none flex items-center pl-3.5 text-slate-400">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.25"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="h-4 w-4"
-          aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="7"></circle>
-          <path d="m20 20-3.5-3.5"></path>
-        </svg>
+        <Icon name="search" size="sm" />
       </span>
 
       <input
@@ -109,20 +97,7 @@ const clearLabels: Record<Lang, string> = {
           data-question-search-clear
           aria-label={clearLabels[lang]}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.25"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="h-3.5 w-3.5"
-            aria-hidden="true"
-          >
-            <path d="M18 6 6 18"></path>
-            <path d="m6 6 12 12"></path>
-          </svg>
+          <Icon name="close" size="sm" />
         </button>
 
         <!-- Loading spinner -->
@@ -160,20 +135,7 @@ const clearLabels: Record<Lang, string> = {
         aria-label={buttonLabels[lang]}
         data-question-search-submit
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.25"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="h-3.5 w-3.5"
-          aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="7"></circle>
-          <path d="m20 20-3.5-3.5"></path>
-        </svg>
+        <Icon name="search" size="sm" />
         <span>{buttonLabels[lang]}</span>
       </button>
     </div>
