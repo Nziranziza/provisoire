@@ -1,9 +1,10 @@
-// Hand-rolled declaration for the untyped `lucide` package (framework-agnostic core).
-// Each named export is an array of [tagName, attrs] tuples — icon node data.
+// Hand-rolled declaration for lucide@^1.66 (framework-agnostic core).
+// The package ships no .d.ts files in its published dist, so TypeScript
+// cannot find types for it automatically. This declaration covers every
+// icon imported in src/lib/icons.ts.
 declare module 'lucide' {
   export type IconNode = [string, Record<string, string | number>][];
 
-  // Declare every icon used in src/lib/icons.ts
   export const Lightbulb: IconNode;
   export const Zap: IconNode;
   export const Timer: IconNode;
@@ -46,4 +47,5 @@ declare module 'lucide' {
   export const Sun: IconNode;
   export const Moon: IconNode;
   export const Monitor: IconNode;
+  export const LoaderCircle: IconNode;
 }
