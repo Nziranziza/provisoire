@@ -106,5 +106,11 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      // lucide ships no `exports` field so Node loads it as CJS, which
+      // crashes in an ESM SSR context ("exports is not defined").
+      // noExternal forces Vite/esbuild to bundle and convert it to ESM.
+      noExternal: ['lucide'],
+    },
   },
 });
