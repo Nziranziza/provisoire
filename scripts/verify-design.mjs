@@ -154,8 +154,7 @@ const RULES = [
     // the per-file full-source scan below), '>', or end-of-line.
     // The per-line test catches <select> and <select attr=…; the multi-line
     // case (<select\n  …) is caught by matching <select at end of line.
-    test: (line) =>
-      (line.match(/<select(?=[\s>]|$)/g) || []).length,
+    test: (line) => (line.match(/<select(?=[\s>]|$)/g) || []).length,
   },
   {
     id: 'inline-handler',
