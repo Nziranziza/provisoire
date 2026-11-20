@@ -1,16 +1,299 @@
 @import 'tailwindcss';
 
-/* Mobile-first: the base styles target a 360px viewport and scale up. */
+/*
+ * Inter Variable — latin + latin-ext subsets only (no cyrillic, greek, vietnamese).
+ * Self-hosted via @fontsource-variable/inter so the font works offline in the PWA
+ * and does not add a third-party request to the privacy policy.
+ * The woff2 files are copied to public/fonts/ by scripts/prepare-pwa.mjs.
+ */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/inter-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/inter-latin-ext-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Metric-matched fallback prevents layout shift while Inter swaps in.
+ * Fine-tune size-adjust within ±1% if Lighthouse still reports CLS. */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+}
+
+/*
+ * Design tokens — neutral scale is slate. stone must NOT be used.
+ * Light values live here. Issue #86 overrides these variables for dark mode.
+ */
+:root {
+  /* Surfaces */
+  --surface: #f8fafc;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f1f5f9;
+  --surface-inverse: #0f172a;
+
+  /* Foreground / text */
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --fg-subtle: #64748b;
+  /* decorative / disabled only — do NOT use on surface-sunken */
+  --fg-inverse: #f8fafc;
+
+  /* Borders */
+  --border-subtle: #e2e8f0;
+  --border-strong: #94a3b8;
+  --border-control: #64748b;
+
+  /* Brand (blue-700 — matches theme-color, PWA icons, OG images) */
+  --brand: #1d4ed8;
+  --brand-hover: #1e40af;
+  --brand-subtle: #eff6ff;
+  --brand-fg: #ffffff;
+
+  /* Status */
+  --success: #15803d;
+  --success-subtle: #f0fdf4;
+  --warning: #b45309;
+  --warning-subtle: #fffbeb;
+  --danger: #b91c1c;
+  --danger-subtle: #fef2f2;
+  /* info uses --brand / --brand-subtle */
+
+  /* Categories */
+  --cat-traffic: #0369a1;
+  --cat-traffic-subtle: #e0f2fe;
+  --cat-signs: #92400e;
+  --cat-signs-subtle: #fef3c7;
+
+  /* Radius — rounded-full is reserved for avatars, dots, progress bars, icon-only round buttons */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Elevation — shadow color is slate-900 at low opacity, never colored.
+   * --elevation-* vars are the overridable primitives; #86 swaps them for dark mode. */
+  --elevation-sm-a: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --elevation-sm-b: 0 1px 3px 0 rgb(15 23 42 / 0.06);
+  --elevation-md-a: 0 4px 8px -2px rgb(15 23 42 / 0.08);
+  --elevation-md-b: 0 2px 4px -2px rgb(15 23 42 / 0.05);
+  --elevation-lg-a: 0 16px 32px -8px rgb(15 23 42 / 0.16);
+  --elevation-lg-b: 0 4px 8px -4px rgb(15 23 42 / 0.08);
+
+  /* Containers */
+  --container-content: 48rem;
+  /* 768px  — reading pages (About, Privacy, question detail…) */
+  --container-wide: 72rem;
+  /* 1152px — listing pages (question list, signs index, home) */
+
+  /* Bottom nav — 64px below lg, 0 from lg (BottomNav hidden at lg+).
+   * Used by Toast (#68), install promo, and page bottom padding. */
+  --bottom-nav-height: 64px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --bottom-nav-height: 0px;
+  }
+}
+
+/*
+ * @theme inline wires each CSS variable to a Tailwind color utility so that
+ * utilities such as bg-surface, text-fg-muted, border-border-control, etc.
+ * are generated and read the variables at runtime (dark mode only needs to
+ * swap the :root values).
+ */
+@theme inline {
+  /* Surfaces */
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-inverse: var(--surface-inverse);
+
+  /* Foreground */
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-inverse: var(--fg-inverse);
+
+  /* Borders */
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-border-control: var(--border-control);
+
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-fg: var(--brand-fg);
+
+  /* Status */
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-danger: var(--danger);
+  --color-danger-subtle: var(--danger-subtle);
+
+  /* Categories */
+  --color-cat-traffic: var(--cat-traffic);
+  --color-cat-traffic-subtle: var(--cat-traffic-subtle);
+  --color-cat-signs: var(--cat-signs);
+  --color-cat-signs-subtle: var(--cat-signs-subtle);
+}
+
+/*
+ * @theme (non-inline) for radius, shadow and container tokens — these are
+ * static values that don't need runtime CSS-variable indirection, so they go
+ * in the regular @theme block alongside font-sans.
+ */
 @theme {
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Shadow — reads elevation primitives so dark mode (#86) can swap them */
+  --shadow-sm: var(--elevation-sm-a), var(--elevation-sm-b);
+  --shadow-md: var(--elevation-md-a), var(--elevation-md-b);
+  --shadow-lg: var(--elevation-lg-a), var(--elevation-lg-b);
+
+  /* Containers */
+  --container-content: 48rem;
+  --container-wide: 72rem;
+
+  /* Font */
   --font-sans:
-    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    'Inter Variable', 'Inter Fallback', system-ui, -apple-system, 'Segoe UI',
+    Roboto, sans-serif;
+
+  /*
+   * Type scale — fluid heading sizes use clamp() so no sm: variants are needed.
+   *
+   * Token       Size                                    Line-ht  Weight  Tracking
+   * ─────────── ──────────────────────────────────────  ───────  ──────  ────────
+   * caption     0.75rem  (12px) — smallest size allowed  1rem    500     0.01em
+   * body-sm     0.875rem (14px)                          1.25rem 400     0
+   * body        1rem     (16px)                          1.5rem  400     0
+   * lead        1.125rem (18px)                          1.75rem 400     0
+   * h3          clamp(1.0625rem, 1rem + 0.25vw, 1.25rem) 1.4    600    -0.005em
+   * h2          clamp(1.25rem,   1.1rem + 0.6vw, 1.5rem) 1.3    600    -0.01em
+   * h1          clamp(1.5rem,  1.25rem + 1.1vw,   2rem)  1.2    700    -0.015em
+   * display     clamp(2rem,    1.5rem  + 2.2vw,   3rem)  1.1    700    -0.02em
+   */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-caption--font-weight: 500;
+  --text-caption--letter-spacing: 0.01em;
+
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.25rem;
+  --text-body-sm--font-weight: 400;
+  --text-body-sm--letter-spacing: 0;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-body--font-weight: 400;
+  --text-body--letter-spacing: 0;
+
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.75rem;
+  --text-lead--font-weight: 400;
+  --text-lead--letter-spacing: 0;
+
+  --text-h3: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+  --text-h3--line-height: 1.4;
+  --text-h3--font-weight: 600;
+  --text-h3--letter-spacing: -0.005em;
+
+  --text-h2: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-h2--line-height: 1.3;
+  --text-h2--font-weight: 600;
+  --text-h2--letter-spacing: -0.01em;
+
+  --text-h1: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 700;
+  --text-h1--letter-spacing: -0.015em;
+
+  --text-display: clamp(2rem, 1.5rem + 2.2vw, 3rem);
+  --text-display--line-height: 1.1;
+  --text-display--font-weight: 700;
+  --text-display--letter-spacing: -0.02em;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
 }
 
 body {
   font-family: var(--font-sans);
+  /* cv11 = Inter's single-storey 'a' — more legible at small sizes on low-DPI screens */
+  font-feature-settings: 'cv11';
+}
+
+/*
+ * Spacing rhythm — convention only, not new tokens.
+ * Any other padding or gap value in a PR must include a reason.
+ *
+ * Context                        Mobile          sm (≥640px) and up
+ * ─────────────────────────────  ──────────────  ──────────────────
+ * Card padding (padding="md")    p-4   (16px)    sm:p-5  (20px)
+ * Card padding (padding="lg")    p-5   (20px)    sm:p-8  (32px)
+ * Gap between items in list/grid gap-3 (12px)    sm:gap-4 (16px)
+ * Gap between blocks in section  gap-6 (24px)    sm:gap-8 (32px)
+ * Gap between page sections      gap-10 (40px)   sm:gap-16 (64px)
+ * Inline gap (icon + label)      gap-2  (8px)    —
+ */
+
+/*
+ * Typography rules (convention — not enforced by tokens):
+ * 1. Weights: 400 body · 500 labels/badges/nav/emphasis · 600 headings & buttons
+ *    · 700 h1/display only. font-extrabold and font-black are not used.
+ * 2. Uppercase: only A/B/C/D option markers and 2–3 letter abbreviations (RW, EN, FR).
+ *    No tracking-wide* anywhere.
+ * 3. Numbers (timers, scores, counters, question numbers, pagination):
+ *    use Tailwind's built-in tabular-nums utility.
+ */
+
+/*
+ * Global focus ring — brand-coloured outline on every interactive element.
+ * Use the ring-focus utility (box-shadow) inside overflow:hidden containers
+ * where the outline would be clipped.
+ */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@utility ring-focus {
+  /* Inset ring stays visible even when the element has overflow:hidden.
+   * Layers (inside out): 2px surface-raised gap, then 4px brand ring. */
+  box-shadow:
+    inset 0 0 0 4px var(--color-brand),
+    inset 0 0 0 2px var(--color-surface-raised);
 }

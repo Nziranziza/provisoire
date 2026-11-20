@@ -1,0 +1,201 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Lang } from '../lib/quiz';
+import { imageSrc, questionHref } from '../lib/quiz';
+import { getSignDetailMetadata } from '../lib/seo';
+import {
+  signAction,
+  signMeaning,
+  signName,
+  signsIndexHref,
+  signTypeLabel,
+  type SignEntry,
+} from '../lib/signs';
+
+interface Props {
+  lang: Lang;
+  sign: SignEntry;
+  imageBase?: string;
+}
+
+const { lang, sign, imageBase = '/' } = Astro.props;
+const seo = getSignDetailMetadata({
+  lang,
+  sign,
+  site: Astro.site,
+  imageBase,
+});
+const name = signName(sign, lang);
+
+const copy: Record<
+  Lang,
+  {
+    home: string;
+    glossary: string;
+    type: string;
+    meaning: string;
+    action: string;
+    questions: string;
+    questionN: (n: number) => string;
+    back: string;
+  }
+> = {
+  en: {
+    home: 'Home',
+    glossary: 'All signs',
+    type: 'Sign type',
+    meaning: 'What it means',
+    action: 'What a driver must do',
+    questions: 'Practice questions featuring this sign',
+    questionN: (n) => `Question ${n}`,
+    back: 'Back to sign glossary',
+  },
+  fr: {
+    home: 'Accueil',
+    glossary: 'Tous les panneaux',
+    type: 'Type de panneau',
+    meaning: 'Signification',
+    action: 'Conduite à tenir',
+    questions: 'Questions d’entraînement avec ce panneau',
+    questionN: (n) => `Question ${n}`,
+    back: 'Retour au glossaire',
+  },
+  rw: {
+    home: 'Ahabanza',
+    glossary: 'Ibyapa byose',
+    type: 'Ubwoko bw’icyapa',
+    meaning: 'Ibisobanuro',
+    action: 'Icyo umushoferi agomba gukora',
+    questions: 'Ibibazo byo kwimenyereza bifite iki cyapa',
+    questionN: (n) => `Ikibazo ${n}`,
+    back: 'Subira ku ncameke y’ibyapa',
+  },
+};
+const t = copy[lang];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  lang={seo.lang}
+  canonical={seo.canonical}
+  alternates={seo.alternates}
+  image={seo.image}
+  imageAlt={seo.imageAlt}
+  type="article"
+  jsonLd={seo.jsonLd}
+>
+  <main id="main-content" class="min-h-screen bg-stone-100 px-4 py-6 sm:py-8">
+    <div class="mx-auto max-w-3xl">
+      <nav
+        class="mb-4 text-xs font-bold text-slate-500"
+        aria-label="Breadcrumb"
+      >
+        <a href={`/${lang}`} class="hover:text-blue-700 hover:underline"
+          >{t.home}</a
+        >
+        <span class="mx-1.5" aria-hidden="true">/</span>
+        <a
+          href={signsIndexHref(lang)}
+          class="hover:text-blue-700 hover:underline">{t.glossary}</a
+        >
+        <span class="mx-1.5" aria-hidden="true">/</span>
+        <span class="text-slate-800">{name}</span>
+      </nav>
+
+      <article
+        class="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs sm:p-8"
+      >
+        <div
+          class="flex flex-col items-center gap-6 sm:flex-row sm:items-start"
+        >
+          <div
+            class="flex h-44 w-44 shrink-0 items-center justify-center rounded-2xl border border-stone-200 bg-stone-50 p-4"
+          >
+            <img
+              src={imageSrc(imageBase, sign.image_url)}
+              alt={name}
+              width="160"
+              height="160"
+              class="max-h-full max-w-full object-contain"
+              loading="eager"
+            />
+          </div>
+          <div class="min-w-0 flex-1 text-center sm:text-left">
+            <p
+              class="text-[11px] font-black tracking-wider text-blue-700 uppercase"
+            >
+              {t.type}: {signTypeLabel(sign.type, lang)}
+            </p>
+            <h1
+              class="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl"
+            >
+              {name}
+            </h1>
+          </div>
+        </div>
+
+        <section class="mt-8" aria-labelledby="sign-meaning">
+          <h2
+            id="sign-meaning"
+            class="text-sm font-black tracking-wide text-slate-900 uppercase"
+          >
+            {t.meaning}
+          </h2>
+          <p class="mt-2 text-base leading-relaxed text-slate-700">
+            {signMeaning(sign, lang)}
+          </p>
+        </section>
+
+        <section class="mt-6" aria-labelledby="sign-action">
+          <h2
+            id="sign-action"
+            class="text-sm font-black tracking-wide text-slate-900 uppercase"
+          >
+            {t.action}
+          </h2>
+          <p class="mt-2 text-base leading-relaxed text-slate-700">
+            {signAction(sign, lang)}
+          </p>
+        </section>
+
+        {
+          sign.questionNumbers.length > 0 && (
+            <section class="mt-8" aria-labelledby="sign-questions">
+              <h2
+                id="sign-questions"
+                class="text-sm font-black tracking-wide text-slate-900 uppercase"
+              >
+                {t.questions}
+              </h2>
+              <ul class="mt-3 flex flex-col gap-2">
+                {sign.questionNumbers.map((n) => (
+                  <li>
+                    <a
+                      href={questionHref(lang, n)}
+                      class="flex items-center justify-between gap-3 rounded-xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-slate-900 transition hover:border-slate-900 hover:bg-white"
+                    >
+                      <span>{t.questionN(n)}</span>
+                      <span aria-hidden="true" class="text-slate-400">
+                        →
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </article>
+
+      <p class="mt-6 text-center">
+        <a
+          href={signsIndexHref(lang)}
+          class="text-sm font-bold text-blue-700 underline-offset-2 hover:underline"
+        >
+          ← {t.back}
+        </a>
+      </p>
+    </div>
+  </main>
+</BaseLayout>

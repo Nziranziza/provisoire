@@ -1,0 +1,22 @@
+---
+import CategoryHubPage from '../../../../components/CategoryHubPage.astro';
+import questionBank from '../../../../../questions.json';
+import { PAGE_SIZE, totalQuestionPages } from '../../../../lib/quiz';
+
+export function getStaticPaths() {
+  const count = questionBank.questions.filter(
+    (q) => q.category_id === 1,
+  ).length;
+  const total = totalQuestionPages(count, PAGE_SIZE);
+  return Array.from({ length: Math.max(0, total - 1) }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }));
+}
+
+const page = Number(Astro.params.page);
+if (page <= 1) {
+  return Astro.redirect('/fr/traffic-rules', 301);
+}
+---
+
+<CategoryHubPage lang="fr" categorySlug="traffic-rules" page={page} />

@@ -1,12 +1,20 @@
-import type { Dispatch } from 'react';
+import { useMemo, useState, useEffect, type Dispatch } from 'react';
 import type { I18nDictionary } from './constants';
 import { formatTime } from './reducer';
 import type { PracticeAction, PracticeState, ReviewFilter } from './types';
-import { PASSING_SCORE } from './constants';
+import { PASSING_SCORE, EXAM_CONFIG } from './constants';
 import { clearSessionFromStorage } from './storage';
 import InstallAppPrompt from '../InstallAppPrompt';
-import { categoryLabel } from '../../lib/quiz';
+import ShareResultCard from './ShareResultCard';
+import { categoryLabel, questionExplanation } from '../../lib/quiz';
 import { questionImageAlt } from '../../lib/seo';
+import {
+  isQuestionBookmarked,
+  toggleQuestionBookmark,
+  getQuestionProgress,
+  deriveMasteryStatus,
+  EVENT_BOOKMARKS_CHANGED,
+} from '../../lib/study-progress';
 
 interface PracticeReviewProps {
   state: PracticeState;
@@ -23,6 +31,77 @@ export default function PracticeReview({
   imageBase,
   onRetake,
 }: PracticeReviewProps) {
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(() => {
+    return new Set(
+      state.sessionQuestions
+        .map((q) => q.id)
+        .filter((id) => isQuestionBookmarked(id)),
+    );
+  });
+
+  // Track expanded questions: Correct answers are collapsed by default to keep focus on mistakes
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(() => {
+    const initial = new Set<string>();
+    state.sessionQuestions.forEach((q, idx) => {
+      const isCorrect = state.answers[idx] === q.correct_index;
+      if (!isCorrect) {
+        initial.add(q.id);
+      }
+    });
+    return initial;
+  });
+
+  useEffect(() => {
+    const handleBookmarkEvent = () => {
+      setBookmarkedIds(
+        new Set(
+          state.sessionQuestions
+            .map((q) => q.id)
+            .filter((id) => isQuestionBookmarked(id)),
+        ),
+      );
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener(EVENT_BOOKMARKS_CHANGED, handleBookmarkEvent);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener(
+          EVENT_BOOKMARKS_CHANGED,
+          handleBookmarkEvent,
+        );
+      }
+    };
+  }, [state.sessionQuestions]);
+
+  const handleToggleBookmark = (questionId: string) => {
+    const next = toggleQuestionBookmark(questionId);
+    setBookmarkedIds((prev) => {
+      const copy = new Set(prev);
+      if (next) copy.add(questionId);
+      else copy.delete(questionId);
+      return copy;
+    });
+  };
+
+  const handleToggleExpand = (questionId: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(questionId)) next.delete(questionId);
+      else next.add(questionId);
+      return next;
+    });
+  };
+
+  const handleExpandAll = () => {
+    setExpandedIds(new Set(state.sessionQuestions.map((q) => q.id)));
+  };
+
+  const handleCollapseAll = () => {
+    // Keep incorrect open or collapse everything
+    setExpandedIds(new Set());
+  };
+
   let totalScore = 0;
   let rulesScore = 0;
   let rulesTotal = 0;
@@ -42,9 +121,45 @@ export default function PracticeReview({
     }
   });
 
-  const isPassed = totalScore >= PASSING_SCORE;
+  const totalQuestions = state.sessionQuestions.length;
+  const missedCount = totalQuestions - totalScore;
+  const passThreshold =
+    totalQuestions >= EXAM_CONFIG.TOTAL_QUESTIONS
+      ? PASSING_SCORE
+      : Math.ceil(totalQuestions * (EXAM_CONFIG.PASSING_PERCENTAGE / 100));
+  const isPassed = totalScore >= passThreshold;
   const scorePercent = Math.round(
-    (totalScore / Math.max(1, state.sessionQuestions.length)) * 100,
+    (totalScore / Math.max(1, totalQuestions)) * 100,
+  );
+
+  const resultCardData = useMemo(
+    () => ({
+      score: totalScore,
+      total: state.sessionQuestions.length,
+      isPassed,
+      rulesScore,
+      rulesTotal,
+      signsScore,
+      signsTotal,
+      timeSpent: state.timeSpent,
+      mode:
+        state.mode === 'mock_exam'
+          ? ('mock_exam' as const)
+          : ('practice' as const),
+      locale: state.currentLocale,
+    }),
+    [
+      totalScore,
+      state.sessionQuestions.length,
+      isPassed,
+      rulesScore,
+      rulesTotal,
+      signsScore,
+      signsTotal,
+      state.timeSpent,
+      state.mode,
+      state.currentLocale,
+    ],
   );
 
   // Filtered list for review mode
@@ -94,7 +209,13 @@ export default function PracticeReview({
           </h1>
 
           <p className="mt-2 max-w-md text-sm text-slate-600">
-            {isPassed ? t.resultPassedDesc : t.resultFailedDesc}
+            {totalQuestions >= EXAM_CONFIG.TOTAL_QUESTIONS
+              ? isPassed
+                ? t.resultPassedDesc
+                : t.resultFailedDesc
+              : isPassed
+                ? `${t.historyPassed}: ${totalScore}/${totalQuestions} (${scorePercent}%). ${t.passMarkLabel}: ${passThreshold}/${totalQuestions} (${EXAM_CONFIG.PASSING_PERCENTAGE}%).`
+                : `${t.historyFailed}: ${totalScore}/${totalQuestions} (${scorePercent}%). ${t.passMarkLabel}: ${passThreshold}/${totalQuestions} (${EXAM_CONFIG.PASSING_PERCENTAGE}%).`}
           </p>
 
           {/* Big Score Display */}
@@ -103,7 +224,7 @@ export default function PracticeReview({
               {totalScore}
             </span>
             <span className="text-2xl font-bold text-slate-500">
-              / {state.sessionQuestions.length}
+              / {totalQuestions}
             </span>
             <span className="ml-2 rounded-lg border border-stone-200 bg-white px-2.5 py-1 text-sm font-bold text-slate-700 shadow-xs">
               {scorePercent}%
@@ -135,68 +256,84 @@ export default function PracticeReview({
           </div>
         </div>
 
-        {/* Action Buttons on Top */}
-        <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3">
+        {/* Action Buttons on Top — Structured for high-visibility learning flows */}
+        <div className="mt-6 w-full space-y-3">
           <button
             type="button"
             onClick={onRetake}
-            className="flex min-h-[48px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 active:scale-95"
+            className="flex min-h-[56px] w-full cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-slate-900 px-6 py-4 text-center text-sm leading-snug font-black text-white shadow-md transition hover:bg-slate-800 hover:shadow-lg active:scale-[0.98] sm:min-h-[60px] sm:text-base"
           >
-            {t.retakeBtn}
+            <span>↺</span>
+            <span>{t.retakeBtn}</span>
           </button>
 
-          {!isPassed && totalScore < state.sessionQuestions.length && (
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3">
+            {missedCount > 0 && (
+              <button
+                type="button"
+                id="retry-wrong-only"
+                data-testid="retry-wrong-only"
+                onClick={() => dispatch({ type: 'RETAKE_MISSED' })}
+                className="flex min-h-[52px] w-full cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-slate-900 bg-amber-100 px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-900 shadow-xs transition hover:bg-amber-200 active:scale-95 sm:text-sm"
+              >
+                <span>⚡</span>
+                <span>
+                  {t.retakeMissedBtn} ({missedCount})
+                </span>
+              </button>
+            )}
+
             <button
               type="button"
-              onClick={() => dispatch({ type: 'RETAKE_MISSED' })}
-              className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-full border-2 border-slate-900 bg-white px-5 text-sm font-bold text-slate-900 transition hover:bg-stone-100 active:scale-95"
+              onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
+              className="flex min-h-[52px] w-full cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-700 shadow-xs transition hover:bg-stone-100 active:scale-95 sm:text-sm"
             >
-              {t.retakeMissedBtn}
+              <span>↺</span>
+              <span>{t.discardBtn}</span>
             </button>
-          )}
 
-          <button
-            type="button"
-            onClick={() => dispatch({ type: 'DISCARD_SAVED_SESSION' })}
-            className="flex min-h-[48px] cursor-pointer touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-bold text-slate-700 transition hover:bg-stone-100 active:scale-95 sm:text-sm"
-          >
-            ↺ {t.discardBtn}
-          </button>
-
-          <a
-            href={`/${state.currentLocale}/questions`}
-            className="inline-flex min-h-[48px] touch-manipulation items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-bold text-slate-700 no-underline transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:text-sm"
-            onClick={() => {
-              // Leaving Practice/Exam -> don't keep the in-progress session around.
-              // This avoids the "Saved Session" card showing up next time.
-              clearSessionFromStorage();
-            }}
-          >
-            ← {t.bankBtn}
-          </a>
+            <a
+              href={`/${state.currentLocale}/questions`}
+              className="flex min-h-[52px] w-full touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-center text-xs leading-snug font-extrabold text-slate-700 no-underline shadow-xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:text-sm"
+              onClick={() => {
+                clearSessionFromStorage();
+              }}
+            >
+              <span>←</span>
+              <span>{t.bankBtn}</span>
+            </a>
+          </div>
         </div>
       </div>
+
+      {/* Shareable Viral Result Card for WhatsApp & Social */}
+      <ShareResultCard data={resultCardData} locale={state.currentLocale} />
 
       {/* Sensible Add to Home Screen Prompt after completed session */}
       <InstallAppPrompt lang={state.currentLocale} />
 
       {/* Detailed Question Review List */}
       <div className="rounded-3xl border border-stone-200 bg-stone-50 p-4 sm:p-7">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-base font-black tracking-wide text-slate-900 uppercase">
-            {t.reviewHeader}
-          </h2>
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-base font-black tracking-wide text-slate-900 uppercase sm:text-lg">
+              {t.reviewHeader}
+            </h2>
+            <p className="mt-0.5 text-xs text-slate-500">{t.collapsedNotice}</p>
+          </div>
 
-          {/* Filter Tabs with Accessible Tap Targets */}
-          <div className="flex flex-wrap gap-2">
-            {(['all', 'incorrect', 'correct', 'flagged'] as ReviewFilter[]).map(
-              (f) => {
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Filter Tabs with Accessible Tap Targets */}
+            <div className="flex flex-wrap gap-1.5">
+              {(
+                ['all', 'incorrect', 'correct', 'flagged'] as ReviewFilter[]
+              ).map((f) => {
                 const active = state.reviewFilter === f;
                 const label =
                   f === 'all'
-                    ? `${t.filterAll} (${state.sessionQuestions.length})`
+                    ? `${t.filterAll} (${totalQuestions})`
                     : f === 'incorrect'
-                      ? `${t.filterIncorrect} (${state.sessionQuestions.length - totalScore})`
+                      ? `${t.filterIncorrect} (${missedCount})`
                       : f === 'correct'
                         ? `${t.filterCorrect} (${totalScore})`
                         : `${t.filterFlagged} (${Object.values(state.flagged).filter(Boolean).length})`;
@@ -211,17 +348,37 @@ export default function PracticeReview({
                         payload: { filter: f },
                       })
                     }
-                    className={`flex min-h-[38px] touch-manipulation items-center rounded-full px-4 text-xs font-bold transition active:scale-95 ${
+                    className={`flex min-h-[38px] cursor-pointer touch-manipulation items-center justify-center rounded-xl px-3.5 py-1.5 text-xs font-extrabold transition active:scale-95 sm:rounded-full sm:text-sm ${
                       active
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-200'
+                        ? 'bg-slate-900 text-white shadow-sm'
+                        : 'border-2 border-stone-300 bg-white text-slate-700 hover:bg-stone-200'
                     }`}
                   >
                     {label}
                   </button>
                 );
-              },
-            )}
+              })}
+            </div>
+
+            {/* Quick Expand / Collapse All */}
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleExpandAll}
+                className="inline-flex min-h-[38px] cursor-pointer items-center rounded-lg border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-slate-700 transition hover:bg-stone-100"
+                title={t.expandAll}
+              >
+                <span>{t.expandAll}</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleCollapseAll}
+                className="inline-flex min-h-[38px] cursor-pointer items-center rounded-lg border border-stone-300 bg-white px-2.5 py-1 text-xs font-bold text-slate-700 transition hover:bg-stone-100"
+                title={t.collapseAll}
+              >
+                <span>{t.collapseAll}</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -237,27 +394,97 @@ export default function PracticeReview({
               isFlagged,
             }) => {
               const tr =
-                q.translations[state.currentLocale] || q.translations.en;
+                q.translations[state.currentLocale] ||
+                q.translations.rw ||
+                q.translations.en;
               const title = tr?.question || 'Question';
               const opts = tr?.options || [];
-              const explanation = tr?.explanation;
+              const explanation = questionExplanation(q, state.currentLocale);
+              const isBookmarked = bookmarkedIds.has(q.id);
+              const p = getQuestionProgress(q.id);
+              const status = deriveMasteryStatus(p);
+              const isExpanded = expandedIds.has(q.id);
+              const questionUrl = `/${state.currentLocale}/questions/${q.bankIndex + 1}`;
 
+              // 1. Collapsed State (when question ID is absent from expandedIds)
+              if (!isExpanded) {
+                return (
+                  <div
+                    key={q.id}
+                    className={`group rounded-2xl border border-l-4 border-stone-200 bg-white p-3.5 shadow-2xs transition sm:p-4 ${
+                      isAnsCorrect
+                        ? 'border-l-emerald-600 hover:bg-emerald-50/30'
+                        : 'border-l-rose-600 hover:bg-rose-50/30'
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2.5">
+                      <div className="flex min-w-0 flex-1 items-center gap-2.5">
+                        <span className="text-xs font-bold text-slate-400 uppercase">
+                          Q{idx + 1}
+                        </span>
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-black uppercase ${
+                            isAnsCorrect
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-rose-100 text-rose-800'
+                          }`}
+                        >
+                          {isAnsCorrect
+                            ? `✓ ${t.historyPassed}`
+                            : isAns
+                              ? `✗ ${t.historyFailed}`
+                              : `○ ${t.noAnswer}`}
+                        </span>
+                        <a
+                          href={questionUrl}
+                          className="line-clamp-1 min-w-0 flex-1 text-xs font-semibold text-slate-800 no-underline hover:text-blue-700 sm:text-sm"
+                          title={title}
+                        >
+                          {title}
+                        </a>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase ${
+                            q.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
+                          }`}
+                        >
+                          {categoryLabel(q.category_id, state.currentLocale)}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={() => handleToggleExpand(q.id)}
+                          aria-expanded={false}
+                          className="inline-flex min-h-[34px] cursor-pointer touch-manipulation items-center gap-1 rounded-xl border border-stone-300 bg-stone-50 px-2.5 py-1 text-xs font-bold text-slate-700 transition hover:bg-stone-200 active:scale-95"
+                        >
+                          <span>{t.showDetails}</span>
+                          <span>▾</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // 2. Full Expanded Card (Incorrect answers or user-expanded correct answers)
               return (
                 <div
                   key={q.id}
-                  className={`rounded-xl border border-l-4 bg-white p-4 shadow-xs sm:p-5 ${
+                  className={`rounded-2xl border border-l-4 bg-white p-4 shadow-xs sm:p-5 ${
                     isAnsCorrect
                       ? 'border-stone-200 border-l-emerald-600'
                       : 'border-stone-200 border-l-rose-600'
                   }`}
                 >
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs font-bold text-slate-400 uppercase">
                         Q{idx + 1}
                       </span>
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold text-white uppercase ${
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-black text-white uppercase ${
                           isAnsCorrect ? 'bg-emerald-600' : 'bg-rose-600'
                         }`}
                       >
@@ -272,19 +499,62 @@ export default function PracticeReview({
                           ⚑ {t.flaggedDuringTest}
                         </span>
                       )}
+                      {status === 'mastered' && (
+                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-black text-emerald-800 uppercase">
+                          🟢 {t.mastered}
+                        </span>
+                      )}
+                      {status === 'weak' && (
+                        <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-black text-rose-800 uppercase">
+                          🔴 {t.weak}
+                        </span>
+                      )}
+                      {status === 'learning' && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black text-amber-800 uppercase">
+                          🟡 {t.learning}
+                        </span>
+                      )}
                     </div>
 
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase ${
-                        q.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
-                      }`}
-                    >
-                      {categoryLabel(q.category_id, state.currentLocale)}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleBookmark(q.id)}
+                        className={`inline-flex cursor-pointer items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-extrabold shadow-2xs transition ${
+                          isBookmarked
+                            ? 'bg-sky-700 text-white hover:bg-sky-800'
+                            : 'border border-stone-300 bg-white text-slate-700 hover:bg-stone-100'
+                        }`}
+                        title={isBookmarked ? t.bookmarkedBtn : t.bookmarkBtn}
+                      >
+                        <span>{isBookmarked ? '🔖' : '🏷️'}</span>
+                        <span className="hidden sm:inline">
+                          {isBookmarked ? t.bookmarkedBtn : t.bookmarkBtn}
+                        </span>
+                      </button>
+
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase ${
+                          q.category_id === 2 ? 'bg-sky-700' : 'bg-amber-700'
+                        }`}
+                      >
+                        {categoryLabel(q.category_id, state.currentLocale)}
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => handleToggleExpand(q.id)}
+                        aria-expanded={true}
+                        className="inline-flex min-h-[30px] cursor-pointer touch-manipulation items-center gap-1 rounded-lg border border-stone-300 bg-stone-50 px-2 py-0.5 text-[11px] font-bold text-slate-700 transition hover:bg-stone-200 active:scale-95"
+                      >
+                        <span>{t.hideDetails}</span>
+                        <span>▴</span>
+                      </button>
+                    </div>
                   </div>
 
                   {q.image_url && (
-                    <div className="my-2">
+                    <div className="my-2.5">
                       <img
                         src={`${imageBase}${q.image_url.replace(/^\//, '')}`}
                         alt={questionImageAlt(
@@ -302,12 +572,16 @@ export default function PracticeReview({
                     </div>
                   )}
 
-                  <p className="mb-3 text-sm leading-relaxed font-bold text-slate-900">
+                  {/* Question Title with direct link to full question page */}
+                  <a
+                    href={questionUrl}
+                    className="mb-3 block text-sm leading-relaxed font-bold text-slate-900 no-underline transition hover:text-blue-700 sm:text-base"
+                  >
                     {title}
-                  </p>
+                  </a>
 
                   {/* Options list */}
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     {opts.map((opt, oIdx) => {
                       const isCorrectOption = oIdx === q.correct_index;
                       const isUserSelected = uAns === oIdx;
@@ -315,63 +589,125 @@ export default function PracticeReview({
                       return (
                         <div
                           key={oIdx}
-                          className={`flex items-start gap-2.5 rounded-lg border px-3 py-2 text-xs sm:text-sm ${
+                          className={`flex items-start gap-3 rounded-xl border-2 p-3 text-xs sm:p-3.5 sm:text-sm ${
                             isCorrectOption
-                              ? 'border-emerald-600 bg-emerald-50 font-medium text-slate-900'
+                              ? 'border-emerald-600 bg-emerald-50/90 font-semibold text-slate-900 shadow-2xs'
                               : isUserSelected && !isAnsCorrect
-                                ? 'border-rose-400 bg-rose-50 text-rose-900'
-                                : 'border-stone-200 bg-stone-50/50 text-slate-600'
+                                ? 'border-rose-400 bg-rose-50/90 text-rose-950 shadow-2xs'
+                                : 'border-stone-200 bg-stone-50/60 text-slate-700'
                           }`}
                         >
                           <span
-                            className={`flex h-5 w-5 flex-none items-center justify-center rounded-full text-[10px] font-extrabold ${
+                            className={`mt-0.5 flex h-6 w-6 flex-none shrink-0 items-center justify-center rounded-full text-xs font-black sm:h-6.5 sm:w-6.5 ${
                               isCorrectOption
                                 ? 'bg-emerald-600 text-white'
                                 : isUserSelected && !isAnsCorrect
                                   ? 'bg-rose-600 text-white'
-                                  : 'border border-slate-300 bg-white text-slate-600'
+                                  : 'border border-slate-300 bg-white text-slate-700'
                             }`}
                           >
                             {String.fromCharCode(65 + oIdx)}
                           </span>
-                          <span className="flex-1">{opt}</span>
-                          {isCorrectOption && (
-                            <span className="flex-none font-bold text-emerald-700">
-                              {t.correctAnswer}
+                          <div className="flex min-w-0 flex-1 flex-col gap-1">
+                            <span className="leading-relaxed break-words">
+                              {opt}
                             </span>
-                          )}
-                          {isUserSelected && !isCorrectOption && (
-                            <span className="flex-none font-bold text-rose-700">
-                              {t.yourAnswer}
-                            </span>
-                          )}
+                            {isCorrectOption && (
+                              <span className="inline-flex items-center self-start rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-black tracking-wide text-emerald-800 uppercase sm:text-xs">
+                                ✓ {t.correctAnswer}
+                              </span>
+                            )}
+                            {isUserSelected && !isCorrectOption && (
+                              <span className="inline-flex items-center self-start rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-black tracking-wide text-rose-800 uppercase sm:text-xs">
+                                ✗ {t.yourAnswer}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       );
                     })}
+
+                    {!isAns && !isAnsCorrect && (
+                      <div className="rounded-lg border border-amber-300 bg-amber-50/80 p-2.5 text-xs text-amber-900">
+                        <span className="font-bold">○ {t.noAnswer}</span>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Explanation if present */}
+                  {/* Explanation Section */}
                   {explanation && (
-                    <div className="mt-3 rounded-lg bg-blue-50/70 p-3 text-xs text-blue-900">
-                      <strong className="block font-bold">
-                        {t.explanation}:
-                      </strong>
-                      <p className="mt-0.5">{explanation}</p>
+                    <div
+                      data-testid="explanation-box"
+                      className="mt-3.5 rounded-2xl border border-blue-200/90 bg-blue-50/90 p-3.5 text-xs text-blue-950 shadow-2xs sm:p-4 sm:text-sm"
+                    >
+                      <div className="mb-1 flex items-center gap-1.5 font-black text-blue-900">
+                        <span>💡</span>
+                        <span>{t.explanation}:</span>
+                      </div>
+                      <p className="leading-relaxed break-words">
+                        {explanation}
+                      </p>
                     </div>
                   )}
 
-                  <div className="mt-3 flex justify-end">
+                  {/* Internal Link to Full Question Page */}
+                  <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 border-t border-stone-100 pt-3">
+                    <span className="text-[11px] font-semibold text-slate-400">
+                      ID: {q.id.slice(0, 8)} · #{q.bankIndex + 1}
+                    </span>
+
                     <a
-                      href={`/${state.currentLocale}/questions/${q.bankIndex + 1}`}
-                      className="text-xs font-semibold text-blue-700 hover:underline"
+                      href={questionUrl}
+                      className="inline-flex min-h-[36px] items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50/60 px-3.5 py-1.5 text-xs font-bold text-blue-700 no-underline transition hover:bg-blue-100 hover:text-blue-900"
                     >
-                      {t.bankLink}
+                      <span>{t.bankLink}</span>
                     </a>
                   </div>
                 </div>
               );
             },
           )}
+        </div>
+
+        {/* Action Row at Bottom of Review List */}
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+          {missedCount > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                dispatch({ type: 'RETAKE_MISSED' });
+                if (typeof window !== 'undefined') {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+              className="flex min-h-[50px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-slate-900 bg-amber-100 px-6 py-3 text-center text-xs font-extrabold text-slate-900 shadow-xs transition hover:bg-amber-200 active:scale-95 sm:text-sm"
+            >
+              <span>⚡</span>
+              <span>
+                {t.retakeMissedBtn} ({missedCount})
+              </span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={onRetake}
+            className="flex min-h-[50px] cursor-pointer touch-manipulation items-center justify-center gap-1.5 rounded-2xl bg-slate-900 px-6 py-3 text-center text-xs font-extrabold text-white shadow-xs transition hover:bg-slate-800 active:scale-95 sm:text-sm"
+          >
+            <span>↺</span>
+            <span>{t.retakeBtn}</span>
+          </button>
+
+          <a
+            href={`/${state.currentLocale}/questions`}
+            onClick={() => {
+              clearSessionFromStorage();
+            }}
+            className="flex min-h-[50px] touch-manipulation items-center justify-center gap-1.5 rounded-2xl border-2 border-stone-300 bg-white px-6 py-3 text-center text-xs font-extrabold text-slate-700 no-underline shadow-xs transition hover:bg-stone-100 active:scale-95 sm:text-sm"
+          >
+            <span>←</span>
+            <span>{t.bankBtn}</span>
+          </a>
         </div>
       </div>
     </div>

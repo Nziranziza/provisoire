@@ -142,11 +142,13 @@ function parseHtml(html) {
   const ogDesc = matchMetaByProperty('og:description');
   const ogUrl = matchMetaByProperty('og:url');
   const ogType = matchMetaByProperty('og:type');
+  const ogImage = matchMetaByProperty('og:image');
 
   // Twitter
   const twCard = matchMetaByName('twitter:card');
   const twTitle = matchMetaByName('twitter:title');
   const twDesc = matchMetaByName('twitter:description');
+  const twImage = matchMetaByName('twitter:image');
 
   // Images
   const imgRegex = /<img\s+[^>]*>/gi;
@@ -175,11 +177,13 @@ function parseHtml(html) {
       desc: ogDesc,
       url: ogUrl,
       type: ogType,
+      image: ogImage,
     },
     twitter: {
       card: twCard,
       title: twTitle,
       desc: twDesc,
+      image: twImage,
     },
     images,
   };
@@ -266,9 +270,31 @@ for (const filePath of htmlFiles) {
   assert.ok(parsed.og.title, `Page ${relPath} missing og:title`);
   assert.ok(parsed.og.desc, `Page ${relPath} missing og:description`);
   assert.ok(parsed.og.url, `Page ${relPath} missing og:url`);
+  assert.ok(parsed.og.image, `Page ${relPath} missing og:image`);
   assert.ok(parsed.twitter.card, `Page ${relPath} missing twitter:card`);
+  assert.equal(
+    parsed.twitter.card,
+    'summary_large_image',
+    `Page ${relPath} twitter:card must be summary_large_image`,
+  );
   assert.ok(parsed.twitter.title, `Page ${relPath} missing twitter:title`);
   assert.ok(parsed.twitter.desc, `Page ${relPath} missing twitter:description`);
+  assert.ok(parsed.twitter.image, `Page ${relPath} missing twitter:image`);
+
+  // Verify og:image file exists on disk in dist/
+  let ogImageUrl;
+  try {
+    ogImageUrl = new URL(parsed.og.image);
+  } catch {
+    assert.fail(
+      `Page ${relPath} og:image must be a valid URL, got ${parsed.og.image}`,
+    );
+  }
+  const ogImgDiskPath = join(DIST_DIR, ogImageUrl.pathname.replace(/^\//, ''));
+  assert.ok(
+    existsSync(ogImgDiskPath),
+    `Page ${relPath} og:image file does not exist at ${ogImgDiskPath}`,
+  );
 
   // 5. Hreflang alternates check for localized pages
   const isLocalizedPage =
@@ -520,6 +546,61 @@ for (const [locale, expectedLinks] of Object.entries(requiredFooterLinks)) {
 }
 console.log(
   '✓ Footer landmark, required links, and localized dictionaries verified across all locales!',
+);
+
+// 12. Check Header landmark, localized labels, navigation, and mobile menu across all locales
+console.log('\n--- Checking Header Landmark & Localized Navigation ---');
+const requiredHeaderLinks = {
+  en: [
+    '/en',
+    '/en/traffic-rules',
+    '/en/road-signs',
+    '/en/practice',
+    '/en/exam',
+    '/en/about',
+  ],
+  fr: [
+    '/fr',
+    '/fr/traffic-rules',
+    '/fr/road-signs',
+    '/fr/practice',
+    '/fr/exam',
+    '/fr/about',
+  ],
+  rw: [
+    '/rw',
+    '/rw/traffic-rules',
+    '/rw/road-signs',
+    '/rw/practice',
+    '/rw/exam',
+    '/rw/about',
+  ],
+};
+
+for (const [locale, expectedLinks] of Object.entries(requiredHeaderLinks)) {
+  const samplePath = join(DIST_DIR, `${locale}.html`);
+  assert(
+    existsSync(samplePath),
+    `Sample page ${locale}.html must exist in dist/ to test header`,
+  );
+  const html = readFileSync(samplePath, 'utf8');
+  assert(
+    html.includes('<header'),
+    `<header element must exist in ${locale}.html`,
+  );
+  assert(
+    html.includes('id="site-mobile-menu-btn"'),
+    `Mobile menu button must exist in ${locale}.html`,
+  );
+  for (const link of expectedLinks) {
+    assert(
+      html.includes(`href="${link}"`),
+      `Header in ${locale}.html missing expected localized link: ${link}`,
+    );
+  }
+}
+console.log(
+  '✓ Header landmark, mobile menu, and localized navigation verified across all locales!',
 );
 
 console.log('\n======================================================');

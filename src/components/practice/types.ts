@@ -19,7 +19,8 @@ export interface SessionQuestion {
 }
 
 export type ExamStage = 'intro' | 'in_progress' | 'review_all';
-export type ExamMode = 'practice' | 'mock_exam';
+export type ExamMode =
+  'practice' | 'mock_exam' | 'weak_drill' | 'bookmarked_drill';
 export type ReviewFilter = 'all' | 'incorrect' | 'correct' | 'flagged';
 
 export interface PastResult {

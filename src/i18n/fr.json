@@ -1,0 +1,61 @@
+{
+  "header": {
+    "home": "Accueil",
+    "trafficRules": "Règles de circulation",
+    "roadSigns": "Panneaux routiers",
+    "signsGlossary": "Guide des panneaux",
+    "practice": "Entraînement",
+    "exam": "Examen",
+    "questions": "Questions",
+    "about": "À propos",
+    "languageSelector": "Sélecteur de langue",
+    "openMenu": "Ouvrir le menu de navigation",
+    "closeMenu": "Fermer le menu de navigation",
+    "nav": "Navigation principale",
+    "mobileNav": "Navigation mobile",
+    "brandTagline": "Code de la route rwandais",
+    "skipToContent": "Passer au contenu principal",
+    "homeAriaLabel": "Accueil Provisoire",
+    "homeDesc": "Aperçu & banque de questions",
+    "trafficRulesDesc": "Règles officielles & priorités",
+    "roadSignsDesc": "Signaux de danger, d’obligation & d’indication",
+    "practiceDesc": "Quiz interactif sans chronomètre",
+    "examDesc": "Examen blanc chronométré 20 questions",
+    "aboutDesc": "À propos de notre plateforme d’étude",
+    "installAppText": "Installer l’app",
+    "installAppDesc": "Révisez hors-ligne sur votre appareil",
+    "activeBadge": "Actuel"
+  },
+  "bottomNav": {
+    "home": "Accueil",
+    "questions": "Questions",
+    "practice": "Entraînement",
+    "signs": "Panneaux",
+    "exam": "Examen"
+  },
+  "footer": {
+    "tagline": "Aide à l’étude pour le code de la route au Rwanda",
+    "home": "Accueil",
+    "practice": "Entraînement",
+    "exam": "Examen blanc",
+    "questions": "Questions",
+    "trafficRules": "Règles de circulation",
+    "roadSigns": "Panneaux routiers",
+    "about": "À propos",
+    "privacy": "Confidentialité",
+    "terms": "Conditions d’utilisation",
+    "share": "Partager",
+    "shareToast": "Lien copié dans le presse-papiers !",
+    "shareTitle": "Provisoire — Entraînement au code de la route rwandais",
+    "shareText": "Pratiquez gratuitement et hors-ligne les questions officielles et examens blancs du permis provisoire au Rwanda !",
+    "languageSelector": "Sélecteur de langue",
+    "backToTop": "Haut",
+    "disclaimer": "Provisoire est un outil d’apprentissage indépendant et non officiel, sans affiliation ni approbation de la Police Nationale du Rwanda (RNP) ou de toute entité gouvernementale.",
+    "nav": "Navigation de bas de page"
+  },
+  "locales": {
+    "en": "English",
+    "fr": "Français",
+    "rw": "Kinyarwanda"
+  }
+}

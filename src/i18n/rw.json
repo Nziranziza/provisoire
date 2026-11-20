@@ -1,0 +1,61 @@
+{
+  "header": {
+    "home": "Ahabanza",
+    "trafficRules": "Amategeko y’umuhanda",
+    "roadSigns": "Ibyapa byo ku muhanda",
+    "signsGlossary": "Ubuyobozi bw’ibyapa",
+    "practice": "Imyitozo",
+    "exam": "Ikizamini",
+    "questions": "Ibibazo",
+    "about": "Ibyerekeye",
+    "languageSelector": "Guhitamo ururimi",
+    "openMenu": "Fungura menu y’urubuga",
+    "closeMenu": "Funga menu y’urubuga",
+    "nav": "Ibyerekezo bikuru",
+    "mobileNav": "Kugenda kuri telefoni",
+    "brandTagline": "Kwiga amategeko y’umuhanda",
+    "skipToContent": "Simbukira ku birimo nyamukuru",
+    "homeAriaLabel": "Ahabanza ha Provisoire",
+    "homeDesc": "Ahabanza n’incamake y’ibibazo",
+    "trafficRulesDesc": "Amategeko agenga uburyo bwo kugenda",
+    "roadSignsDesc": "Ibyapa by’integuza, ibitegeka n’ibimenyesha",
+    "practiceDesc": "Kwimenyereza ibibazo nta gitutu",
+    "examDesc": "Ikizamini cy’ikitegererezo cy’iminota 20",
+    "aboutDesc": "Ibyerekeye urubuga n’ubufasha bwo kwiga",
+    "installAppText": "Shyiramo App",
+    "installAppDesc": "Wige nta interineti muri telefone yawe",
+    "activeBadge": "Iriho"
+  },
+  "bottomNav": {
+    "home": "Ahabanza",
+    "questions": "Ibibazo",
+    "practice": "Imyitozo",
+    "signs": "Ibyapa",
+    "exam": "Ikizamini"
+  },
+  "footer": {
+    "tagline": "Ubufasha bwo kwiga amategeko y’umuhanda mu Rwanda",
+    "home": "Ahabanza",
+    "practice": "Imyitozo",
+    "exam": "Ikizamini cy’ikitegererezo",
+    "questions": "Ibibazo",
+    "trafficRules": "Amategeko y’umuhanda",
+    "roadSigns": "Ibyapa byo ku muhanda",
+    "about": "Ibyerekeye",
+    "privacy": "Ubuzima bwite",
+    "terms": "Amategeko ngenderwaho",
+    "share": "Sangiza",
+    "shareToast": "Ihuza ryakoporowe mu bubiko bw’agateganyo!",
+    "shareTitle": "Provisoire — Kwitegura ikizamini cy’uruhushya rw’agateganyo",
+    "shareText": "Imenyereze ibibazo byemewe n’ibizamini by’ikitegererezo ku buntu kandi nta interineti!",
+    "languageSelector": "Guhitamo ururimi",
+    "backToTop": "Hejuru",
+    "disclaimer": "Provisoire ni uburyo bwigenga bwo gufasha kwiga butafitanye isano cyangwa ngo bwemezwe na Polisi y’u Rwanda (RNP) cyangwa urundi rwego rwa leta.",
+    "nav": "Ibyerekezo byo hasi"
+  },
+  "locales": {
+    "en": "English",
+    "fr": "Français",
+    "rw": "Kinyarwanda"
+  }
+}

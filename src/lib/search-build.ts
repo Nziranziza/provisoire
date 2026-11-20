@@ -30,7 +30,7 @@ export function buildSearchPayload(
       o: options,
     };
 
-    if (explanation.trim()) {
+    if (explanation && explanation.trim()) {
       entry.e = explanation.trim();
     }
     if (answer.trim()) {

@@ -34,7 +34,6 @@ import PracticeIntro from './practice/PracticeIntro';
 import PracticeExam from './practice/PracticeExam';
 import PracticeSubmitModal from './practice/PracticeSubmitModal';
 import PracticeReview from './practice/PracticeReview';
-import InstallAppButton from './InstallAppButton';
 import { markCompletedSession, precacheUrls } from '../lib/pwa';
 
 export default function PracticeSession({
@@ -285,85 +284,24 @@ export default function PracticeSession({
     });
   };
 
-  const handleLocaleChange = (newLocale: Lang) => {
-    dispatch({ type: 'SET_LOCALE', payload: { locale: newLocale } });
-
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('provisoire_user_locale', newLocale);
-
-        const currentPath = window.location.pathname;
-        const targetSlug = state.mode === 'mock_exam' ? 'exam' : 'practice';
-        let newPath = `/${newLocale}/${targetSlug}`;
-        if (/^\/(en|fr|rw)\/(exam|practice)(\/|$)/.test(currentPath)) {
-          newPath = currentPath.replace(/^\/(en|fr|rw)/, `/${newLocale}`);
-        }
-        window.history.pushState(null, '', newPath + window.location.search);
-      }
-    } catch {
-      // ignore
-    }
-  };
-
   return (
     <div className="practice-engine mx-auto w-full max-w-3xl text-slate-900">
-      {/* Top Locale & Navigation Bar (Only visible before test starts or during review) */}
+      {/* Top locale & mode chrome live in SiteHeader — only keep Bank here */}
       {state.stage !== 'in_progress' && (
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-3">
           <div className="flex items-center gap-3">
             <a
               href={`/${state.currentLocale}/questions`}
-              className="inline-flex min-h-[40px] touch-manipulation items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-[11px] font-bold whitespace-nowrap text-slate-700 no-underline shadow-2xs transition hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:px-3.5 sm:text-xs"
+              className="inline-flex min-h-[42px] touch-manipulation items-center gap-2 rounded-2xl border-2 border-stone-300 bg-white px-4 py-2 text-xs font-extrabold text-slate-800 no-underline shadow-2xs transition hover:border-slate-400 hover:bg-stone-100 hover:text-blue-700 active:scale-95 sm:rounded-full sm:text-sm"
               title={t.bankBtn}
               onClick={() => {
                 // User left Practice/Exam to browse questions: clear in-progress session.
                 clearSessionFromStorage();
               }}
             >
-              <span>←</span>
-              <span className="hidden sm:inline">{t.bankBtn}</span>
-              <span className="sm:hidden">Bank</span>
+              <span className="text-sm">←</span>
+              <span>{t.bankBtn}</span>
             </a>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2.5">
-            <InstallAppButton lang={state.currentLocale} />
-
-            <div
-              className="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
-              role="group"
-              aria-label="Language selector"
-            >
-              {(['en', 'fr', 'rw'] as Lang[]).map((code) => {
-                const active = state.currentLocale === code;
-                const targetSlug =
-                  state.mode === 'mock_exam' ? 'exam' : 'practice';
-                const catSearch =
-                  state.selectedCategory === 1
-                    ? '?category=traffic-rules'
-                    : state.selectedCategory === 2
-                      ? '?category=road-signs'
-                      : '';
-                return (
-                  <a
-                    key={code}
-                    href={`/${code}/${targetSlug}${catSearch}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleLocaleChange(code);
-                    }}
-                    aria-current={active ? 'page' : undefined}
-                    className={`border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide no-underline transition last:border-r-0 ${
-                      active
-                        ? 'bg-blue-700 text-white'
-                        : 'bg-stone-50 text-slate-900 hover:bg-stone-200'
-                    }`}
-                  >
-                    {code.toUpperCase()}
-                  </a>
-                );
-              })}
-            </div>
           </div>
         </div>
       )}

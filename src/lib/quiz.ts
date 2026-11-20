@@ -1,31 +1,17 @@
-export type Lang = 'en' | 'fr' | 'rw';
-
-export type QuestionTranslation = {
-  question: string;
-  options: string[];
-  correct_answer?: string;
-  explanation?: string;
-};
-
-export type Question = {
-  id: string;
-  category_id: number;
-  category_name: string;
-  image_url: string | null;
-  correct_index: number;
-  translations: Record<string, QuestionTranslation>;
-};
-
-export type Category = {
-  id: number;
-  name: string;
-};
+export type {
+  Lang,
+  QuestionTranslation,
+  Question,
+  Category,
+  QuestionBank,
+} from './questions';
+import type { Lang, Question } from './questions';
 
 export type QuestionPayload = {
   id: string;
   correctIndex: number;
   image: string | null;
-  t: Record<string, QuestionTranslation>;
+  t: Record<string, import('./questions').QuestionTranslation>;
 };
 
 export function questionPayload(q: Question): string {
@@ -60,9 +46,19 @@ export function correctAnswerText(q: Question, lang: Lang): string {
   return t.correct_answer || t.options[q.correct_index] || '';
 }
 
-export function questionExplanation(q: Question, lang: Lang): string {
-  const t = q.translations[lang] ?? q.translations.en;
-  return t?.explanation ?? '';
+export function questionExplanation(
+  q: Question,
+  lang: Lang,
+): string | undefined {
+  const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
+  if (
+    t?.explanation &&
+    typeof t.explanation === 'string' &&
+    t.explanation.trim().length > 0
+  ) {
+    return t.explanation.trim();
+  }
+  return undefined;
 }
 
 export const ANSWER_LABEL: Record<Lang, string> = {
@@ -132,13 +128,18 @@ export function categoryIdFromSlug(slug: string): number | undefined {
 
 /**
  * Category Hub URL:
- * - /[lang]/traffic-rules
- * - /[lang]/road-signs
+ * - /[lang]/traffic-rules[/page/N]
+ * - /[lang]/road-signs[/page/N]
  */
-export function categoryHubHref(lang: Lang, slugOrId: string | number): string {
+export function categoryHubHref(
+  lang: Lang,
+  slugOrId: string | number,
+  page = 1,
+): string {
   const slug =
     typeof slugOrId === 'number' ? CATEGORY_SLUGS[slugOrId] : slugOrId;
-  return `/${lang}/${slug}`;
+  if (page <= 1) return `/${lang}/${slug}`;
+  return `/${lang}/${slug}/page/${page}`;
 }
 
 /**

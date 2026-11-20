@@ -14,6 +14,14 @@ import {
   totalQuestionPages,
 } from './quiz';
 import { getCategoryContent } from './category-content';
+import type { SignEntry, SignType } from './signs';
+import {
+  signHref,
+  signName,
+  signMeaning,
+  signsIndexHref,
+  signTypeLabel,
+} from './signs';
 
 export type HreflangLink = {
   lang: string;
@@ -114,13 +122,18 @@ export function questionPageAlternates(
  *
  * @param slugOrId - Category slug or numerical identifier.
  * @param site - Base site URL or origin.
+ * @param page - Optional page number (default 1).
  * @returns Array of hreflang links.
  */
 export function categoryHubAlternates(
   slugOrId: string | number,
   site: string | URL | undefined,
+  page = 1,
 ): HreflangLink[] {
-  return hreflangAlternates((lang) => categoryHubHref(lang, slugOrId), site);
+  return hreflangAlternates(
+    (lang) => categoryHubHref(lang, slugOrId, page),
+    site,
+  );
 }
 
 /**
@@ -251,9 +264,16 @@ export function getQuestionPageMetadata(
     ? absoluteUrl(questionHref(lang, number + 1), site)
     : null;
 
+  const categoryFallbackOg =
+    question.category_id === 1
+      ? `/og/og-${lang}-traffic-rules.png`
+      : question.category_id === 2
+        ? `/og/og-${lang}-road-signs.png`
+        : `/og/og-${lang}-questions.png`;
+
   const image = question.image_url
     ? absoluteUrl(imageSrc(imageBase, question.image_url), site)
-    : null;
+    : absoluteUrl(categoryFallbackOg, site);
   const imageAlt = questionImageAlt(question, lang, number);
 
   const breadcrumbLabels: Record<
@@ -307,7 +327,7 @@ export function getQuestionPageMetadata(
       image,
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
       image,
@@ -485,6 +505,16 @@ export function getListPageMetadata(
     page < totalPages
       ? absoluteUrl(questionsListHref(lang, page + 1, categoryId), site)
       : null;
+  const ogImageRel = isRoot
+    ? '/og/og-default.png'
+    : isHome
+      ? `/og/og-${lang}-home.png`
+      : categoryId === 1
+        ? `/og/og-${lang}-traffic-rules.png`
+        : categoryId === 2
+          ? `/og/og-${lang}-road-signs.png`
+          : `/og/og-${lang}-questions.png`;
+  const image = absoluteUrl(ogImageRel, site);
 
   return {
     title,
@@ -492,7 +522,7 @@ export function getListPageMetadata(
     lang,
     canonical,
     alternates,
-    image: null,
+    image,
     prev,
     next,
     robots: 'index,follow',
@@ -505,13 +535,13 @@ export function getListPageMetadata(
       siteName: 'Provisoire',
       locale: ogLocale(lang),
       alternateLocales: LOCALES.filter((l) => l !== lang).map(ogLocale),
-      image: null,
+      image,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      image: null,
+      image,
     },
   };
 }
@@ -520,6 +550,8 @@ export interface CategoryHubMetadataOptions {
   lang: Lang;
   categorySlug: 'traffic-rules' | 'road-signs';
   site: string | URL | undefined;
+  page?: number;
+  totalPages?: number;
 }
 
 /**
@@ -531,37 +563,75 @@ export interface CategoryHubMetadataOptions {
 export function getCategoryHubMetadata(
   options: CategoryHubMetadataOptions,
 ): PageMetadataResult {
-  const { lang, categorySlug, site } = options;
+  const { lang, categorySlug, site, page = 1, totalPages = 1 } = options;
   const content = getCategoryContent(lang, categorySlug);
-  const canonical = absoluteUrl(categoryHubHref(lang, categorySlug), site);
-  const alternates = categoryHubAlternates(categorySlug, site);
+  const canonical = absoluteUrl(
+    categoryHubHref(lang, categorySlug, page),
+    site,
+  );
+  const alternates = categoryHubAlternates(categorySlug, site, page);
+
+  const title =
+    page > 1
+      ? lang === 'fr'
+        ? `${content.title} · Page ${page} — Provisoire`
+        : lang === 'rw'
+          ? `${content.title} · Paji ya ${page} — Provisoire`
+          : `${content.title} · Page ${page} — Provisoire`
+      : content.metaTitle;
+
+  const pageSuffix =
+    lang === 'fr'
+      ? ` Page ${page} sur ${totalPages}.`
+      : lang === 'rw'
+        ? ` Paji ya ${page} kuri ${totalPages}.`
+        : ` Page ${page} of ${totalPages}.`;
+
+  const description =
+    page > 1
+      ? `${truncateMeta(content.metaDescription, 155 - pageSuffix.length)}${pageSuffix}`
+      : content.metaDescription;
+
+  const prev =
+    page > 1
+      ? absoluteUrl(categoryHubHref(lang, categorySlug, page - 1), site)
+      : null;
+  const next =
+    page < totalPages
+      ? absoluteUrl(categoryHubHref(lang, categorySlug, page + 1), site)
+      : null;
+  const ogImageRel =
+    categorySlug === 'traffic-rules'
+      ? `/og/og-${lang}-traffic-rules.png`
+      : `/og/og-${lang}-road-signs.png`;
+  const image = absoluteUrl(ogImageRel, site);
 
   return {
-    title: content.metaTitle,
-    description: content.metaDescription,
+    title,
+    description,
     lang,
     canonical,
     alternates,
-    image: null,
-    prev: null,
-    next: null,
+    image,
+    prev,
+    next,
     robots: 'index,follow',
     jsonLd: [],
     openGraph: {
-      title: content.metaTitle,
-      description: content.metaDescription,
+      title,
+      description,
       url: canonical,
       type: 'website',
       siteName: 'Provisoire',
       locale: ogLocale(lang),
       alternateLocales: LOCALES.filter((l) => l !== lang).map(ogLocale),
-      image: null,
+      image,
     },
     twitter: {
-      card: 'summary',
-      title: content.metaTitle,
-      description: content.metaDescription,
-      image: null,
+      card: 'summary_large_image',
+      title,
+      description,
+      image,
     },
   };
 }
@@ -615,6 +685,10 @@ export function getPracticePageMetadata(
   const { title, description } = meta[lang];
   const canonical = absoluteUrl(`/${lang}/${routeSlug}`, site);
   const alternates = hreflangAlternates((l) => `/${l}/${routeSlug}`, site);
+  const ogImageRel = isExam
+    ? `/og/og-${lang}-exam.png`
+    : `/og/og-${lang}-practice.png`;
+  const image = absoluteUrl(ogImageRel, site);
 
   return {
     title,
@@ -622,7 +696,7 @@ export function getPracticePageMetadata(
     lang,
     canonical,
     alternates,
-    image: null,
+    image,
     prev: null,
     next: null,
     robots: 'noindex,nofollow',
@@ -635,13 +709,13 @@ export function getPracticePageMetadata(
       siteName: 'Provisoire',
       locale: ogLocale(lang),
       alternateLocales: LOCALES.filter((l) => l !== lang).map(ogLocale),
-      image: null,
+      image,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      image: null,
+      image,
     },
   };
 }
@@ -974,4 +1048,149 @@ export function breadcrumbJsonLd(
  */
 export function siteListPageCount(questionCount: number) {
   return totalQuestionPages(questionCount, PAGE_SIZE);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Signs glossary SEO                                                         */
+/* -------------------------------------------------------------------------- */
+
+const SIGNS_INDEX_COPY: Record<
+  Lang,
+  { title: string; description: string; heading: string }
+> = {
+  en: {
+    title: 'Rwanda Road Signs Glossary — Meanings & Driver Actions',
+    description:
+      'Browse Rwanda road signs by type: warning, prohibitory, mandatory, information, and markings. Official meanings and what drivers must do.',
+    heading: 'Rwanda road signs',
+  },
+  fr: {
+    title: 'Glossaire des panneaux routiers du Rwanda — Significations',
+    description:
+      'Parcourez les panneaux routiers du Rwanda par type : danger, interdiction, obligation, indication et marquage. Significations et conduite à tenir.',
+    heading: 'Panneaux routiers du Rwanda',
+  },
+  rw: {
+    title: 'Ibyapa byo ku muhanda mu Rwanda — Ibisobanuro',
+    description:
+      'Reba ibyapa byo ku muhanda mu Rwanda hakurikijwe ubwoko: integuza, kubuza, gutegeka, amakuru n’ibimenyetso. Ibisobanuro n’icyo umushoferi agomba gukora.',
+    heading: 'Ibyapa byo ku muhanda mu Rwanda',
+  },
+};
+
+export function getSignsIndexMetadata(options: {
+  lang: Lang;
+  site: string | URL | undefined;
+  signCount: number;
+}) {
+  const { lang, site, signCount } = options;
+  const copy = SIGNS_INDEX_COPY[lang];
+  const path = signsIndexHref(lang);
+  const canonical = absoluteUrl(path, site);
+  const title = `${copy.title} — Provisoire`;
+  const description = truncateMeta(`${copy.description} ${signCount} signs.`);
+
+  return {
+    title,
+    description,
+    lang,
+    canonical,
+    alternates: hreflangAlternates((locale) => signsIndexHref(locale), site),
+    image: absoluteUrl(`/og/og-${lang}-signs.png`, site),
+    imageAlt: copy.heading,
+    jsonLd: [
+      breadcrumbJsonLd(
+        [
+          { name: 'Provisoire', path: `/${lang}` },
+          { name: copy.heading, path },
+        ],
+        site,
+      ),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: copy.heading,
+        description,
+        inLanguage: lang,
+        url: canonical,
+        numberOfItems: signCount,
+      },
+    ],
+  };
+}
+
+export function getSignDetailMetadata(options: {
+  lang: Lang;
+  sign: SignEntry;
+  site: string | URL | undefined;
+  imageBase?: string;
+}) {
+  const { lang, sign, site, imageBase = '/' } = options;
+  const name = signName(sign, lang);
+  const meaning = signMeaning(sign, lang);
+  const typeLabel = signTypeLabel(sign.type as SignType, lang);
+  const path = signHref(lang, sign.slug);
+  const canonical = absoluteUrl(path, site);
+  const image = absoluteUrl(imageSrc(imageBase, sign.image_url), site);
+
+  const titles: Record<Lang, string> = {
+    en: `${name} — Rwanda Road Sign Meaning`,
+    fr: `${name} — Signification du panneau routier (Rwanda)`,
+    rw: `${name} — Ibisobanuro by’icyapa cyo ku muhanda`,
+  };
+  const descriptions: Record<Lang, string> = {
+    en: `What the ${name} road sign means in Rwanda (${typeLabel}). ${meaning}. What drivers must do, with practice questions.`,
+    fr: `Signification du panneau « ${name} » au Rwanda (${typeLabel}). ${meaning}. Conduite à tenir et questions d’entraînement.`,
+    rw: `Icyapa « ${name} » bisobanura iki mu Rwanda (${typeLabel}). ${meaning}. Icyo umushoferi agomba gukora n’ibibazo byo kwimenyereza.`,
+  };
+
+  const title = `${titles[lang]} — Provisoire`;
+  const description = truncateMeta(descriptions[lang]);
+  const indexCopy = SIGNS_INDEX_COPY[lang];
+
+  return {
+    title,
+    description,
+    lang,
+    canonical,
+    alternates: hreflangAlternates(
+      (locale) => signHref(locale, sign.slug),
+      site,
+    ),
+    image,
+    imageAlt: name,
+    jsonLd: [
+      breadcrumbJsonLd(
+        [
+          { name: 'Provisoire', path: `/${lang}` },
+          { name: indexCopy.heading, path: signsIndexHref(lang) },
+          { name, path },
+        ],
+        site,
+      ),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'DefinedTerm',
+        name,
+        description: meaning,
+        inLanguage: lang,
+        url: canonical,
+        image,
+        termCode: sign.slug,
+        inDefinedTermSet: {
+          '@type': 'DefinedTermSet',
+          name: indexCopy.heading,
+          url: absoluteUrl(signsIndexHref(lang), site),
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ImageObject',
+        contentUrl: image,
+        name,
+        description: meaning,
+        inLanguage: lang,
+      },
+    ],
+  };
 }

@@ -41,7 +41,11 @@ export function buildRedirectMap({
       [`/${lang}/questions/page/1`, `/${lang}/questions`],
       ...Object.values(categorySlugs).map((slug) => [
         `/${lang}/questions/category/${slug}/page/1`,
-        `/${lang}/questions/category/${slug}`,
+        `/${lang}/${slug}`,
+      ]),
+      ...Object.values(categorySlugs).map((slug) => [
+        `/${lang}/${slug}/page/1`,
+        `/${lang}/${slug}`,
       ]),
     ]),
   );
@@ -51,15 +55,12 @@ export function buildRedirectMap({
     locales.flatMap((lang) =>
       Object.entries(categoryPageCounts).flatMap(([slug, totalPages]) => {
         const entries = [
-          [
-            `/${lang}/questions/page/1/category/${slug}`,
-            `/${lang}/questions/category/${slug}`,
-          ],
+          [`/${lang}/questions/page/1/category/${slug}`, `/${lang}/${slug}`],
         ];
         for (let page = 2; page <= totalPages; page++) {
           entries.push([
             `/${lang}/questions/page/${page}/category/${slug}`,
-            `/${lang}/questions/category/${slug}/page/${page}`,
+            `/${lang}/${slug}/page/${page}`,
           ]);
         }
         return entries;
@@ -74,31 +75,30 @@ export function buildRedirectMap({
         [`/${lang}/questions/category/${slug}`, `/${lang}/${slug}`],
         ...Array.from({ length: totalPages }, (_, index) => {
           const page = index + 1;
-          return [
-            `/${lang}/questions/category/${slug}/page/${page}`,
-            `/${lang}/${slug}`,
-          ];
+          const target =
+            page > 1 ? `/${lang}/${slug}/page/${page}` : `/${lang}/${slug}`;
+          return [`/${lang}/questions/category/${slug}/page/${page}`, target];
         }),
         ...Array.from({ length: totalPages }, (_, index) => {
           const page = index + 1;
-          return [
-            `/${lang}/questions/page/${page}/category/${slug}`,
-            `/${lang}/${slug}`,
-          ];
+          const target =
+            page > 1 ? `/${lang}/${slug}/page/${page}` : `/${lang}/${slug}`;
+          return [`/${lang}/questions/page/${page}/category/${slug}`, target];
         }),
       ]),
     ),
   );
 
-  /** Unprefixed root aliases → default locale (en) pages */
+  /** Unprefixed root aliases → default locale (rw) pages */
   const rootAliases = {
-    '/terms': '/en/terms',
-    '/privacy': '/en/privacy',
-    '/about': '/en/about',
-    '/practice': '/en/practice',
-    '/exam': '/en/exam',
-    '/traffic-rules': '/en/traffic-rules',
-    '/road-signs': '/en/road-signs',
+    '/terms': '/rw/terms',
+    '/privacy': '/rw/privacy',
+    '/about': '/rw/about',
+    '/practice': '/rw/practice',
+    '/exam': '/rw/exam',
+    '/traffic-rules': '/rw/traffic-rules',
+    '/road-signs': '/rw/road-signs',
+    '/signs': '/rw/signs',
   };
 
   return {

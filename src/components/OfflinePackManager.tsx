@@ -183,27 +183,29 @@ export default function OfflinePackManager({
       )}
 
       {/* Action buttons */}
-      <div className="mt-3.5 flex flex-wrap items-center gap-2">
+      <div className="mt-4 flex flex-wrap items-center gap-2.5">
         {!isComplete ? (
           <button
             type="button"
             disabled={isDownloading}
             onClick={handleDownload}
-            className="flex min-h-[40px] flex-1 cursor-pointer touch-manipulation items-center justify-center rounded-full bg-blue-700 px-4 text-xs font-bold text-white shadow-xs transition hover:bg-blue-800 active:scale-95 disabled:opacity-50"
+            className="flex min-h-[54px] w-full cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-2xl bg-blue-700 px-5 py-3.5 text-center text-xs leading-snug font-black break-words text-white shadow-md transition-all hover:bg-blue-800 active:scale-[0.98] disabled:opacity-50 sm:min-h-[58px] sm:text-sm"
           >
-            {isDownloading
-              ? `${t.downloading} (${progressPercent}%)`
-              : t.downloadBtn}
+            <span>
+              {isDownloading
+                ? `${t.downloading} (${progressPercent}%)`
+                : t.downloadBtn}
+            </span>
           </button>
         ) : (
-          <div className="flex w-full flex-wrap items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+          <div className="flex w-full flex-wrap items-center justify-between gap-2.5 rounded-2xl border-2 border-emerald-300 bg-emerald-50/80 p-3.5">
+            <span className="inline-flex items-center gap-2 text-xs leading-snug font-extrabold text-emerald-900 sm:text-sm">
               <span>{t.allSaved}</span>
             </span>
             <button
               type="button"
               onClick={handleClear}
-              className="text-[11px] font-semibold text-slate-400 underline-offset-2 hover:text-rose-600 hover:underline"
+              className="min-h-[36px] rounded-xl border border-rose-200 bg-white px-3 py-1.5 text-xs font-bold text-rose-700 shadow-2xs transition hover:bg-rose-50 active:scale-95"
             >
               {t.freeSpace}
             </button>

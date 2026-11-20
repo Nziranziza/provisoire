@@ -411,7 +411,7 @@ if (existsSync(distDir)) {
       'CollectionPage schema must exist on traffic-rules hub',
     );
     assert.equal(faq.inLanguage, 'en');
-    assert.equal(collection.mainEntity.numberOfItems, 101);
+    assert.equal(collection.mainEntity.numberOfItems, 20);
     console.log(
       `✓ Verified live FAQPage & CollectionPage JSON-LD in ${relative(distDir, trafficHubPath)}`,
     );

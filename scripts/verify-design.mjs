@@ -36,7 +36,7 @@ const EMOJI_ALLOWLIST = [
   {
     file: 'src/lib/pwa.ts',
     declarations: ['installGuideCopy'],
-    reason: 'install instructions — describes OS UI chrome (\u2191 \u22ee \u2295)',
+    reason: 'install instructions — describes OS UI chrome (↑ ⋮ ⊕)',
   },
 ];
 
@@ -51,7 +51,7 @@ const EMOJI_ALLOWLIST = [
  * until depth returns to zero. That covers both object properties and function
  * bodies without a full parser.
  *
- * @returns {Map<string, Set<number>>} absPath -> Set of 0-based line indices
+ * @returns {Map<string, Set<number>>} absPath → Set of 0-based line indices
  */
 function buildEmojiExemptLines() {
   /** @type {Map<string, Set<number>>} */
@@ -129,7 +129,7 @@ const RULES = [
       // lineno is 1-based; Set stores 0-based indices.
       if (exemptSet && exemptSet.has(lineno - 1)) return 0;
       return (
-        strippedLine.match(/\p{Extended_Pictographic}|[\u2190\u2192\u2191\u2193\u2713\u2714\u2717\u2715\u22ee]/gu) || []
+        strippedLine.match(/\p{Extended_Pictographic}|[←→↑↓✓✔✗✕⋮]/gu) || []
       ).length;
     },
   },
@@ -152,10 +152,9 @@ const RULES = [
     label: '<select',
     // Match <select followed by whitespace (including newlines, captured via
     // the per-file full-source scan below), '>', or end-of-line.
-    // The per-line test catches <select> and <select attr=...; the multi-line
-    // case (<select\n  ...) is caught by matching <select at end of line.
-    test: (line) =>
-      (line.match(/<select(?=[\s>]|$)/g) || []).length,
+    // The per-line test catches <select> and <select attr=…; the multi-line
+    // case (<select\n  …) is caught by matching <select at end of line.
+    test: (line) => (line.match(/<select(?=[\s>]|$)/g) || []).length,
   },
   {
     id: 'inline-handler',
@@ -177,7 +176,7 @@ const RULES = [
 // — no nested template expressions).
 //
 // State object fields (mutated across lines of the same file):
-//   inBlock  {boolean}  — currently inside a /* ... */ block comment
+//   inBlock  {boolean}  — currently inside a /* … */ block comment
 //   inQuote  {string|null} — the opening quote character if inside a string,
 //                            or null when not in a quoted context
 // ---------------------------------------------------------------------------
@@ -196,11 +195,11 @@ function stripCommentsFromLine(raw, state) {
   const len = raw.length;
 
   while (i < len) {
-    // Inside a block comment
+    // ── Inside a block comment ────────────────────────────────────────────
     if (state.inBlock) {
       const end = raw.indexOf('*/', i);
       if (end === -1) {
-        // Entire rest of line is block-comment content -- consume and stop.
+        // Entire rest of line is block-comment content — consume and stop.
         i = len;
       } else {
         state.inBlock = false;
@@ -211,10 +210,10 @@ function stripCommentsFromLine(raw, state) {
 
     const ch = raw[i];
 
-    // Inside a quoted string
+    // ── Inside a quoted string ────────────────────────────────────────────
     if (state.inQuote) {
       if (ch === '\\') {
-        // Escaped character -- keep both and skip next.
+        // Escaped character — keep both and skip next.
         out += ch + (raw[i + 1] ?? '');
         i += 2;
       } else if (ch === state.inQuote) {
@@ -229,7 +228,7 @@ function stripCommentsFromLine(raw, state) {
       continue;
     }
 
-    // Outside any comment or string
+    // ── Outside any comment or string ─────────────────────────────────────
 
     // Check for opening quotes.
     if (ch === '"' || ch === "'" || ch === '`') {
@@ -241,7 +240,7 @@ function stripCommentsFromLine(raw, state) {
 
     // Check for line comment // — but not when preceded by ':' (URL scheme, e.g. https://).
     if (raw[i] === '/' && raw[i + 1] === '/' && raw[i - 1] !== ':') {
-      // Rest of line is a line comment -- stop outputting.
+      // Rest of line is a line comment — stop outputting.
       i = len;
       continue;
     }
@@ -288,7 +287,7 @@ function* walkSrc(dir) {
 const srcDir = path.join(root, 'src');
 const strict = process.argv.includes('--strict');
 
-/** @type {Map<string, number[]>} filePath -> counts per rule */
+/** @type {Map<string, number[]>} filePath → counts per rule */
 const results = new Map();
 
 for (const filePath of walkSrc(srcDir)) {
@@ -322,7 +321,7 @@ for (const counts of results.values()) {
 const grandTotal = totals.reduce((a, b) => a + b, 0);
 
 // ---------------------------------------------------------------------------
-// Table rendering -- column widths derived from each rule's label
+// Table rendering — column widths derived from each rule's label
 // ---------------------------------------------------------------------------
 
 const COL_FILE = 44;
@@ -351,11 +350,11 @@ console.log(separator);
 for (const [filePath, counts] of [...results.entries()].sort()) {
   const rel = path.relative(root, filePath).replace(/\\/g, '/');
   const display =
-    rel.length > COL_FILE - 1 ? '\u2026' + rel.slice(-(COL_FILE - 2)) : rel;
+    rel.length > COL_FILE - 1 ? '…' + rel.slice(-(COL_FILE - 2)) : rel;
   const rowTotal = counts.reduce((a, b) => a + b, 0);
   console.log(
     padR(display, COL_FILE) +
-      counts.map((c, i) => padL(c === 0 ? '\u00b7' : c, COL_WIDTHS[i])).join('') +
+      counts.map((c, i) => padL(c === 0 ? '·' : c, COL_WIDTHS[i])).join('') +
       padL(rowTotal, COL_TOTAL_W),
   );
 }
@@ -363,7 +362,7 @@ for (const [filePath, counts] of [...results.entries()].sort()) {
 console.log(separator);
 console.log(
   padR('TOTAL', COL_FILE) +
-    totals.map((c, i) => padL(c === 0 ? '\u00b7' : c, COL_WIDTHS[i])).join('') +
+    totals.map((c, i) => padL(c === 0 ? '·' : c, COL_WIDTHS[i])).join('') +
     padL(grandTotal, COL_TOTAL_W),
 );
 console.log();
@@ -373,7 +372,7 @@ console.log();
 // ---------------------------------------------------------------------------
 console.log('Emoji allowlist (not counted above):');
 for (const { file, declarations, reason } of EMOJI_ALLOWLIST) {
-  console.log(`  ${file} [${declarations.join(', ')}] -- ${reason}`);
+  console.log(`  ${file} [${declarations.join(', ')}] — ${reason}`);
 }
 console.log();
 
@@ -387,5 +386,5 @@ if (strict) {
     );
     process.exit(1);
   }
-  console.log('--strict: no anti-patterns found. \u2713');
+  console.log('--strict: no anti-patterns found. ✓');
 }

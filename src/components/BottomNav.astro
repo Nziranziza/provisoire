@@ -1,0 +1,106 @@
+---
+import type { Lang } from '../lib/quiz';
+import { getUIChrome } from '../i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getUIChrome(lang);
+
+const pathname = Astro.url.pathname;
+const cleanPath = pathname
+  .replace(/\.html$/, '')
+  .replace(/\/index$/, '')
+  .replace(/\/$/, '');
+
+const isHome = cleanPath === '' || cleanPath === `/${lang}`;
+const isQuestions =
+  cleanPath === `/${lang}/questions` ||
+  cleanPath.startsWith(`/${lang}/questions/page/`) ||
+  (cleanPath.startsWith(`/${lang}/questions/`) &&
+    !cleanPath.includes('/category/'));
+const isPractice =
+  cleanPath === `/${lang}/practice` ||
+  cleanPath.startsWith(`/${lang}/practice/`);
+const isSigns =
+  cleanPath === `/${lang}/road-signs` ||
+  cleanPath.startsWith(`/${lang}/road-signs/`) ||
+  cleanPath === `/${lang}/signs` ||
+  cleanPath.startsWith(`/${lang}/signs/`);
+const isExam =
+  cleanPath === `/${lang}/exam` || cleanPath.startsWith(`/${lang}/exam/`);
+
+const items = [
+  {
+    href: `/${lang}`,
+    label: t.bottomNav.home,
+    icon: '🏠',
+    active: isHome,
+  },
+  {
+    href: `/${lang}/questions`,
+    label: t.bottomNav.questions,
+    icon: '📋',
+    active: isQuestions,
+  },
+  {
+    href: `/${lang}/practice`,
+    label: t.bottomNav.practice,
+    icon: '💡',
+    active: isPractice,
+  },
+  {
+    href: `/${lang}/road-signs`,
+    label: t.bottomNav.signs,
+    icon: '🛑',
+    active: isSigns,
+  },
+  {
+    href: `/${lang}/exam`,
+    label: t.bottomNav.exam,
+    icon: '⏱️',
+    active: isExam,
+  },
+];
+---
+
+<nav
+  id="mobile-bottom-nav"
+  aria-label={t.header.mobileNav}
+  class="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-stone-200/90 bg-white/95 px-1 py-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom))] shadow-lg backdrop-blur-md md:hidden"
+>
+  {
+    items.map((item) => (
+      <a
+        href={item.href}
+        aria-current={item.active ? 'page' : undefined}
+        class:list={[
+          'group flex min-h-[44px] flex-1 touch-manipulation flex-col items-center justify-center rounded-xl px-1 py-1 text-center transition-all duration-150 active:scale-95',
+          item.active
+            ? 'font-extrabold text-blue-700'
+            : 'font-medium text-slate-600 hover:text-slate-900',
+        ]}
+      >
+        <span
+          class:list={[
+            'text-lg leading-none transition-transform duration-150 group-hover:scale-110',
+            item.active ? 'scale-110' : 'opacity-85',
+          ]}
+          aria-hidden="true"
+        >
+          {item.icon}
+        </span>
+        <span
+          class:list={[
+            'mt-0.5 text-[10px] leading-tight tracking-tight whitespace-nowrap',
+            item.active ? 'font-black text-blue-700' : 'text-slate-600',
+          ]}
+        >
+          {item.label}
+        </span>
+      </a>
+    ))
+  }
+</nav>

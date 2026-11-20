@@ -146,9 +146,10 @@ jsonLd.push(breadcrumbJsonLd(breadcrumbItems, Astro.site));
   prev={seo.prev}
   next={seo.next}
   alternates={seo.alternates}
+  image={seo.image}
   jsonLd={jsonLd}
 >
-  <main class="m-0 bg-stone-100 px-4 py-10">
+  <main id="main-content" class="min-h-screen bg-stone-100 px-4 py-6 sm:py-8">
     <QuestionList
       lang={lang}
       imageBase="/"

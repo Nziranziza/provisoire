@@ -5,7 +5,6 @@ import {
   categoryLabel,
   questionsListHref,
 } from '../../lib/quiz';
-import HeaderInstallButton from '../HeaderInstallButton.astro';
 
 interface Props {
   categories: Category[];
@@ -16,13 +15,7 @@ interface Props {
   categoryCounts?: Record<number, number>;
 }
 
-const { categories, categoryId, lang, page = 1, categoryCounts } = Astro.props;
-
-const locales: { code: Lang; label: string }[] = [
-  { code: 'rw', label: 'RW' },
-  { code: 'en', label: 'EN' },
-  { code: 'fr', label: 'FR' },
-];
+const { categories, categoryId, lang, categoryCounts } = Astro.props;
 
 const allLabel: Record<Lang, string> = {
   en: 'All categories',
@@ -47,16 +40,10 @@ const categoryFilterLabel: Record<Lang, string> = {
   fr: 'Filtre de catégorie',
   rw: 'Akayunguruzo k’icyiciro',
 };
-
-const aboutLabel: Record<Lang, string> = {
-  en: 'About',
-  fr: 'À propos',
-  rw: 'Ibyerekeye',
-};
 ---
 
-<header
-  class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-3.5 shadow-2xs sm:p-4"
+<div
+  class="quiz-header mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-3.5 shadow-2xs sm:p-4"
 >
   <div>
     <span
@@ -72,76 +59,10 @@ const aboutLabel: Record<Lang, string> = {
     </h2>
   </div>
 
-  <div class="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
-    <!-- Practice button -->
-    <a
-      href={`/${lang}/practice`}
-      class:list={[
-        'inline-flex min-h-[40px] items-center justify-center gap-1 rounded-full border-2 border-slate-900 bg-white px-4 py-2 leading-none font-bold whitespace-nowrap text-slate-800 shadow-2xs transition hover:bg-stone-100 active:scale-95 sm:min-h-[36px]',
-        lang === 'fr'
-          ? 'text-[11px] tracking-normal sm:text-xs'
-          : 'text-[11px] tracking-wide sm:text-xs',
-      ]}
-    >
-      <span aria-hidden="true">💡</span>
-
-      {
-        lang === 'fr' ? (
-          <>
-            <span class="sm:hidden">Pratique</span>
-            <span class="hidden sm:inline">Entraînement</span>
-          </>
-        ) : lang === 'rw' ? (
-          'Imyitozo'
-        ) : (
-          'Practice'
-        )
-      }
-    </a>
-
-    <!-- Install App button -->
-    <HeaderInstallButton lang={lang} />
-
-    <!-- About link -->
-    <a
-      href={`/${lang}/about`}
-      class="inline-flex min-h-[40px] items-center justify-center rounded-full border-2 border-slate-900 bg-amber-300 px-4 py-2 text-xs font-extrabold text-slate-950 shadow-2xs transition hover:bg-amber-400 active:scale-95 sm:min-h-[36px]"
-    >
-      {aboutLabel[lang]}
-    </a>
-
-    <!-- Language selector -->
-    <div
-      class="inline-flex overflow-hidden rounded-full border-2 border-slate-900"
-      role="group"
-      aria-label="Language"
-    >
-      {
-        locales.map(({ code, label }) => {
-          const active = lang === code;
-
-          return (
-            <a
-              href={questionsListHref(code, page, categoryId)}
-              hreflang={code}
-              aria-current={active ? 'page' : undefined}
-              class:list={[
-                'border-r-2 border-slate-900 px-3 py-2 text-xs font-bold tracking-wide transition last:border-r-0',
-                active
-                  ? 'bg-blue-700 text-white'
-                  : 'bg-stone-50 text-slate-900 hover:bg-stone-200',
-              ]}
-            >
-              {label}
-            </a>
-          );
-        })
-      }
-    </div>
-
+  <div class="flex items-center gap-2">
     <!-- Category filter -->
     <select
-      class="max-w-full rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-xs font-bold text-slate-900"
+      class="max-w-full rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-1.5 text-xs font-bold text-slate-900"
       aria-label={categoryFilterLabel[lang]}
       onchange="if (this.value) window.location.assign(this.value);"
     >
@@ -176,7 +97,7 @@ const aboutLabel: Record<Lang, string> = {
         <a
           href={questionsListHref(lang, 1)}
           aria-current={!categoryId ? 'page' : undefined}
-          class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-xs font-bold text-slate-900"
+          class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-1.5 text-xs font-bold text-slate-900"
         >
           {allLabel[lang]}
         </a>
@@ -192,7 +113,7 @@ const aboutLabel: Record<Lang, string> = {
               <a
                 href={categoryHubHref(lang, c.id)}
                 aria-current={categoryId === c.id ? 'page' : undefined}
-                class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-2 text-xs font-bold text-slate-900"
+                class="rounded-full border-2 border-slate-900 bg-stone-50 px-3 py-1.5 text-xs font-bold text-slate-900"
               >
                 {label}
               </a>
@@ -202,4 +123,4 @@ const aboutLabel: Record<Lang, string> = {
       </nav>
     </noscript>
   </div>
-</header>
+</div>
