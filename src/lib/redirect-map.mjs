@@ -90,15 +90,15 @@ export function buildRedirectMap({
     ),
   );
 
-  /** Unprefixed root aliases → default locale (rw) pages */
+  /** Unprefixed root aliases → default locale (en) pages */
   const rootAliases = {
-    '/terms': '/rw/terms',
-    '/privacy': '/rw/privacy',
-    '/about': '/rw/about',
-    '/practice': '/rw/practice',
-    '/exam': '/rw/exam',
-    '/traffic-rules': '/rw/traffic-rules',
-    '/road-signs': '/rw/road-signs',
+    '/terms': '/en/terms',
+    '/privacy': '/en/privacy',
+    '/about': '/en/about',
+    '/practice': '/en/practice',
+    '/exam': '/en/exam',
+    '/traffic-rules': '/en/traffic-rules',
+    '/road-signs': '/en/road-signs',
   };
 
   return {
