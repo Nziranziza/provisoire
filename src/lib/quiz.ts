@@ -37,11 +37,16 @@ export function questionText(q: Question, lang: Lang): string {
 }
 
 export function questionOptions(q: Question, lang: Lang): string[] {
-  return q.translations[lang]?.options ?? q.translations.en?.options ?? [];
+  return (
+    q.translations[lang]?.options ??
+    q.translations.rw?.options ??
+    q.translations.en?.options ??
+    []
+  );
 }
 
 export function correctAnswerText(q: Question, lang: Lang): string {
-  const t = q.translations[lang] ?? q.translations.en;
+  const t = q.translations[lang] ?? q.translations.rw ?? q.translations.en;
   if (!t) return '';
   return t.correct_answer || t.options[q.correct_index] || '';
 }

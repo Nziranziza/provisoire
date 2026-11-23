@@ -369,9 +369,9 @@ export function getListPageMetadata(
 
   if (isRoot) {
     baseTitle =
-      'Provisoire — Rwanda Provisional Driving Test Prep & Free Question Bank';
+      "Provisoire — Kwitegura ikizamini cy'uruhushya rw'agateganyo mu Rwanda";
     baseDescription =
-      'Prepare and pass your Rwanda provisional driving test with official traffic rules, road signs question bank, instant answers, and timed mock exam simulator.';
+      "Batsinda ikizamini cy'uruhushya rwo gutwara rw'agateganyo mu Rwanda: ibibazo n'ibisubizo by'amategeko n'ibyapa, ibisobanuro n'ibizamini by'ikitegererezo.";
   } else if (isHome) {
     if (lang === 'fr') {
       baseTitle =
@@ -469,7 +469,7 @@ export function getListPageMetadata(
     ? [
         {
           lang: 'en',
-          href: absoluteUrl('/', site),
+          href: absoluteUrl('/en', site),
         },
         {
           lang: 'fr',
@@ -492,7 +492,7 @@ export function getListPageMetadata(
           })),
           {
             lang: 'x-default',
-            href: absoluteUrl(homePath('en'), site),
+            href: absoluteUrl(homePath('rw'), site),
           },
         ]
       : listPageAlternates(page, site, categoryId);
