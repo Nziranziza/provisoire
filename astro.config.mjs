@@ -70,8 +70,8 @@ export default defineConfig({
   redirects,
 
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'fr', 'rw'],
+    defaultLocale: 'rw',
+    locales: ['rw', 'en', 'fr'],
     routing: {
       prefixDefaultLocale: true,
     },
