@@ -38,7 +38,7 @@ interface Props {
 const {
   title,
   description,
-  lang = Astro.currentLocale ?? 'en',
+  lang = Astro.currentLocale ?? 'rw',
   canonical: canonicalProp,
   prev,
   next,
@@ -57,7 +57,7 @@ function toAbsolute(url: string): string {
 const canonical = toAbsolute(canonicalProp ?? Astro.url.pathname);
 const prevHref = prev ? toAbsolute(prev) : null;
 const nextHref = next ? toAbsolute(next) : null;
-const locale = (lang as Lang) || 'en';
+const locale = (lang as Lang) || 'rw';
 const defaultOgImage = `/og/og-${locale}-home.png`;
 const imageHref = image ? toAbsolute(image) : toAbsolute(defaultOgImage);
 const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];

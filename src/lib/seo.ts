@@ -369,9 +369,9 @@ export function getListPageMetadata(
 
   if (isRoot) {
     baseTitle =
-      "Provisoire — Kwitegura Ikizamini cy'Uruhushya rw'Agateganyo mu Rwanda";
+      "Provisoire — Kwitegura ikizamini cy'uruhushya rw'agateganyo mu Rwanda";
     baseDescription =
-      "Kwimenyereza no gutsinda ikizamini cy'uruhushya rw'agateganyo mu Rwanda: amategeko y'umuhanda, ibyapa, ibisobanuro n'ibizamini by'ikitegererezo bifite igihe.";
+      "Batsinda ikizamini cy'uruhushya rwo gutwara rw'agateganyo mu Rwanda: ibibazo n'ibisubizo by'amategeko n'ibyapa, ibisobanuro n'ibizamini by'ikitegererezo.";
   } else if (isHome) {
     if (lang === 'fr') {
       baseTitle =
@@ -380,7 +380,7 @@ export function getListPageMetadata(
         'Révisez et réussissez le permis de conduire provisoire au Rwanda : questions officielles du code de la route, panneaux routiers, explications et examens blancs.';
     } else if (lang === 'rw') {
       baseTitle =
-        "Provisoire — Ibibazo n'Ibisobanuro by'Uruhushya rw'Agateganyo mu Rwanda";
+        "Provisoire — Kwitegura ikizamini cy'uruhushya rw'agateganyo mu Rwanda";
       baseDescription =
         "Batsinda ikizamini cy'uruhushya rwo gutwara rw'agateganyo mu Rwanda: ibibazo n'ibisubizo by'amategeko n'ibyapa, ibisobanuro n'ibizamini by'ikitegererezo.";
     } else {
@@ -468,16 +468,16 @@ export function getListPageMetadata(
   const alternates = isRoot
     ? [
         {
-          lang: 'rw',
-          href: absoluteUrl('/', site),
-        },
-        {
           lang: 'en',
           href: absoluteUrl('/en', site),
         },
         {
           lang: 'fr',
           href: absoluteUrl('/fr', site),
+        },
+        {
+          lang: 'rw',
+          href: absoluteUrl('/rw', site),
         },
         {
           lang: 'x-default',

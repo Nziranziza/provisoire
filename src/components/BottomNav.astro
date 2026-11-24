@@ -6,7 +6,7 @@ interface Props {
   lang?: Lang;
 }
 
-const { lang = 'en' } = Astro.props;
+const { lang = 'rw' } = Astro.props;
 const t = getUIChrome(lang);
 
 const pathname = Astro.url.pathname;

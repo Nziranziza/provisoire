@@ -24,7 +24,7 @@ const fileEnv = loadEnv(
 // and hreflang entries.
 const SITE = process.env.SITE_URL ?? fileEnv.SITE_URL ?? 'https://umuhanda.rw';
 const PAGE_SIZE = 20;
-const locales = ['rw', 'en', 'fr'];
+const locales = ['en', 'fr', 'rw'];
 const CATEGORY_SLUGS = {
   1: 'traffic-rules',
   2: 'road-signs',
@@ -70,8 +70,8 @@ export default defineConfig({
   redirects,
 
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'fr', 'rw'],
+    defaultLocale: 'rw',
+    locales: ['rw', 'en', 'fr'],
     routing: {
       prefixDefaultLocale: true,
     },

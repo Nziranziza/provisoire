@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Provisoire — Rwanda Driving Test",
+  "name": "Provisoire — Ikizamini cy'uruhushya rwo gutwara mu Rwanda",
   "short_name": "Provisoire",
-  "description": "Practice Rwanda provisional driving license questions, road signs, and simulated mock exams offline.",
+  "description": "Witegure ikizamini cy'uruhushya rw'agateganyo mu Rwanda: ibibazo, ibyapa by'umuhanda, n'ibizamini by'ikitegererezo.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -48,23 +48,23 @@
   ],
   "shortcuts": [
     {
-      "name": "Practice Mode",
-      "short_name": "Practice",
-      "description": "Start an untimed practice session with instant feedback",
+      "name": "Imyitozo",
+      "short_name": "Imyitozo",
+      "description": "Tangira imyitozo itabarwa n'igihe n'igisubizo cya buri kintu",
       "url": "/rw/practice",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Mock Exam",
-      "short_name": "Exam",
-      "description": "Take a 20-minute timed exam simulator",
+      "name": "Ikizamini cy'ikitegererezo",
+      "short_name": "Ikizamini",
+      "description": "Kora ikizamini cy'iminota 20 cy'ikitegererezo",
       "url": "/rw/exam",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Question Bank",
-      "short_name": "Questions",
-      "description": "Browse and search all traffic rules and road signs",
+      "name": "Ibibazo byose",
+      "short_name": "Ibibazo",
+      "description": "Reba kandi shakisha amategeko n'ibyapa by'umuhanda",
       "url": "/rw/questions",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     }
