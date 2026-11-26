@@ -22,7 +22,7 @@ const iconOnlySizeClasses: Record<ButtonSize, string> = {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-brand text-brand-fg hover:bg-brand-hover active:bg-brand-hover active:shadow-none disabled:opacity-50 aria-disabled:opacity-50',
+    'bg-brand text-brand-fg hover:bg-brand-hover active:bg-brand-hover active:shadow-none',
   secondary:
     'border border-border-subtle bg-surface-raised text-fg shadow-sm hover:bg-surface-sunken active:bg-surface-sunken active:shadow-none',
   ghost:
@@ -38,7 +38,7 @@ export function buttonClass({
 }: ButtonClassOptions = {}): string {
   return [
     `inline-flex items-center justify-center ${iconOnly ? 'rounded-full' : 'rounded-md'} font-semibold transition-colors`,
-    'disabled:cursor-not-allowed aria-disabled:cursor-not-allowed',
+    'disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:opacity-50',
     variantClasses[variant],
     iconOnly ? `${iconOnlySizeClasses[size]} p-0` : sizeClasses[size],
     fullWidth && 'w-full',

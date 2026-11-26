@@ -65,6 +65,13 @@ export function Button({
     throw new Error('Button: iconOnly requires an aria-label.');
   }
 
+  const {
+    onClick,
+    onClickCapture,
+    tabIndex: callerTabIndex,
+    ...restAttributes
+  } = attributes;
+
   const classes = [
     buttonClass({ variant, size, fullWidth, iconOnly }),
     className,
@@ -81,10 +88,12 @@ export function Button({
   if (href !== undefined) {
     return (
       <a
-        {...attributes}
+        {...restAttributes}
         href={disabled ? undefined : href}
         aria-disabled={disabled ? 'true' : undefined}
-        tabIndex={disabled ? -1 : undefined}
+        tabIndex={disabled ? -1 : callerTabIndex}
+        onClick={disabled ? undefined : onClick}
+        onClickCapture={disabled ? undefined : onClickCapture}
         className={classes}
       >
         {icons.start}
@@ -95,7 +104,14 @@ export function Button({
   }
 
   return (
-    <button {...attributes} type={type} disabled={disabled} className={classes}>
+    <button
+      {...restAttributes}
+      onClick={onClick}
+      onClickCapture={onClickCapture}
+      type={type}
+      disabled={disabled}
+      className={classes}
+    >
       {icons.start}
       {children}
       {icons.end}
