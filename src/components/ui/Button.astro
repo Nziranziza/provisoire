@@ -1,0 +1,106 @@
+---
+import type { IconName } from '../../lib/icons';
+import {
+  buttonClass,
+  type ButtonSize,
+  type ButtonVariant,
+} from '../../lib/ui/button';
+import Icon from './Icon.astro';
+
+interface SharedProps {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+  iconStart?: IconName;
+  iconEnd?: IconName;
+  disabled?: boolean;
+  class?: string;
+  id?: string;
+  title?: string;
+  'aria-describedby'?: string;
+  'aria-controls'?: string;
+  'aria-expanded'?: boolean;
+  'aria-pressed'?: boolean;
+  [key: `aria-${string}`]: string | number | boolean | undefined;
+  [key: `data-${string}`]: string | number | boolean | undefined;
+}
+
+type IconOnlyProps =
+  | { iconOnly: true; 'aria-label': string }
+  | { iconOnly?: false; 'aria-label'?: string };
+
+type Props = Omit<SharedProps, 'iconOnly' | 'aria-label'> &
+  IconOnlyProps &
+  (
+    | {
+        href: string;
+        rel?: string;
+        target?: string;
+        download?: boolean | string;
+        type?: never;
+      }
+    | {
+        href?: undefined;
+        type?: 'button' | 'submit' | 'reset';
+        name?: string;
+        value?: string | number;
+        form?: string;
+      }
+  );
+
+const {
+  variant = 'primary',
+  size = 'md',
+  fullWidth = false,
+  iconOnly = false,
+  iconStart,
+  iconEnd,
+  disabled = false,
+  class: className,
+  href,
+  type = 'button',
+  ...attributes
+} = Astro.props;
+
+if (iconOnly && !attributes['aria-label']) {
+  throw new Error('Button: iconOnly requires an aria-label.');
+}
+
+const classNameForButton = [
+  buttonClass({ variant, size, fullWidth, iconOnly }),
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{
+  href !== undefined ? (
+    <a
+      {...attributes}
+      href={disabled ? undefined : href}
+      aria-disabled={disabled ? 'true' : undefined}
+      tabindex={disabled ? -1 : undefined}
+      class={classNameForButton}
+    >
+      {iconStart && (
+        <Icon name={iconStart} size={size === 'sm' ? 'sm' : 'md'} />
+      )}
+      <slot />
+      {iconEnd && <Icon name={iconEnd} size={size === 'sm' ? 'sm' : 'md'} />}
+    </a>
+  ) : (
+    <button
+      {...attributes}
+      type={type}
+      disabled={disabled}
+      class={classNameForButton}
+    >
+      {iconStart && (
+        <Icon name={iconStart} size={size === 'sm' ? 'sm' : 'md'} />
+      )}
+      <slot />
+      {iconEnd && <Icon name={iconEnd} size={size === 'sm' ? 'sm' : 'md'} />}
+    </button>
+  )
+}

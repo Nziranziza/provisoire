@@ -1,6 +1,7 @@
 ---
 import type { Lang } from '../../lib/quiz';
 import { questionsListHref } from '../../lib/quiz';
+import Button from '../ui/Button.astro';
 
 export interface Props {
   lang: string;
@@ -39,20 +40,13 @@ const nextHref = page < totalPages ? getHref(page + 1) : null;
 >
   {
     prevHref ? (
-      <a
-        href={prevHref}
-        rel="prev"
-        class="rounded-full border border-slate-900 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-slate-100"
-      >
+      <Button href={prevHref} rel="prev" variant="secondary">
         Back
-      </a>
+      </Button>
     ) : (
-      <span
-        class="rounded-full border border-stone-200 px-5 py-2.5 text-sm font-bold text-stone-300"
-        aria-disabled="true"
-      >
+      <Button disabled variant="secondary">
         Back
-      </span>
+      </Button>
     )
   }
 
@@ -65,20 +59,11 @@ const nextHref = page < totalPages ? getHref(page + 1) : null;
 
   {
     nextHref ? (
-      <a
-        href={nextHref}
-        rel="next"
-        class="rounded-full border border-slate-900 bg-slate-900 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-slate-700"
-      >
+      <Button href={nextHref} rel="next">
         Next
-      </a>
+      </Button>
     ) : (
-      <span
-        class="rounded-full border border-stone-200 px-5 py-2.5 text-sm font-bold text-stone-300"
-        aria-disabled="true"
-      >
-        Next
-      </span>
+      <Button disabled>Next</Button>
     )
   }
 </nav>
